@@ -26,8 +26,7 @@ class AIOS3CachedObject:
         self.cached_bucket = cached_bucket
 
         self.exists_lock = asyncio.Lock()
-        self.get_lock = asyncio.Lock()
-        self.put_lock = asyncio.Lock()
+        self.io_lock = asyncio.Lock()
         self.make_lock = asyncio.Lock()
 
         #add pointer to primary object
@@ -42,7 +41,7 @@ class AIOS3CachedObject:
     
     async def exists(self):
         if not self.primary:
-            return self.primary_obj.exists()
+            return await self.primary_obj.exists()
         
         async with self.exists_lock:
             try:
@@ -66,16 +65,16 @@ class AIOS3CachedObject:
 
     async def get_obj_data(self):
         if not self.primary:
-            return self.primary_obj.get_obj_data()
+            return await self.primary_obj.get_obj_data()
 
-        async with self.get_lock: 
+        async with self.io_lock: 
             try:
                 if self.obj_buff:
                     return self.obj_buff
                 
                 #This not only tests for exist, but gets the object head
                 if not await self.exists():
-                    return False
+                    raise Exception("Can not download file: {}".format(self.key))
                 
                 async with self.object['Body'] as stream:
                     global total_gets
@@ -96,10 +95,11 @@ class AIOS3CachedObject:
     async def put_obj_data(self, buffer):
         #still need to push to primary, as this also sets the local cache obj
         if not self.primary:
-            return self.primary_obj.put_obj_data(buffer)
+            return await self.primary_obj.put_obj_data(buffer)
         
-        async with self.put_lock:
+        async with self.io_lock:
             try:
+                self.obj_buff = buffer
                 buffer.seek(0)
                 # Uploading the image for caching
                 global total_puts
@@ -110,7 +110,7 @@ class AIOS3CachedObject:
                 if resp == None:
                     pass
                 
-                self.obj_buff = buffer
+                
 
             except ClientError as e:
                 # Something else has gone wrong.

@@ -6,7 +6,9 @@ def main():
 
     event = {
         'queryStringParameters': {
-            'model':'FA-X70R2'
+            'model':'FA-X70R2',
+            'shelves':'sas-24,sas-12,nvme-12',
+            'face':'back'
         },
         "test": True
     }
