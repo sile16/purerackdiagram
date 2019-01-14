@@ -92,7 +92,7 @@ class AIOS3CachedObject:
                     # Something else has gone wrong.
                     raise
         
-    async def put_obj_data(self, buffer):
+    async def put_obj_data(self, buffer, content_type=None):
         #still need to push to primary, as this also sets the local cache obj
         if not self.primary:
             return await self.primary_obj.put_obj_data(buffer)
@@ -106,7 +106,7 @@ class AIOS3CachedObject:
                 total_puts += 1
                 resp = await self.cached_bucket.client.put_object(Bucket=self.bucket,
                                                     Key=self.key,
-                                                    Body=buffer)
+                                                    Body=buffer, ContentType=content_type)
                 if resp == None:
                     pass
                 

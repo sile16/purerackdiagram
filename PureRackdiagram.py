@@ -25,7 +25,7 @@ loop = asyncio.get_event_loop()
 session = aiobotocore.get_session(loop=loop)
 
 bucket = "images.purestorage"
-version = "v1.1"
+version = "v1.6"
 cached_bucket = None
 
 tasks = []
@@ -71,10 +71,10 @@ class RackImage(AIOS3Cache.AIOS3CachedObject):
             self.img.save(buffer, "PNG")
             # run this in the future, but don't block now, we have the image locally.
             global tasks
-            tasks.append(asyncio.create_task(self.put_obj_data(buffer)))
+            tasks.append(asyncio.create_task(self.put_obj_data(buffer,"image/png")))
 
     async def create_image(self):
-        raise Exception("Need to overload create function")
+        raise Exception("File not found on S3")
 
     def generate_id(self, config):
         config_str = '{}{}'.format(version, config)
@@ -87,13 +87,66 @@ class FAShelf(RackImage):
     
     def __init__(self, params):
         self.config = params
+        self.start_img_event = asyncio.Event()
         super().__init__(self.config)
         #config = self.parseParams(params)
     
     async def create_image(self):
         c = self.config
-        starting_str = 'png/pure_fa_{}_shelf_{}.png'.format(c['shelf_type'],c['face'])
-        return await RackImage(starting_str).get_image()
+        tasks = []
+        tasks.append(self.get_base_img())
+        if c['face'] == 'front':
+            if c['shelf_type'] == 'nvme':
+                tasks.append(self.add_nvme_drives())
+            else:
+                tasks.append(self.add_sas_drives())
+                            
+        await asyncio.gather(*tasks)
+        return self.tmp_img
+
+    async def get_base_img(self):
+        c = self.config
+        key = 'png/pure_fa_{}_shelf_{}.png'.format(c['shelf_type'],c['face'])
+        self.tmp_img = await RackImage(key).get_image()
+        self.start_img_event.set()
+
+    async  def add_nvme_drives(self):
+        curr_module=0
+        
+        for dp in self.config['datapacks']:
+            drive_str = dp[0]
+            drive_type = dp[1]
+            num_modules = dp[2]
+        
+            if num_modules > 0:
+                drive_img = await RackImage('png/pure_fa_dfm.png').get_image()
+                await self.start_img_event.wait()
+                drive_loc = get_chassis_drive_loc()
+                drive_rotated = drive_img.rotate(-90,expand = True)
+
+                for x in range(curr_module, min(28,num_modules+curr_module) ):
+                    if x < 20:
+                        self.tmp_img.paste(drive_img, drive_loc[x])
+                    else:
+                        self.tmp_img.paste(drive_rotated, drive_loc[x])
+                curr_module += num_modules
+
+    async def add_sas_drives(self):
+        curr_module=0
+        for dp in self.config['datapacks']:
+            drive_str = dp[0]
+            drive_type = dp[1]
+            num_modules = dp[2]
+        
+            if num_modules > 0:
+                drive_img = await RackImage('png/pure_fa_dfm.png').get_image()
+                await self.start_img_event.wait()
+                drive_loc = get_sas_drive_loc()
+
+                for x in range(curr_module, min(24,curr_module+num_modules) ):
+                    self.tmp_img.paste(drive_img, drive_loc[x])
+                    #self.tmp_img.save('tmp.png')
+                curr_module += num_modules
 
 
 class FAChassis(RackImage):
@@ -103,11 +156,12 @@ class FAChassis(RackImage):
         del config['shelves']
         self.config = config
         self.start_img_event = asyncio.Event()
+        self.ch0_drive_loc = None
         super().__init__(config)
     
     async def create_image(self):
         c = self.config
-        key = "png/pure_fa_{}".format(c['gen_short'])
+        key = "png/pure_fa_{}".format(c['generation'])
         
         if c['face'] == 'front' and c['bezel']:
             key += '_bezel.png'
@@ -137,48 +191,112 @@ class FAChassis(RackImage):
             
     
     async def add_nvram(self):
-        
-        if self.config['model'] < 20:
+        nv1 = (1263,28)
+        nv2 = (1813,28)
+        if self.config['model_num'] < 20:
             return
         
-        nvram_img = RackImage("png/pure_fa_x_nvram.png").get_image
+        nvram_img = await RackImage("png/pure_fa_x_nvram.png").get_image()
         await self.start_img_event.wait()
-        self.tmp_img.past(nvram_img, (50,300))
+        self.tmp_img.paste(nvram_img, nv1)
+        self.tmp_img.paste(nvram_img, nv2)
 
     async def add_cards(self):
-        pci0 = (2069,87)
-        pci1 = (1199,90)
-        pci2 = (1199,204)
-        pci3 = (2069,204)
-
-
-        tasks = []
-
-
-
-        await self.start_img_event.wait()
-
+        pci = self.config['pci_config']
         
+        tasks = []
+        for x in range(4):
+            if pci[x]:
+                tasks.append(self.add_card(x,pci[x]))
+        await asyncio.gather(*tasks)
+
+    async def add_card(self, slot, card_type):
+        y_offset = 378
+        pci_loc = [(1198,87),
+                   (1198,203),
+                   (2069,87),
+                   (2069,203)]
+        if slot < 2:
+            height = "fh"
+        else:
+            height = "hh"
+        key = 'png/pure_fa_{}_{}.png'.format(card_type,height)
+        card_img = await RackImage(key).get_image()
+        await self.start_img_event.wait()
+        cord=pci_loc[slot]
+        self.tmp_img.paste(card_img, cord)
+        ct0_cord=(cord[0],cord[1]+y_offset)
+        self.tmp_img.paste(card_img, ct0_cord)
+
 
     async def add_mezz(self):
-        if self.config['gen_short'] != 'x':
+        if self.config['generation'] != 'x':
             return
         key = 'png/pure_fa_x_{}.png'.format(self.config['mezz'])
         mezz_img = await RackImage(key).get_image()
         await self.start_img_event.wait()
-        self.tmp_img.paste(mezz_img, (595,50))
-        self.tmp_img.paste(mezz_img, (595,430))
-
-
-
+        self.tmp_img.paste(mezz_img, (585,45))
+        self.tmp_img.paste(mezz_img, (585,425))
 
 
     async def add_drives(self):
+        curr_module=0
+        for dp in self.config['chassis_datapacks']:
+            drive_str = dp[0]
+            drive_type = dp[1]
+            num_modules = dp[2]
 
-        await self.start_img_event.wait()
+            drive_img = await RackImage('png/pure_fa_dfm.png').get_image()
+            await self.start_img_event.wait()
+            drive_loc = get_chassis_drive_loc()
+            for x in range(curr_module, min(20,curr_module + num_modules) ):
+                #self.tmp_img.save("tmp.png")
+                self.tmp_img.paste(drive_img, drive_loc[x])
+            curr_module += num_modules
 
 
+#x,y coordinates for all chassis drives.
+def get_chassis_drive_loc():
+    ch0_drive_loc = [None]*28
+    ch0_drive_loc[0] = (165, 250)
+    ch0_drive_loc[4] = (714, 250)
+    ch0_drive_loc[8] = (1265,250)
+    ch0_drive_loc[12] = (1817,250)
+    ch0_drive_loc[20] = (164,27)
 
+    x_offset = 105
+    for x in range(20):
+        if ch0_drive_loc[x] == None:
+            loc = list(ch0_drive_loc[x-1])
+            loc[0] += int(x_offset)
+            ch0_drive_loc[x] = tuple(loc)
+
+    y_offset = x_offset
+    x_offset = 550
+    for x in range(20,28):
+        if ch0_drive_loc[x] == None:
+            loc = list(ch0_drive_loc[x-1])
+            if x % 2 == 0: 
+                loc[0] += x_offset
+                loc[1] -= y_offset
+            else:
+                loc[1] += y_offset
+            ch0_drive_loc[x] = tuple(loc)
+    return ch0_drive_loc
+
+#x,y coordinates for all sas drives
+def get_sas_drive_loc():
+    drive_loc = [None]*24
+    drive_loc[0] = (138,1)
+    drive_loc[12] = (1450,1)
+    x_offset = 105
+
+    for x in range(24):
+        if drive_loc[x] == None:
+            loc = list(drive_loc[x-1])
+            loc[0] += x_offset
+            drive_loc[x] = tuple(loc)
+    return drive_loc
 
 
 class FADiagram(RackImage):
@@ -187,44 +305,145 @@ class FADiagram(RackImage):
         #front or back
         config = {}
         config['face'] = params.get('face','front')
-        config['bezel'] = params.get('bezel',False)
+        config['bezel'] = 'bezel' in params
         config['mezz'] = params.get('mezz','emezz')
-        config['pci1'] = params.get('pci1',None)
-        config['pci2'] = params.get('pci2',None)
-        config['pci3'] = params.get('pci3',None)
+        config['protocol'] = params.get('protocol','fc') 
+        
         config['model_str'] = params['model'].lower()
-        config['direction'] = params.get('direction','up')
-        config['gen_short'] = config['model_str'][3:4]
+        config['generation'] = config['model_str'][3:4]
         config['model_num'] = int(config['model_str'][4:6])
-
+        config['direction'] = params.get('direction','up')
+        config['drive_label'] = 'drive_label' in params
+        config['dp_overlay'] = 'dp_overlay' in params
         
         if 'r' in config['model_str'] and len(config['model_str']) > 7:
-            config['model_release']= int(config['model_str'][7:8])
+            config['release']= int(config['model_str'][7:8])
         else:
-            config['model_release'] = 1
+            config['release'] = 1
+
+
+        #default card config:
+        pci_config_lookup = {
+            "fa-x10r2-fc" : [None,None,'2fc',None],
+            "fa-x20r2-fc" : [None,None,'2fc',None],
+            "fa-x50r2-fc" : ["4fc",None,None,None],
+            "fa-x70r2-fc" : ["4fc",None,'2fc',None],
+            "fa-x90r2-fc" : ["4fc",None,'2fc',None],
+            "fa-x10r2-eth" : [None,None,None,None],
+            "fa-x20r2-eth" : [None,None,None,None],
+            "fa-x50r2-eth" : ['2eth',None,None,None],
+            "fa-x70r2-eth" : ['2eth',None,None,None],
+            "fa-x90r2-eth" : ['2eth',None,None,None],
+            "fa-m10r2-fc" : [None,None,'2fc',None],
+            "fa-m20r2-fc" : [None,None,'2fc',None],
+            "fa-m50r2-fc" : ['2fc',None,'2fc',None],
+            "fa-m70r2-fc" : ['4fc',None,'2fc',None],
+            "fa-m10r2-eth" : [None,None,None,None],
+            "fa-m20r2-eth" : [None,None,'2eth',None],
+            "fa-m50r2-eth" : ['2eth',None,'2eth',None],
+            "fa-m70r2-eth" : ['2eth',None,'2eth',None],
+            "fa-x70r1-eth" : ['2eth',None,'2eth',None],
+            "fa-x70r1-fc" : ['4fc',None,'2fc',None]
+        }
+
+        pci_config = [None,None,None,None]
+        pci_lookup_str = "fa-{}{}r{}-{}".format(config['generation'],
+                                              config['model_num'],
+                                              config['release'],
+                                              config['protocol'])
+        if pci_lookup_str in pci_config_lookup:
+            pci_config = pci_config_lookup[pci_lookup_str]
+
+        #add on cards
+        if 'addoncards' in params:
+            for card in params['addoncards'].split(','):
+                
+                
+                order = [0,1]
+                if card == '2fc' or card == '2eth':
+                    order = [2,0,1,3]
+            
+                for slot in order:
+                    if pci_config[slot] == None:
+                        pci_config[slot] = card
+                        break
+
+        config['pci_config'] = pci_config
+        
+        #pci3 = '2fc'  overrides everything
+        for x in range(4):
+            slot = "pci.{}".format(x)
+            pci_config[x] = params.get(slot,pci_config[x])
+        
+        ######################################
+        #####  Parse Data Packs & Shelf config
+        
+        chassis_dp_size_lookup = {   "4.8":["480GB","sas",10,"4.8"],
+                                     "5":["500GB","sas",10,"5"],
+                                     "9.6":["960GB","sas",10,"9.6"], 
+                                     "10":["1TB","sas",10,"10"],
+                                     "19.2":["1.9TB","sas",10,"19.2"],
+                                     "20":["2TB","sas",10,"20"],
+                                     "38":["3.8TB","sas",10,"38"],
+                                     "76":["7.6TB","sas",10,"76"],
+                                     "22":["2.2TB","nvme",10,"22"],
+                                     "45":["4.5TB","nvme",10,"45"],
+                                     "91":["9.1TB","nvme",10,"91"],
+                                     "183":["18.3TB","nvme",10,"183"],
+                                     "127":["9.1TB","nvme",16,"127"],
+                                     "275":["18.3TB","nvme",15,"275"]}
+
+        shelf_dp_size_lookup = {     "11":["960GB","sas",12,"11"],
+                                     "22":["1.9TB","sas",12,"22"],
+                                     "45":["3.8TB","sas",12,"45"],
+                                     "90":["7.6TB","sas",12,"90"],
+                                     "31":["2.2TB","nvme",14,"31"],
+                                     "63":["4.5TB","nvme",14,"63"],
+                                     "127":["9.1TB","nvme",14,"127"],
+                                     "256":["18.3TB","nvme",14,"256"]}
 
         shelves = []
-        if 'shelves' in params:
-            #Shelf of form "dfm-12,sas-24,sas-12,0"  for shelves
-            #shelf type of form ""
-            if config['gen_short'] == 'x' and config['model_num'] > 20:
-                default_shelf_type = 'nvme'
-            else:
+        if 'datapacks' in params:
+            if 'm' in config['generation']:
                 default_shelf_type = 'sas'
-            for shelf in params['shelves'].split(','):
+            else:
+                default_shelf_type = 'nvme'
+            #Of form "38/38-90/0"
+            dp_configs = params['datapacks'].split('-')
+            chassis = dp_configs[0]
+            
+            # Pull shelf info into seperate array
+            shelf_configs = []
+            if len(dp_configs) > 1:
+                shelf_configs = dp_configs[1:]
+            
+            #Chassis data pack config:
+            datapacks = []
+            
+            for dp in chassis.split('/'):
+                if dp in chassis_dp_size_lookup:
+                    datapacks.append(chassis_dp_size_lookup[dp])
+            
+            config['chassis_datapacks'] = datapacks
+
+            # Shelf DPs
+            for shelf in shelf_configs:
+                datapacks = []
                 shelf_type = default_shelf_type
-                shelf_modules = 0
-                for item in shelf.split('-'):
-                    if item.isnumeric():
-                        shelf_modules = int(item)
-                    else:
-                        if item == 'sas':
-                            shelf_type = 'sas'
-                        else:
-                            shelf_type = 'nvme'
+
+                for dp in shelf.split('/'):
+                    if dp in shelf_dp_size_lookup:
+                        datapacks.append(shelf_dp_size_lookup[dp])
+                        shelf_type = shelf_dp_size_lookup[dp][1]
+                
+                
                 shelves.append({'shelf_type': shelf_type, 
-                                'modules': shelf_modules,
-                                'face': config['face']})
+                                    'datapacks': datapacks,
+                                    'face': config['face'],
+                                    'dp_overlay': config['dp_overlay'],
+                                    'drive_label': config['drive_label']
+                })
+        
         config['shelves'] = shelves
 
         self.config = config
@@ -268,15 +487,47 @@ def combine_images_vertically(images):
     return new_im
 
 
+class FBDiagram(RackImage):
+    
+    def __init__(self, params):
+        self.config = {}
+        self.config['chassis'] = params.get('chassis',1)
+        self.config['face'] = params.get('face','front')
+
+
+
+    
+    async def create_image(self):
+        tasks = []
+
+        img_key = 'png/fb_chassis_{}.png'.format(self.config['face'])
+        
+        for x in range(self.config['chassis']):
+            tasks.append(RackImage(img_key).get_image())
+
+        all_images = await asyncio.gather(*tasks)
+        if self.config['direction'] == 'up':
+            all_images.reverse()
+
+
+        return  combine_images_vertically(all_images)
 
 
 async def build_diagram(params):
     session = aiobotocore.get_session(loop=loop)
     key = ""
+
+
     async with session.create_client('s3') as client:
         global cached_bucket
         cached_bucket = AIOS3Cache.AIOS3CachedBucket(client, bucket)
-        diagram = FADiagram(params)
+        model = params['model'].lower()
+        
+        if model.startswith('fa'):
+            diagram = FADiagram(params)
+        elif model.startswith('fb'):
+            diagram = FBDiagram(params)
+        
         key = await diagram.get_image_key()
         
         #complete all the uploads
