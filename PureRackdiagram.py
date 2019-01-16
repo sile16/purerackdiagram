@@ -4,6 +4,8 @@ Builds a rack diagram and caches results.
 import os
 import sys
 from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 from io import BytesIO
 import asyncio
 import aiobotocore
@@ -24,7 +26,7 @@ loop = asyncio.get_event_loop()
 session = aiobotocore.get_session(loop=loop)
 
 bucket = "images.purestorage"
-version = "v1.6"
+version = "v1.9f8aaaaa"
 cached_bucket = None
 
 tasks = []
@@ -95,9 +97,9 @@ class FAShelf(RackImage):
         tasks.append(self.get_base_img())
         if c["face"] == "front":
             if c["shelf_type"] == "nvme":
-                tasks.append(self.add_nvme_drives())
+                tasks.append(self.add_nvme_fms())
             else:
-                tasks.append(self.add_sas_drives())
+                tasks.append(self.add_sas_fms())
 
         await asyncio.gather(*tasks)
         return self.tmp_img
@@ -108,43 +110,76 @@ class FAShelf(RackImage):
         self.tmp_img = await RackImage(key).get_image()
         self.start_img_event.set()
 
-    async def add_nvme_drives(self):
+    async def add_nvme_fms(self):
         cur_module = 0
 
         for dp in self.config["datapacks"]:
-            drive_str = dp[0]
-            drive_type = dp[1]
+            fm_str = dp[0]
+            fm_type = dp[1]
             num_modules = dp[2]
 
             if num_modules > 0:
-                drive_img = await RackImage("png/pure_fa_dfm.png").get_image()
+                fm_img = await RackImage("png/pure_fa_dfm.png").get_image()
+                if self.config['fm_label']:
+                    apply_fm_label(fm_img, fm_str, fm_type)
+
                 await self.start_img_event.wait()
-                drive_loc = get_chassis_drive_loc()
-                drive_rotated = drive_img.rotate(-90, expand=True)
+                fm_loc = get_chassis_fm_loc()
+                fm_rotated = fm_img.rotate(-90, expand=True)
 
                 for x in range(cur_module, min(28, num_modules + cur_module)):
                     if x < 20:
-                        self.tmp_img.paste(drive_img, drive_loc[x])
+                        self.tmp_img.paste(fm_img, fm_loc[x])
                     else:
-                        self.tmp_img.paste(drive_rotated, drive_loc[x])
+                        self.tmp_img.paste(fm_rotated, fm_loc[x])
                 cur_module += num_modules
 
-    async def add_sas_drives(self):
+        right = False
+        if self.config['dp_label']:
+            for dp in self.config["datapacks"]:
+                dp_size = dp[3]
+    
+                y_offset = 50
+                x_offset = 162
+                self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
+                right = True
+
+                
+            
+
+
+    async def add_sas_fms(self):
         cur_module = 0
         for dp in self.config["datapacks"]:
-            drive_str = dp[0]
-            drive_type = dp[1]
+            fm_str = dp[0]
+            fm_type = dp[1]
             num_modules = dp[2]
+            dp_size = dp[3]
+
+            dp_start = cur_module
 
             if num_modules > 0:
-                drive_img = await RackImage("png/pure_fa_dfm.png").get_image()
+                fm_img = await RackImage("png/pure_fa_dfm.png").get_image()
+
+                if self.config['fm_label']:
+                    apply_fm_label(fm_img, fm_str, fm_type)
+
+
                 await self.start_img_event.wait()
-                drive_loc = get_sas_drive_loc()
+                fm_loc = get_sas_fm_loc()
 
                 for x in range(cur_module, min(24, cur_module + num_modules)):
-                    self.tmp_img.paste(drive_img, drive_loc[x])
+                    self.tmp_img.paste(fm_img, fm_loc[x])
                     # self.tmp_img.save('tmp.png')
                 cur_module += num_modules
+
+                if self.config['dp_label']:
+                    y_offset = 0
+                    x_offset = 90
+                    right = False
+                    if dp_start > 9:
+                        right = True
+                    self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
 
 
 class FAChassis(RackImage):
@@ -153,7 +188,7 @@ class FAChassis(RackImage):
         del config["shelves"]
         self.config = config
         self.start_img_event = asyncio.Event()
-        self.ch0_drive_loc = None
+        self.ch0_fm_loc = None
         super().__init__(config)
 
     async def create_image(self):
@@ -171,8 +206,9 @@ class FAChassis(RackImage):
         tasks.append(self.get_base_img(key))
 
         if c["face"] == "front":
-            tasks.append(self.add_drives())
+            tasks.append(self.add_fms())
             tasks.append(self.add_nvram())
+            tasks.append(self.add_model_text())
         else:
             tasks.append(self.add_cards())
             tasks.append(self.add_mezz())
@@ -188,7 +224,7 @@ class FAChassis(RackImage):
     async def add_nvram(self):
         nv1 = (1263, 28)
         nv2 = (1813, 28)
-        if self.config["model_num"] < 20:
+        if self.config["model_num"] < 70:
             return
 
         nvram_img = await RackImage("png/pure_fa_x_nvram.png").get_image()
@@ -221,7 +257,7 @@ class FAChassis(RackImage):
         self.tmp_img.paste(card_img, ct0_cord)
 
     async def add_mezz(self):
-        if self.config["generation"] != "x":
+        if self.config["generation"] != "x" or self.config['mezz'] is None:
             return
         key = "png/pure_fa_x_{}.png".format(self.config["mezz"])
         mezz_img = await RackImage(key).get_image()
@@ -229,65 +265,132 @@ class FAChassis(RackImage):
         self.tmp_img.paste(mezz_img, (585, 45))
         self.tmp_img.paste(mezz_img, (585, 425))
 
-    async def add_drives(self):
+    async def add_fms(self):
         curr_module = 0
         for dp in self.config["chassis_datapacks"]:
-            drive_str = dp[0]
-            drive_type = dp[1]
+            fm_str = dp[0]
+            fm_type = dp[1]
             num_modules = dp[2]
+            dp_size = dp[3]
+            dp_start = curr_module
 
-            drive_img = await RackImage("png/pure_fa_dfm.png").get_image()
+            fm_img = await RackImage("png/pure_fa_dfm.png").get_image()
+
+            if self.config['fm_label']:
+                apply_fm_label(fm_img, fm_str, fm_type)
+
             await self.start_img_event.wait()
-            drive_loc = get_chassis_drive_loc()
+            fm_loc = get_chassis_fm_loc()
             for x in range(curr_module, min(20, curr_module + num_modules)):
                 # self.tmp_img.save("tmp.png")
-                self.tmp_img.paste(drive_img, drive_loc[x])
+                self.tmp_img.paste(fm_img, fm_loc[x])
             curr_module += num_modules
 
+            if self.config['dp_label']:
+                y_offset = 244
+                x_offset = 130
+                right = False
+                if dp_start > 9:
+                    right = True
+                self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
+    
+    async def add_model_text(self):
+        await self.start_img_event.wait()
+        c = self.config
+        draw = ImageDraw.Draw(self.tmp_img)
+        font = ImageFont.truetype("Lato-Regular.ttf",size=24)
+        text = "{}{}r{}".format(c['generation'].upper(),c['model_num'],c['release'])
+        draw.text((2759,83), text, (255, 255, 255, 220), font=font)
 
-# x,y coordinates for all chassis drives.
-def get_chassis_drive_loc():
-    ch0_drive_loc = [None] * 28
-    ch0_drive_loc[0] = (165, 250)
-    ch0_drive_loc[4] = (714, 250)
-    ch0_drive_loc[8] = (1265, 250)
-    ch0_drive_loc[12] = (1817, 250)
-    ch0_drive_loc[20] = (164, 27)
+
+def apply_fm_label(fm_img, fm_str, fm_type):
+    draw = ImageDraw.Draw(fm_img)
+    font = ImageFont.truetype("Lato-Regular.ttf",size=15)
+    w, _ = draw.textsize(fm_str, font=font)
+    x_loc = fm_img.size[0] // 2 - w // 2
+    draw.text((x_loc,18), fm_str, fill=(199,89,40),font=font)
+    w, _ = draw.textsize(fm_type, font=font)
+    x_loc = fm_img.size[0] // 2 - w // 2
+    draw.text( (34,32), fm_type, fill=(199,89,40),font=font)
+
+def apply_dp_label(img, dp_size, x_offset, y_offset, right):
+    #temp image same size as our chassis.
+    tmp = Image.new('RGBA', img.size, (0,0,0,0))
+
+    # Create a drawing context for it.
+    draw = ImageDraw.Draw(tmp)
+
+    x_buffer = 75
+    y_buffer = 60
+
+
+    box_loc = (x_offset + x_buffer, y_offset + y_buffer)
+    if right:
+        box_loc = (tmp.size[0] // 2 + x_buffer, y_offset + y_buffer)
+    
+    
+    box_size = (tmp.size[0]  // 2 - 2 * x_buffer - x_offset, 
+                (tmp.size[1]  -  2 * y_buffer - y_offset))
+
+    #put DP on left or right
+    
+    box_loc2 = (box_loc[0]+box_size[0], box_loc[1]+box_size[1])
+
+    
+    draw.rectangle((box_loc, box_loc2),fill=(199,89,40,127))
+    box_center = ((box_loc[0] + box_loc2[0]) // 2, (box_loc[1] + box_loc2[1]) //2)
+    font = ImageFont.truetype("Lato-Regular.ttf",size=85)
+    w, h = draw.textsize(dp_size+"TB",font=font)
+    text_loc = (box_center[0] - w/2, box_center[1] - h/2)
+    draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220),font=font)
+
+    alpha_tmp = img.convert("RGBA")
+    return Image.alpha_composite(alpha_tmp, tmp)
+
+
+# x,y coordinates for all chassis fms.
+def get_chassis_fm_loc():
+    ch0_fm_loc = [None] * 28
+    ch0_fm_loc[0] = (165, 250)
+    ch0_fm_loc[4] = (714, 250)
+    ch0_fm_loc[8] = (1265, 250)
+    ch0_fm_loc[12] = (1817, 250)
+    ch0_fm_loc[20] = (164, 27)
 
     x_offset = 105
     for x in range(20):
-        if ch0_drive_loc[x] is None:
-            loc = list(ch0_drive_loc[x - 1])
+        if ch0_fm_loc[x] is None:
+            loc = list(ch0_fm_loc[x - 1])
             loc[0] += int(x_offset)
-            ch0_drive_loc[x] = tuple(loc)
+            ch0_fm_loc[x] = tuple(loc)
 
     y_offset = x_offset
     x_offset = 550
     for x in range(20, 28):
-        if ch0_drive_loc[x] is None:
-            loc = list(ch0_drive_loc[x - 1])
+        if ch0_fm_loc[x] is None:
+            loc = list(ch0_fm_loc[x - 1])
             if x % 2 == 0:
                 loc[0] += x_offset
                 loc[1] -= y_offset
             else:
                 loc[1] += y_offset
-            ch0_drive_loc[x] = tuple(loc)
-    return ch0_drive_loc
+            ch0_fm_loc[x] = tuple(loc)
+    return ch0_fm_loc
 
 
-# x,y coordinates for all sas drives
-def get_sas_drive_loc():
-    drive_loc = [None] * 24
-    drive_loc[0] = (138, 1)
-    drive_loc[12] = (1450, 1)
+# x,y coordinates for all sas fms
+def get_sas_fm_loc():
+    fm_loc = [None] * 24
+    fm_loc[0] = (138, 1)
+    fm_loc[12] = (1450, 1)
     x_offset = 105
 
     for x in range(24):
-        if drive_loc[x] is None:
-            loc = list(drive_loc[x - 1])
+        if fm_loc[x] is None:
+            loc = list(fm_loc[x - 1])
             loc[0] += x_offset
-            drive_loc[x] = tuple(loc)
-    return drive_loc
+            fm_loc[x] = tuple(loc)
+    return fm_loc
 
 
 class FADiagram(RackImage):
@@ -296,15 +399,20 @@ class FADiagram(RackImage):
         config = {}
         config["face"] = params.get("face", "front")
         config["bezel"] = "bezel" in params
-        config["mezz"] = params.get("mezz", "emezz")
+        
         config["protocol"] = params.get("protocol", "fc")
 
         config["model_str"] = params["model"].lower()
         config["generation"] = config["model_str"][3:4]
         config["model_num"] = int(config["model_str"][4:6])
         config["direction"] = params.get("direction", "up")
-        config["drive_label"] = "drive_label" in params
-        config["dp_overlay"] = "dp_overlay" in params
+        config["fm_label"] = "fm_label" in params
+        config["dp_label"] = "dp_label" in params
+        
+        default_mezz = None
+        if config["model_num"] > 20:
+            default_mezz = 'emezz'
+        config["mezz"] = params.get("mezz", default_mezz )
 
         if "r" in config["model_str"] and len(config["model_str"]) > 7:
             config["release"] = int(config["model_str"][7:8])
@@ -435,8 +543,8 @@ class FADiagram(RackImage):
                         "shelf_type": shelf_type,
                         "datapacks": datapacks,
                         "face": config["face"],
-                        "dp_overlay": config["dp_overlay"],
-                        "drive_label": config["drive_label"],
+                        "dp_label": config["dp_label"],
+                        "fm_label": config["fm_label"],
                     }
                 )
 
@@ -492,7 +600,7 @@ class FBDiagram(RackImage):
 
         img_key = "png/fb_chassis_{}.png".format(self.config["face"])
 
-        for x in range(self.config["chassis"]):
+        for _ in range(self.config["chassis"]):
             tasks.append(RackImage(img_key).get_image())
 
         all_images = await asyncio.gather(*tasks)

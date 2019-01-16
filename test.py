@@ -6,10 +6,13 @@ def main():
 
     event = {
         "queryStringParameters": {
-            "model": "FA-X20R2",
-            "datapacks": "127",
+            "model": "FA-X70R2",
+            "datapacks": "22/38-45/90-22/45-63/31",
             "face": "back",
             "addoncards": "2eth40",
+            "protocol":"eth",
+            "fm_label":"",
+            "dp_label":""
         },
         "test": True,
     }
