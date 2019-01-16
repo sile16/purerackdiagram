@@ -6,13 +6,9 @@ def main():
 
     event = {
         "queryStringParameters": {
-            "model": "FA-X70R2",
-            "datapacks": "22/38-45/90-22/45-63/31",
-            "face": "back",
-            "addoncards": "2eth40",
-            "protocol":"eth",
-            "fm_label":"",
-            "dp_label":""
+            "model": "FA-X70R1",
+            "datapacks": "22/45-45/45-63/31",
+            "face":"front"
         },
         "test": True,
     }

@@ -505,6 +505,8 @@ class FADiagram(RackImage):
         }
 
         shelves = []
+        config["chassis_datapacks"] = []
+        
         if "datapacks" in params:
             if "m" in config["generation"]:
                 default_shelf_type = "sas"
