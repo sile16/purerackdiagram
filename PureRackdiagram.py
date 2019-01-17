@@ -8,90 +8,56 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from io import BytesIO
 import asyncio
-import aiobotocore
-from botocore.exceptions import ClientError
-import hashlib
-import AIOS3Cache
 from datetime import datetime
+import concurrent
+import base64
 
 startTime = datetime.now()
 
+cache = {}
+cache_lock = asyncio.Lock()
 
-# size in pixels of 1 RU
-RU = 765 / 3
-WIDTH = 2844
-BORDER = 8
-
-loop = asyncio.get_event_loop()
-session = aiobotocore.get_session(loop=loop)
-
-bucket = "images.purestorage"
-version = "v1.9f8aaaaa"
-cached_bucket = None
-
-tasks = []
-
-
-class RackImage(AIOS3Cache.AIOS3CachedObject):
-    def __init__(self, key_or_config):
-        self.id = None
-        self.params = None
+class RackImage():
+    def __init__(self, key):
+        self.key = key
         self.img = None
+        self.io_lock = asyncio.Lock()
 
-        if isinstance(key_or_config, dict):
-            # this is a cached generated image, we will generate a key
-            self.key = "cache/{}.png".format(self.generate_id(key_or_config))
+        if key in cache:
+            self.primary = False
+            self.primary_obj = cache[key]
         else:
-            self.key = key_or_config
+            cache[key] = self
+            self.primary = True
 
-        super().__init__(self.key, cached_bucket)
-
+        
     async def get_image(self):
-        if self.img:
-            return self.img
+        if not self.primary:
+            return await self.primary_obj.get_image()
+        
+        async with self.io_lock:
+            
+            if self.img:
+                return self.img.copy()
+            
+            loop = asyncio.get_running_loop()
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                await loop.run_in_executor(pool, self.load_img)
 
-        await self.make_exist()
-        if self.img:
-            return self.img
-        else:
-            self.img = Image.open(await self.get_obj_data())
-        return self.img
-
-    async def get_image_key(self):
-        await self.make_exist()
-        return self.key
-
-    async def make_exist(self):
-        async with self.primary_obj.make_lock:
-            if await self.exists():
-                return
-            self.img = await self.create_image()
-            # we need to upload
-            buffer = BytesIO()
-            self.img.save(buffer, "PNG")
-            # run this later, but don't block, we have the image locally
-            global tasks
-            tasks.append(
-                asyncio.create_task(self.put_obj_data(buffer, "image/png")))
-
-    async def create_image(self):
-        raise Exception("File not found on S3")
-
-    def generate_id(self, config):
-        config_str = "{}{}".format(version, config)
-        hashstr = hashlib.sha1(config_str.encode("utf-8")).hexdigest()[:20]
-        self.id = self.__class__.__name__ + hashstr
-        return self.id
+            return self.img.copy()
+    
+    def load_img(self):
+        self.img = Image.open(self.key)
+        self.img.load()
 
 
-class FAShelf(RackImage):
+
+class FAShelf():
     def __init__(self, params):
         self.config = params
         self.start_img_event = asyncio.Event()
-        super().__init__(self.config)
-        # config = self.parseParams(params)
 
-    async def create_image(self):
+    async def get_image(self):
         c = self.config
         tasks = []
         tasks.append(self.get_base_img())
@@ -144,9 +110,6 @@ class FAShelf(RackImage):
                 self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
                 right = True
 
-                
-            
-
 
     async def add_sas_fms(self):
         cur_module = 0
@@ -170,6 +133,7 @@ class FAShelf(RackImage):
 
                 for x in range(cur_module, min(24, cur_module + num_modules)):
                     self.tmp_img.paste(fm_img, fm_loc[x])
+            
                     # self.tmp_img.save('tmp.png')
                 cur_module += num_modules
 
@@ -182,16 +146,16 @@ class FAShelf(RackImage):
                     self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
 
 
-class FAChassis(RackImage):
+class FAChassis():
     def __init__(self, params):
         config = params.copy()
         del config["shelves"]
         self.config = config
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
-        super().__init__(config)
+        
 
-    async def create_image(self):
+    async def get_image(self):
         c = self.config
         key = "png/pure_fa_{}".format(c["generation"])
 
@@ -393,23 +357,29 @@ def get_sas_fm_loc():
     return fm_loc
 
 
-class FADiagram(RackImage):
+class FADiagram():
     def __init__(self, params):
         # front or back
         config = {}
-        config["face"] = params.get("face", "front")
-        config["bezel"] = "bezel" in params
+        face = params.get("face", "front")
         
-        config["protocol"] = params.get("protocol", "fc")
+        if face != "front" and face != "back":
+            face = "front"
+
+        config["face"] = face
+
+        config["bezel"] = params.get("bezel",False)
+        
+        config["protocol"] = params.get("protocol", "fc").lower()
 
         config["model_str"] = params["model"].lower()
         config["generation"] = config["model_str"][3:4]
         config["model_num"] = int(config["model_str"][4:6])
-        config["direction"] = params.get("direction", "up")
+        config["direction"] = params.get("direction", "up").lower()
         config["fm_label"] = "fm_label" in params
         config["dp_label"] = "dp_label" in params
         
-        default_mezz = None
+        default_mezz = 'smezz'
         if config["model_num"] > 20:
             default_mezz = 'emezz'
         config["mezz"] = params.get("mezz", default_mezz )
@@ -506,7 +476,7 @@ class FADiagram(RackImage):
 
         shelves = []
         config["chassis_datapacks"] = []
-        
+
         if "datapacks" in params:
             if "m" in config["generation"]:
                 default_shelf_type = "sas"
@@ -554,9 +524,8 @@ class FADiagram(RackImage):
 
         self.config = config
 
-        super().__init__(config)
 
-    async def create_image(self):
+    async def get_image(self):
         tasks = []
 
         tasks.append(FAChassis(self.config).get_image())
@@ -594,13 +563,14 @@ def combine_images_vertically(images):
 class FBDiagram(RackImage):
     def __init__(self, params):
         self.config = {}
-        self.config["chassis"] = params.get("chassis", 1)
-        self.config["face"] = params.get("face", "front")
+        self.config["chassis"] = int(params.get("chassis", 1))
+        self.config["face"] = params.get("face", "front").lower()
+        self.config['direction'] = params.get("direction","up").lower()
 
-    async def create_image(self):
+    async def get_image(self):
         tasks = []
 
-        img_key = "png/fb_chassis_{}.png".format(self.config["face"])
+        img_key = "png/pure_fb_{}.png".format(self.config["face"])
 
         for _ in range(self.config["chassis"]):
             tasks.append(RackImage(img_key).get_image())
@@ -613,50 +583,48 @@ class FBDiagram(RackImage):
 
 
 async def build_diagram(params):
-    session = aiobotocore.get_session(loop=loop)
-    key = ""
 
-    async with session.create_client("s3") as client:
-        global cached_bucket
-        cached_bucket = AIOS3Cache.AIOS3CachedBucket(client, bucket)
-        model = params["model"].lower()
+    model = params.get('model','fa-x20r2').lower()
+    params['model'] = model
 
-        if model.startswith("fa"):
-            diagram = FADiagram(params)
-        elif model.startswith("fb"):
-            diagram = FBDiagram(params)
+    if model.startswith("fa"):
+        diagram = FADiagram(params)
+    elif model.startswith("fb"):
+        diagram = FBDiagram(params)
+    else:
+        raise Exception("Error unknown model, looking for fa or fb")
 
-        key = await diagram.get_image_key()
+    img = await diagram.get_image()
 
-        # complete all the uploads
-        await asyncio.gather(*tasks)
+    
 
-    return key
-
+    return img
 
 def handler(event, context):
 
     if ("queryStringParameters" not in event
        or event["queryStringParameters"] is None):
 
-        return {"statusCode": 200, "body": "no query params"}
-
+        return {"statusCode": 200, "body": "no query params. event={} and context={}".format(event,vars(context))}
+    
     params = event["queryStringParameters"]
-    key = loop.run_until_complete(build_diagram(params))
+    
+    loop = asyncio.get_event_loop()
+
+    img = loop.run_until_complete(build_diagram(params))
 
     if "test" in event:
         print("time elapsed: {}".format(datetime.now() - startTime))
-        print(
-            "head: {}   get: {}   put: {}".format(
-                AIOS3Cache.total_head,
-                AIOS3Cache.total_gets,
-                AIOS3Cache.total_puts
-            )
-        )
+        img.save('tmp.png')
 
-    url = "https://s3.amazonaws.com/{}/{}".format(bucket, key)
-    return {
-        "statusCode": 302,
-        "body": "",
-        "headers": {"Location": url}
-    }
+    else:    
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        return {
+            "statusCode": 200,
+            "body": img_str,
+            "headers": {"Content-Type": "image/png"},
+            "isBase64Encoded": True
+        }

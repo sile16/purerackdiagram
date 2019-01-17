@@ -5,12 +5,13 @@ ENV WORKDIR /var/task
 
 # Make the dir and to install all packages into packages/
 COPY requirements.txt "$WORKDIR"
-RUN mkdir -p deploy/ && \
-    pip install -r requirements.txt -t deploy/ &&
-    rm -rf deploy/botocore*
+RUN mkdir -p deploy/png && \
+    pip install -r requirements.txt -t deploy/ && \
+    rm -rf deploy/*dist-info
 
 COPY *.py "$WORKDIR/deploy/"
 COPY *.ttf "$WORKDIR/deploy/"
+COPY png "$WORKDIR/deploy/png/"
 
 
 # Compress all source codes.
