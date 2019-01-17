@@ -207,7 +207,11 @@ class FAChassis():
 
     async def add_card(self, slot, card_type):
         y_offset = 378
-        pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
+        if self.config['generation'] == 'x':
+            pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
+        elif self.config['generation'] == 'm':
+            pci_loc = [(1317, 87), (1317, 201), (2182, 87), (2182, 201)]
+        
         if slot < 2:
             height = "fh"
         else:
