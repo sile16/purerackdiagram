@@ -6,9 +6,11 @@ def main():
 
     event = {
         "queryStringParameters": {
-            "model": "fb",
+            "model": "fa-x20r2",
+            "datapacks": "38/38-31/63-127/0",
+            "direction":"down",
             "chassis": 2,
-            "face":"back"
+            "face":"front"
         },
         "test": True,
     }
