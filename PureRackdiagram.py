@@ -186,8 +186,13 @@ class FAChassis():
         self.start_img_event.set()
 
     async def add_nvram(self):
-        nv1 = (1263, 28)
-        nv2 = (1813, 28)
+        if self.config['generation'] == 'x':
+            nv1 = (1263, 28)
+            nv2 = (1813, 28)
+        else:
+            nv1 = (1255, 20)
+            nv2 = (1805, 20)
+            
         if self.config["model_num"] < 70:
             return
 
@@ -248,7 +253,7 @@ class FAChassis():
                 apply_fm_label(fm_img, fm_str, fm_type)
 
             await self.start_img_event.wait()
-            fm_loc = get_chassis_fm_loc()
+            fm_loc = get_chassis_fm_loc(self.config['generation'])
             for x in range(curr_module, min(20, curr_module + num_modules)):
                 # self.tmp_img.save("tmp.png")
                 self.tmp_img.paste(fm_img, fm_loc[x])
@@ -263,12 +268,17 @@ class FAChassis():
                 self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
     
     async def add_model_text(self):
+        if self.config['generation'] == 'x':
+            loc = (2759,83)
+        else:
+            loc = (2745,120)
+
         await self.start_img_event.wait()
         c = self.config
         draw = ImageDraw.Draw(self.tmp_img)
         font = ImageFont.truetype("Lato-Regular.ttf",size=24)
         text = "{}{}r{}".format(c['generation'].upper(),c['model_num'],c['release'])
-        draw.text((2759,83), text, (255, 255, 255, 220), font=font)
+        draw.text(loc, text, (255, 255, 255, 220), font=font)
 
 
 def apply_fm_label(fm_img, fm_str, fm_type):
@@ -317,7 +327,7 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right):
 
 
 # x,y coordinates for all chassis fms.
-def get_chassis_fm_loc():
+def get_chassis_fm_loc(model = 'x'):
     ch0_fm_loc = [None] * 28
     ch0_fm_loc[0] = (165, 250)
     ch0_fm_loc[4] = (714, 250)
@@ -343,6 +353,12 @@ def get_chassis_fm_loc():
             else:
                 loc[1] += y_offset
             ch0_fm_loc[x] = tuple(loc)
+    
+    if model != 'x':
+        #adjust slightly for the //m image
+        for x in range(len(ch0_fm_loc)):
+            ch0_fm_loc[x] = (ch0_fm_loc[x][0] - 9, ch0_fm_loc[x][1] - 7)
+    
     return ch0_fm_loc
 
 
