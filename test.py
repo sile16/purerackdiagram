@@ -14,8 +14,8 @@ def main():
 
     event = {
         "queryStringParameters": {
-            "model": "fa-m70r2",
-            "datapacks": "38/38-31/63-127/0",
+            "model": "fa-m20r2",
+            "datapacks": "19.2/0-31/63-0/0",
             "chassis": 2,
             "addoncards":"4fc,4fc,2eth",
             "face":"front",

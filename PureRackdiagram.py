@@ -619,8 +619,10 @@ class FADiagram():
             config["dp_label"] = "dp_label" in params
             config["bezel"] = params.get("bezel",False)
             #check for string versions of no/false
-            if config["bezel"] in ['False','false','no','0']:
-                config['bezel'] = False
+            for item in ["fm_label",'dp_label','bezel']:
+                if config[item] in ['False','false','FALSE','no','0','']:
+                    config[item] = False
+            
             
         #need for both as shelf type is encoded in DP sizes
         self._init_datapacks(config, params)
