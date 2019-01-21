@@ -615,8 +615,8 @@ class FADiagram():
 
         else:
             #face == 'front'
-            config["fm_label"] = "fm_label" in params
-            config["dp_label"] = "dp_label" in params
+            config["fm_label"] = params.get("fm_label",False)
+            config["dp_label"] = params.get("dp_label",False)
             config["bezel"] = params.get("bezel",False)
             #check for string versions of no/false
             for item in ["fm_label",'dp_label','bezel']:
