@@ -2,7 +2,6 @@
 Builds a rack diagram and caches results.
 """
 import time
-program_time_s = time.time()
 import os
 import sys
 from PIL import Image
@@ -10,7 +9,6 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from io import BytesIO
 import asyncio
-from datetime import datetime
 import concurrent
 import base64
 import boto3
@@ -24,15 +22,14 @@ from concurrent.futures import CancelledError
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-
 cache = {}
 cache_lock = asyncio.Lock()
 version = 1
+program_time_s = 0
 
-session = boto3.session.Session()
-s3 = session.client('s3')
 s3_base_url = 'https://s3.amazonaws.com/'
 bucket = 'images.purestorage'
+
 
 
 def timeit(method):
@@ -117,23 +114,28 @@ class FAShelf():
             fm_str = dp[0]
             fm_type = dp[1]
             num_modules = dp[2]
-
-            if num_modules > 0:
+            if fm_str == 'Blank':
+                num_modules = 14
+                fm_type = 'nvme'
+                fm_img = await RackImage("png/pure_fa_blank_fm.png").get_image()
+            else:
                 fm_img = await RackImage("png/pure_fa_dfm.png").get_image()
-                if self.config['fm_label']:
-                    apply_fm_label(fm_img, fm_str, fm_type)
 
-                await self.start_img_event.wait()
-                fm_loc = get_chassis_fm_loc()
-                fm_rotated = fm_img.rotate(-90, expand=True)
+            if self.config['fm_label']:
+                apply_fm_label(fm_img, fm_str, fm_type)
 
-                for x in range(cur_module, min(28, num_modules + cur_module)):
-                    if x < 20:
-                        self.tmp_img.paste(fm_img, fm_loc[x])
-                    else:
-                        self.tmp_img.paste(fm_rotated, fm_loc[x])
-                cur_module += num_modules
+            await self.start_img_event.wait()
+            fm_loc = get_chassis_fm_loc()
+            fm_rotated = fm_img.rotate(-90, expand=True)
 
+            for x in range(cur_module, min(28, num_modules + cur_module)):
+                if x < 20:
+                    self.tmp_img.paste(fm_img, fm_loc[x])
+                else:
+                    self.tmp_img.paste(fm_rotated, fm_loc[x])
+            cur_module += num_modules
+
+        #add datapack labels
         right = False
         if self.config['dp_label']:
             for dp in self.config["datapacks"]:
@@ -155,29 +157,31 @@ class FAShelf():
 
             dp_start = cur_module
 
-            if num_modules > 0:
+            if fm_str == 'Blank':
+                fm_img = await RackImage("png/pure_fa_blank_fm.png").get_image()
+            else:
                 fm_img = await RackImage("png/pure_fa_dfm.png").get_image()
 
-                if self.config['fm_label']:
-                    apply_fm_label(fm_img, fm_str, fm_type)
+            if self.config['fm_label']:
+                apply_fm_label(fm_img, fm_str, fm_type)
 
 
-                await self.start_img_event.wait()
-                fm_loc = get_sas_fm_loc()
+            await self.start_img_event.wait()
+            fm_loc = get_sas_fm_loc()
 
-                for x in range(cur_module, min(24, cur_module + num_modules)):
-                    self.tmp_img.paste(fm_img, fm_loc[x])
-            
-                    # self.tmp_img.save('tmp.png')
-                cur_module += num_modules
+            for x in range(cur_module, min(24, cur_module + num_modules)):
+                self.tmp_img.paste(fm_img, fm_loc[x])
 
-                if self.config['dp_label']:
-                    y_offset = 0
-                    x_offset = 90
-                    right = False
-                    if dp_start > 9:
-                        right = True
-                    self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
+            #apply dp label after fm modules
+            if self.config['dp_label']:
+                y_offset = 0
+                x_offset = 90
+                right = False
+                if dp_start > 9:
+                    right = True
+                self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
+
+            cur_module += num_modules
 
 
 class FAChassis():
@@ -284,7 +288,10 @@ class FAChassis():
             dp_size = dp[3]
             dp_start = curr_module
 
-            fm_img = await RackImage("png/pure_fa_dfm.png").get_image()
+            if fm_str == 'Blank':
+                fm_img = await RackImage("png/pure_fa_blank_fm.png").get_image()
+            else:
+                fm_img = await RackImage("png/pure_fa_dfm.png").get_image()
 
             if self.config['fm_label']:
                 apply_fm_label(fm_img, fm_str, fm_type)
@@ -294,8 +301,7 @@ class FAChassis():
             for x in range(curr_module, min(20, curr_module + num_modules)):
                 # self.tmp_img.save("tmp.png")
                 self.tmp_img.paste(fm_img, fm_loc[x])
-            curr_module += num_modules
-
+            
             if self.config['dp_label']:
                 y_offset = 244
                 x_offset = 130
@@ -303,6 +309,10 @@ class FAChassis():
                 if dp_start > 9:
                     right = True
                 self.tmp_img = apply_dp_label(self.tmp_img, dp_size, x_offset, y_offset, right)
+            
+            curr_module += num_modules
+
+            
     
     async def add_model_text(self):
         if self.config['generation'] == 'x':
@@ -477,6 +487,7 @@ class FADiagram():
         #  Parse Data Packs & Shelf config
 
         chassis_dp_size_lookup = {
+            "0" : ["Blank", "", 10, "0"],
             "4.8": ["480GB", "sas", 10, "4.8"],
             "5": ["500GB", "sas", 10, "5"],
             "9.6": ["960GB", "sas", 10, "9.6"],
@@ -494,6 +505,7 @@ class FADiagram():
         }
 
         shelf_dp_size_lookup = {
+            "0" : ["Blank", "", 12, "0"],
             "11": ["960GB", "sas", 12, "11"],
             "22": ["1.9TB", "sas", 12, "22"],
             "45": ["3.8TB", "sas", 12, "45"],
@@ -547,9 +559,8 @@ class FADiagram():
                 for dp in shelf.split("/"):
                     if dp in shelf_dp_size_lookup:
                         datapacks.append(shelf_dp_size_lookup[dp])
-                        shelf_type = shelf_dp_size_lookup[dp][1]
-                    elif dp == '0':
-                        pass
+                        if dp != '0':
+                            shelf_type = shelf_dp_size_lookup[dp][1]
                     else:
                         raise Exception("Unknown Shelf: DP: {}\nPick from One of the Following\n{}".
                                     format(dp,shelf_dp_size_lookup))
@@ -705,7 +716,23 @@ def build_img(q, loop, diagram):
 
 @timeit
 def check_cache_and_upload(q, key, img_queue):
-    #time.sleep(2)
+    session = boto3.session.Session()
+    s3 = session.client('s3')
+    
+    if key_exists(s3, key):
+        logger.info("We found a cache object!! Yeah")
+        q.put({'name':'cache','result':True})
+        #just in case build still finished before us, pull the img from queue
+        img_queue.get()
+        img_queue.task_done()
+    else:
+        #Only if we didn't find it in cache we will upload it.
+        img = img_queue.get()
+        upload_img(s3, img, key)
+        img_queue.task_done()
+
+@timeit
+def key_exists(s3, key):
     response = s3.list_objects_v2(
         Bucket=bucket,
         Prefix=key
@@ -713,29 +740,28 @@ def check_cache_and_upload(q, key, img_queue):
     for obj in response.get('Contents', []):
         if obj['Key'] == key:
             #we found our cache object
-            logger.info("We found a cache object!! Yeah")
-            q.put({'name':'cache','result':True})
-            return
+            return True
+    return False
 
-    #Only if we didn't find it in cache we will upload it.
-    img = img_queue.get()
-    upload_img(img, key)
 
 @timeit
-def upload_img(img, key):
+def upload_img(s3, img, key):
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     buffer.seek(0)
     s3.put_object(Bucket=bucket, Key=key, Body=buffer, ContentType='image/png')
+    logger.info("S3 object uploaded.")
 
 @timeit
 def handler(event, context):
-    startTime = datetime.now()
+    global program_time_s
+    program_time_s = time.time()
+
     try:
         if ("queryStringParameters" not in event
         or event["queryStringParameters"] is None):
 
-            return {"statusCode": 200, "body": "no query params. event={} and context={}".format(event,vars(context))}
+            return {"statusCode": 500, "body": "no query params. event={} and context={}".format(event,vars(context))}
         
         params = event["queryStringParameters"]
 
@@ -749,6 +775,8 @@ def handler(event, context):
         check_cache_and_upload_thread = Thread(target=check_cache_and_upload, 
                                                args=(result_queue, cache_key, img_queue))
         build_img_thread = Thread(target=build_img, args=(result_queue, loop, diagram))
+        
+        #start both threads concurrently
         check_cache_and_upload_thread.start()
         build_img_thread.start()
         
@@ -760,6 +788,10 @@ def handler(event, context):
                 task.cancel()
                 #logging.info('bye, exiting in a minute...')  
             loop.stop()
+
+            #stuff empty object into queue, so that s3_check_and_upload thread closes nicely.
+            img_queue.put(None)
+            
             return {
                 "statusCode": 301,
                 "body": "",
@@ -779,6 +811,8 @@ def handler(event, context):
             #convert to base64 and encode utf-8
             img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
             
+            #when running in lambda we HAVE to wait until upload done before returning
+            img_queue.join()
             return_data = {
                     "statusCode": 200,
                     "body": img_str,
@@ -793,7 +827,6 @@ def handler(event, context):
             else:
                 return return_data
 
-            #does uplaod ? thread complete ? 
     
     except Exception as e:
         logger.error("{}\nOriginal Params: {}".format(e, params))
@@ -802,7 +835,6 @@ def handler(event, context):
             "body": "{}".format(e),
             "headers": {"Content-Type": "text/plain"}
         }
-    finally:
-        logger.info(print("time elapsed: {}".format(datetime.now() - startTime)))
+
 
     

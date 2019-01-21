@@ -7,13 +7,15 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 
+#38/38-31/63-127/0
+#0/38-0/45-0/45-0/63
 
 def main():
 
     event = {
         "queryStringParameters": {
             "model": "fa-m70r2",
-            "datapacks": "38/38-45/45-45/45-63/31",
+            "datapacks": "38/38-31/63-127/0",
             "chassis": 2,
             "addoncards":"4fc,4fc,2eth",
             "face":"front",
