@@ -1,6 +1,8 @@
 """
 Builds a rack diagram and caches results.
 """
+import time
+program_time_s = time.time()
 import os
 import sys
 from PIL import Image
@@ -11,11 +13,41 @@ import asyncio
 from datetime import datetime
 import concurrent
 import base64
+import boto3
+import queue
 
-startTime = datetime.now()
+import logging
+import hashlib
+from threading import Thread
+from concurrent.futures import CancelledError
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 
 cache = {}
 cache_lock = asyncio.Lock()
+version = 1
+
+session = boto3.session.Session()
+s3 = session.client('s3')
+s3_base_url = 'https://s3.amazonaws.com/'
+bucket = 'images.purestorage'
+
+
+def timeit(method):
+    def timed(*args, **kw):
+        ts = time.time()
+        result = method(*args, **kw)
+        te = time.time()
+        logger.info('{:>5}  Duration: {:.2f} ms, Start: {:.2f} - {:.2f}'.format(
+                    method.__name__,
+                    (te - ts) * 1000,
+                    (ts - program_time_s)*1000,
+                    (te - program_time_s)*1000 ))
+        return result
+    return timed
+
 
 class RackImage():
     def __init__(self, key):
@@ -46,9 +78,11 @@ class RackImage():
 
             return self.img.copy()
     
+    @timeit
     def load_img(self):
         self.img = Image.open(self.key)
         self.img.load()
+        logger.info("Loaded: {}".format(self.key))
 
 
 
@@ -147,6 +181,8 @@ class FAShelf():
 
 
 class FAChassis():
+
+    @timeit
     def __init__(self, params):
         config = params.copy()
         del config["shelves"]
@@ -154,7 +190,7 @@ class FAChassis():
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
         
-
+    @timeit
     async def get_image(self):
         c = self.config
         key = "png/pure_fa_{}".format(c["generation"])
@@ -211,7 +247,7 @@ class FAChassis():
         await asyncio.gather(*tasks)
 
     async def add_card(self, slot, card_type):
-        y_offset = 378
+        y_offset = 378 #y offset from CT1 -> CT0
         if self.config['generation'] == 'x':
             pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
         elif self.config['generation'] == 'm':
@@ -221,6 +257,7 @@ class FAChassis():
             height = "fh"
         else:
             height = "hh"
+        
         key = "png/pure_fa_{}_{}.png".format(card_type, height)
         card_img = await RackImage(key).get_image()
         await self.start_img_event.wait()
@@ -378,37 +415,7 @@ def get_sas_fm_loc():
 
 
 class FADiagram():
-    def __init__(self, params):
-        # front or back
-        config = {}
-        face = params.get("face", "front")
-        
-        if face != "front" and face != "back":
-            face = "front"
-
-        config["face"] = face
-
-        config["bezel"] = params.get("bezel",False)
-        
-        config["protocol"] = params.get("protocol", "fc").lower()
-
-        config["model_str"] = params["model"].lower()
-        config["generation"] = config["model_str"][3:4]
-        config["model_num"] = int(config["model_str"][4:6])
-        config["direction"] = params.get("direction", "up").lower()
-        config["fm_label"] = "fm_label" in params
-        config["dp_label"] = "dp_label" in params
-        
-        default_mezz = 'smezz'
-        if config["model_num"] > 20:
-            default_mezz = 'emezz'
-        config["mezz"] = params.get("mezz", default_mezz )
-
-        if "r" in config["model_str"] and len(config["model_str"]) > 7:
-            config["release"] = int(config["model_str"][7:8])
-        else:
-            config["release"] = 1
-
+    def _init_pci_cards(self, config, params):
         # default card config:
         pci_config_lookup = {
             "fa-x10r2-fc": [None, None, "2fc", None],
@@ -461,9 +468,12 @@ class FADiagram():
         # pci3 = '2fc'  overrides everything
         for x in range(4):
             slot = "pci.{}".format(x)
+            #try to pull slot specic rules, to override, provide self as default
             pci_config[x] = params.get(slot, pci_config[x])
+        
 
-        ######################################
+    def _init_datapacks(self, config, params):
+       ######################################
         #  Parse Data Packs & Shelf config
 
         chassis_dp_size_lookup = {
@@ -502,6 +512,7 @@ class FADiagram():
                 default_shelf_type = "sas"
             else:
                 default_shelf_type = "nvme"
+            
             # Of form "38/38-90/0"
             dp_configs = params["datapacks"].split("-")
             chassis = dp_configs[0]
@@ -514,37 +525,97 @@ class FADiagram():
             # Chassis data pack config:
             datapacks = []
 
-            for dp in chassis.split("/"):
-                if dp in chassis_dp_size_lookup:
-                    datapacks.append(chassis_dp_size_lookup[dp])
+            #not displaying chassis DP if there is a bezel
+            if not config["bezel"]:
+                for dp in chassis.split("/"):
+                    if dp in chassis_dp_size_lookup:
+                        datapacks.append(chassis_dp_size_lookup[dp])
+                    elif dp == '0':
+                        pass
+                    else:
+                        raise Exception("Unknown Chassis: DP: {}\nPick from One of the Following\n{}".
+                                        format(dp,chassis_dp_size_lookup))
 
-            config["chassis_datapacks"] = datapacks
+                config["chassis_datapacks"] = datapacks
 
             # Shelf DPs
             for shelf in shelf_configs:
                 datapacks = []
                 shelf_type = default_shelf_type
 
+                
                 for dp in shelf.split("/"):
                     if dp in shelf_dp_size_lookup:
                         datapacks.append(shelf_dp_size_lookup[dp])
                         shelf_type = shelf_dp_size_lookup[dp][1]
+                    elif dp == '0':
+                        pass
+                    else:
+                        raise Exception("Unknown Shelf: DP: {}\nPick from One of the Following\n{}".
+                                    format(dp,shelf_dp_size_lookup))
 
-                shelves.append(
-                    {
-                        "shelf_type": shelf_type,
-                        "datapacks": datapacks,
-                        "face": config["face"],
-                        "dp_label": config["dp_label"],
-                        "fm_label": config["fm_label"],
-                    }
-                )
+
+                if config['face'] == 'front':
+                    shelves.append(
+                        {
+                            "shelf_type": shelf_type,
+                            "datapacks": datapacks,
+                            "face": config["face"],
+                            "dp_label": config["dp_label"],
+                            "fm_label": config["fm_label"],
+                        }
+                    )
+                else:
+                    shelves.append({'shelf_type': shelf_type, "face": 'back'})
 
         config["shelves"] = shelves
 
+
+    @timeit
+    def __init__(self, params):
+        # front or back
+        config = {}
+        
+        #mode-str of type  "fa-m70r2" or "fa-x70"
+        config["model_str"] = params["model"].lower()
+        config["generation"] = config["model_str"][3:4]
+        config["model_num"] = int(config["model_str"][4:6])
+        config["direction"] = params.get("direction", "up").lower()
+        
+        if "r" in config["model_str"] and len(config["model_str"]) > 7:
+            config["release"] = int(config["model_str"][7:8])
+        else:
+            config["release"] = 1
+
+        face = params.get("face", "front")
+        if face != "front" and face != "back":
+            face = "front"
+        config["face"] = face
+        
+        if face == "back":
+            config['bezel'] = False
+            config["protocol"] = params.get("protocol", "fc").lower()
+
+            default_mezz = 'smezz'
+            if config["model_num"] > 20:
+                default_mezz = 'emezz'
+            config["mezz"] = params.get("mezz", default_mezz )
+            self._init_pci_cards(config, params)
+
+        else:
+            #face == 'front'
+            config["fm_label"] = "fm_label" in params
+            config["dp_label"] = "dp_label" in params
+            config["bezel"] = params.get("bezel",False)
+            #check for string versions of no/false
+            if config["bezel"] in ['False','false','no','0']:
+                config['bezel'] = False
+            
+        #need for both as shelf type is encoded in DP sizes
+        self._init_datapacks(config, params)
         self.config = config
 
-
+    @timeit
     async def get_image(self):
         tasks = []
 
@@ -580,7 +651,7 @@ def combine_images_vertically(images):
     return new_im
 
 
-class FBDiagram(RackImage):
+class FBDiagram():
     def __init__(self, params):
         self.config = {}
         self.config["chassis"] = int(params.get("chassis", 1))
@@ -602,7 +673,7 @@ class FBDiagram(RackImage):
         return combine_images_vertically(all_images)
 
 
-async def build_diagram(params):
+def init_diagram(params):
 
     model = params.get('model','fa-x20r2').lower()
     params['model'] = model
@@ -614,37 +685,124 @@ async def build_diagram(params):
     else:
         raise Exception("Error unknown model, looking for fa or fb")
 
-    img = await diagram.get_image()
+    return diagram
 
-    
+@timeit
+def generate_id(config):
+    config_str = "{}{}".format(version, config)
+    return hashlib.sha1(config_str.encode("utf-8")).hexdigest()[:20]
 
-    return img
+@timeit
+def build_img(q, loop, diagram):
+    #time.sleep(3)
+    try:
+        img = loop.run_until_complete(diagram.get_image())
+        q.put({'name':'build','img':img})
+    except RuntimeError:
+        logging.info('CancelledError')
+ 
+    return
 
+@timeit
+def check_cache_and_upload(q, key, img_queue):
+    #time.sleep(2)
+    response = s3.list_objects_v2(
+        Bucket=bucket,
+        Prefix=key
+    )
+    for obj in response.get('Contents', []):
+        if obj['Key'] == key:
+            #we found our cache object
+            logger.info("We found a cache object!! Yeah")
+            q.put({'name':'cache','result':True})
+            return
+
+    #Only if we didn't find it in cache we will upload it.
+    img = img_queue.get()
+    upload_img(img, key)
+
+@timeit
+def upload_img(img, key):
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+    s3.put_object(Bucket=bucket, Key=key, Body=buffer, ContentType='image/png')
+
+@timeit
 def handler(event, context):
+    startTime = datetime.now()
+    try:
+        if ("queryStringParameters" not in event
+        or event["queryStringParameters"] is None):
 
-    if ("queryStringParameters" not in event
-       or event["queryStringParameters"] is None):
+            return {"statusCode": 200, "body": "no query params. event={} and context={}".format(event,vars(context))}
+        
+        params = event["queryStringParameters"]
 
-        return {"statusCode": 200, "body": "no query params. event={} and context={}".format(event,vars(context))}
+        diagram = init_diagram(params)
+        cache_key = "cache/{}".format(generate_id(diagram.config))
+        
+        result_queue = queue.Queue()
+        img_queue = queue.Queue()
+
+        loop = asyncio.get_event_loop()
+        check_cache_and_upload_thread = Thread(target=check_cache_and_upload, 
+                                               args=(result_queue, cache_key, img_queue))
+        build_img_thread = Thread(target=build_img, args=(result_queue, loop, diagram))
+        check_cache_and_upload_thread.start()
+        build_img_thread.start()
+        
+        #block until either the image is found in s3 cache, or we built the image locally
+        first_result = result_queue.get()
+        if first_result['name'] == 'cache':
+            #stop trying to build our image
+            for task in asyncio.Task.all_tasks():
+                task.cancel()
+                #logging.info('bye, exiting in a minute...')  
+            loop.stop()
+            return {
+                "statusCode": 301,
+                "body": "",
+                "headers": {"Location": "{}{}/{}".format(s3_base_url,bucket,cache_key) } 
+            }
+
+        #we built the image
+        elif first_result['name'] == 'build':
+            img = first_result['img']
+            img_queue.put(img)
+            
+
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            #buffer_cache_copy = buffered.copy()
+        
+            #convert to base64 and encode utf-8
+            img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+            
+            return_data = {
+                    "statusCode": 200,
+                    "body": img_str,
+                    "headers": {"Content-Type": "image/png"},
+                    "isBase64Encoded": True
+                }
+            if 'test' in event:
+                img.save('tmp.png')
+                #don't want to dump actual image to console.
+                del return_data['body']
+                return return_data
+            else:
+                return return_data
+
+            #does uplaod ? thread complete ? 
     
-    params = event["queryStringParameters"]
-    
-    loop = asyncio.get_event_loop()
-
-    img = loop.run_until_complete(build_diagram(params))
-
-    if "test" in event:
-        print("time elapsed: {}".format(datetime.now() - startTime))
-        img.save('tmp.png')
-
-    else:    
-        buffered = BytesIO()
-        img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
+    except Exception as e:
+        logger.error("{}\nOriginal Params: {}".format(e, params))
         return {
-            "statusCode": 200,
-            "body": img_str,
-            "headers": {"Content-Type": "image/png"},
-            "isBase64Encoded": True
+            "statusCode": 500,
+            "body": "{}".format(e),
+            "headers": {"Content-Type": "text/plain"}
         }
+    finally:
+        logger.info(print("time elapsed: {}".format(datetime.now() - startTime)))
+
+    
