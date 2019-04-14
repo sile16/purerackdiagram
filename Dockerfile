@@ -11,7 +11,9 @@ RUN mkdir -p deploy/png && \
 
 COPY *.py "$WORKDIR/deploy/"
 COPY *.ttf "$WORKDIR/deploy/"
+COPY config.json "$WORKDIR/deploy/"
 COPY png "$WORKDIR/deploy/png/"
+
 
 
 # Compress all source codes.

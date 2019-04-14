@@ -51,10 +51,13 @@ def generate_id(config):
     return hashlib.sha1(config_str.encode("utf-8")).hexdigest()[:20]
 
 @timeit
-def build_img(q, loop, diagram):
+def build_img(q, loop, diagram, params):
     """ this is a wrapper around the simple diagram.get_image to 
         to allow it to be ran in a thread and to be cancelleable."""
     try:
+        if 'local_delay' in params:
+            logging.info("Local delay of {}".format(params['local_delay']))
+            time.sleep(params['local_delay'])
         img = loop.run_until_complete(diagram.get_image())
         q.put({'name':'build','img':img})
     except RuntimeError:
@@ -136,7 +139,7 @@ def handler(event, context):
         loop = asyncio.get_event_loop()
         check_cache_and_upload_thread = Thread(target=check_cache_and_upload, 
                                                args=(result_queue, cache_key, img_queue))
-        build_img_thread = Thread(target=build_img, args=(result_queue, loop, diagram))
+        build_img_thread = Thread(target=build_img, args=(result_queue, loop, diagram, params))
         
         #start both threads concurrently
         check_cache_and_upload_thread.start()

@@ -6,13 +6,11 @@ import hashlib
 import io
 import queue
 import os
-import PureRackdiagram
+import lambdaentry
 from utils import global_config
 import purediagram
 import asyncio
 import json
-
-
 
 logger = logging.getLogger()
 ch = logging.StreamHandler()
@@ -25,7 +23,7 @@ save_dir = 'test_results/'
 #0/38-0/45-0/45-0/63
 
 def test_lambda():
-    event = {
+    event1 = {
         "queryStringParameters": {
             "model": "fa-m20r2",
             "datapacks": "19.2/0-31/63-0/0",
@@ -37,7 +35,17 @@ def test_lambda():
         }
     }
 
-    results  = PureRackdiagram.handler(event, None)
+    event2 = {
+        "queryStringParameters": {
+            "model": "fb",
+            "chassis": 3,
+            "face":"back",
+            'direction':'up',
+            'local_delay':2
+        }
+    }
+
+    results  = lambdaentry.handler(event2, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
@@ -145,7 +153,7 @@ def test_all(args):
 
 
 def main(args):
-    if args.a:
+    if args.testtype == 'all':
         test_all(args)
     else:
         test_lambda()
@@ -154,8 +162,8 @@ def main(args):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("-s", help="save the images", action="store_true", default=True)
-    parser.add_argument('-a', help="Test all", 
-                         action="store_true", default=True)
+    parser.add_argument('testtype', choices=['all', 'lambda'], default='lambda',
+                        nargs='?', 
+                        help="Test all options, or test through lamdba entry")
     parser.add_argument('-t',type=int, help="number of threads", default=1)
     main(parser.parse_args())

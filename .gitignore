@@ -102,3 +102,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+test_results
+lambda
+lamdba/
+lamdba.zip
+.DS_Store
+tmp.png
