@@ -50,7 +50,7 @@ $(function() {
     url += "&model=fb"; // it is fixed value, but reserved for future expension
     url += "&chassis="  + fb_option_chassis.val();
     url += "&face="  + fb_option_face.val();
-    url += "&direction="  + fa_option_direction.val();
+    url += "&direction="  + fb_option_direction.val();
 
     return url;
   }
