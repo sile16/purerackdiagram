@@ -7,8 +7,8 @@ import io
 import queue
 import os
 import lambdaentry
-from utils import global_config
-import purediagram
+from purerackdiagram.utils import global_config
+import purerackdiagram
 import asyncio
 import json
 
@@ -23,6 +23,7 @@ save_dir = 'test_results/'
 #0/38-0/45-0/45-0/63
 
 def test_lambda():
+    #local_delay puts a delay into build_img so they we can test the cache lookkup
     event1 = {
         "queryStringParameters": {
             "model": "fa-m20r2",
@@ -31,21 +32,22 @@ def test_lambda():
             "addoncards":"4fc,4fc,2eth",
             "face":"front",
             "fm_label":True,
-            "dp_label":True
+            "dp_label":True,
+            "local_delay":2
         }
     }
 
     event2 = {
         "queryStringParameters": {
             "model": "fb",
-            "chassis": 3,
-            "face":"back",
+            "chassis": 4,
+            "face":"front",
             'direction':'up',
             'local_delay':2
         }
     }
 
-    results  = lambdaentry.handler(event2, None)
+    results  = lambdaentry.handler(event1, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
@@ -66,13 +68,16 @@ class TestWorker(threading.Thread):
         self.results = results
 
     def run(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+        #loop = asyncio.new_event_loop()
+        #asyncio.set_event_loop(loop)
 
         while True:
             item = self.q.get()
-            diagram = purediagram.get_diagram(item)
-            img = loop.run_until_complete(diagram.get_image())
+
+            #diagram = purediagram.get_diagram(item)
+            #img = loop.run_until_complete(diagram.get_image())
+            img = purerackdiagram.get_image_sync(item)
+
             name = ""
             for n in item.values():
                 if isinstance(n, str):
@@ -146,7 +151,10 @@ def test_all(args):
 
     errors = 0
     for key in results:
-        if results[key] != validation[key]:
+        if key not in validation:
+            errors += 1
+            print("WARNING missing key:{}".format(key))
+        elif results[key] != validation[key]:
             errors += 1
             print("WARNING no match key:{}".format(key))
     print("Test Complete {} Errors Found".format(errors))

@@ -7,15 +7,18 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 from io import BytesIO
+import os
+import purerackdiagram
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 cache = {}
 cache_lock = asyncio.Lock()
+root_path = os.path.dirname(purerackdiagram.__file__)
 
 global_config = None
-with open('config.json', 'r') as f:
+with open(os.path.join(root_path, 'config.json'), 'r') as f:
         global_config = json.load(f)
 
 class RackImage():
@@ -23,13 +26,16 @@ class RackImage():
     loaded it returns the cached object.  Originally, we were loading
     images from an S3 bucket, however, now to improve performance images are loaded
     directly from local FS.  So the benefit of this caching is questionable
-    but is already written.  Probably could replace this whole thing 
+    but is already written.  Probably could replace this whole class
     with img = Image.open(key)  lol!
     """
+    
 
     def __init__(self, key):
+        global root_path
+
         #key is the file name, s3 terminology.
-        self.key = key
+        self.key = os.path.join(root_path, key)
         self.img = None
         self.io_lock = asyncio.Lock()
 
@@ -56,7 +62,7 @@ class RackImage():
             if self.img:
                 return self.img.copy()
             
-            loop = asyncio.get_running_loop()
+            loop = asyncio.get_event_loop()
 
             #reading through asyncIO, it seems some OS implementations are not truly Async!!!  
             #now i'm going back to threads...  
@@ -68,6 +74,7 @@ class RackImage():
     
     def load_img(self):
         #load image from disk
+        
         self.img = Image.open(self.key)
         self.img.load()
         logger.info("Loaded: {}".format(self.key))

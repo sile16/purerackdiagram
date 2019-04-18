@@ -1,5 +1,5 @@
 import asyncio
-from utils import RackImage, combine_images_vertically
+from .utils import RackImage, combine_images_vertically
 
 
 class FBDiagram():

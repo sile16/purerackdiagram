@@ -3,10 +3,13 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from io import BytesIO
 import asyncio
-import utils
-from utils import RackImage, combine_images_vertically
+from . import utils
+from .utils import RackImage, combine_images_vertically
 import logging
+import os
 
+root_path = os.path.dirname(utils.__file__)
+ttf_path = os.path.join(root_path,"Lato-Regular.ttf")
 
 
 class FAShelf():
@@ -122,6 +125,7 @@ class FAChassis():
         self.config = config
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
+        
         
     async def get_image(self):
         c = self.config
@@ -241,6 +245,8 @@ class FAChassis():
             curr_module += num_modules
 
     async def add_model_text(self):
+        global ttf_path
+
         if self.config['generation'] == 'x':
             loc = (2759,83)
         else:
@@ -249,14 +255,17 @@ class FAChassis():
         await self.start_img_event.wait()
         c = self.config
         draw = ImageDraw.Draw(self.tmp_img)
-        font = ImageFont.truetype("Lato-Regular.ttf",size=24)
+        
+        font = ImageFont.truetype(ttf_path,size=24)
         text = "{}{}r{}".format(c['generation'].upper(),c['model_num'],c['release'])
         draw.text(loc, text, (255, 255, 255, 220), font=font)
 
 
 def apply_fm_label(fm_img, fm_str, fm_type):
+    global ttf_path
+
     draw = ImageDraw.Draw(fm_img)
-    font = ImageFont.truetype("Lato-Regular.ttf",size=15)
+    font = ImageFont.truetype(ttf_path,size=15)
     w, _ = draw.textsize(fm_str, font=font)
     x_loc = fm_img.size[0] // 2 - w // 2
     draw.text((x_loc,18), fm_str, fill=(199,89,40),font=font)
@@ -265,6 +274,7 @@ def apply_fm_label(fm_img, fm_str, fm_type):
     draw.text( (34,32), fm_type, fill=(199,89,40),font=font)
 
 def apply_dp_label(img, dp_size, x_offset, y_offset, right):
+    global ttf_path
     #temp image same size as our chassis.
     tmp = Image.new('RGBA', img.size, (0,0,0,0))
 
@@ -289,7 +299,7 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right):
     
     draw.rectangle((box_loc, box_loc2),fill=(199,89,40,127))
     box_center = ((box_loc[0] + box_loc2[0]) // 2, (box_loc[1] + box_loc2[1]) //2)
-    font = ImageFont.truetype("Lato-Regular.ttf",size=85)
+    font = ImageFont.truetype(ttf_path,size=85)
     w, h = draw.textsize(dp_size+"TB",font=font)
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
     draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220),font=font)
@@ -368,6 +378,11 @@ class FADiagram():
         # add on cards
         if "addoncards" in params:
             for card in params["addoncards"].split(","):
+                card = card.strip()
+                if not card:
+                    #meaining it's blank, do nothing.
+                    continue
+
                 if card not in pci_valid_cards:
                     raise Exception("invalid pci card: {}, valid cards:{}".format(card,pci_valid_cards))
 
@@ -390,7 +405,13 @@ class FADiagram():
         for x in range(4):
             slot = "pci{}".format(x)
             #specific slot overrides
-            pci_config[x] = params.get(slot, pci_config[x])
+            #make the default, the current config so far.
+            card = params.get(slot, pci_config[x])
+            if not card:
+                continue
+            if card not in pci_valid_cards:
+                raise Exception("invalid pci card: {}, valid cards:{}".format(card,pci_valid_cards))
+            pci_config[x] = card
         
 
     def _init_datapacks(self, config, params):
@@ -431,7 +452,7 @@ class FADiagram():
                         pass
                     else:
                         raise Exception("Unknown Chassis: DP: {}\nPick from One of the Following\n{}".
-                                        format(dp,chassis_dp_size_lookup))
+                                    format(dp,chassis_dp_size_lookup))
 
                 config["chassis_datapacks"] = datapacks
 

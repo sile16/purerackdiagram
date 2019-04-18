@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Pure Rack Diagram Builder</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" href="multiple-select/1.2.2/multiple-select.min.css">
+  <script src="multiple-select/1.2.2/multiple-select.min.js"></script>
+
+  <script src="CONFIG.js"></script>
+  <script src="mfgui.js"></script>
+  <script src="purerackdiagram.js"></script>
+  <link rel="stylesheet" href="purerackdiagram.css">
+
+</head>
+<body>
+
+<h1>Pure Rack Diagram Builder</h1>
+<h4>Instructions:</h4>
+Select the options from Option section, click Display button the display the diagram on the Rack Diagrm section
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <h2>Option</h2>
+
+      <div id="option-tabs">
+        <ul>
+          <li><a href="#tabs-fa">Flash Array</a></li>
+          <li><a href="#tabs-fb">Flash Blade</a></li>
+          <li><a href="#tabs-oe">Object Engine</a></li>
+        </ul>
+        <div id="tabs-fa">
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">model:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_model"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">protocl:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_protocol"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">face:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_face"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">datapacks:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_datapacks"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">bezel:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_bezel"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">direction:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_direction"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">fm_label:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_fm_label"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">dp_label:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_dp_label"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">addoncards:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_addoncards"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">mezz:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_mezz"></span></div>
+          </div>
+          <br/>
+        </div>
+        <div id="tabs-fb">
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">model:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fb_option_model">FlashBlade (no other options)</span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">chassis:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fb_option_chassis"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">face:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fb_option_face"></span></div>
+          </div>
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 option_label">directon:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fb_option_direction"></span></div>
+          </div>
+          <br/>
+
+        </div>
+        <div id="tabs-oe">
+          <h1> working in progress </h1>
+        </div>
+      </div>
+      <br/>
+
+      <button id="display">Display</button>
+      <div>
+        <h5>image link:</h5>
+        <div id="img_url"></div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <h2>Rack Diagram</h2>
+      <br>
+      <img id='rack_digram' src="smiley.gif" alt="Rack Digram, please click on Display to show it" width="100%">
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

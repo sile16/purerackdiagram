@@ -11,7 +11,8 @@
         "addoncards": ["4fc", "2fc", "2eth", "2eth40", "sas"],
         "mezz": ["", "smezz", "emezz"]
     },
-    "pci_valid_cards": ["2eth","2eth40","2fc","4fc"],
+
+    "pci_valid_cards": ["2eth", "2eth40", "2fc", "4fc", "sas"],
         
     "pci_config_lookup": {
         "fa-x10r2-fc": [null, null, "2fc", null],

@@ -19,7 +19,7 @@ import logging
 import hashlib
 from threading import Thread
 from concurrent.futures import CancelledError
-import purediagram
+import purerackdiagram
 
 
 logger = logging.getLogger()
@@ -129,13 +129,14 @@ def handler(event, context):
         params = event["queryStringParameters"]
 
         #Initialize our diagram from the params, parse all the params
-        diagram = purediagram.get_diagram(params)
+        diagram = purerackdiagram.get_diagram(params)
 
         cache_key = "cache/{}".format(generate_id(diagram.config))
         
         result_queue = queue.Queue()
         img_queue = queue.Queue()
 
+        #doing this out here so we can stop the loop if necessary.
         loop = asyncio.get_event_loop()
         check_cache_and_upload_thread = Thread(target=check_cache_and_upload, 
                                                args=(result_queue, cache_key, img_queue))
@@ -152,7 +153,10 @@ def handler(event, context):
             for task in asyncio.Task.all_tasks():
                 task.cancel()
                 #logging.info('bye, exiting in a minute...')  
-            loop.stop()
+            try:
+                loop.stop()
+            except:
+                pass
 
             #stuff empty object into queue, so that s3_check_and_upload thread closes nicely.
             img_queue.put(None)
@@ -163,7 +167,7 @@ def handler(event, context):
                 "headers": {"Location": "{}{}/{}".format(s3_base_url,bucket,cache_key) } 
             }
 
-        #we built the image
+        #we built the image first
         elif first_result['name'] == 'build':
             img = first_result['img']
 
