@@ -51,6 +51,7 @@ $(function() {
     url += "&chassis="  + fb_option_chassis.val();
     url += "&face="  + fb_option_face.val();
     url += "&direction="  + fb_option_direction.val();
+    url += "&xfm=" + fb_option_xfm.val();
 
     return url;
   }

@@ -9,9 +9,14 @@ class FBDiagram():
         self.config["face"] = params.get("face", "front").lower()
         self.config['direction'] = params.get("direction","up").lower()
 
-        self.xfm = False
+        default_xfm = False
         if self.config['chassis'] > 1 :
-            self.xfm = True
+            default_xfm = True
+
+        config["xfm"] = params.get("xfm",default_xfm)
+        for item in ["xfm"]:
+            if config[item] in ['False','false','FALSE','no','0','']:
+                config[item] = False
 
 
     async def get_image(self):

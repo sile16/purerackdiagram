@@ -15,6 +15,8 @@ COPY purerackdiagram "$WORKDIR/deploy/purerackdiagram/"
 #pre-compile.pyc
 RUN python -m compileall .  
 
+
+
 # Compress all source codes.
 RUN cd deploy && zip -r9 $WORKDIR/lambda.zip .
 
