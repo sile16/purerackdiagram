@@ -21,6 +21,6 @@ var FA_OPTIONS = {
 var FB_OPTIONS = {
     face: ['front', 'back'],
     chassis: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    xfm: ['','FALSE','TRUE']
+    xfm: ['','FALSE','TRUE'],
     direction: ['up', 'down']
 }
