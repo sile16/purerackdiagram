@@ -17,6 +17,7 @@ $(function() {
   var fb_option_face = build_select('#fb_option_face', FB_OPTIONS.face);
   var fb_option_direction = build_select('#fb_option_direction', FB_OPTIONS.direction);
   var fb_option_chassis = build_select('#fb_option_chassis', FB_OPTIONS.chassis);
+  var fb_option_xfm = build_select('#fb_option_xfm', FB_OPTIONS.xfm)
 
 
   var fa_url = function(){

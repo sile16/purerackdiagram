@@ -40,14 +40,15 @@ def test_lambda():
     event2 = {
         "queryStringParameters": {
             "model": "fb",
-            "chassis": 4,
+            "chassis": 2,
             "face":"front",
             'direction':'up',
+            'xfm':"",
             'local_delay':2
         }
     }
 
-    results  = lambdaentry.handler(event1, None)
+    results  = lambdaentry.handler(event2, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
