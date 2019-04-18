@@ -4,7 +4,7 @@ This is an un-official tool to build Pure Storage rack diagrams.
 
 ## Try it out:
 
-[Web UI](https://raw.githubusercontent.com/sile16/purerackdiagram/master/ui/index.html)
+[Web UI](https://sile16.github.io/purerackdiagram/ui/)
 
 Thank you Jian Ruan for the html interface!!
 
