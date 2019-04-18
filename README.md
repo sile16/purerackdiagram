@@ -8,6 +8,14 @@ This is an un-official tool to build Pure Storage rack diagrams.
 
 Thank you Jian Ruan for the html interface!!
 
+### Example FA UI
+
+![fa ui example](https://raw.githubusercontent.com/sile16/purerackdiagram/master/ui/example_fa_ui.png)
+
+### Example FB UI
+
+![fb ui example](https://raw.githubusercontent.com/sile16/purerackdiagram/master/ui/example_fb_ui.png)
+
 ## Background
 
 
