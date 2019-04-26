@@ -77,6 +77,9 @@ class TestWorker(threading.Thread):
 
             #diagram = purediagram.get_diagram(item)
             #img = loop.run_until_complete(diagram.get_image())
+            if 'addoncards' in item:
+                if item['addoncards'] == "2ethbaset":
+                    a=2
             img = purerackdiagram.get_image_sync(item)
 
             name = ""
@@ -133,6 +136,7 @@ def test_all(args):
 
     for model in models:
         for card in addon_cards:
+
             for dp in dps:
                 model = model[:8]
                 params = {"model":model, 
@@ -171,7 +175,7 @@ def main(args):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('testtype', choices=['all', 'lambda'], default='lambda',
+    parser.add_argument('testtype', choices=['all', 'lambda'], default='all',
                         nargs='?', 
                         help="Test all options, or test through lamdba entry")
     parser.add_argument('-t',type=int, help="number of threads", default=1)

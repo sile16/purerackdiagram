@@ -8,11 +8,11 @@
         "direction": ["up", "down"],
         "fm_label": [false, true],
         "dp_label": [false, true],
-        "addoncards": ["4fc", "2fc", "2eth", "2eth40", "sas"],
+        "addoncards": ["4fc", "2fc", "2eth", "2eth40", "sas", "2ethbaset"],
         "mezz": ["", "smezz", "emezz"]
     },
 
-    "pci_valid_cards": ["2eth", "2eth40", "2fc", "4fc", "sas"],
+    "pci_valid_cards": ["2eth", "2eth40", "2fc", "4fc", "sas", "2ethbaset"],
         
     "pci_config_lookup": {
         "fa-x10r2-fc": [null, null, "2fc", null],

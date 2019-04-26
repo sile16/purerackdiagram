@@ -13,7 +13,7 @@ var FA_OPTIONS = {
     direction: ['up', 'down'],
     fm_label: ['FALSE', 'TRUE'],
     dp_label: ['FALSE', 'TRUE'],
-    addoncards: ['4fc', '2fc', '2eth', '2eth40', 'sas'],
+    addoncards: ['4fc', '2fc', '2eth', '2eth40', 'sas', '2ethbaset'],
     mezz: ['', 'smezz', 'emezz']
 };
 

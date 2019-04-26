@@ -373,7 +373,8 @@ class FADiagram():
             config["protocol"],
         )
         if pci_lookup_str in pci_config_lookup:
-            pci_config = pci_config_lookup[pci_lookup_str]
+            pci_config = pci_config_lookup[pci_lookup_str].copy()
+            
 
         # add on cards
         if "addoncards" in params:
@@ -389,7 +390,7 @@ class FADiagram():
 
                 #card population order for a full height only card
                 order = [0, 1]
-                if card == "2fc" or card == "2eth":
+                if card == "2fc" or card == "2eth" or card == "2ethbaset":
                     #card population order for a half or full card slot
                     order = [2, 0, 1, 3]
 
