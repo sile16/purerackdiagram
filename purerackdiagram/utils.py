@@ -16,6 +16,7 @@ logger.setLevel(logging.INFO)
 cache = {}
 cache_lock = asyncio.Lock()
 root_path = os.path.dirname(purerackdiagram.__file__)
+ttf_path = os.path.join(root_path,"Lato-Regular.ttf")
 
 global_config = None
 with open(os.path.join(root_path, 'config.json'), 'r') as f:
@@ -98,6 +99,19 @@ def combine_images_vertically(images):
         new_im.paste(im, (x_offset, y_offset))
         y_offset += im.size[1]
     return new_im
+
+def apply_text(img, text, x_loc, y_loc, font_size=15):
+    global ttf_path
+
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype(ttf_path, size=font_size)
+    w, _ = draw.textsize(text, font=font)
+    x_loc = x_loc - w // 2
+    draw.text((x_loc, y_loc), text, fill=(199,89,40), font=font)
+
+def apply_text_centered(img, text, y_loc, font_size=15):
+    x_loc = img.size[0] // 2
+    apply_text(img, text, x_loc, y_loc, font_size)
 
 
     

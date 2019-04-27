@@ -262,16 +262,9 @@ class FAChassis():
 
 
 def apply_fm_label(fm_img, fm_str, fm_type):
-    global ttf_path
-
-    draw = ImageDraw.Draw(fm_img)
-    font = ImageFont.truetype(ttf_path,size=15)
-    w, _ = draw.textsize(fm_str, font=font)
-    x_loc = fm_img.size[0] // 2 - w // 2
-    draw.text((x_loc,18), fm_str, fill=(199,89,40),font=font)
-    w, _ = draw.textsize(fm_type, font=font)
-    x_loc = fm_img.size[0] // 2 - w // 2
-    draw.text( (34,32), fm_type, fill=(199,89,40),font=font)
+    #writing flash module text lables
+    utils.apply_text_centered(fm_img, fm_str, 18)
+    utils.apply_text_centered(fm_img, fm_type, 32)
 
 def apply_dp_label(img, dp_size, x_offset, y_offset, right):
     global ttf_path
@@ -284,11 +277,10 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right):
     x_buffer = 75
     y_buffer = 60
 
-
     box_loc = (x_offset + x_buffer, y_offset + y_buffer)
+    
     if right:
         box_loc = (tmp.size[0] // 2 + x_buffer, y_offset + y_buffer)
-    
     
     box_size = (tmp.size[0]  // 2 - 2 * x_buffer - x_offset, 
                 (tmp.size[1]  -  2 * y_buffer - y_offset))
@@ -374,7 +366,7 @@ class FADiagram():
         )
         if pci_lookup_str in pci_config_lookup:
             pci_config = pci_config_lookup[pci_lookup_str].copy()
-            
+
 
         # add on cards
         if "addoncards" in params:

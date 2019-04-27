@@ -22,5 +22,6 @@ var FB_OPTIONS = {
     face: ['front', 'back'],
     chassis: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     xfm: ['','FALSE','TRUE'],
-    direction: ['up', 'down']
+    direction: ['up', 'down'],
+    blades: '8:0-6,17:7,52:8-14'
 }

@@ -44,7 +44,8 @@ def test_lambda():
             "face":"front",
             'direction':'up',
             'xfm':"",
-            'local_delay':2
+            'local_delay':0,
+            'blades': '17:0-6,52:23-29'
         }
     }
 
@@ -136,7 +137,6 @@ def test_all(args):
 
     for model in models:
         for card in addon_cards:
-
             for dp in dps:
                 model = model[:8]
                 params = {"model":model, 

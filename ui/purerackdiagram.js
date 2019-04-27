@@ -18,6 +18,7 @@ $(function() {
   var fb_option_direction = build_select('#fb_option_direction', FB_OPTIONS.direction);
   var fb_option_chassis = build_select('#fb_option_chassis', FB_OPTIONS.chassis);
   var fb_option_xfm = build_select('#fb_option_xfm', FB_OPTIONS.xfm)
+  var fb_option_blades = build_input('#fb_option_blades', FB_OPTIONS.blades)
 
 
   var fa_url = function(){
@@ -53,6 +54,7 @@ $(function() {
     url += "&face="  + fb_option_face.val();
     url += "&direction="  + fb_option_direction.val();
     url += "&xfm=" + fb_option_xfm.val();
+    url += "&blades=" + fb_option_blades.val();
 
     return url;
   }
