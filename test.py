@@ -26,14 +26,15 @@ def test_lambda():
     #local_delay puts a delay into build_img so they we can test the cache lookkup
     event1 = {
         "queryStringParameters": {
-            "model": "fa-m20r2",
+            "model": "fa-x70r1",
             "datapacks": "19.2/0-31/63-0/0",
             "chassis": 2,
             "addoncards":"4fc,4fc,2eth",
-            "face":"front",
+            "face":"back",
             "fm_label":True,
             "dp_label":True,
-            "local_delay":2
+            "mezz":"emezz",
+            "local_delay":0
         }
     }
 
@@ -49,7 +50,7 @@ def test_lambda():
         }
     }
 
-    results  = lambdaentry.handler(event2, None)
+    results  = lambdaentry.handler(event1, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:

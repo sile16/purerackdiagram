@@ -203,13 +203,18 @@ class FAChassis():
         self.tmp_img.paste(card_img, ct0_cord)
 
     async def add_mezz(self):
-        if self.config["generation"] != "x" or self.config['mezz'] is None:
-            return
-        key = "png/pure_fa_x_{}.png".format(self.config["mezz"])
-        mezz_img = await RackImage(key).get_image()
-        await self.start_img_event.wait()
-        self.tmp_img.paste(mezz_img, (585, 45))
-        self.tmp_img.paste(mezz_img, (585, 425))
+        #if self.config["generation"] != "x" or self.config['mezz'] is None:
+        #    return
+        if self.config['mezz']:
+            key = "png/pure_fa_x_{}.png".format(self.config["mezz"])
+            mezz_img = await RackImage(key).get_image()
+            await self.start_img_event.wait()
+            if self.config['generation'] == 'x':
+                self.tmp_img.paste(mezz_img, (585, 45))
+                self.tmp_img.paste(mezz_img, (585, 425))
+            elif self.config['generation'] == 'm':
+                self.tmp_img.paste(mezz_img, (709, 44))
+                self.tmp_img.paste(mezz_img, (709, 421))
 
     async def add_fms(self):
         curr_module = 0
