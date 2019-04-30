@@ -24,5 +24,5 @@ var FB_OPTIONS = {
     xfm: ['','FALSE','TRUE'],
     direction: ['up', 'down'],
     blades: '8:0-6,17:7,52:8-14',
-    efm: ['', 'efm_110', 'efm_310']
+    efm: ['', 'efm110', 'efm310']
 }
