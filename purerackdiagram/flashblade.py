@@ -15,7 +15,12 @@ class FBDiagram():
         config['efm'] = params.get('efm','efm310').lower()
         if not config['efm']:
             config['efm'] = "efm310"
-            
+        
+        valid_efm = ['efm110', 'efm310']
+        if config['efm'] not in valid_efm:
+            raise Exception('please provide a valid efm: {}'.format(valid_efm))
+
+
         blades = params.get('blades',"17:0-6").lower()
 
         #pattern 17:0-7,52:8-10
