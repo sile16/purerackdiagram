@@ -506,11 +506,17 @@ class FADiagram():
             
             config["protocol"] = params.get("protocol", "fc").lower()
 
+            #hack for the x70r1, is identical to m70r2, so just going to change it internally to m70r2
+            if config['generation'] == 'x' and config['release'] == 1 and config['model_num'] == 70:
+                config['generation'] = 'm'
+                config['release'] = 2
+
+
             #Mezz
             #the m70 base image already has the backend SAS ports
             default_mezz = None
             valid_mezz = [None, 'emezz', 'smezz']
-            if config['generation']== 'x' and config["model_num"] >= 20:
+            if config['generation'] == 'x' and config["model_num"] >= 20:
                 default_mezz = 'emezz'
             config["mezz"] = params.get("mezz", default_mezz )
             if config['mezz'] == "":

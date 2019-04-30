@@ -41,7 +41,7 @@ def test_lambda():
         "queryStringParameters": {
             "model": "fb",
             "chassis": 2,
-            "face":"front",
+            "face":"back",
             'direction':'up',
             'xfm':"",
             'local_delay':0,
@@ -161,7 +161,7 @@ def test_all(args):
             print("WARNING missing key:{}".format(key))
         elif results[key] != validation[key]:
             errors += 1
-            print("WARNING no match key:{}".format(key))
+            print("Error Image Changed!!:{}".format(key))
     print("Test Complete {} Errors Found".format(errors))
 
 
