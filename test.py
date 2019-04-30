@@ -44,13 +44,28 @@ def test_lambda():
             "chassis": 2,
             "face":"back",
             'direction':'up',
-            'xfm':"",
+            'efm':"efm110",
             'local_delay':0,
             'blades': '17:0-6,52:23-29'
         }
     }
 
-    results  = lambdaentry.handler(event1, None)
+    event3 = {
+        "queryStringParameters": {
+            "model": "fa-x70r1",
+            "protocol":"fc",
+            "direction":"up",
+            "datapacks": "91/91-45/45",
+            "addoncards":"",
+            "face":"back",
+            "fm_label":"FALSE",
+            "dp_label":"FALSE",
+            "bezel":"FALSE",
+            "local_delay":3
+        }
+    }
+
+    results  = lambdaentry.handler(event2, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
@@ -176,7 +191,7 @@ def main(args):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('testtype', choices=['all', 'lambda'], default='all',
+    parser.add_argument('testtype', choices=['all', 'lambda'], default='lambda',
                         nargs='?', 
                         help="Test all options, or test through lamdba entry")
     parser.add_argument('-t',type=int, help="number of threads", default=1)

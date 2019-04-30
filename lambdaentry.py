@@ -25,7 +25,7 @@ import purerackdiagram
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-version = 3
+version = 4
 
 
 s3_base_url = 'https://s3.amazonaws.com/'

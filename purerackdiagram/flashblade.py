@@ -12,6 +12,10 @@ class FBDiagram():
         config["chassis"] = int(params.get("chassis", 1))
         config["face"] = params.get("face", "front").lower()
         config['direction'] = params.get("direction","up").lower()
+        config['efm'] = params.get('efm','efm310').lower()
+        if not config['efm']:
+            config['efm'] = "efm310"
+            
         blades = params.get('blades',"17:0-6").lower()
 
         #pattern 17:0-7,52:8-10
@@ -57,7 +61,11 @@ class FBDiagram():
 
     async def build_chassis(self, number):
         face = self.config["face"]
-        img_key = "png/pure_fb_{}.png".format(face)
+        if face == 'front':
+            img_key = "png/pure_fb_front.png"
+        else:
+            img_key = "png/pure_fb_back_{}.png".format(self.config['efm'])
+
         img = await RackImage(img_key).get_image()
 
         if face == "front":
