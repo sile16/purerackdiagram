@@ -1,14 +1,17 @@
 
-API_ENDPOINT = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/default/rackdiagram?"
+API_ENDPOINT = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/default/rackdiagram?";
 // API_ENDPOINT = "rackdiagram?"
 
 // the options values for FlashArray configurations
 //
 var FA_OPTIONS = {
-    model: ['fa-m10r2','fa-m20r2','fa-m50r2','fa-m70r2', 'fa-x70r1', 'fa-x10r2','fa-x20r2','fa-x50r2','fa-x70r2', 'fa-x90r2'],
+    model: ['fa-m10r2', 'fa-m20r2', 'fa-m50r2', 'fa-m70r2',
+            'fa-x70r1', 'fa-x10r2', 'fa-x20r2', 'fa-x50r2', 'fa-x70r2', 'fa-x90r2',
+            'fa-c60'],
     protocol: ['fc', 'eth'],
     face: ['front', 'back'],
     datapacks: '91/91-45/45',
+    csizes: ['366', '879', '1390'],
     bezel: ['FALSE', 'TRUE'],
     direction: ['up', 'down'],
     fm_label: ['FALSE', 'TRUE'],
@@ -21,8 +24,8 @@ var FA_OPTIONS = {
 var FB_OPTIONS = {
     face: ['front', 'back'],
     chassis: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    xfm: ['','FALSE','TRUE'],
+    xfm: ['', 'FALSE', 'TRUE'],
     direction: ['up', 'down'],
     blades: '8:0-6,17:7,52:8-14',
     efm: ['', 'efm110', 'efm310']
-}
+};

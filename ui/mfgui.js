@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 function build_select(selector, values) {
 

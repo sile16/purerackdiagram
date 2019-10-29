@@ -40,107 +40,152 @@ Select the options from Option section, click Display button the display the dia
         <div id="tabs-fa">
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">model:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_model"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="C models now available" id="fa_option_model"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
 
-          <div class="row">
-            <div class="col-xs-4 col-sm-4 option_label">protocl:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_protocol"></span></div>
+          <div class="row" id="csize" hidden="true">
+            <div class="col-xs-4 col-sm-4 option_label">C Capacity:</div>
+            <div class="col-xs-8 col-sm-8"><span id="fa_option_csize"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
+          
+
+          <div class="row" id="datapacks">
+            <div class="col-xs-4 col-sm-4 option_label">datapacks:</div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="In the format <dp>-<dp>,<dp>,<dp>-<dp>
+              Where the first two are the chassis and folloing shelves.  You can use 127 for wide DP, and 3 & 6
+              for SCM modules.  All models should be configurable." id="fa_option_datapacks"></span></div>
+            <br/>
+            <br/>
+          </div>
+
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">face:</div>
             <div class="col-xs-8 col-sm-8"><span id="fa_option_face"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
-
-          <div class="row">
-            <div class="col-xs-4 col-sm-4 option_label">datapacks:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_datapacks"></span></div>
-          </div>
-          <br/>
-
-          <div class="row">
-            <div class="col-xs-4 col-sm-4 option_label">bezel:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_bezel"></span></div>
-          </div>
-          <br/>
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">direction:</div>
             <div class="col-xs-8 col-sm-8"><span id="fa_option_direction"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
 
-          <div class="row">
+          <div class="row" id="fm_label">
             <div class="col-xs-4 col-sm-4 option_label">fm_label:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_fm_label"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="add a label for each FlashModule" id="fa_option_fm_label"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
 
-          <div class="row">
+          <div class="row" id="dp_label">
             <div class="col-xs-4 col-sm-4 option_label">dp_label:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_dp_label"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="add a label for each data pack" id="fa_option_dp_label"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
 
-          <div class="row">
+          
+          <div class="row" id="bezel">
+            <div class="col-xs-4 col-sm-4 option_label">bezel:</div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="show bezel" id="fa_option_bezel"></span></div>
+            <br/>
+            <br/>
+          </div>
+          
+
+
+          
+          
+          <div class="row" id="protocol" hidden="true">
+            <div class="col-xs-4 col-sm-4 option_label">protocol:</div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="set protocol, eth or fc, default eth" id="fa_option_protocol"></span></div>
+            <br/>
+            <br/>
+          </div>
+
+          <div class="row" id='addoncards' hidden="true">
             <div class="col-xs-4 col-sm-4 option_label">addoncards:</div>
             <div class="col-xs-8 col-sm-8"><span id="fa_option_addoncards"></span></div>
+            <br/>
+            <br/>
+            <p>Default cards should be correct per model.</p>
           </div>
-          <br/>
-
-          <div class="row">
+          
+          <div class="row" id="mezz" hidden="true">
             <div class="col-xs-4 col-sm-4 option_label">mezz:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_mezz"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="override default mezzaine cards" id="fa_option_mezz"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
+
         </div>
+
         <div id="tabs-fb">
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">model:</div>
             <div class="col-xs-8 col-sm-8"><span id="fb_option_model">FlashBlade (no other options)</span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
+          
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">chassis:</div>
             <div class="col-xs-8 col-sm-8"><span id="fb_option_chassis"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
+
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">face:</div>
             <div class="col-xs-8 col-sm-8"><span id="fb_option_face"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
+
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">blades:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fb_option_blades"></span></div>
+            <div class="col-xs-8 col-sm-8">
+              <span id="fb_option_blades" data-tooltip="Blades in format <Size>:<Start Blade#>
+                                                        -<End Blade#>, blade # are 0-149. Example,
+                                                        1 Chassis of 17TB blades, and 1 chassis  52,
+                                                        would be 17:0-14,52:15-29"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">xfm:</div>
             <div class="col-xs-8 col-sm-8"><span id="fb_option_xfm"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
+
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">directon:</div>
             <div class="col-xs-8 col-sm-8"><span id="fb_option_direction"></span></div>
+            <br/>
+            <br/>
           </div>
-          <br/>
+
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">efm_model:</div>
             <div class="col-xs-8 col-sm-8"><span id="fb_option_efm"></span></div>
+            <br/>
+            <br/>
           </div>
 
-          <br/>
 
         </div>
         <div id="tabs-oe">
@@ -158,9 +203,11 @@ Select the options from Option section, click Display button the display the dia
 
     <div class="col-md-7">
       <h2>Rack Diagram</h2>
+      <p> Configs are NOT validated as possible.  Invalid unsupported options can be displayed. </p>
       <br>
-      <img id='rack_digram' src="smiley.gif" alt="Rack Digram, please click on Display to show it" width="100%">
-
+      <img id='rack_digram' src="" alt="Rack Digram, please click on Display to show it" width="100%">
+      <br/>
+      <p id="error_msg"></p>
     </div>
   </div>
 

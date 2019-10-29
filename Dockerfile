@@ -9,13 +9,15 @@ RUN mkdir -p deploy/purerackdiagram && \
     pip install -r requirements.txt -t deploy/ && \
     rm -rf deploy/*dist-info
 
-COPY *.py "$WORKDIR/deploy/"
-COPY purerackdiagram "$WORKDIR/deploy/purerackdiagram/"
+RUN mkdir -p "$WORKDIR/deploy/purerackdiagram/png"
+COPY lambdaentry.py "$WORKDIR/deploy/"
+COPY purerackdiagram/*.py "$WORKDIR/deploy/purerackdiagram/"
+COPY purerackdiagram/*.json "$WORKDIR/deploy/purerackdiagram/"
+COPY purerackdiagram/*.ttf "$WORKDIR/deploy/purerackdiagram/"
+COPY purerackdiagram/png/*.png "$WORKDIR/deploy/purerackdiagram/png/"
 
 #pre-compile.pyc
 RUN python -m compileall .  
-
-
 
 # Compress all source codes.
 RUN cd deploy && zip -r9 $WORKDIR/lambda.zip .

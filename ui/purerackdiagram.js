@@ -1,6 +1,8 @@
 
-$(function() {
-  console.log( "ready!" );
+
+
+$(function () {
+  console.log("ready!");
 
   $('#option-tabs').tabs();
 
@@ -8,6 +10,7 @@ $(function() {
   var fa_option_protocol = build_select('#fa_option_protocol', FA_OPTIONS.protocol);
   var fa_option_face = build_select('#fa_option_face', FA_OPTIONS.face);
   var fa_option_datapacks = build_input('#fa_option_datapacks', FA_OPTIONS.datapacks);
+  var fa_option_csize = build_select('#fa_option_csize', FA_OPTIONS.csizes);
   var fa_option_bezel = build_select('#fa_option_bezel', FA_OPTIONS.bezel);
   var fa_option_direction = build_select('#fa_option_direction', FA_OPTIONS.direction);
   var fa_option_fm_label = build_select('#fa_option_fm_label', FA_OPTIONS.fm_label);
@@ -35,6 +38,7 @@ $(function() {
     url += "&fm_label="  + fa_option_fm_label.val();
     url += "&dp_label="  + fa_option_dp_label.val();
     url += "&addoncards="  + fa_option_addoncards.val();
+    url += "&csize" + fa_option_csize.val();
 
     var mezz_val = fa_option_mezz.val();
     console.log(mezz_val);
@@ -81,7 +85,47 @@ $(function() {
     console.log(url);
 
     $('#rack_digram').attr('src', url);
-
+    
     $('#img_url').html('<a target="_blank" href="' + url + '">' + url + '</a>');
+  });
+
+  $("#fa_option_model > select").change(function () {
+     if (fa_option_model.val() == 'fa-c60') {
+       $('#csize').show();
+       $('#datapacks').hide();
+       $('#mezz').hide();
+     }
+     else {
+      $('#csize').hide();
+      $('#datapacks').show();
+      if ( fa_option_face.val() == 'back'){
+        $("#mezz").show();
+      }
+     }
+
+  });
+
+  $("#fa_option_face > select").change(function () {
+    if (fa_option_face.val() == 'front') {
+      $('#fm_label').show();
+      $('#dp_label').show();
+      $('#bezel').show();
+
+      $('#mezz').hide();
+      $('#protocol').hide();
+      $('#addoncards').hide();
+    }
+    else {
+      $('#fm_label').hide();
+      $('#dp_label').hide();
+      $('#bezel').hide();
+      
+      $('#protocol').show();
+      $('#addoncards').show();
+      if (fa_option_model.val() != 'fa-c60'){
+        $("#mezz").show();
+      }
+
+    }
   });
 });

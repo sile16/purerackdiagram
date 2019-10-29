@@ -9,7 +9,7 @@ import os
 import lambdaentry
 from purerackdiagram.utils import global_config
 import purerackdiagram
-import asyncio
+# import asyncio
 import json
 
 logger = logging.getLogger()
@@ -19,22 +19,24 @@ logger.addHandler(ch)
 
 save_dir = 'test_results/'
 
-#38/38-31/63-127/0
-#0/38-0/45-0/45-0/63
+# 38/38-31/63-127/0
+# 0/38-0/45-0/45-0/63
+
 
 def test_lambda():
-    #local_delay puts a delay into build_img so they we can test the cache lookkup
+    # local_delay puts a delay into build_img so
+    # they we can test the cache lookkup
     event1 = {
         "queryStringParameters": {
             "model": "fa-x70r1",
             "datapacks": "19.2/0-31/63-0/0",
             "chassis": 2,
-            "addoncards":"4fc,4fc,2eth",
-            "face":"back",
-            "fm_label":True,
-            "dp_label":True,
-            "mezz":"emezz",
-            "local_delay":0
+            "addoncards": "4fc,4fc,2eth",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "emezz",
+            "local_delay": 0
         }
     }
 
@@ -42,10 +44,10 @@ def test_lambda():
         "queryStringParameters": {
             "model": "fb",
             "chassis": 2,
-            "face":"back",
-            'direction':'up',
-            'efm':"efm110",
-            'local_delay':0,
+            "face": "back",
+            'direction': 'up',
+            'efm': "efm110",
+            'local_delay': 0,
             'blades': '17:0-6,52:23-29'
         }
     }
@@ -53,19 +55,47 @@ def test_lambda():
     event3 = {
         "queryStringParameters": {
             "model": "fa-x70r1",
-            "protocol":"fc",
-            "direction":"up",
+            "protocol": "fc",
+            "direction": "up",
             "datapacks": "91/91-45/45",
-            "addoncards":"",
-            "face":"back",
-            "fm_label":"FALSE",
-            "dp_label":"FALSE",
-            "bezel":"FALSE",
-            "local_delay":3
+            "addoncards": "",
+            "face": "back",
+            "fm_label": "FALSE",
+            "dp_label": "FALSE",
+            "bezel": "FALSE",
+            "local_delay": 3
         }
     }
 
-    results  = lambdaentry.handler(event2, None)
+    c_event = {
+        "queryStringParameters": {
+            "model": "fa-c60",
+            "protocol": "eth",
+            "direction": "up",
+            "datapacks": "91/91-45/45",
+            "csize": '879',
+            "addoncards": "",
+            "face": "back",
+            "fm_label": "True",
+            "dp_label": "Ture",
+            "bezel": "FALSE"
+        }
+    }
+
+    x_scm1 = {
+        "queryStringParameters": {
+            "model": "fa-x70r1",
+            "protocol": "fc",
+            "direction": "up",
+            "datapacks": "276-45/45",
+            "addoncards": "",
+            "face": "front",
+            "fm_label": "True",
+            "dp_label": "FALSE"
+        }
+    }
+
+    results = lambdaentry.handler(x_scm1, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
@@ -73,10 +103,8 @@ def test_lambda():
             with open('tmp.png', 'wb') as outfile:
                 outfile.write(img_str)
             del results['body']
-        
 
     pprint(results)
-
 
 
 class TestWorker(threading.Thread):
@@ -87,7 +115,7 @@ class TestWorker(threading.Thread):
 
     def run(self):
         #loop = asyncio.new_event_loop()
-        #asyncio.set_event_loop(loop)
+        # asyncio.set_event_loop(loop)
 
         while True:
             item = self.q.get()
@@ -96,31 +124,31 @@ class TestWorker(threading.Thread):
             #img = loop.run_until_complete(diagram.get_image())
             if 'addoncards' in item:
                 if item['addoncards'] == "2ethbaset":
-                    a=2
+                    a = 2
             img = purerackdiagram.get_image_sync(item)
 
             name = ""
             for n in item.values():
                 if isinstance(n, str):
-                    n = n.replace("/",'-')
+                    n = n.replace("/", '-')
                 name += str(n)+"_"
             name += '.png'
-            
+
             h = hashlib.sha256()
             with io.BytesIO() as memf:
-                img.save(memf,'PNG')
+                img.save(memf, 'PNG')
                 data = memf.getvalue()
                 h.update(data)
-                img.save(os.path.join(save_dir,name))
-        
+                img.save(os.path.join(save_dir, name))
+
                 self.results[name] = h.hexdigest()
             self.q.task_done()
-
 
 
 def test_all(args):
     models = global_config['pci_config_lookup']
     dps = ['45/45-31/63-45']
+    csizes = ['366', '879', '1390']
 
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -133,38 +161,54 @@ def test_all(args):
         t.start()
 
     count = 0
-    ## front:
+    # front:
     for model in models:
+        model = model[:8]
         for dp_label in [True, False]:
-            for dp in dps:
-                #if count > 3:
-                #    break
-                count += 1
-                model = model[:8]
-                params = {"model":model, 
-                            "fm_label":True, 
-                            "dp_label": dp_label, 
-                            "datapacks":dp}
-                q.put(params)
-                        
-    
-    #back:
+            if 'c' in model:
+                for csize in csizes:
+                    count += 1
+                    params = {"model": model,
+                              "fm_label": True,
+                              "dp_label": dp_label,
+                              "csize": csize}
+                    q.put(params)
+            else:
+                for dp in dps:
+                    # if count > 3:
+                    #    break
+                    count += 1
+                    params = {"model": model,
+                              "fm_label": True,
+                              "dp_label": dp_label,
+                              "datapacks": dp}
+
+                    q.put(params)
+
+    # back:
     addon_cards = global_config['pci_valid_cards']
 
     for model in models:
+        model = model[:8]
         for card in addon_cards:
-            for dp in dps:
-                model = model[:8]
-                params = {"model":model, 
-                          "datapacks":dp,
-                          "addoncards":card,
-                          "face": "back"}
-                q.put(params)
+            if 'c' in model:
+                for csize in csizes:
+                    params = {"model": model,
+                              "addoncards": card,
+                              "face": "back",
+                              "csize": csize}
+                    q.put(params)
+            else:
+                for dp in dps:
+                    params = {"model": model,
+                              "datapacks": dp,
+                              "addoncards": card,
+                              "face": "back"}
+                    q.put(params)
 
-    
     q.join()
-    
-    with open("test_results.json","w") as f:
+
+    with open("test_results.json", "w") as f:
         json.dump(results, f)
 
     with open("test_validation.json") as f:
@@ -186,13 +230,13 @@ def main(args):
         test_all(args)
     else:
         test_lambda()
-        
+
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('testtype', choices=['all', 'lambda'], default='lambda',
-                        nargs='?', 
+                        nargs='?',
                         help="Test all options, or test through lamdba entry")
-    parser.add_argument('-t',type=int, help="number of threads", default=1)
+    parser.add_argument('-t', type=int, help="number of threads", default=1)
     main(parser.parse_args())
