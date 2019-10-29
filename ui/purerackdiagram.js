@@ -38,7 +38,7 @@ $(function () {
     url += "&fm_label="  + fa_option_fm_label.val();
     url += "&dp_label="  + fa_option_dp_label.val();
     url += "&addoncards="  + fa_option_addoncards.val();
-    url += "&csize" + fa_option_csize.val();
+    url += "&csize=" + fa_option_csize.val();
 
     var mezz_val = fa_option_mezz.val();
     console.log(mezz_val);
