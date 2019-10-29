@@ -30,7 +30,8 @@ def text_to_image(text, width):
     root_path = os.path.dirname(purerackdiagram.__file__)
     ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
     font = ImageFont.truetype(ttf_path, size=36)
-    color = (255, 255, 255, 220)
+    color = (255, 255, 255, 255)
+    background_color = (0, 0, 0, 255)
 
     # get each line of the text
     lines = text.splitlines()
@@ -43,7 +44,7 @@ def text_to_image(text, width):
     total_height = line_height * len(lines) + y * 2
     total_width = max([font.getsize(line)[0] for line in lines]) + 2 * x
 
-    img = Image.new('RGBA', (total_width, total_height), (0, 0, 0, 0))
+    img = Image.new('RGBA', (total_width, total_height), background_color)
     draw = ImageDraw.Draw(img)
     for line in lines:
         # draw the line on the image
