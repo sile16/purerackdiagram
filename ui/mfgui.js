@@ -21,35 +21,6 @@ function build_select(selector, values) {
   return sel;
 }
 
-function buile_multipleselect(selector, values) {
-
-  var sel = $('<select multiple="multiple" style="width:90%">').appendTo($(selector));
-
-  $(values).each(function (index, value) {
-    var item = null;
-
-    if (typeof value === 'string') {
-      item = {'val': value, 'text': value};
-    }
-    else {
-      item = this;
-    }
-
-    sel.append($("<option>").attr('value', item.val).text(item.text));
-  });
-
-  sel.multipleSelect({
-    selectAll: false,
-    formatAllSelected: function () {
-      return null;
-    },
-    formatCountSelected: function () {
-      return null;
-    },
-  });
-
-  return sel;
-}
 
 function build_input(selector, value) {
   var input = $('<input>').appendTo($(selector));

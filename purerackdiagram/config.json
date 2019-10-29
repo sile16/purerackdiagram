@@ -43,8 +43,8 @@
 
         "chassis_dp_size_lookup": {
             "0" : ["Blank", "blank", 10, "0"],
-            "3" : ["750GB", "scm", 4, "3TB DM Cache"],
-            "6" : ["750GB", "scm", 8, "6TB DM Cache"],
+            "3" : ["750GB", "scm", 4, "DM Cache 3"],
+            "6" : ["750GB", "scm", 8, "DM Cache 6"],
             "4.8": ["480GB", "sas", 10, "4.8"],
             "5": ["500GB", "sas", 10, "5"],
             "9.6": ["960GB", "sas", 10, "9.6"],

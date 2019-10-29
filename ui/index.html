@@ -7,12 +7,10 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
 
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
-  <link rel="stylesheet" href="multiple-select/1.2.2/multiple-select.min.css">
-  <script src="multiple-select/1.2.2/multiple-select.min.js"></script>
 
   <script src="CONFIG.js"></script>
   <script src="mfgui.js"></script>
@@ -112,11 +110,44 @@ Select the options from Option section, click Display button the display the dia
 
           <div class="row" id='addoncards' hidden="true">
             <div class="col-xs-4 col-sm-4 option_label">addoncards:</div>
-            <div class="col-xs-8 col-sm-8"><span id="fa_option_addoncards"></span></div>
+            <div class="col-xs-8 col-sm-8">
+              <p>2 Port FC
+                <a href="#" id='2fc' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </a>
+              </p>
+              <p>4 Port FC
+                <a href="#" id='4fc' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </a>
+              </p>
+              <p>2 Eth 10Gb Optical
+                <a href="#" id='2eth' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </a>
+              </p>
+              <p>2 Eth 10Gb 10GBaseT
+                <a href="#" id='2ethbaset' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </a>
+              </p>
+              <p>2 Eth 40Gb
+                <a href="#" id='2eth40' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </a>
+              </p>
+              <p>SAS Expander
+                <a href="#" id='sas' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span>
+                </a>
+              </p>
+
+              <span id="fa_option_addoncards" data-tooltip="Add cards in order to the default cards included with this model array."></span>
+            </div>
             <br/>
             <br/>
-            <p>Default cards should be correct per model.</p>
           </div>
+          <br/>
           
           <div class="row" id="mezz" hidden="true">
             <div class="col-xs-4 col-sm-4 option_label">mezz:</div>
