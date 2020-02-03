@@ -73,6 +73,10 @@ class FAShelf():
         right = False
         if self.config['dp_label']:
             for dp in self.config["datapacks"]:
+                num_modules = dp[2]
+                full = False
+                if num_modules == 24:
+                    full = True
                 dp_size = dp[3]
                 y_offset = 50
                 x_offset = 162
@@ -80,7 +84,8 @@ class FAShelf():
                                               dp_size,
                                               x_offset,
                                               y_offset,
-                                              right)
+                                              right,
+                                              full)
                 right = True
 
     async def add_sas_fms(self):
@@ -103,21 +108,34 @@ class FAShelf():
 
             for x in range(cur_module, min(24, cur_module + num_modules)):
                 self.tmp_img.paste(fm_img, fm_loc[x])
+            
+            cur_module += num_modules
 
-            # apply dp label after fm modules
-            if self.config['dp_label']:
+
+        # apply dp label after fm modules
+        right = False
+        if self.config['dp_label']:
+            for dp in self.config["datapacks"]:
+                fm_str = dp[0]
+                fm_type = dp[1]
+                num_modules = dp[2]
+                dp_size = dp[3]
+                
                 y_offset = 0
                 x_offset = 90
-                right = False
-                if dp_start > 9:
-                    right = True
+                full = False
+                if num_modules == 24:
+                    full = True
+
                 self.tmp_img = apply_dp_label(self.tmp_img,
                                               dp_size,
                                               x_offset,
                                               y_offset,
-                                              right)
+                                              right,
+                                              full)
+                right = True
 
-            cur_module += num_modules
+            
 
 
 class FAChassis():
@@ -261,18 +279,33 @@ class FAChassis():
                     self.tmp_img.paste(blank_img, fm_loc[x])
                 else:
                     self.tmp_img.paste(fm_img, fm_loc[x])
+            
+            right = True
 
-            if self.config['dp_label']:
+
+        
+        if self.config['dp_label']:
+            right = False
+            for dp in self.config["chassis_datapacks"]:
+                fm_str = dp[0]
+                fm_type = dp[1]
+                num_modules = dp[2]
+                dp_size = dp[3]
+
                 y_offset = 244
                 x_offset = 130
+                full = False
+                if num_modules == 20:
+                    full = True
 
                 self.tmp_img = apply_dp_label(self.tmp_img,
                                               dp_size,
                                               x_offset,
                                               y_offset,
-                                              right)
-            # the next DP must be the right side.
-            right = True
+                                              right,
+                                              full)
+                # the next DP must be the right side.
+                right = True
 
     async def add_model_text(self):
         global ttf_path
@@ -300,7 +333,7 @@ def apply_fm_label(fm_img, fm_str, fm_type):
     utils.apply_text_centered(fm_img, fm_type, 32)
 
 
-def apply_dp_label(img, dp_size, x_offset, y_offset, right):
+def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
     global ttf_path
     # temp image same size as our chassis.
     tmp = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -316,7 +349,11 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right):
     if right:
         box_loc = (tmp.size[0] // 2 + x_buffer, y_offset + y_buffer)
 
+    
     box_size = (tmp.size[0] // 2 - 2 * x_buffer - x_offset,
+                (tmp.size[1] - 2 * y_buffer - y_offset))
+    if full:
+        box_size = (tmp.size[0] - 2 * x_buffer - 2 * x_offset,
                 (tmp.size[1] - 2 * y_buffer - y_offset))
 
     # put DP on left or right

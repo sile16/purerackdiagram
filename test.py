@@ -147,7 +147,7 @@ class TestWorker(threading.Thread):
 
 def test_all(args):
     models = global_config['pci_config_lookup']
-    dps = ['45/45-31/63-45']
+    dps = ['45/45-31/63-45', '3/127-24']
     csizes = ['366', '879', '1390']
 
     if not os.path.exists(save_dir):
@@ -235,7 +235,7 @@ def main(args):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('testtype', choices=['all', 'lambda'], default='lambda',
+    parser.add_argument('testtype', choices=['all', 'lambda'], default='all',
                         nargs='?',
                         help="Test all options, or test through lamdba entry")
     parser.add_argument('-t', type=int, help="number of threads", default=1)
