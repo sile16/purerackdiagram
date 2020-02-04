@@ -75,7 +75,7 @@ class FAShelf():
             for dp in self.config["datapacks"]:
                 num_modules = dp[2]
                 full = False
-                if num_modules == 24:
+                if num_modules == 28:
                     full = True
                 dp_size = dp[3]
                 y_offset = 50
