@@ -130,6 +130,13 @@ def handler(event, context):
         if first_result['name'] == 'build':
             img = first_result['img']
 
+            # resize if too large:
+            max_height = 4604
+            if img.size[1] > max_height:
+                wpercent = (max_height/float(img.size[1]))
+                hsize = int((float(img.size[0]) * float(wpercent)))
+                img = img.resize((hsize, max_height), Image.ANTIALIAS)
+
             # reformat image to be passed back directly to API caller
             buffered = BytesIO()
             img.save(buffered, format="PNG")

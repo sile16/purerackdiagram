@@ -95,7 +95,20 @@ def test_lambda():
         }
     }
 
-    results = lambdaentry.handler(x_scm1, None)
+    fb_large = {
+        "queryStringParameters": {
+            "model": "fb",
+            "chassis": 10,
+            "face": "back",
+            'direction': 'up',
+            'efm': "efm310",
+            'blades': '17:0-6,52:23-29'
+        }
+    }
+
+
+
+    results = lambdaentry.handler(fb_large, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
