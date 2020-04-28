@@ -99,6 +99,21 @@ def handler(event, context):
             ru = diagram.config['ru']
             h_inches = "{:.2f}".format(ru*1.75)
 
+            #generate a name for this config
+            items = []
+            name = ""
+            if params['model'] == 'fb':
+                name += "fb"
+                items = ['chassis', 'face', 'direction', 'efm']
+            else:
+                # this is FlashArray
+                name += params['model']
+                name += "_" + params['datapacks'].replace("/", '-')
+                items = ['face', 'direction']
+
+            for n in items:
+                name += "_" + str(diagram.config[n])
+
             # building a visio template
             root_path = os.path.dirname(__file__)
             vssx_path = os.path.join(root_path, "vssx/vssx_template.zip")
@@ -122,6 +137,7 @@ def handler(event, context):
             # Get only the right 7 digits of HEX
             unique_id = f"{stamp:07X}"[-7:]
             masters = masters.replace('<template_unique_id>', unique_id)
+            masters = masters.replace('<template_name>', name)
             
             # do import down here, so we don't have load if not needed
             import zipfile
@@ -146,11 +162,12 @@ def handler(event, context):
 
             # when running in lambda we HAVE to wait until
             # upload done before returning
+            content_disposition = 'attachment; filename="{}.vssx"'.format(name)
             return_data = {
                 "statusCode": 200,
                 "body": zip_str,
                 "headers": {"Content-Type": "application/vnd.ms-visio.stencil",
-                            'content-disposition': 'attachment; filename="pure_diagram.vssx"'},
+                            'content-disposition': content_disposition},
                 "isBase64Encoded": True
             }
 

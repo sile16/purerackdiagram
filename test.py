@@ -63,7 +63,8 @@ def test_lambda():
             "fm_label": "FALSE",
             "dp_label": "FALSE",
             "bezel": "FALSE",
-            "local_delay": 3
+            "local_delay": 3,
+            'vssx': True
         }
     }
 
@@ -108,7 +109,7 @@ def test_lambda():
         }
     }
 
-    results = lambdaentry.handler(c_event, None)
+    results = lambdaentry.handler(fb_large, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
