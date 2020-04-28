@@ -129,6 +129,7 @@ def handler(event, context):
 
             master1 = master1.replace('<template_h_in>', h_inches)
             master1 = master1.replace('<template_h_u>', str(ru))
+            master1 = master1.replace('<template_name>', stencil_name)
 
             # create uniqueID for this template
             masters = None

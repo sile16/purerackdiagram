@@ -64,7 +64,7 @@
                     <Cell N='Calendar' V='0' F='No Formula'/>
                 </Row>
                 <Row N='ShapeType'>
-                    <Cell N='Value' V='FlashArray' U='STR'/>
+                    <Cell N='Value' V='<template_name>' U='STR'/>
                     <Cell N='Prompt' V='' F='No Formula'/>
                     <Cell N='Label' V='ShapeType'/>
                     <Cell N='Format' V='' F='No Formula'/>
