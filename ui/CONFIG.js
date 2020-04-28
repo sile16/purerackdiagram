@@ -10,11 +10,11 @@ var FA_OPTIONS = {
             'fa-x70r1', 'fa-c60', 'fa-m10r2', 'fa-m20r2', 'fa-m50r2', 'fa-m70r2'],
     protocol: ['fc', 'eth'],
     face: ['front', 'back'],
-    datapacks: '91/91-45/45',
+    datapacks: '6/127-45/0',
     csizes: ['366', '879', '1390'],
     bezel: ['FALSE', 'TRUE'],
     direction: ['up', 'down'],
-    fm_label: ['FALSE', 'TRUE'],
+    fm_label: ['TRUE', 'FALSE'],
     dp_label: ['FALSE', 'TRUE'],
     addoncards: ['4fc', '2fc', '2eth', '2eth40', 'sas', '2ethbaset'],
     mezz: ['', 'smezz', 'emezz']
