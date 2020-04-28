@@ -94,6 +94,8 @@ class FAShelf():
             fm_str = dp[0]
             fm_type = dp[1]
             num_modules = dp[2]
+            if fm_type == 'blank':
+                num_modules = 12
             dp_size = dp[3]
             fm_img_str = "png/pure_fa_fm_{}.png".format(fm_type)
             fm_img = await RackImage(fm_img_str).get_image()
@@ -262,10 +264,20 @@ class FAChassis():
 
             await self.start_img_event.wait()
             if not right:
+                left_modules = num_modules
                 the_range = range(0, num_modules)
             else:
                 # Populate from the righ to the left
                 # easiest  way to follow the DMM rules
+                # but do not overlap wide modules from the left.
+
+                # if left dp was > 10, substract those from the right
+                if fm_type == "blank":
+                    num_modules = 20 - num_modules
+                else:
+                    if num_modules + left_modules > 20:
+                        raise Exception("number of modules in chassis datapacks exceeds 20.")
+
                 the_range = reversed(range(20-num_modules, 20))
 
             fm_loc = get_chassis_fm_loc(self.config['generation'])
