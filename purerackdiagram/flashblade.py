@@ -55,14 +55,19 @@ class FBDiagram():
         if config['chassis'] > 1 :
             default_xfm = True
 
-        config["xfm"] = params.get("xfm",default_xfm)
+        config["xfm"] = params.get("xfm", default_xfm)
         
         if config['xfm'] == "":
             config['xfm'] = default_xfm
 
+
         for item in ["xfm"]:
             if config[item] in ['False','false','FALSE','no','0','']:
                 config[item] = False
+
+        if config['xfm']:
+            config['ru'] += 2
+        
         self.config = config
 
     async def build_chassis(self, number):

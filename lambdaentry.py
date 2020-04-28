@@ -104,9 +104,11 @@ def handler(event, context):
             name = ""
             if params['model'] == 'fb':
                 name += "fb"
+                stencil_name = "Pure FlashBlade"
                 items = ['chassis', 'face', 'direction', 'efm']
             else:
                 # this is FlashArray
+                stencil_name = "Pure FlashArray"
                 name += params['model']
                 name += "_" + params['datapacks'].replace("/", '-')
                 items = ['face', 'direction']
@@ -137,7 +139,7 @@ def handler(event, context):
             # Get only the right 7 digits of HEX
             unique_id = f"{stamp:07X}"[-7:]
             masters = masters.replace('<template_unique_id>', unique_id)
-            masters = masters.replace('<template_name>', name)
+            masters = masters.replace('<template_name>', stencil_name)
             
             # do import down here, so we don't have load if not needed
             import zipfile
