@@ -9,15 +9,12 @@ import time
 from io import BytesIO
 import asyncio
 import base64
-import queue
 import logging
-from threading import Thread
 import purerackdiagram
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 import os
-from pprint import pformat
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -56,35 +53,7 @@ def text_to_image(text, width):
     return img
 
 
-def timeit(method):
-    def timed(*args, **kw):
-        ts = time.time()
-        result = method(*args, **kw)
-        te = time.time()
-        logger.info(
-            '{:>5}  Duration: {:.2f} ms, Start: {:.2f} - {:.2f}'.format(
-                method.__name__,
-                (te - ts) * 1000,
-                (ts - program_time_s)*1000,
-                (te - program_time_s)*1000))
-        return result
-    return timed
 
-
-@timeit
-def build_img(q, loop, diagram, params):
-    """ this is a wrapper around the simple diagram.get_image to
-        to allow it to be ran in a thread and to be cancelleable."""
-    try:
-        img = loop.run_until_complete(diagram.get_image())
-        q.put({'name': 'build', 'img': img})
-    except RuntimeError:
-        logging.info('CancelledError')
-
-    return
-
-
-@timeit
 def handler(event, context):
     """ This is the entry point for AWS Lambda, API Gateway
     We start two threads, 1 to check to see if this config already exists in S3
@@ -110,36 +79,84 @@ def handler(event, context):
         # Initialize our diagram from the params, parse all the params
         diagram = purerackdiagram.get_diagram(params)
 
-        result_queue = queue.Queue()
+        # do the work to generate the image
+        img = asyncio.run(diagram.get_image())
 
-        # doing this out here so we can stop the loop if necessary.
-        loop = asyncio.get_event_loop()
-        build_img_thread = Thread(target=build_img, args=(result_queue,
-                                                          loop,
-                                                          diagram,
-                                                          params))
+        # resize if too large:
+        # will break google slides if file is too big
+        max_height = 4604
+        if img.size[1] > max_height:
+            wpercent = (max_height/float(img.size[1]))
+            hsize = int((float(img.size[0]) * float(wpercent)))
+            img = img.resize((hsize, max_height), Image.ANTIALIAS)
 
-        # start build thread
-        build_img_thread.start()
+        # reformat image to be passed back directly to API caller
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
 
-        # block until either the image is found in s3 cache,
-        # or we built the image locally
-        first_result = result_queue.get()
+        # do we want a visio template or the raw image:
+        if 'vssx' in params and params['vssx']:
+            ru = diagram.config['ru']
+            h_inches = "{:.2f}".format(ru*1.75)
 
-        # we built the image first
-        if first_result['name'] == 'build':
-            img = first_result['img']
+            # building a visio template
+            root_path = os.path.dirname(__file__)
+            vssx_path = os.path.join(root_path, "vssx/vssx_template.zip")
+            master1_template_path = os.path.join(root_path, "vssx/master1_template.xml")
+            masters_template_path = os.path.join(root_path, "vssx/masters_template.xml")
 
-            # resize if too large:
-            max_height = 4604
-            if img.size[1] > max_height:
-                wpercent = (max_height/float(img.size[1]))
-                hsize = int((float(img.size[0]) * float(wpercent)))
-                img = img.resize((hsize, max_height), Image.ANTIALIAS)
+            # adjust the stencil height
+            master1 = None
+            with open(master1_template_path, 'r') as mf:
+                master1 = mf.read()
 
-            # reformat image to be passed back directly to API caller
-            buffered = BytesIO()
-            img.save(buffered, format="PNG")
+            master1 = master1.replace('<template_h_in>', h_inches)
+            master1 = master1.replace('<template_h_u>', str(ru))
+
+            # create uniqueID for this template
+            masters = None
+            with open(masters_template_path, 'r') as mf:
+                masters = mf.read()
+            
+            stamp = int((time.time())*10)
+            # Get only the right 7 digits of HEX
+            unique_id = f"{stamp:07X}"[-7:]
+            masters = masters.replace('<template_unique_id>', unique_id)
+            
+            # do import down here, so we don't have load if not needed
+            import zipfile
+            import io
+
+            # read file into memory
+            zipfile_raw = None
+            with open(vssx_path, 'rb') as vssx_file:
+                zipfile_raw = vssx_file.read()
+
+            zipfile_buffered = io.BytesIO(zipfile_raw)
+
+            # add the image and master1 file to zip file.
+            with zipfile_buffered as zfb:
+                with zipfile.ZipFile(zfb, 'a') as zipf:
+                    # Add a file located at the source_path to the destination within the zip
+                    zipf.writestr('visio/media/image1.png', buffered.getvalue())
+                    zipf.writestr('visio/masters/master1.xml', master1)
+                    zipf.writestr('visio/masters/masters.xml', masters)
+                    zipf.close()
+                zip_str = base64.b64encode(zfb.getvalue()).decode('utf-8')
+
+            # when running in lambda we HAVE to wait until
+            # upload done before returning
+            return_data = {
+                "statusCode": 200,
+                "body": zip_str,
+                "headers": {"Content-Type": "application/vnd.ms-visio.stencil",
+                            'content-disposition': 'attachment; filename="pure_diagram.vssx"'},
+                "isBase64Encoded": True
+            }
+
+            return return_data
+
+        else:
 
             # convert to base64 and encode utf-8
             # this is required for a binary object passed back

@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<MasterContents xmlns='http://schemas.microsoft.com/office/visio/2012/main' 
+    xmlns:r='http://schemas.openxmlformats.org/officeDocument/2006/relationships' xml:space='preserve'>
+    <Shapes>
+        <Shape ID='19' Type='Foreign' LineStyle='2' FillStyle='2' TextStyle='2'>
+            <Cell N='PinX' V='11.4'/>
+            <Cell N='PinY' V='10.025'/>
+            <Cell N='Width' V='19' U='IN' F='(User.OneUHeight)*19/1.75'/>
+            <Cell N='Height' V='<template_h_in>' U='IN' F='ROUND(Prop.UCount,0)*User.OneUHeight'/>
+            <Cell N='LocPinX' V='9.5' U='IN' F='Width*0.5'/>
+            <Cell N='LocPinY' V='4.375' U='IN' F='Height*0.5'/>
+            <Cell N='Angle' V='0'/>
+            <Cell N='FlipX' V='0'/>
+            <Cell N='FlipY' V='0'/>
+            <Cell N='ResizeMode' V='0'/>
+            <Cell N='ImgOffsetX' V='0' U='IN' F='ImgWidth*0'/>
+            <Cell N='ImgOffsetY' V='0' U='IN' F='ImgHeight*0'/>
+            <Cell N='ImgWidth' V='19' U='IN' F='Width*1'/>
+            <Cell N='ImgHeight' V='<template_h_in>' U='IN' F='Height*1'/>
+            <Cell N='ClippingPath' V='' E='#N/A'/>
+            <Cell N='TxtPinX' V='9.5' U='IN' F='Width*0.5'/>
+            <Cell N='TxtPinY' V='0' U='IN' F='Height*0'/>
+            <Cell N='TxtWidth' V='19' U='IN' F='Width*1'/>
+            <Cell N='TxtHeight' V='0' U='IN' F='Height*0'/>
+            <Cell N='TxtLocPinX' V='9.5' U='IN' F='TxtWidth*0.5'/>
+            <Cell N='TxtLocPinY' V='0' U='IN' F='TxtHeight*0.5'/>
+            <Cell N='TxtAngle' V='0'/>
+            <Cell N='VerticalAlign' V='0'/>
+            <Section N='User'>
+                <Row N='OneUHeight'>
+                    <Cell N='Value' V='1.75' U='IN' F='1.75IN*DropOnPageScale'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                </Row>
+                <Row N='EdgeOffset'>
+                    <Cell N='Value' V='0.5' U='IN' F='0.5IN*DropOnPageScale'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                </Row>
+            </Section>
+            <Section N='Property'>
+                <Row N='UCount'>
+                    <Cell N='Value' V='<template_h_u>'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Height in U&apos;s'/>
+                    <Cell N='Format' V='#'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='2'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='ShapeClass'>
+                    <Cell N='Value' V='RackEquipment' U='STR'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='ShapeClass'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='ShapeType'>
+                    <Cell N='Value' V='FlashArray' U='STR'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='ShapeType'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='Manufacturer'>
+                    <Cell N='Value' V='Pure Storage' U='STR'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Manufacturer'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='ProductNumber'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Product Number'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='PartNumber'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Part Number'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='ProductDescription'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Product Description'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='AssetNumber'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Asset Number'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='SerialNumber'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Serial Number'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='Location'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Location'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='Building'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Building'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+                <Row N='Room'>
+                    <Cell N='Value' V='0' F='No Formula'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                    <Cell N='Label' V='Room'/>
+                    <Cell N='Format' V='' F='No Formula'/>
+                    <Cell N='SortKey' V='' F='No Formula'/>
+                    <Cell N='Type' V='0'/>
+                    <Cell N='Invisible' V='0' F='No Formula'/>
+                    <Cell N='Verify' V='0' F='No Formula'/>
+                    <Cell N='DataLinked' V='0' F='No Formula'/>
+                    <Cell N='LangID' V='en-US'/>
+                    <Cell N='Calendar' V='0' F='No Formula'/>
+                </Row>
+            </Section>
+            <Section N='Connection'>
+                <Row T='Connection' IX='0'>
+                    <Cell N='X' V='0' U='IN' F='Width*0'/>
+                    <Cell N='Y' V='0' U='IN' F='Height*0'/>
+                    <Cell N='DirX' V='0'/>
+                    <Cell N='DirY' V='-1'/>
+                    <Cell N='Type' V='1'/>
+                    <Cell N='AutoGen' V='0'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                </Row>
+                <Row T='Connection' IX='1'>
+                    <Cell N='X' V='19' U='IN' F='Width*1'/>
+                    <Cell N='Y' V='0' U='IN' F='Height*0'/>
+                    <Cell N='DirX' V='0'/>
+                    <Cell N='DirY' V='-1'/>
+                    <Cell N='Type' V='1'/>
+                    <Cell N='AutoGen' V='0'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                </Row>
+            </Section>
+            <Section N='Geometry' IX='0'>
+                <Cell N='NoFill' V='0'/>
+                <Cell N='NoLine' V='0'/>
+                <Cell N='NoShow' V='0'/>
+                <Cell N='NoSnap' V='0'/>
+                <Cell N='NoQuickDrag' V='0'/>
+                <Row T='RelMoveTo' IX='1'>
+                    <Cell N='X' V='0'/>
+                    <Cell N='Y' V='0'/>
+                </Row>
+                <Row T='RelLineTo' IX='2'>
+                    <Cell N='X' V='1'/>
+                    <Cell N='Y' V='0'/>
+                </Row>
+                <Row T='RelLineTo' IX='3'>
+                    <Cell N='X' V='1'/>
+                    <Cell N='Y' V='1'/>
+                </Row>
+                <Row T='RelLineTo' IX='4'>
+                    <Cell N='X' V='0'/>
+                    <Cell N='Y' V='1'/>
+                </Row>
+                <Row T='RelLineTo' IX='5'>
+                    <Cell N='X' V='0'/>
+                    <Cell N='Y' V='0'/>
+                </Row>
+            </Section>
+            <ForeignData ForeignType='Bitmap' CompressionType='PNG'>
+                <Rel r:id='rId1'/>
+            </ForeignData>
+        </Shape>
+    </Shapes>
+</MasterContents>

@@ -78,12 +78,11 @@ $(function () {
     url += "&efm=" + fb_option_efm.val();
 
     return url;
-  }
+  };
 
   var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
 
-  $("#display").click(function () {
-
+  var get_url = function() {
     var active_tab_idx = $('#option-tabs').tabs( "option", "active" );
     console.log(active_tab_idx);
 
@@ -92,17 +91,27 @@ $(function () {
     }
     else if (active_tab_idx == 1) {
       url = fb_url();
-    }
-    else {
-      url = API_ENDPOINT + 'OE_WIP';
-    }
+    };
 
     console.log(url);
-
     $('#rack_digram').attr('src', url);
     
+    visio_url = url + "&vssx=True";
+    
     $('#img_url').html('<a target="_blank" href="' + url + '">' + url + '</a>');
+    $('#visio_url').html('<a target="_blank" href="' + visio_url + '">' + visio_url + '</a>');
+    
+    return url
+  }
+
+  $("#display").click(function () {
+    get_url();
   });
+
+  $("#download_visio").click(function () {
+    url = get_url() + "&vssx=True";
+    location.href = url;
+  })
 
   $("#fa_option_model > select").change(function () {
      if (fa_option_model.val() == 'fa-c60') {

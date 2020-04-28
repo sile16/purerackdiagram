@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<Masters xmlns='http://schemas.microsoft.com/office/visio/2012/main' 
+    xmlns:r='http://schemas.openxmlformats.org/officeDocument/2006/relationships' xml:space='preserve'>
+    <Master ID='2' NameU='Pure Stencil' IsCustomNameU='1' Name='Pure FlashArray' IsCustomName='1' Prompt='Drag onto a rack or cabinet shape to snap into place.' IconSize='1' AlignName='2' MatchByName='0' IconUpdate='1' UniqueID='{1<template_unique_id>-0002-0000-8E40-00608CF305B2}' BaseID='{AD87A3C2-F38E-4A8C-99FD-2CED9E9E1067}' PatternFlags='0' Hidden='0' MasterType='2'>
+        <PageSheet LineStyle='0' FillStyle='0' TextStyle='0'>
+            <Cell N='PageWidth' V='24' U='FT'/>
+            <Cell N='PageHeight' V='24' U='FT'/>
+            <Cell N='ShdwOffsetX' V='0.125' U='IN'/>
+            <Cell N='ShdwOffsetY' V='-0.125' U='IN'/>
+            <Cell N='PageScale' V='1' U='IN'/>
+            <Cell N='DrawingScale' V='12' U='FT'/>
+            <Cell N='DrawingSizeType' V='4'/>
+            <Cell N='DrawingScaleType' V='1'/>
+            <Cell N='InhibitSnap' V='0'/>
+            <Cell N='PageLockReplace' V='0' U='BOOL'/>
+            <Cell N='PageLockDuplicate' V='0' U='BOOL'/>
+            <Cell N='UIVisibility' V='0'/>
+            <Cell N='ShdwType' V='0'/>
+            <Cell N='ShdwObliqueAngle' V='0'/>
+            <Cell N='ShdwScaleFactor' V='1' F='No Formula'/>
+            <Cell N='DrawingResizeType' V='1'/>
+            <Cell N='ShapeKeywords' V='pure,flasharray,storage,rack,rack,equipment,U,gear'/>
+            <Section N='User'>
+                <Row N='ShowU'>
+                    <Cell N='Value' V='1' U='BOOL'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                </Row>
+            </Section>
+        </PageSheet>
+        <Icon> AAABAAEAICAQiQAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAgAIAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD//wD/AAAA/w D/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHeIAIiIiICAiAgIiHAABzM BiIiIiIiIj4j4iIhwAAcDAIj4iHeIiIiHiIiIcAAIiIiI+Ih4iIiId4+I+HAACIiIiIiIiIiIiIiI iIhwAAcAAYiIiIiIiI+I+IiIcAAHIgCI+Ih4iIiIh4iIiHAACIiIiPiIeIiIiHePiPhwAAiIiIeIi IiIiIiHeIiIcAAANzMzhododoj4hzMziDAAAwMzc3ZmZmZoh4d3M3cwAAN3M3OHd3ZnZnZ3dzMzMA AHhzd3iI+GZ2Z2Zzc3MDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAD////////////////////////////////////////////////4YClDgAAAAYAAAAGAAAABgAAA AYAAAAGAAAABgAAAAcAAAAPAAAADwAAAA8AAAAPAAAAD///////////////////////////////// ////////////////////w==</Icon>
+        <Rel r:id='rId1'/>
+    </Master>
+</Masters>

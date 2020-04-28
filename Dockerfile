@@ -10,7 +10,10 @@ RUN mkdir -p deploy/purerackdiagram && \
     rm -rf deploy/*dist-info
 
 RUN mkdir -p "$WORKDIR/deploy/purerackdiagram/png"
+RUN mkdir -p "$WORKDIR/deploy/vssx"
 COPY lambdaentry.py "$WORKDIR/deploy/"
+COPY vssx/*.xml "$WORKDIR/deploy/vssx/"
+COPY vssx/*.zip "$WORKDIR/deploy/vssx/"
 COPY purerackdiagram/*.py "$WORKDIR/deploy/purerackdiagram/"
 COPY purerackdiagram/*.json "$WORKDIR/deploy/purerackdiagram/"
 COPY purerackdiagram/*.ttf "$WORKDIR/deploy/purerackdiagram/"

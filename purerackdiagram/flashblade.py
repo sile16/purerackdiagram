@@ -10,6 +10,7 @@ class FBDiagram():
         
         config = {}
         config["chassis"] = int(params.get("chassis", 1))
+        config['ru'] = config["chassis"]*4
         config["face"] = params.get("face", "front").lower()
         config['direction'] = params.get("direction","up").lower()
         config['efm'] = params.get('efm','efm310').lower()

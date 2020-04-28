@@ -95,8 +95,6 @@ class FAShelf():
             fm_type = dp[1]
             num_modules = dp[2]
             dp_size = dp[3]
-
-            dp_start = cur_module
             fm_img_str = "png/pure_fa_fm_{}.png".format(fm_type)
             fm_img = await RackImage(fm_img_str).get_image()
 
@@ -425,6 +423,7 @@ def get_sas_fm_loc():
 
 
 class FADiagram():
+    
     def _init_pci_cards(self, config, params):
         pci_valid_cards = utils.global_config['pci_valid_cards']
         pci_config_lookup = utils.global_config['pci_config_lookup']
@@ -549,6 +548,11 @@ class FADiagram():
                 else:
                     shelves.append({'shelf_type': shelf_type, "face": 'back'})
 
+                if shelf_type == 'nvme':
+                    config['ru'] += 3
+                else:
+                    config['ru'] += 2
+
         config["shelves"] = shelves
 
     def __init__(self, params):
@@ -560,6 +564,8 @@ class FADiagram():
         config["generation"] = config["model_str"][3:4]
         config["model_num"] = int(config["model_str"][4:6])
         config["direction"] = params.get("direction", "up").lower()
+        config["ru"] = 3 # this gets increased during shelf parsing
+    
 
         if "r" in config["model_str"] and len(config["model_str"]) > 7:
             config["release"] = int(config["model_str"][7:8])
@@ -631,9 +637,12 @@ class FADiagram():
     async def get_image(self):
         tasks = []
 
+
         tasks.append(FAChassis(self.config).get_image())
+
         for shelf in self.config["shelves"]:
             tasks.append(FAShelf(shelf).get_image())
+
 
         # go get the cached versions or build images
         # this returns the results of the all the tasks in a list

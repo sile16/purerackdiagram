@@ -78,7 +78,8 @@ def test_lambda():
             "face": "back",
             "fm_label": "True",
             "dp_label": "Ture",
-            "bezel": "FALSE"
+            "bezel": "FALSE",
+            "vssx": True
         }
     }
 
@@ -102,18 +103,23 @@ def test_lambda():
             "face": "back",
             'direction': 'up',
             'efm': "efm310",
-            'blades': '17:0-6,52:23-29'
+            'blades': '17:0-6,52:23-29',
+            'vssx': True
         }
     }
 
-
-
-    results = lambdaentry.handler(fb_large, None)
+    results = lambdaentry.handler(c_event, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
             with open('tmp.png', 'wb') as outfile:
+                outfile.write(img_str)
+            del results['body']
+    elif results['headers'].get("Content-Type") == 'application/vnd.ms-visio.stencil':
+        if 'body' in results:
+            img_str = base64.b64decode(results['body'].encode('utf-8'))
+            with open('stencil.vssx', 'wb') as outfile:
                 outfile.write(img_str)
             del results['body']
 
