@@ -248,6 +248,7 @@ class FAChassis():
         # is  this the right side data pack ?
         # starts with no, then we change to yes after first one
         right = False
+        slots = {}
         for dp in self.config["chassis_datapacks"]:
             fm_str = dp[0]
             fm_type = dp[1]
@@ -264,20 +265,8 @@ class FAChassis():
 
             await self.start_img_event.wait()
             if not right:
-                left_modules = num_modules
                 the_range = range(0, num_modules)
             else:
-                # Populate from the righ to the left
-                # easiest  way to follow the DMM rules
-                # but do not overlap wide modules from the left.
-
-                # if left dp was > 10, substract those from the right
-                if fm_type == "blank":
-                    num_modules = 20 - num_modules
-                else:
-                    if num_modules + left_modules > 20:
-                        raise Exception("number of modules in chassis datapacks exceeds 20.")
-
                 the_range = reversed(range(20-num_modules, 20))
 
             fm_loc = get_chassis_fm_loc(self.config['generation'])
@@ -288,7 +277,16 @@ class FAChassis():
                     # for short DMM modules, fill the rest with blanks
                     self.tmp_img.paste(blank_img, fm_loc[x])
                 else:
-                    self.tmp_img.paste(fm_img, fm_loc[x])
+                    
+                    if x in slots and slots[x] != "blank":
+                        if fm_type == "blank":
+                            pass
+                        else:
+                            raise Exception("Overlapping datapacks, check data pack sizes dont exceed chassis size of 20.")
+                    else:                    
+                        self.tmp_img.paste(fm_img, fm_loc[x])
+                        # keep track of modules, to detect overlaps
+                        slots[x] = fm_type
             
             right = True
 

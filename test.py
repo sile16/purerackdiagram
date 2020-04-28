@@ -21,12 +21,8 @@ save_dir = 'test_results/'
 
 # 38/38-31/63-127/0
 # 0/38-0/45-0/45-0/63
-
-
-def test_lambda():
-    # local_delay puts a delay into build_img so
-    # they we can test the cache lookkup
-    event1 = {
+more_tests = [
+    {
         "queryStringParameters": {
             "model": "fa-x70r1",
             "datapacks": "19.2/0-31/63-0/0",
@@ -38,9 +34,9 @@ def test_lambda():
             "mezz": "emezz",
             "local_delay": 0
         }
-    }
+    },
 
-    event2 = {
+    {
         "queryStringParameters": {
             "model": "fb",
             "chassis": 2,
@@ -50,9 +46,9 @@ def test_lambda():
             'local_delay': 0,
             'blades': '17:0-6,52:23-29'
         }
-    }
+    },
 
-    event3 = {
+    {
         "queryStringParameters": {
             "model": "fa-x70r1",
             "protocol": "fc",
@@ -63,12 +59,11 @@ def test_lambda():
             "fm_label": "FALSE",
             "dp_label": "FALSE",
             "bezel": "FALSE",
-            "local_delay": 3,
-            'vssx': True
+            "local_delay": 3
         }
-    }
+    },
 
-    c_event = {
+    {
         "queryStringParameters": {
             "model": "fa-c60",
             "protocol": "eth",
@@ -79,12 +74,11 @@ def test_lambda():
             "face": "back",
             "fm_label": "True",
             "dp_label": "Ture",
-            "bezel": "FALSE",
-            "vssx": True
+            "bezel": "FALSE"
         }
-    }
+    },
 
-    x_scm1 = {
+    {
         "queryStringParameters": {
             "model": "fa-x70r1",
             "protocol": "fc",
@@ -95,21 +89,66 @@ def test_lambda():
             "fm_label": "True",
             "dp_label": "FALSE"
         }
-    }
+    },
 
-    fb_large = {
+    {
         "queryStringParameters": {
             "model": "fb",
             "chassis": 10,
             "face": "back",
             'direction': 'up',
             'efm': "efm310",
-            'blades': '17:0-6,52:23-29',
-            'vssx': True
+            'blades': '17:0-6,52:23-29'
+        }
+    },
+
+    {
+        "queryStringParameters": {
+            "model": "fa-x70r1",
+            "protocol": "fc",
+            "direction": "up",
+            "datapacks": "0/127",
+            "addoncards": "",
+            "face": "front",
+            "fm_label": "True",
+            "dp_label": "FALSE"
+        }
+    },
+    
+    {
+        "queryStringParameters": {
+            "model": "fa-x70r1",
+            "protocol": "fc",
+            "direction": "up",
+            "datapacks": "127/0",
+            "addoncards": "",
+            "face": "front",
+            "fm_label": "True",
+            "dp_label": "FALSE"
+        }
+    },
+
+        
+    {
+        "queryStringParameters": {
+            "model": "fa-x70r1",
+            "protocol": "fc",
+            "direction": "up",
+            "datapacks": "3/127",
+            "addoncards": "",
+            "face": "front",
+            "fm_label": "True",
+            "dp_label": "True"
         }
     }
+]
 
-    results = lambdaentry.handler(fb_large, None)
+def test_lambda():
+    # local_delay puts a delay into build_img so
+    # they we can test the cache lookkup
+    
+
+    results = lambdaentry.handler(more_tests[0], None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
@@ -225,6 +264,9 @@ def test_all(args):
                               "addoncards": card,
                               "face": "back"}
                     q.put(params)
+    
+    for test in more_tests:
+        q.put(test)
 
     q.join()
 

@@ -10,7 +10,7 @@ var FA_OPTIONS = {
             'fa-x70r1', 'fa-c60', 'fa-m10r2', 'fa-m20r2', 'fa-m50r2', 'fa-m70r2'],
     protocol: ['fc', 'eth'],
     face: ['front', 'back'],
-    datapacks: '6/127-45/0',
+    datapacks: '3/127-45/0',
     csizes: ['366', '879', '1390'],
     bezel: ['FALSE', 'TRUE'],
     direction: ['up', 'down'],
