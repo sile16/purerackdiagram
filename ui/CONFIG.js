@@ -11,7 +11,7 @@ var FA_OPTIONS = {
     protocol: ['fc', 'eth'],
     face: ['front', 'back'],
     datapacks: '3/127-45/0',
-    csizes: ['366', '879', '1390'],
+    csizes: ['366', '494', '839', '879', '1185', '1390'],
     bezel: ['FALSE', 'TRUE'],
     direction: ['up', 'down'],
     fm_label: ['TRUE', 'FALSE'],
