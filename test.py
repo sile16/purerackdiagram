@@ -1,15 +1,13 @@
 from pprint import pprint
 import logging
 import base64
-import threading
+from multiprocessing import Pool
 import hashlib
 import io
-import queue
 import os
 import lambdaentry
 from purerackdiagram.utils import global_config
 import purerackdiagram
-# import asyncio
 import json
 
 logger = logging.getLogger()
@@ -83,7 +81,7 @@ more_tests = [
             "model": "fa-x70r1",
             "protocol": "fc",
             "direction": "up",
-            "datapacks": "276-45/45",
+            "datapacks": "292-45/45",
             "addoncards": "",
             "face": "front",
             "fm_label": "True",
@@ -114,7 +112,6 @@ more_tests = [
             "dp_label": "FALSE"
         }
     },
-    
     {
         "queryStringParameters": {
             "model": "fa-x70r1",
@@ -127,8 +124,6 @@ more_tests = [
             "dp_label": "FALSE"
         }
     },
-
-        
     {
         "queryStringParameters": {
             "model": "fa-x70r1",
@@ -143,10 +138,10 @@ more_tests = [
     }
 ]
 
+
 def test_lambda():
     # local_delay puts a delay into build_img so
     # they we can test the cache lookkup
-    
 
     results = lambdaentry.handler(more_tests[0], None)
 
@@ -166,58 +161,34 @@ def test_lambda():
     pprint(results)
 
 
-class TestWorker(threading.Thread):
-    def __init__(self, q, results):
-        threading.Thread.__init__(self)
-        self.q = q
-        self.results = results
+def create_test_image(item, count, total):
+    img = purerackdiagram.get_image_sync(item)
 
-    def run(self):
-        #loop = asyncio.new_event_loop()
-        # asyncio.set_event_loop(loop)
+    file_name = ""
+    for n in ['model', 'addoncards', 'face', 'dp_label', 'fm_label', 'datapacks']:
+        if n in item:
+            if n == 'datapacks':
+                file_name += str(item[n]).replace('/', '-') + "_"
+            else:
+                file_name += str(item[n]) + "_"
+    file_name += '.png'
 
-        while True:
-            item = self.q.get()
+    h = hashlib.sha256()
+    with io.BytesIO() as memf:
+        img.save(memf, 'PNG')
+        data = memf.getvalue()
+        h.update(data)
+        img.save(os.path.join(save_dir, file_name))
 
-            #diagram = purediagram.get_diagram(item)
-            #img = loop.run_until_complete(diagram.get_image())
-            if 'addoncards' in item:
-                if item['addoncards'] == "2ethbaset":
-                    a = 2
-            img = purerackdiagram.get_image_sync(item)
-
-            name = ""
-            for n in item.values():
-                if isinstance(n, str):
-                    n = n.replace("/", '-')
-                name += str(n)+"_"
-            name += '.png'
-
-            h = hashlib.sha256()
-            with io.BytesIO() as memf:
-                img.save(memf, 'PNG')
-                data = memf.getvalue()
-                h.update(data)
-                img.save(os.path.join(save_dir, name))
-
-                self.results[name] = h.hexdigest()
-            self.q.task_done()
+        # result_q.put({file_name: h.hexdigest()})
+        print(f"{count} of {total}   {file_name}")
+        return({file_name: h.hexdigest()})
 
 
-def test_all(args):
+def get_all_tests():
     models = global_config['pci_config_lookup']
     dps = ['45/45-31/63-45', '3/127-24']
     csizes = ['366', '879', '1390']
-
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-
-    results = {}
-    q = queue.Queue()
-    for _ in range(args.t):
-        t = TestWorker(q, results)
-        t.setDaemon(True)
-        t.start()
 
     count = 0
     # front:
@@ -231,7 +202,7 @@ def test_all(args):
                               "fm_label": True,
                               "dp_label": dp_label,
                               "csize": csize}
-                    q.put(params)
+                    yield params
             else:
                 for dp in dps:
                     # if count > 3:
@@ -242,7 +213,7 @@ def test_all(args):
                               "dp_label": dp_label,
                               "datapacks": dp}
 
-                    q.put(params)
+                    yield params
 
     # back:
     addon_cards = global_config['pci_valid_cards']
@@ -256,19 +227,43 @@ def test_all(args):
                               "addoncards": card,
                               "face": "back",
                               "csize": csize}
-                    q.put(params)
+                    yield params
             else:
                 for dp in dps:
                     params = {"model": model,
                               "datapacks": dp,
                               "addoncards": card,
                               "face": "back"}
-                    q.put(params)
-    
-    for test in more_tests:
-        q.put(test)
+                    yield params
 
-    q.join()
+    for test in more_tests:
+        yield test['queryStringParameters']
+
+
+def test_all(args):
+
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    # Create amultiprocessing pool
+    pool = Pool(processes=args.t)
+    futures = []
+    total_count = 0
+
+    all_items = list(get_all_tests())
+    count = 0
+    for item in all_items:
+        futures.append(pool.apply_async(create_test_image, args=(item, count, len(all_items), )))
+        count += 1
+
+    pool.close()
+    pool.join()
+
+    results = {}
+
+    for f in futures:
+        result = f.get()
+        results.update(result)
 
     with open("test_results.json", "w") as f:
         json.dump(results, f)
@@ -277,14 +272,15 @@ def test_all(args):
         validation = json.load(f)
 
     errors = 0
+    warnings = 0
     for key in results:
         if key not in validation:
-            errors += 1
+            warnings += 1
             print("WARNING missing key:{}".format(key))
         elif results[key] != validation[key]:
             errors += 1
             print("Error Image Changed!!:{}".format(key))
-    print("Test Complete {} Errors Found".format(errors))
+    print("Test Complete {} Errors Found {} Warning".format(errors, warnings))
 
 
 def main(args):
@@ -300,5 +296,5 @@ if __name__ == "__main__":
     parser.add_argument('testtype', choices=['all', 'lambda'], default='all',
                         nargs='?',
                         help="Test all options, or test through lamdba entry")
-    parser.add_argument('-t', type=int, help="number of threads", default=1)
+    parser.add_argument('-t', type=int, help="number of threads", default=8)
     main(parser.parse_args())

@@ -80,7 +80,7 @@ class RackImage():
 
         self.img = Image.open(self.key)
         self.img.load()
-        logger.info("Loaded: {}".format(self.key))
+        logger.debug("Loaded: {}".format(self.key))
 
 
 def combine_images_vertically(images):
@@ -116,3 +116,13 @@ def apply_text(img, text, x_loc, y_loc, font_size=15):
 def apply_text_centered(img, text, y_loc, font_size=15):
     x_loc = img.size[0] // 2
     apply_text(img, text, x_loc, y_loc, font_size)
+
+
+def main():
+    # args no arg unless we need to have this tool to more
+    # Generate, the offsets programatically for slot locations for each chassis
+    pass
+
+
+if __name__ == "__main__":
+    main()

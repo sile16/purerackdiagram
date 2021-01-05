@@ -17,7 +17,7 @@ def get_diagram(params):
     # elif model.startswith("oe"):
     #    diagram = OEDiagram(params)
     else:
-        raise Exception("Error unknown model, looking for fa or fb or oe")
+        raise Exception("Error unknown model, looking for fa or fb ")
 
     return diagram
 
