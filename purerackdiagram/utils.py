@@ -1,4 +1,4 @@
-import json
+import yaml
 import asyncio
 import concurrent
 # import time
@@ -10,6 +10,7 @@ from PIL import ImageFont
 import os
 import purerackdiagram
 
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -19,8 +20,8 @@ root_path = os.path.dirname(purerackdiagram.__file__)
 ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
 
 global_config = None
-with open(os.path.join(root_path, 'config.json'), 'r') as f:
-    global_config = json.load(f)
+with open(os.path.join(root_path, 'config.yaml'), 'r') as f:
+    global_config = yaml.load(f)
 
 
 class RackImage():
@@ -118,11 +119,3 @@ def apply_text_centered(img, text, y_loc, font_size=15):
     apply_text(img, text, x_loc, y_loc, font_size)
 
 
-def main():
-    # args no arg unless we need to have this tool to more
-    # Generate, the offsets programatically for slot locations for each chassis
-    pass
-
-
-if __name__ == "__main__":
-    main()

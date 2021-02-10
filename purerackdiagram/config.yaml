@@ -1,0 +1,896 @@
+chassis_dp_size_lookup:
+  '0':
+  - Blank
+  - blank
+  - 10
+  - '0'
+  '10':
+  - 1TB
+  - sas
+  - 10
+  - '10'
+  '109':
+  - 9.1TB
+  - nvme
+  - 12
+  - '109'
+  '11':
+  - 1.1TB
+  - nvme
+  - 10
+  - '11'
+  '127':
+  - 9.1TB
+  - nvme
+  - 14
+  - '127'
+  '145':
+  - 9.1TB
+  - nvme
+  - 16
+  - '145'
+  '183':
+  - 18.3TB
+  - nvme
+  - 10
+  - '183'
+  '19.2':
+  - 1.9TB
+  - sas
+  - 10
+  - '19.2'
+  '20':
+  - 2TB
+  - sas
+  - 10
+  - '20'
+  '219':
+  - 18.3TB
+  - nvme
+  - 12
+  - '219'
+  '22':
+  - 2.2TB
+  - nvme
+  - 10
+  - '22'
+  '247':
+  - 24.7TB
+  - nvme-qlc
+  - 10
+  - '247'
+  '256':
+  - 18.3TB
+  - nvme
+  - 14
+  - '256'
+  '292':
+  - 18.3TB
+  - nvme
+  - 16
+  - '292'
+  '3':
+  - 750GB
+  - scm
+  - 4
+  - DM Cache 3
+  '345':
+  - 24.7TB
+  - nvme-qlc
+  - 14
+  - '345'
+  '366':
+  - 18.3TB
+  - nvme-qlc
+  - 20
+  - '366'
+  '38':
+  - 3.8TB
+  - sas
+  - 10
+  - '38'
+  '4.8':
+  - 480GB
+  - sas
+  - 10
+  - '4.8'
+  '45':
+  - 4.5TB
+  - nvme
+  - 10
+  - '45'
+  '494':
+  - 24.7TB
+  - nvme-qlc
+  - 20
+  - '494'
+  '5':
+  - 500GB
+  - sas
+  - 10
+  - '5'
+  '6':
+  - 750GB
+  - scm
+  - 8
+  - DM Cache 6
+  '63':
+  - 4.5TB
+  - nvme
+  - 14
+  - '63'
+  '72':
+  - 4.5TB
+  - nvme
+  - 16
+  - '72'
+  '76':
+  - 7.6TB
+  - sas
+  - 10
+  - '76'
+  '9.6':
+  - 960GB
+  - sas
+  - 10
+  - '9.6'
+  '91':
+  - 9.1TB
+  - nvme
+  - 10
+  - '91'
+  '984':
+  - 49.2TB
+  - nvme-qlc
+  - 20
+  - '984'
+csize_lookup:
+  '1185': 494-345/345
+  '1390': 366-512-512
+  '1531': 494-345/345-345
+  '1672': 984-688
+  '1877': 494-345/345-345/345
+  '247': '247'
+  '345': '345'
+  '366': '366'
+  '494': '494'
+  '839': 494-345
+  '879': 366-512
+  '984': '984'
+fa_config:
+  addoncards:
+  - 4fc
+  - 2fc
+  - 2eth
+  - 2eth40
+  - sas
+  - 2ethbaset
+  bezel:
+  - false
+  - true
+  datapacks: 91/91-45/45
+  direction:
+  - up
+  - down
+  dp_label:
+  - false
+  - true
+  face:
+  - front
+  - back
+  fm_label:
+  - false
+  - true
+  mezz:
+  - ''
+  - smezz
+  - emezz
+  model:
+  - fa-m10r2
+  - fa-m20r2
+  - fa-m50r2
+  - fa-m70r2
+  - fa-x10r2
+  - fa-x20r2
+  - fa-x50r2
+  - fa-x70r2
+  - fa-x70r1
+  - fa-c60r1
+  protocol:
+  - fc
+  - eth
+fb_blade_reg_pattern: ^([0-9]+:[0-9]+(-[0-9]+)?,?)+$
+pci_config_lookup:
+  fa-c40r3-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-c40r3-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+  fa-c60r1-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-c60r1-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+  fa-m10r2-eth:
+  - null
+  - null
+  - null
+  - null
+  fa-m10r2-fc:
+  - null
+  - null
+  - 2fc
+  - null
+  fa-m20r2-eth:
+  - null
+  - null
+  - 2eth
+  - null
+  fa-m20r2-fc:
+  - null
+  - null
+  - 2fc
+  - null
+  fa-m50r2-eth:
+  - 2eth
+  - null
+  - 2eth
+  - null
+  fa-m50r2-fc:
+  - 2fc
+  - null
+  - 2fc
+  - null
+  fa-m70r2-eth:
+  - 2eth
+  - null
+  - 2eth
+  - null
+  fa-m70r2-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+  fa-x10r2-eth:
+  - null
+  - null
+  - null
+  - null
+  fa-x10r2-fc:
+  - null
+  - null
+  - 2fc
+  - null
+  fa-x10r3-eth:
+  - null
+  - null
+  - null
+  - null
+  fa-x10r3-fc:
+  - null
+  - null
+  - 2fc
+  - null
+  fa-x20r2-eth:
+  - null
+  - null
+  - null
+  - null
+  fa-x20r2-fc:
+  - null
+  - null
+  - 2fc
+  - null
+  fa-x20r3-eth:
+  - null
+  - null
+  - null
+  - null
+  fa-x20r3-fc:
+  - null
+  - null
+  - 2fc
+  - null
+  fa-x50r2-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-x50r2-fc:
+  - 4fc
+  - null
+  - null
+  - null
+  fa-x50r3-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-x50r3-fc:
+  - 4fc
+  - null
+  - null
+  - null
+  fa-x70r1-eth:
+  - 2eth
+  - null
+  - 2eth
+  - null
+  fa-x70r1-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+  fa-x70r2-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-x70r2-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+  fa-x70r3-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-x70r3-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+  fa-x90r2-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-x90r2-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+  fa-x90r3-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-x90r3-fc:
+  - 4fc
+  - null
+  - 2fc
+  - null
+pci_valid_cards:
+- 2eth
+- 2eth40
+- 2fc
+- 4fc
+- sas
+- 2ethbaset
+png/pure_fa_c_back.png:
+  ct0_mezz_loc: &id029 !!python/tuple
+  - 585
+  - 45
+  ct0_pci_loc:
+  - !!python/tuple
+    - 1198
+    - 465
+  - !!python/tuple
+    - 1198
+    - 581
+  - !!python/tuple
+    - 2069
+    - 465
+  - !!python/tuple
+    - 2069
+    - 581
+  ct1_mezz_loc: &id030 !!python/tuple
+  - 585
+  - 425
+  ct1_pci_loc:
+  - &id031 !!python/tuple
+    - 1198
+    - 87
+  - &id032 !!python/tuple
+    - 1198
+    - 203
+  - &id033 !!python/tuple
+    - 2069
+    - 87
+  - &id034 !!python/tuple
+    - 2069
+    - 203
+png/pure_fa_c_front.png:
+  ct0_mezz_loc:
+  - 585
+  - 45
+  ct1_mezz_loc:
+  - 585
+  - 425
+  fm_loc:
+  - &id001 !!python/tuple
+    - 165
+    - 250
+  - &id002 !!python/tuple
+    - 270
+    - 250
+  - &id003 !!python/tuple
+    - 375
+    - 250
+  - &id004 !!python/tuple
+    - 480
+    - 250
+  - &id005 !!python/tuple
+    - 714
+    - 250
+  - &id006 !!python/tuple
+    - 819
+    - 250
+  - &id007 !!python/tuple
+    - 924
+    - 250
+  - &id008 !!python/tuple
+    - 1029
+    - 250
+  - &id009 !!python/tuple
+    - 1265
+    - 250
+  - &id010 !!python/tuple
+    - 1370
+    - 250
+  - &id011 !!python/tuple
+    - 1475
+    - 250
+  - &id012 !!python/tuple
+    - 1580
+    - 250
+  - &id013 !!python/tuple
+    - 1817
+    - 250
+  - &id014 !!python/tuple
+    - 1922
+    - 250
+  - &id015 !!python/tuple
+    - 2027
+    - 250
+  - &id016 !!python/tuple
+    - 2132
+    - 250
+  - &id017 !!python/tuple
+    - 2237
+    - 250
+  - &id018 !!python/tuple
+    - 2342
+    - 250
+  - &id019 !!python/tuple
+    - 2447
+    - 250
+  - &id020 !!python/tuple
+    - 2552
+    - 250
+  - &id021 !!python/tuple
+    - 164
+    - 27
+  - &id022 !!python/tuple
+    - 164
+    - 132
+  - &id023 !!python/tuple
+    - 714
+    - 27
+  - &id024 !!python/tuple
+    - 714
+    - 132
+  - &id025 !!python/tuple
+    - 1264
+    - 27
+  - &id026 !!python/tuple
+    - 1264
+    - 132
+  - &id027 !!python/tuple
+    - 1814
+    - 27
+  - &id028 !!python/tuple
+    - 1814
+    - 132
+  model_text_loc: &id035 !!python/tuple
+  - 2759
+  - 83
+  nvram_loc:
+  - &id036 !!python/tuple
+    - 1263
+    - 28
+  - &id037 !!python/tuple
+    - 1813
+    - 28
+png/pure_fa_m_back.png:
+  ct0_mezz_loc: !!python/tuple
+  - 709
+  - 44
+  ct0_pci_loc:
+  - !!python/tuple
+    - 1317
+    - 465
+  - !!python/tuple
+    - 1317
+    - 579
+  - !!python/tuple
+    - 2182
+    - 465
+  - !!python/tuple
+    - 2182
+    - 579
+  ct1_mezz_loc: !!python/tuple
+  - 709
+  - 421
+  ct1_pci_loc:
+  - !!python/tuple
+    - 1317
+    - 87
+  - !!python/tuple
+    - 1317
+    - 201
+  - !!python/tuple
+    - 2182
+    - 87
+  - !!python/tuple
+    - 2182
+    - 201
+png/pure_fa_m_front.png:
+  ct0_mezz_loc:
+  - 709
+  - 44
+  ct1_mezz_loc:
+  - 709
+  - 421
+  fm_loc:
+  - !!python/tuple
+    - 156
+    - 243
+  - !!python/tuple
+    - 261
+    - 243
+  - !!python/tuple
+    - 366
+    - 243
+  - !!python/tuple
+    - 471
+    - 243
+  - !!python/tuple
+    - 705
+    - 243
+  - !!python/tuple
+    - 810
+    - 243
+  - !!python/tuple
+    - 915
+    - 243
+  - !!python/tuple
+    - 1020
+    - 243
+  - !!python/tuple
+    - 1256
+    - 243
+  - !!python/tuple
+    - 1361
+    - 243
+  - !!python/tuple
+    - 1466
+    - 243
+  - !!python/tuple
+    - 1571
+    - 243
+  - !!python/tuple
+    - 1808
+    - 243
+  - !!python/tuple
+    - 1913
+    - 243
+  - !!python/tuple
+    - 2018
+    - 243
+  - !!python/tuple
+    - 2123
+    - 243
+  - !!python/tuple
+    - 2228
+    - 243
+  - !!python/tuple
+    - 2333
+    - 243
+  - !!python/tuple
+    - 2438
+    - 243
+  - !!python/tuple
+    - 2543
+    - 243
+  - !!python/tuple
+    - 155
+    - 20
+  - !!python/tuple
+    - 155
+    - 125
+  - !!python/tuple
+    - 705
+    - 20
+  - !!python/tuple
+    - 705
+    - 125
+  - !!python/tuple
+    - 1255
+    - 20
+  - !!python/tuple
+    - 1255
+    - 125
+  - !!python/tuple
+    - 1805
+    - 20
+  - !!python/tuple
+    - 1805
+    - 125
+  model_text_loc: !!python/tuple
+  - 2745
+  - 120
+  nvram_loc:
+  - !!python/tuple
+    - 1255
+    - 20
+  - !!python/tuple
+    - 1805
+    - 20
+png/pure_fa_nvme_shelf_front.png:
+  fm_loc:
+  - *id001
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - *id014
+  - *id015
+  - *id016
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+png/pure_fa_sas_shelf_front.png:
+  fm_loc:
+  - !!python/tuple
+    - 138
+    - 1
+  - !!python/tuple
+    - 243
+    - 1
+  - !!python/tuple
+    - 348
+    - 1
+  - !!python/tuple
+    - 453
+    - 1
+  - !!python/tuple
+    - 558
+    - 1
+  - !!python/tuple
+    - 663
+    - 1
+  - !!python/tuple
+    - 768
+    - 1
+  - !!python/tuple
+    - 873
+    - 1
+  - !!python/tuple
+    - 978
+    - 1
+  - !!python/tuple
+    - 1083
+    - 1
+  - !!python/tuple
+    - 1188
+    - 1
+  - !!python/tuple
+    - 1293
+    - 1
+  - !!python/tuple
+    - 1450
+    - 1
+  - !!python/tuple
+    - 1555
+    - 1
+  - !!python/tuple
+    - 1660
+    - 1
+  - !!python/tuple
+    - 1765
+    - 1
+  - !!python/tuple
+    - 1870
+    - 1
+  - !!python/tuple
+    - 1975
+    - 1
+  - !!python/tuple
+    - 2080
+    - 1
+  - !!python/tuple
+    - 2185
+    - 1
+  - !!python/tuple
+    - 2290
+    - 1
+  - !!python/tuple
+    - 2395
+    - 1
+  - !!python/tuple
+    - 2500
+    - 1
+  - !!python/tuple
+    - 2605
+    - 1
+png/pure_fa_x_back.png:
+  ct0_mezz_loc: *id029
+  ct0_pci_loc:
+  - !!python/tuple
+    - 1198
+    - 465
+  - !!python/tuple
+    - 1198
+    - 581
+  - !!python/tuple
+    - 2069
+    - 465
+  - !!python/tuple
+    - 2069
+    - 581
+  ct1_mezz_loc: *id030
+  ct1_pci_loc:
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+png/pure_fa_x_front.png:
+  ct0_mezz_loc:
+  - 585
+  - 45
+  ct1_mezz_loc:
+  - 585
+  - 425
+  fm_loc:
+  - *id001
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - *id014
+  - *id015
+  - *id016
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  model_text_loc: *id035
+  nvram_loc:
+  - *id036
+  - *id037
+shelf_dp_size_lookup:
+  '0':
+  - Blank
+  - blank
+  - 12
+  - '0'
+  '11':
+  - 960GB
+  - sas
+  - 12
+  - '11'
+  '12':
+  - 512GB
+  - sas
+  - 24
+  - '12'
+  '127':
+  - 9.1TB
+  - nvme
+  - 14
+  - '127'
+  '15':
+  - 1.1TB
+  - nvme
+  - 14
+  - '15'
+  '22':
+  - 1.9TB
+  - sas
+  - 12
+  - '22'
+  '24':
+  - 1TB
+  - sas
+  - 24
+  - '24'
+  '256':
+  - 18.3TB
+  - nvme
+  - 14
+  - '256'
+  '31':
+  - 2.2TB
+  - nvme
+  - 14
+  - '31'
+  '345':
+  - 24.7TB
+  - nvme-qlc
+  - 14
+  - '345'
+  '45':
+  - 3.8TB
+  - sas
+  - 12
+  - '45'
+  '512':
+  - 18.3TB
+  - nvme-qlc
+  - 28
+  - '512'
+  '6':
+  - 256GB
+  - sas
+  - 24
+  - '6'
+  '63':
+  - 4.5TB
+  - nvme
+  - 14
+  - '63'
+  '688':
+  - 49.2TB
+  - nvme-qlc
+  - 14
+  - '688'
+  '90':
+  - 7.6TB
+  - sas
+  - 12
+  - '90'

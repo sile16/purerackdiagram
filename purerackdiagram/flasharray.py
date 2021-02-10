@@ -37,7 +37,12 @@ class FAShelf():
     async def get_base_img(self):
         c = self.config
         key = "png/pure_fa_{}_shelf_{}.png".format(c["shelf_type"], c["face"])
+
         self.tmp_img = await RackImage(key).get_image()
+
+        # Load image info
+        if key in utils.global_config:
+            self.img_info = utils.global_config[key]
         self.start_img_event.set()
 
     async def add_nvme_fms(self):
@@ -59,7 +64,8 @@ class FAShelf():
 
             # wait until the base image is loaded
             await self.start_img_event.wait()
-            fm_loc = get_chassis_fm_loc()
+
+            fm_loc = self.img_info['fm_loc']
             fm_rotated = fm_img.rotate(-90, expand=True)
 
             for x in range(cur_module, min(28, num_modules + cur_module)):
@@ -104,13 +110,12 @@ class FAShelf():
                 apply_fm_label(fm_img, fm_str, fm_type)
 
             await self.start_img_event.wait()
-            fm_loc = get_sas_fm_loc()
+            fm_loc = self.img_info['fm_loc']
 
             for x in range(cur_module, min(24, cur_module + num_modules)):
                 self.tmp_img.paste(fm_img, fm_loc[x])
-            
-            cur_module += num_modules
 
+            cur_module += num_modules
 
         # apply dp label after fm modules
         right = False
@@ -120,7 +125,7 @@ class FAShelf():
                 fm_type = dp[1]
                 num_modules = dp[2]
                 dp_size = dp[3]
-                
+
                 y_offset = 0
                 x_offset = 90
                 full = False
@@ -135,9 +140,8 @@ class FAShelf():
                                               full)
                 right = True
 
-            
 
-
+# takes the config parsed in FA Diagram and creates the image for the chassis
 class FAChassis():
 
     def __init__(self, params):
@@ -148,6 +152,7 @@ class FAChassis():
         self.ch0_fm_loc = None
 
     async def get_image(self):
+        # build the image
         c = self.config
         key = "png/pure_fa_{}".format(c["generation"])
 
@@ -160,6 +165,9 @@ class FAChassis():
 
         tasks = []
         tasks.append(self.get_base_img(key))
+
+        if key in utils.global_config:
+            self.img_info = utils.global_config[key]
 
         if c["face"] == "front":
             tasks.append(self.add_fms())
@@ -178,13 +186,6 @@ class FAChassis():
         self.start_img_event.set()
 
     async def add_nvram(self):
-        if self.config['generation'] == 'x' or \
-           self.config['generation'] == 'c':
-            nv1 = (1263, 28)
-            nv2 = (1813, 28)
-        else:
-            nv1 = (1255, 20)
-            nv2 = (1805, 20)
 
         if self.config['generation'] == 'c':
             # always add second nvram on 'c' array
@@ -194,9 +195,10 @@ class FAChassis():
             return
 
         nvram_img = await RackImage("png/pure_fa_x_nvram.png").get_image()
+
         await self.start_img_event.wait()
-        self.tmp_img.paste(nvram_img, nv1)
-        self.tmp_img.paste(nvram_img, nv2)
+        self.tmp_img.paste(nvram_img, self.img_info['nvram_loc'][0])
+        self.tmp_img.paste(nvram_img, self.img_info['nvram_loc'][1])
 
     async def add_cards(self):
         pci = self.config["pci_config"]
@@ -208,13 +210,6 @@ class FAChassis():
         await asyncio.gather(*tasks)
 
     async def add_card(self, slot, card_type):
-        # y offset from CT1 -> CT0
-        y_offset = 378
-        if self.config['generation'] == 'x' or \
-                self.config['generation'] == 'c':
-            pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
-        elif self.config['generation'] == 'm':
-            pci_loc = [(1317, 87), (1317, 201), (2182, 87), (2182, 201)]
 
         if slot < 2:
             height = "fh"
@@ -222,12 +217,17 @@ class FAChassis():
             height = "hh"
 
         key = "png/pure_fa_{}_{}.png".format(card_type, height)
+
         card_img = await RackImage(key).get_image()
         await self.start_img_event.wait()
-        cord = pci_loc[slot]
+
+        # ct0
+        cord = self.img_info['ct0_pci_loc'][slot]
         self.tmp_img.paste(card_img, cord)
-        ct0_cord = (cord[0], cord[1] + y_offset)
-        self.tmp_img.paste(card_img, ct0_cord)
+
+        # ct1
+        cord = self.img_info['ct1_pci_loc'][slot]
+        self.tmp_img.paste(card_img, cord)
 
     async def add_mezz(self):
         # if self.config["generation"] != "x" or self.config['mezz'] is None:
@@ -236,13 +236,9 @@ class FAChassis():
             key = "png/pure_fa_x_{}.png".format(self.config["mezz"])
             mezz_img = await RackImage(key).get_image()
             await self.start_img_event.wait()
-            if self.config['generation'] == 'x' or \
-               self.config['generation'] == 'c':
-                self.tmp_img.paste(mezz_img, (585, 45))
-                self.tmp_img.paste(mezz_img, (585, 425))
-            elif self.config['generation'] == 'm':
-                self.tmp_img.paste(mezz_img, (709, 44))
-                self.tmp_img.paste(mezz_img, (709, 421))
+
+            self.tmp_img.paste(mezz_img, self.img_info['ct0_mezz_loc'])
+            self.tmp_img.paste(mezz_img, self.img_info['ct1_mezz_loc'])
 
     async def add_fms(self):
         # is  this the right side data pack ?
@@ -269,7 +265,7 @@ class FAChassis():
             else:
                 the_range = reversed(range(20-num_modules, 20))
 
-            fm_loc = get_chassis_fm_loc(self.config['generation'])
+            fm_loc = self.img_info['fm_loc']
 
             for x in the_range:
                 # self.tmp_img.save("tmp.png")
@@ -277,21 +273,20 @@ class FAChassis():
                     # for short DMM modules, fill the rest with blanks
                     self.tmp_img.paste(blank_img, fm_loc[x])
                 else:
-                    
+
                     if x in slots and slots[x] != "blank":
                         if fm_type == "blank":
                             pass
                         else:
-                            raise Exception("Overlapping datapacks, check data pack sizes dont exceed chassis size of 20.")
-                    else:                    
+                            raise Exception(
+                                "Overlapping datapacks, check data pack sizes dont exceed chassis size of 20.")
+                    else:
                         self.tmp_img.paste(fm_img, fm_loc[x])
                         # keep track of modules, to detect overlaps
                         slots[x] = fm_type
-            
+
             right = True
 
-
-        
         if self.config['dp_label']:
             right = False
             for dp in self.config["chassis_datapacks"]:
@@ -318,11 +313,7 @@ class FAChassis():
     async def add_model_text(self):
         global ttf_path
 
-        if self.config['generation'] == 'x' or \
-           self.config['generation'] == 'c':
-            loc = (2759, 83)
-        else:
-            loc = (2745, 120)
+        loc = self.img_info['model_text_loc']
 
         await self.start_img_event.wait()
         c = self.config
@@ -357,12 +348,11 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
     if right:
         box_loc = (tmp.size[0] // 2 + x_buffer, y_offset + y_buffer)
 
-    
     box_size = (tmp.size[0] // 2 - 2 * x_buffer - x_offset,
                 (tmp.size[1] - 2 * y_buffer - y_offset))
     if full:
         box_size = (tmp.size[0] - 2 * x_buffer - 2 * x_offset,
-                (tmp.size[1] - 2 * y_buffer - y_offset))
+                    (tmp.size[1] - 2 * y_buffer - y_offset))
 
     # put DP on left or right
     box_loc2 = (box_loc[0]+box_size[0], box_loc[1]+box_size[1])
@@ -379,61 +369,10 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
     return Image.alpha_composite(alpha_tmp, tmp)
 
 
-# x,y coordinates for all chassis fms.
-def get_chassis_fm_loc(model='x'):
-    # these are the anchor locations, and
-    # offsets are calculated to fill in holes
-    ch0_fm_loc = [None] * 28
-    ch0_fm_loc[0] = (165, 250)
-    ch0_fm_loc[4] = (714, 250)
-    ch0_fm_loc[8] = (1265, 250)
-    ch0_fm_loc[12] = (1817, 250)
-    ch0_fm_loc[20] = (164, 27)
-
-    x_offset = 105
-    for x in range(20):
-        if ch0_fm_loc[x] is None:
-            loc = list(ch0_fm_loc[x - 1])
-            loc[0] += int(x_offset)
-            ch0_fm_loc[x] = tuple(loc)
-
-    y_offset = x_offset
-    x_offset = 550
-    for x in range(20, 28):
-        if ch0_fm_loc[x] is None:
-            loc = list(ch0_fm_loc[x - 1])
-            if x % 2 == 0:
-                loc[0] += x_offset
-                loc[1] -= y_offset
-            else:
-                loc[1] += y_offset
-            ch0_fm_loc[x] = tuple(loc)
-
-    if model != 'x':
-        # adjust slightly for the //m image
-        for x in range(len(ch0_fm_loc)):
-            ch0_fm_loc[x] = (ch0_fm_loc[x][0] - 9, ch0_fm_loc[x][1] - 7)
-
-    return ch0_fm_loc
-
-
-# x,y coordinates for all sas fms
-def get_sas_fm_loc():
-    fm_loc = [None] * 24
-    fm_loc[0] = (138, 1)
-    fm_loc[12] = (1450, 1)
-    x_offset = 105
-
-    for x in range(24):
-        if fm_loc[x] is None:
-            loc = list(fm_loc[x - 1])
-            loc[0] += x_offset
-            fm_loc[x] = tuple(loc)
-    return fm_loc
-
-
+# FADiagram does most of the logical config parsing and validation of configuration
+#
 class FADiagram():
-    
+
     def _init_pci_cards(self, config, params):
         pci_valid_cards = utils.global_config['pci_valid_cards']
         pci_config_lookup = utils.global_config['pci_config_lookup']
@@ -574,8 +513,7 @@ class FADiagram():
         config["generation"] = config["model_str"][3:4]
         config["model_num"] = int(config["model_str"][4:6])
         config["direction"] = params.get("direction", "up").lower()
-        config["ru"] = 3 # this gets increased during shelf parsing
-    
+        config["ru"] = 3  # this gets increased during shelf parsing
 
         if "r" in config["model_str"] and len(config["model_str"]) > 7:
             config["release"] = int(config["model_str"][7:8])
@@ -618,6 +556,7 @@ class FADiagram():
                 raise Exception(
                     "Please use a valid mezzainine: {}".format(
                         pformat(valid_mezz)))
+
             self._init_pci_cards(config, params)
 
         else:
@@ -647,14 +586,11 @@ class FADiagram():
     async def get_image(self):
         tasks = []
 
-
         tasks.append(FAChassis(self.config).get_image())
 
         for shelf in self.config["shelves"]:
             tasks.append(FAShelf(shelf).get_image())
 
-
-        # go get the cached versions or build images
         # this returns the results of the all the tasks in a list
         all_images = await asyncio.gather(*tasks)
 

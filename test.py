@@ -9,6 +9,7 @@ import lambdaentry
 from purerackdiagram.utils import global_config
 import purerackdiagram
 import json
+import traceback
 
 logger = logging.getLogger()
 ch = logging.StreamHandler()
@@ -162,8 +163,6 @@ def test_lambda():
 
 
 def create_test_image(item, count, total):
-    img = purerackdiagram.get_image_sync(item)
-
     file_name = ""
     for n in ['model', 'addoncards', 'face', 'dp_label', 'fm_label', 'datapacks']:
         if n in item:
@@ -172,6 +171,18 @@ def create_test_image(item, count, total):
             else:
                 file_name += str(item[n]) + "_"
     file_name += '.png'
+
+
+    try:
+        img = purerackdiagram.get_image_sync(item)
+    
+    except Exception as e:
+        print(f"Caught exeption in image: {file_name} ")
+
+        traceback.print_exc()
+        print()
+        raise e
+
 
     h = hashlib.sha256()
     with io.BytesIO() as memf:
