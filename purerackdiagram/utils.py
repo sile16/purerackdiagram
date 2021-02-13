@@ -83,12 +83,25 @@ class RackImage():
         self.img.load()
         logger.debug("Loaded: {}".format(self.key))
 
+def add_ports_at_offset(key, offset, all_ports):
+    global global_config
 
-def combine_images_vertically(images):
+    if key in global_config:
+        if 'ports' in global_config[key]:
+            ports = global_config[key]['ports']
+            for p in ports:
+                new_port = p.copy()
+                new_loc = (p['loc'][0] + offset[0], p['loc'][1] + offset[1])
+                new_port['loc'] = new_loc
+                all_ports.append(new_port)
+
+def combine_images_vertically(image_ports):
     """ Combines a list of PIL images vertically
         Args:
             images: List of PIL image objects to be combined
     """
+    # pull out the images
+    images = [ i['img'] for i in image_ports]
     widths, heights = zip(*(i.size for i in images))
     total_height = sum(heights)
     total_width = max(widths)
@@ -96,12 +109,23 @@ def combine_images_vertically(images):
     new_im = Image.new("RGB", (total_width, total_height))
 
     y_offset = 0
-    for im in images:
+    all_ports = []
+    for imp in image_ports:
+        im = imp['img']
+        ports = imp['ports']
         # center the x difference if an image is slightly smaller width
         x_offset = int((total_width - im.size[0]) / 2)
         new_im.paste(im, (x_offset, y_offset))
+        
+        #calculate new port location
+        for p in ports:
+            new_port = p.copy()
+            new_yloc = p['loc'][1] + y_offset
+            new_port['loc'] = (p['loc'][0], new_yloc)
+            all_ports.append(new_port)
+
         y_offset += im.size[1]
-    return new_im
+    return new_im, all_ports
 
 
 def apply_text(img, text, x_loc, y_loc, font_size=15):
@@ -117,5 +141,3 @@ def apply_text(img, text, x_loc, y_loc, font_size=15):
 def apply_text_centered(img, text, y_loc, font_size=15):
     x_loc = img.size[0] // 2
     apply_text(img, text, x_loc, y_loc, font_size)
-
-

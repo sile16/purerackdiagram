@@ -213,6 +213,7 @@
                     <Cell N='AutoGen' V='0'/>
                     <Cell N='Prompt' V='' F='No Formula'/>
                 </Row>
+                <additional_connection_points>
             </Section>
             <Section N='Geometry' IX='0'>
                 <Cell N='NoFill' V='0'/>

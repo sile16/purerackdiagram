@@ -1,10 +1,11 @@
+from update_config import static_global_config
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 # from io import BytesIO
 import asyncio
 from . import utils
-from .utils import RackImage, combine_images_vertically
+from .utils import RackImage, combine_images_vertically, add_ports_at_offset
 # import logging
 import os
 from pprint import pformat
@@ -17,6 +18,7 @@ class FAShelf():
     def __init__(self, params):
         self.config = params
         self.start_img_event = asyncio.Event()
+        self.ports = []
 
     # Called externally to retrieve the image of the shelf
     async def get_image(self):
@@ -31,7 +33,7 @@ class FAShelf():
 
         # load the base image and FMs simultaniously.
         await asyncio.gather(*tasks)
-        return self.tmp_img
+        return {'img':self.tmp_img, 'ports': self.ports}
 
     # load the first base image
     async def get_base_img(self):
@@ -41,8 +43,13 @@ class FAShelf():
         self.tmp_img = await RackImage(key).get_image()
 
         # Load image info
+        self.img_info = {}
         if key in utils.global_config:
             self.img_info = utils.global_config[key]
+
+        if 'ports' in self.img_info:
+            self.ports = self.img_info['ports']
+
         self.start_img_event.set()
 
     async def add_nvme_fms(self):
@@ -150,6 +157,7 @@ class FAChassis():
         self.config = config
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
+        self.ports = []
 
     async def get_image(self):
         # build the image
@@ -158,7 +166,8 @@ class FAChassis():
 
         if c["face"] == "front" and c["bezel"]:
             key += "_bezel.png"
-            return await RackImage(key).get_image()
+            img =  await RackImage(key).get_image()
+            return {'img': img, 'ports': []}
 
         # not doing bezel
         key += "_{}.png".format(c["face"])
@@ -168,6 +177,11 @@ class FAChassis():
 
         if key in utils.global_config:
             self.img_info = utils.global_config[key]
+
+        if 'ports' in self.img_info:
+            self.ports = self.img_info['ports']
+
+
 
         if c["face"] == "front":
             tasks.append(self.add_fms())
@@ -179,7 +193,7 @@ class FAChassis():
 
         # run all the tasks concurrently
         await asyncio.gather(*tasks)
-        return self.tmp_img
+        return {'img': self.tmp_img, 'ports':self.ports}
 
     async def get_base_img(self, key):
         self.tmp_img = await RackImage(key).get_image()
@@ -224,10 +238,14 @@ class FAChassis():
         # ct0
         cord = self.img_info['ct0_pci_loc'][slot]
         self.tmp_img.paste(card_img, cord)
+        add_ports_at_offset(key, cord, self.ports)
 
         # ct1
         cord = self.img_info['ct1_pci_loc'][slot]
+        add_ports_at_offset(key, cord, self.ports)
         self.tmp_img.paste(card_img, cord)
+    
+
 
     async def add_mezz(self):
         # if self.config["generation"] != "x" or self.config['mezz'] is None:
@@ -238,7 +256,11 @@ class FAChassis():
             await self.start_img_event.wait()
 
             self.tmp_img.paste(mezz_img, self.img_info['ct0_mezz_loc'])
+            add_ports_at_offset(key, self.img_info['ct0_mezz_loc'], self.ports)
+
             self.tmp_img.paste(mezz_img, self.img_info['ct1_mezz_loc'])
+            add_ports_at_offset(key, self.img_info['ct1_mezz_loc'], self.ports)
+
 
     async def add_fms(self):
         # is  this the right side data pack ?
@@ -361,7 +383,7 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
     box_center = ((box_loc[0] + box_loc2[0]) // 2,
                   (box_loc[1] + box_loc2[1]) // 2)
     font = ImageFont.truetype(ttf_path, size=85)
-    w, h = draw.textsize(dp_size+"TB", font=font)
+    w, h = draw.textsize(dp_size + "TB", font=font)
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
     draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220), font=font)
 
@@ -507,6 +529,7 @@ class FADiagram():
     def __init__(self, params):
         # front or back
         config = {}
+        self.ports = []
 
         # mode-str of type  "fa-m70r2" or "fa-x70"
         config["model_str"] = params["model"].lower()
@@ -592,9 +615,11 @@ class FADiagram():
             tasks.append(FAShelf(shelf).get_image())
 
         # this returns the results of the all the tasks in a list
-        all_images = await asyncio.gather(*tasks)
+        all_image_ports = await asyncio.gather(*tasks)
 
         if self.config["direction"] == "up":
-            all_images.reverse()
+            all_image_ports.reverse()
 
-        return combine_images_vertically(all_images)
+        final_img, all_ports = combine_images_vertically(all_image_ports)
+        self.ports = all_ports
+        return final_img

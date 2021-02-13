@@ -31,7 +31,8 @@ more_tests = [
             "fm_label": True,
             "dp_label": True,
             "mezz": "emezz",
-            "local_delay": 0
+            "local_delay": 0,
+            "vssx": True
         }
     },
 
@@ -141,6 +142,7 @@ more_tests = [
 
 
 def test_lambda():
+    # Single test functions
     # local_delay puts a delay into build_img so
     # they we can test the cache lookkup
 

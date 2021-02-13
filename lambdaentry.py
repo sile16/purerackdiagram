@@ -53,7 +53,6 @@ def text_to_image(text, width):
     return img
 
 
-
 def handler(event, context):
     """ This is the entry point for AWS Lambda, API Gateway
     We start two threads, 1 to check to see if this config already exists in S3
@@ -64,6 +63,7 @@ def handler(event, context):
     """
     global program_time_s
     program_time_s = time.time()
+    params = "unknown"
 
     try:
         if ("queryStringParameters" not in event
@@ -82,11 +82,14 @@ def handler(event, context):
         # do the work to generate the image
         img = asyncio.run(diagram.get_image())
 
+        # save original image dimensions needed for port pixel->in calculation
+        img_original_size = img.size
+
         # resize if too large:
         # will break google slides if file is too big
         max_height = 4604
         if img.size[1] > max_height:
-            wpercent = (max_height/float(img.size[1]))
+            wpercent = (max_height / float(img.size[1]))
             hsize = int((float(img.size[0]) * float(wpercent)))
             img = img.resize((hsize, max_height), Image.ANTIALIAS)
 
@@ -99,7 +102,7 @@ def handler(event, context):
             ru = diagram.config['ru']
             h_inches = "{:.2f}".format(ru*1.75)
 
-            #generate a name for this config
+            # generate a name for this config
             items = []
             name = ""
             if params['model'] == 'fb':
@@ -119,8 +122,30 @@ def handler(event, context):
             # building a visio template
             root_path = os.path.dirname(__file__)
             vssx_path = os.path.join(root_path, "vssx/vssx_template.zip")
-            master1_template_path = os.path.join(root_path, "vssx/master1_template.xml")
-            masters_template_path = os.path.join(root_path, "vssx/masters_template.xml")
+            master1_template_path = os.path.join(
+                root_path, "vssx/master1_template.xml")
+            masters_template_path = os.path.join(
+                root_path, "vssx/masters_template.xml")
+           
+            connection_template = """
+                <Row T='Connection' IX='1'>
+                    <Cell N='X' V='{:.6f}' U='IN' />
+                    <Cell N='Y' V='{:.6f}' U='IN' />
+                    <Cell N='DirX' V='0'/>
+                    <Cell N='DirY' V='-1'/>d
+                    <Cell N='Type' V='1'/>
+                    <Cell N='AutoGen' V='0'/>
+                    <Cell N='Prompt' V='' F='No Formula'/>
+                </Row>
+                """
+            ports = diagram.ports
+
+            connection_points = ""
+            for p in ports:
+                x_in = 19.0 * (p['loc'][0] / img_original_size[0])
+                y_in = ru * 1.75 * (p['loc'][1] / img_original_size[0])
+
+                connection_points += connection_template.format(x_in, y_in)
 
             # adjust the stencil height
             master1 = None
@@ -130,18 +155,19 @@ def handler(event, context):
             master1 = master1.replace('<template_h_in>', h_inches)
             master1 = master1.replace('<template_h_u>', str(ru))
             master1 = master1.replace('<template_name>', stencil_name)
+            master1 = master1.replace('<additional_connection_points>', connection_points)
 
             # create uniqueID for this template
             masters = None
             with open(masters_template_path, 'r') as mf:
                 masters = mf.read()
-            
+
             stamp = int((time.time())*10)
             # Get only the right 7 digits of HEX
             unique_id = f"{stamp:07X}"[-7:]
             masters = masters.replace('<template_unique_id>', unique_id)
             masters = masters.replace('<template_name>', stencil_name)
-            
+
             # do import down here, so we don't have load if not needed
             import zipfile
             import io
@@ -157,7 +183,8 @@ def handler(event, context):
             with zipfile_buffered as zfb:
                 with zipfile.ZipFile(zfb, 'a') as zipf:
                     # Add a file located at the source_path to the destination within the zip
-                    zipf.writestr('visio/media/image1.png', buffered.getvalue())
+                    zipf.writestr('visio/media/image1.png',
+                                  buffered.getvalue())
                     zipf.writestr('visio/masters/master1.xml', master1)
                     zipf.writestr('visio/masters/masters.xml', masters)
                     zipf.close()
