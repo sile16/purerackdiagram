@@ -333,7 +333,7 @@ png/pure_fa_2eth40_fh.png:
     - 40
     port_type: eth40
   - loc: !!python/tuple
-    - 578
+    - 410
     - 40
     port_type: eth40
 png/pure_fa_2eth_hh.png:
