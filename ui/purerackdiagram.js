@@ -132,12 +132,14 @@ $(function () {
        $('#csize').show();
        $('#datapacks').hide();
        $('#mezz').hide();
+       $("#ports").hide();
      }
      else {
       $('#csize').hide();
       $('#datapacks').show();
       if ( fa_option_face.val() == 'back'){
         $("#mezz").show();
+        $("#ports").show();
       }
      }
 
@@ -150,6 +152,8 @@ $(function () {
       $('#bezel').show();
 
       $('#mezz').hide();
+      $('#ports').hide();
+
       $('#protocol').hide();
       $('#addoncards').hide();
     }
@@ -162,6 +166,7 @@ $(function () {
       $('#addoncards').show();
       if (fa_option_model.val() != 'fa-c60'){
         $("#mezz").show();
+        $("#ports").show();
       }
 
     }
