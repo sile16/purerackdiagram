@@ -16,6 +16,7 @@ $(function () {
   var fa_option_fm_label = build_select('#fa_option_fm_label', FA_OPTIONS.fm_label);
   var fa_option_dp_label = build_select('#fa_option_dp_label', FA_OPTIONS.dp_label);
   var fa_option_addoncards = build_input('#fa_option_addoncards', "");
+  var fa_option_ports = build_select('#fa_options_ports', FA_OPTIONS.ports);
   
   fa_option_addoncards.prop("readonly",true);
   $(".addon_card").click( function(event){
@@ -37,6 +38,7 @@ $(function () {
   var fb_option_xfm = build_select('#fb_option_xfm', FB_OPTIONS.xfm);
   var fb_option_blades = build_input('#fb_option_blades', FB_OPTIONS.blades);
   var fb_option_efm = build_select('#fb_option_efm', FB_OPTIONS.efm);
+  var fb_option_ports = build_select('#fb_options_ports', FB_OPTIONS.ports);
 
   
 
@@ -54,6 +56,12 @@ $(function () {
     url += "&dp_label="  + fa_option_dp_label.val();
     url += "&addoncards="  + fa_option_addoncards.val();
     url += "&csize=" + fa_option_csize.val();
+
+    var  ports_val = fa_option_ports.val();
+    if (ports_val){
+      url += "&ports=" + ports_val;
+    }
+    
 
     var mezz_val = fa_option_mezz.val();
     console.log(mezz_val);
@@ -76,6 +84,11 @@ $(function () {
     url += "&xfm=" + fb_option_xfm.val();
     url += "&blades=" + fb_option_blades.val();
     url += "&efm=" + fb_option_efm.val();
+
+    var ports_val = fb_option_ports.val();
+    if (ports_val){
+      url += "&ports=" + ports_val;
+    }
 
     return url;
   };

@@ -17,7 +17,8 @@ var FA_OPTIONS = {
     fm_label: ['TRUE', 'FALSE'],
     dp_label: ['FALSE', 'TRUE'],
     addoncards: ['4fc', '2fc', '2eth', '2eth40', 'sas', '2ethbaset'],
-    mezz: ['', 'smezz', 'emezz']
+    mezz: ['', 'smezz', 'emezz'],
+    ports: ['FALSE', 'TRUE']
 };
 
 
@@ -27,5 +28,6 @@ var FB_OPTIONS = {
     xfm: ['', 'FALSE', 'TRUE'],
     direction: ['up', 'down'],
     blades: '17:0-14,52:15-129',
-    efm: ['', 'efm110', 'efm310']
+    efm: ['', 'efm110', 'efm310'],
+    ports: ['FALSE', 'TRUE']
 };
