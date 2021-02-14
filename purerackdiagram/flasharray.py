@@ -178,9 +178,7 @@ class FAChassis():
         if key in utils.global_config:
             self.img_info = utils.global_config[key]
 
-        if 'ports' in self.img_info:
-            self.ports = self.img_info['ports']
-
+        add_ports_at_offset(key, (0, 0), self.ports)
 
 
         if c["face"] == "front":
@@ -193,7 +191,7 @@ class FAChassis():
 
         # run all the tasks concurrently
         await asyncio.gather(*tasks)
-        return {'img': self.tmp_img, 'ports':self.ports}
+        return {'img': self.tmp_img, 'ports': self.ports}
 
     async def get_base_img(self, key):
         self.tmp_img = await RackImage(key).get_image()

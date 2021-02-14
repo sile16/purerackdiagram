@@ -393,38 +393,68 @@ def update_static_model_port_loc(config):
 
     ct1ports = []
     for p in ct0ports:
-        p['loc'] = p['loc'][0], p['loc'][1] + 380
-        p['name'] = p['name'].replace('fm0', 'fm1')
+        new_port = p.copy()
+        new_port['loc'] = p['loc'][0], p['loc'][1] + 365
+        new_port['name'] = p['name'].replace('fm0', 'fm1')
+        ct1ports.append(new_port)
 
     key = 'png/pure_fb_back_efm310.png'
     if key not in config:
         config[key] = {}
     config[key]['ports'] = ct0ports + ct1ports
 
+    ct0ports = [
+        {'loc': (1362, 224),
+         'port_type': 'eth',
+         'name': 'fm0.eht1'},
+        {'loc': (1362, 314),
+         'port_type': 'eth',
+         'name': 'fm0.eht2'},
+        {'loc': (1482, 224),
+         'port_type': 'eth',
+         'name': 'fm0.eht3'},
+        {'loc': (1482, 314),
+         'port_type': 'eth',
+         'name': 'fm0.eth4'}]
+
+    ct1ports = []
+    for p in ct0ports:
+        new_port = p.copy()
+        new_port['loc'] = p['loc'][0], p['loc'][1] + 370
+        new_port['name'] = p['name'].replace('fm0', 'fm1')
+        ct1ports.append(new_port)
+
+    key = 'png/pure_fb_back_efm110.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['ports'] = ct0ports[0:4] + ct1ports[0:4]
+
     # Pure FB BAck XFM
 
     start = (344, 99)
-    y_offset = 101
-    x1_offset = 128
-    x2_offset = 272
+    y_offset = 102
+    x1_offset = 120
+    x2_offset = 267
 
     ports = []
-
     curr_loc = start
-    for p in range(0, 20, 4):
+    for p in range(0, 32, 4):
         ports.append({'loc': curr_loc,
                       'port_type': 'eth',
                       'name': f'eth{p}'})
-        ports.append({'loc': (curr_loc[0] + y_offset, curr_loc[1]),
+        ports.append({'loc': (curr_loc[0], curr_loc[1] + y_offset),
                       'port_type': 'eth',
                       'name': f'eth{p + 1}'})
-        ports.append({'loc': (curr_loc[0], curr_loc[1] + x1_offset),
+        ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] ),
                       'port_type': 'eth',
                       'name': f'eth{p + 2}'})
-        ports.append({'loc': (curr_loc[0] + y_offset, curr_loc[1] + x1_offset),
+        ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] + y_offset),
                       'port_type': 'eth',
                       'name': f'eth{p + 3}'})
         curr_loc = (curr_loc[0] + x2_offset, curr_loc[1])
+    ports.append({'loc': (2455, 103),
+                  'port_type': 'eth',
+                  'name': 'mgmt'})
 
     key = 'png/pure_fb_xfm_back.png'
     if key not in config:
@@ -439,15 +469,15 @@ def update_static_mezz_port_loc(config):
     all_ports = []
     for p in ports:
         all_ports.append({'loc': p, 'port_type': port_type})
-    config[key] = all_ports
+    config[key] = {'ports': all_ports}
 
     ports = [(158, 110), (217, 110), (283, 110), (341, 110)]
-    key = 'png/pure_fa_x_emezz.png'
+    key = 'png/pure_fa_x_smezz.png'
     port_type = 'sas'
     all_ports = []
     for p in ports:
         all_ports.append({'loc': p, 'port_type': port_type})
-    config[key] = all_ports
+    config[key] = {'ports': all_ports}
 
 
 if __name__ == "__main__":

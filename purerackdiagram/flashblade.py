@@ -1,8 +1,9 @@
 import asyncio
+from os.path import join
 import re
 from PIL import ImageDraw
 from PIL import ImageFont
-from .utils import RackImage, combine_images_vertically, global_config, apply_text
+from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
 
 
 class FBDiagram():
@@ -80,8 +81,8 @@ class FBDiagram():
         if img_key in global_config:
             self.img_info = global_config[img_key]
 
-        if 'ports' in self.img_info:
-            self.ports = self.img_info['ports']
+        ports = []
+        add_ports_at_offset(img_key, (0, 0), ports)
 
         img = await RackImage(img_key).get_image()
 
@@ -98,10 +99,12 @@ class FBDiagram():
                     apply_text(img, label, x_offset +
                                x_blade_size*index, y_offset, 36)
 
-        return img
+        return {'img': img, 'ports': ports}
 
     async def get_rack_image_with_ports(self, key):
-        return {'img': RackImage(key).get_image(), 'ports': self.ports}
+        ports = []
+        add_ports_at_offset(key, (0, 0), ports)
+        return {'img': await RackImage(key).get_image(), 'ports': ports}
 
     async def get_image(self):
         tasks = []
@@ -120,5 +123,5 @@ class FBDiagram():
             all_images.reverse()
 
         final_img, all_ports = combine_images_vertically(all_images)
-        self.config['all_ports'] = all_ports
+        self.ports = all_ports
         return final_img

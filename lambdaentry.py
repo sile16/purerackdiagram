@@ -85,6 +85,21 @@ def handler(event, context):
         # save original image dimensions needed for port pixel->in calculation
         img_original_size = img.size
 
+        if 'ports' in params and params['ports']:
+
+            # Draw
+            draw = ImageDraw.Draw(img)
+
+            for p in diagram.ports:
+                if p['port_type'] == 'eth':
+                    color = 'brown'
+                else:
+                    color = 'orange'
+                size = 20
+                draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
+                              p['loc'][0] + size, p['loc'][1] + size),
+                             fill=color, outline=color)
+
         # resize if too large:
         # will break google slides if file is too big
         max_height = 4604
@@ -126,26 +141,33 @@ def handler(event, context):
                 root_path, "vssx/master1_template.xml")
             masters_template_path = os.path.join(
                 root_path, "vssx/masters_template.xml")
-           
+
             connection_template = """
-                <Row T='Connection' IX='1'>
-                    <Cell N='X' V='{:.6f}' U='IN' />
-                    <Cell N='Y' V='{:.6f}' U='IN' />
+                <Row T='Connection' IX='{}'>
+                    <Cell N='X' V='{:.10f}' U='IN' F='Width*{:.10f}'/>
+                    <Cell N='Y' V='{:.10f}' U='IN' F='Height*{:.10f}'/>
                     <Cell N='DirX' V='0'/>
-                    <Cell N='DirY' V='-1'/>d
-                    <Cell N='Type' V='1'/>
+                    <Cell N='DirY' V='0'/>d
+                    <Cell N='Type' V='0'/>
                     <Cell N='AutoGen' V='0'/>
                     <Cell N='Prompt' V='' F='No Formula'/>
                 </Row>
                 """
             ports = diagram.ports
 
+            ix = 2
             connection_points = ""
             for p in ports:
-                x_in = 19.0 * (p['loc'][0] / img_original_size[0])
-                y_in = ru * 1.75 * (p['loc'][1] / img_original_size[0])
+                x_w = 1.0 * (p['loc'][0] / img_original_size[0])
+                x_in = 19 * x_w
+                # I think the y 0,0 location is bottom left
+                # all my images are from top left, so need to reverse Y loc
+                y_h = 1 - 1.0 * (p['loc'][1] / img_original_size[1])
+                y_in = ru * 1.75 * y_h
 
-                connection_points += connection_template.format(x_in, y_in)
+                connection_points += connection_template.format(
+                    ix, x_in, x_w, y_in, y_h)
+                ix += 1
 
             # adjust the stencil height
             master1 = None
@@ -155,7 +177,8 @@ def handler(event, context):
             master1 = master1.replace('<template_h_in>', h_inches)
             master1 = master1.replace('<template_h_u>', str(ru))
             master1 = master1.replace('<template_name>', stencil_name)
-            master1 = master1.replace('<additional_connection_points>', connection_points)
+            master1 = master1.replace(
+                '<additional_connection_points>', connection_points)
 
             # create uniqueID for this template
             masters = None

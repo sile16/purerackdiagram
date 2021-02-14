@@ -23,16 +23,16 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
-            "model": "fa-x70r1",
+            "model": "fa-x70r3",
             "datapacks": "19.2/0-31/63-0/0",
             "chassis": 2,
             "addoncards": "4fc,4fc,2eth",
             "face": "back",
             "fm_label": True,
             "dp_label": True,
-            "mezz": "emezz",
+            "mezz": "smezz",
             "local_delay": 0,
-            "vssx": True
+            "ports": True
         }
     },
 
@@ -42,9 +42,10 @@ more_tests = [
             "chassis": 2,
             "face": "back",
             'direction': 'up',
-            'efm': "efm110",
+            'efm': "efm310",
             'local_delay': 0,
-            'blades': '17:0-6,52:23-29'
+            'blades': '17:0-6,52:23-29',
+            'ports': True
         }
     },
 
@@ -146,7 +147,7 @@ def test_lambda():
     # local_delay puts a delay into build_img so
     # they we can test the cache lookkup
 
-    results = lambdaentry.handler(more_tests[0], None)
+    results = lambdaentry.handler(more_tests[1], None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:

@@ -113,15 +113,17 @@ def combine_images_vertically(image_ports):
     for imp in image_ports:
         im = imp['img']
         ports = imp['ports']
+
         # center the x difference if an image is slightly smaller width
         x_offset = int((total_width - im.size[0]) / 2)
         new_im.paste(im, (x_offset, y_offset))
+
         
         #calculate new port location
         for p in ports:
             new_port = p.copy()
-            new_yloc = p['loc'][1] + y_offset
-            new_port['loc'] = (p['loc'][0], new_yloc)
+            new_loc = (p['loc'][0] + x_offset, p['loc'][1] + y_offset)
+            new_port['loc'] = new_loc
             all_ports.append(new_port)
 
         y_offset += im.size[1]
