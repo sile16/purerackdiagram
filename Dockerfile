@@ -15,7 +15,7 @@ COPY lambdaentry.py "$WORKDIR/deploy/"
 COPY vssx/*.xml "$WORKDIR/deploy/vssx/"
 COPY vssx/*.zip "$WORKDIR/deploy/vssx/"
 COPY purerackdiagram/*.py "$WORKDIR/deploy/purerackdiagram/"
-COPY purerackdiagram/*.json "$WORKDIR/deploy/purerackdiagram/"
+COPY purerackdiagram/*.yaml "$WORKDIR/deploy/purerackdiagram/"
 COPY purerackdiagram/*.ttf "$WORKDIR/deploy/purerackdiagram/"
 COPY purerackdiagram/png/*.png "$WORKDIR/deploy/purerackdiagram/png/"
 
