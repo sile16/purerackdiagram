@@ -147,7 +147,7 @@ def test_lambda():
     # local_delay puts a delay into build_img so
     # they we can test the cache lookkup
 
-    results = lambdaentry.handler(more_tests[1], None)
+    results = lambdaentry.handler(more_tests[0], None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:

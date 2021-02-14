@@ -16,7 +16,7 @@ $(function () {
   var fa_option_fm_label = build_select('#fa_option_fm_label', FA_OPTIONS.fm_label);
   var fa_option_dp_label = build_select('#fa_option_dp_label', FA_OPTIONS.dp_label);
   var fa_option_addoncards = build_input('#fa_option_addoncards', "");
-  var fa_option_ports = build_select('#fa_options_ports', FA_OPTIONS.ports);
+  var fa_option_ports = build_select('#fa_option_ports', FA_OPTIONS.ports);
   
   fa_option_addoncards.prop("readonly",true);
   $(".addon_card").click( function(event){
@@ -30,7 +30,8 @@ $(function () {
     }
   
   });
-  fa_option_addoncards.attr
+
+  fa_option_addoncards.attr;
 
   var fb_option_face = build_select('#fb_option_face', FB_OPTIONS.face);
   var fb_option_direction = build_select('#fb_option_direction', FB_OPTIONS.direction);
@@ -38,9 +39,9 @@ $(function () {
   var fb_option_xfm = build_select('#fb_option_xfm', FB_OPTIONS.xfm);
   var fb_option_blades = build_input('#fb_option_blades', FB_OPTIONS.blades);
   var fb_option_efm = build_select('#fb_option_efm', FB_OPTIONS.efm);
-  var fb_option_ports = build_select('#fb_options_ports', FB_OPTIONS.ports);
+  var fb_option_ports = build_select('#fb_option_ports', FB_OPTIONS.ports);
 
-  
+
 
   var fa_url = function(){
     // the function to generate the url for FA image based on options

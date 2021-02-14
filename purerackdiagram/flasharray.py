@@ -1,4 +1,3 @@
-from update_config import static_global_config
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
