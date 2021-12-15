@@ -21,7 +21,7 @@ ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
 
 global_config = None
 with open(os.path.join(root_path, 'config.yaml'), 'r') as f:
-    global_config = yaml.load(f)
+    global_config = yaml.full_load(f)
 
 
 class RackImage():
