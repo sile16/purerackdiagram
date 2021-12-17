@@ -54,12 +54,7 @@ def text_to_image(text, width):
 
 
 def handler(event, context):
-    """ This is the entry point for AWS Lambda, API Gateway
-    We start two threads, 1 to check to see if this config already exists in S3
-    and another that starts building the imgae.  Which ever one finishes first
-    is returned.  Either a binary image streamed directly back or a 403
-    redirect to the s3 object.  After generating the image,
-    it's uploaded to s3 as a cache.
+    """ Lambda Entry
     """
     global program_time_s
     program_time_s = time.time()

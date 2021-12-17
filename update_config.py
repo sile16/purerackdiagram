@@ -339,7 +339,7 @@ def update_static_model_loc(config, generation):
             generation == 'c':
         loc = (2759, 83)
     elif generation == 'xl':
-        loc = (22, 330)
+        loc = (22, 245)
     else:
         loc = (2745, 120)
 

@@ -1274,7 +1274,7 @@ png/pure_fa_xl_front.png:
     - 730
   model_text_loc: !!python/tuple
   - 22
-  - 330
+  - 230
 png/pure_fb_back_efm110.png:
   ports:
   - loc: !!python/tuple

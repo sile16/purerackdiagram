@@ -364,9 +364,13 @@ class FAChassis():
         draw = ImageDraw.Draw(self.tmp_img)
 
         font = ImageFont.truetype(ttf_path, size=24)
-        text = "{}{}r{}".format(c['generation'].upper(),
-                                c['model_num'],
-                                c['release'])
+        if c['generation'] == 'xl':
+            text = "{}r{}".format(c['model_num'],
+                                    c['release'])
+        else:
+            text = "{}{}r{}".format(c['generation'].upper(),
+                                    c['model_num'],
+                                    c['release'])
         draw.text(loc, text, (255, 255, 255, 220), font=font)
 
 
