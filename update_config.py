@@ -367,10 +367,10 @@ def update_static_card_port_loc(config):
         add_ports_to_key(ports_loc, k[0], k[1], config)
 
     ports_loc = [(210, 40), (410, 40)]
-    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_fh.png', 'eth40', config)
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_fh.png', 'eth', config)
 
     ports_loc = [(70, 40), (245, 40) ]
-    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_hh.png', 'eth40', config)
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_hh.png', 'eth', config)
 
     ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_4fc_fh.png', 'fc', config)

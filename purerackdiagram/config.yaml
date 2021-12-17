@@ -386,21 +386,21 @@ png/pure_fa_2eth40_fh.png:
   - loc: !!python/tuple
     - 210
     - 40
-    port_type: eth40
+    port_type: eth
   - loc: !!python/tuple
     - 410
     - 40
-    port_type: eth40
+    port_type: eth
 png/pure_fa_2eth40_hh.png:
   ports:
   - loc: !!python/tuple
     - 70
     - 40
-    port_type: eth40
+    port_type: eth
   - loc: !!python/tuple
     - 245
     - 40
-    port_type: eth40
+    port_type: eth
 png/pure_fa_2eth_hh.png:
   ports:
   - loc: &id001 !!python/tuple

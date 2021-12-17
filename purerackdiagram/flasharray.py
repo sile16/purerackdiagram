@@ -444,6 +444,9 @@ class FADiagram():
                         card, pformat(pci_valid_cards)))
 
                 # card population order for a full height only card
+                # Todo: the logic in the XL, is each card has different best
+                # practice for population order, may have to just put this 
+                # back on the SE to select which slot.
                 if config["generation"] == 'xl':
                     fh_order = [2, 3]
                     hh_order = [0, 1, 4, 6, 7, 8]
