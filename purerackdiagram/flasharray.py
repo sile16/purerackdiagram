@@ -8,6 +8,7 @@ from .utils import RackImage, combine_images_vertically, add_ports_at_offset
 # import logging
 import os
 from pprint import pformat
+import re
 
 root_path = os.path.dirname(utils.__file__)
 ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
@@ -197,10 +198,13 @@ class FAChassis():
         self.start_img_event.set()
 
     async def add_nvram(self):
+        
 
         if self.config['generation'] == 'c':
             # always add second nvram on 'c' array
             pass
+        elif self.config['generation'] == 'xl':
+            return
         elif self.config["model_num"] < 70:
             # Don't add second nvram on less  than 70
             return
@@ -215,7 +219,7 @@ class FAChassis():
         pci = self.config["pci_config"]
 
         tasks = []
-        for x in range(4):
+        for x in range(len(pci)):
             if pci[x]:
                 tasks.append(self.add_card(x, pci[x]))
         await asyncio.gather(*tasks)
@@ -245,8 +249,9 @@ class FAChassis():
 
 
     async def add_mezz(self):
-        # if self.config["generation"] != "x" or self.config['mezz'] is None:
-        #    return
+        if self.config["generation"] == "xl":
+            return
+
         if self.config['mezz']:
             key = "png/pure_fa_x_{}.png".format(self.config["mezz"])
             mezz_img = await RackImage(key).get_image()
@@ -264,7 +269,20 @@ class FAChassis():
         # starts with no, then we change to yes after first one
         right = False
         slots = {}
-        for dp in self.config["chassis_datapacks"]:
+
+        # of chassis slots
+        total_fm_count = len(self.img_info['fm_loc'])
+        current_index = 0
+        dp_count = len(self.config["chassis_datapacks"])
+        for dp_i in range(dp_count):
+            dp = self.config["chassis_datapacks"][dp_i]
+            # see if this is the last data pack or not
+            if dp_i + 1 == dp_count:
+                # If it's m or X need to populated the 
+                # last datapack from the right side
+                if self.config['generation'] != 'xl':
+                    right = True
+
             fm_str = dp[0]
             fm_type = dp[1]
             num_modules = dp[2]
@@ -280,15 +298,17 @@ class FAChassis():
 
             await self.start_img_event.wait()
             if not right:
-                the_range = range(0, num_modules)
+                the_range = range(current_index, current_index + num_modules)
+                current_index += num_modules
             else:
+                # this is hard coded 20, probably fine
                 the_range = reversed(range(20-num_modules, 20))
 
             fm_loc = self.img_info['fm_loc']
 
             for x in the_range:
                 # self.tmp_img.save("tmp.png")
-                if not right and x >= num_modules:
+                if not right and x >= num_modules and self.config["generation"] != 'xl':
                     # for short DMM modules, fill the rest with blanks
                     self.tmp_img.paste(blank_img, fm_loc[x])
                 else:
@@ -304,7 +324,6 @@ class FAChassis():
                         # keep track of modules, to detect overlaps
                         slots[x] = fm_type
 
-            right = True
 
         if self.config['dp_label']:
             right = False
@@ -403,8 +422,8 @@ class FADiagram():
             config["release"],
             config["protocol"],
         )
-        if pci_lookup_str in pci_config_lookup:
-            pci_config = pci_config_lookup[pci_lookup_str].copy()
+        
+        pci_config = pci_config_lookup[pci_lookup_str].copy()
 
         # add on cards
         if "addoncards" in params:
@@ -419,10 +438,16 @@ class FADiagram():
                         card, pformat(pci_valid_cards)))
 
                 # card population order for a full height only card
-                order = [0, 1]
+                if config["generation"] == 'xl':
+                    fh_order = [2, 3]
+                    hh_order = [0, 1, 4, 6, 7, 8]
+                else:
+                    fh_order = [0, 1]
+                    hh_order = [0, 1, 4, 6, 7, 8]
+                order = fh_order
                 if card == "2fc" or card == "2eth" or card == "2ethbaset":
                     # card population order for a half or full card slot
-                    order = [2, 0, 1, 3]
+                    order = hh_order
 
                 # populate add on cards by the order
                 for slot in order:
@@ -433,7 +458,7 @@ class FADiagram():
         config["pci_config"] = pci_config
 
         # pci3 = '2fc'  overrides everything
-        for x in range(4):
+        for x in range(len(pci_config)):
             slot = "pci{}".format(x)
             # specific slot overrides
             # make the default, the current config so far.
@@ -528,18 +553,26 @@ class FADiagram():
         config = {}
         self.ports = []
 
-        # mode-str of type  "fa-m70r2" or "fa-x70"
         config["model_str"] = params["model"].lower()
-        config["generation"] = config["model_str"][3:4]
-        config["model_num"] = int(config["model_str"][4:6])
-        config["direction"] = params.get("direction", "up").lower()
-        config["ru"] = 3  # this gets increased during shelf parsing
 
-        if "r" in config["model_str"] and len(config["model_str"]) > 7:
-            config["release"] = int(config["model_str"][7:8])
+        # mode-str of type  "fa-m70r2" or "fa-x70" or "fa-xl130" or fa-xl170r2
+        # Split string on the - and transition to numbers
+        results = re.split('(\d+)|-', config["model_str"])
+        config["generation"] = results[2]
+        config['model_num'] = int(results[3])
+        if "r" in config["model_str"]:
+            config["release"] = int(results[5])
         else:
             config["release"] = 1
+        
+        config["direction"] = params.get("direction", "up").lower()
 
+        if config["generation"] == 'xl':
+            config["ru"] = 5  # this gets increased during shelf parsing
+        else:
+            config["ru"] = 3  # this gets increased during shelf parsing
+
+        
         face = params.get("face", "front")
         if face != "front" and face != "back":
             face = "front"
