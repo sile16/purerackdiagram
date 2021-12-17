@@ -12,11 +12,16 @@ def main():
 
     update_static_fm_loc(config)
     update_static_model_port_loc(config)
+
     for gen in ['m', 'x', 'c']:
         update_static_pci_loc(config, gen)
         update_static_mezz_loc(config, gen)
         update_static_model_loc(config, gen)
         update_static_nvram_loc(config, gen)
+
+    for gen in ['xl']:
+        update_static_pci_loc(config, gen)
+        update_static_model_loc(config, gen)
 
     update_static_card_port_loc(config)
     update_static_mezz_port_loc(config)
@@ -62,7 +67,12 @@ def static_global_config():
             "fa-x70r1-eth": ["2eth", None, "2eth", None],
             "fa-x70r1-fc": ["4fc", None, "2fc", None],
             "fa-c60r1-eth": ["2eth", None, None, None],
-            "fa-c60r1-fc": ["4fc", None, "2fc", None]
+            "fa-c60r1-fc": ["4fc", None, "2fc", None],
+            "fa-xl130r1-eth": [None, "2eth", None, None, None, None, None, None, None],
+            "fa-xl130r1-fc": [None, "4fc", None, None, None, None, None, None, "2fc"],
+            "fa-xl170r1-eth": [None, "2eth", None, None, None, None, None, None, None],
+            "fa-xl170r1-fc": [None, "4fc", None, None, None, None, None, None, "2fc"]
+
         },
 
         "chassis_dp_size_lookup": {
@@ -76,16 +86,19 @@ def static_global_config():
             "72": ["4.5TB", "nvme", 16, "72"],
             "91": ["9.1TB", "nvme", 10, "91"],
             "109": ["9.1TB", "nvme", 12, "109"],
+            "126": ["4.5TB", "nvme", 24, "126"],
             "127": ["9.1TB", "nvme", 14, "127"],
             "145": ["9.1TB", "nvme", 16, "145"],
             "183": ["18.3TB", "nvme", 10, "183"],
             "219": ["18.3TB", "nvme", 12, "219"],
+            "254": ["9.1TB", "nvme", 24, "254"],
             "256": ["18.3TB", "nvme", 14, "256"],
             "292": ["18.3TB", "nvme", 16, "292"],
             "247": ["24.7TB", "nvme-qlc", 10, "247"],
             "345": ["24.7TB", "nvme-qlc", 14, "345"],
             "366": ["18.3TB", "nvme-qlc", 20, "366"],
             "494": ["24.7TB", "nvme-qlc", 20, "494"],
+            "512": ["18.3TB", "nvme", 24, "512"],
             "984": ["49.2TB", "nvme-qlc", 20, "984"],
             "4.8": ["480GB", "sas", 10, "4.8"],
             "5": ["500GB", "sas", 10, "5"],
@@ -136,6 +149,11 @@ def static_global_config():
 
 
 def update_static_fm_loc(config):
+    # Location of Flash Module Location
+
+    ######################
+    ## SAS SHELF
+    ######################
 
     fm_loc = [None] * 24
     fm_loc[0] = (138, 1)
@@ -151,6 +169,10 @@ def update_static_fm_loc(config):
     if key not in config:
         config[key] = {}
     config[key]['fm_loc'] = fm_loc
+
+    #################################
+    ## FA Chassis Flash Modules for M, X, C, NVMe Shelf
+    ######################
 
     # x,y coordinates for all chassis fms.
     # Chassis FM locations
@@ -209,27 +231,70 @@ def update_static_fm_loc(config):
         config[key] = {}
     config[key]['fm_loc'] = ch0_fm_loc.copy()
 
+    #################################
+    ## FA Chassis Flash Modules for XL
+    ######################
+
+    # XL is different lets start over for XL
+    ch0_fm_loc = [None] * 40
+    ch0_fm_loc[0] = (161, 75)
+    ch0_fm_loc[10] = (1471, 75)
+    ch0_fm_loc[20] = (161, 746)
+    ch0_fm_loc[30] = (1471, 746)
+    
+    x_offset = 125
+
+    for x in range(len(ch0_fm_loc)):
+        if ch0_fm_loc[x] is None:  # skips anchor locations
+            loc = list(ch0_fm_loc[x - 1])
+            loc[0] += int(x_offset)
+            ch0_fm_loc[x] = tuple(loc)
+    
+    key = 'png/pure_fa_xl_front.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['fm_loc']= ch0_fm_loc.copy()
+
+
+
+
 
 def update_static_pci_loc(config, generation):
     pci_loc = None
     if generation == 'x' or generation == 'c':
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
+        ct1_y_offset = 378
+
     elif generation == 'm':
         pci_loc = [(1317, 87), (1317, 201), (2182, 87), (2182, 201)]
+        ct1_y_offset = 378
+
+    elif generation == 'xl':
+        pci_loc = [(325, 373), (325, 497), 
+                   (893, 373), (893, 497),
+                   (1626, 373),(1626, 497),
+                   (2179, 373), (2179, 497), (2179, 615)]
+        ct1_y_offset = 497
+
 
     key = f'png/pure_fa_{generation}_back.png'
     if key not in config:
         config[key] = {}
 
-    config[key]['ct1_pci_loc'] = pci_loc.copy()
+    config[key]['ct0_pci_loc'] = pci_loc.copy()
 
-    ct1_y_offset = 378
-    for i in range(4):
+    ## Now calculate all the pci slot locations for ct1
+    for i in range(len(pci_loc)):
         # add a y_offset to calculate the ct0 coordinates
         cord = pci_loc[i]
         pci_loc[i] = (cord[0], cord[1] + ct1_y_offset)
 
-    config[key]['ct0_pci_loc'] = pci_loc.copy()
+    
+    config[key]['ct1_pci_loc'] = pci_loc.copy()
+
+    
+
+    
 
 
 def update_static_nvram_loc(config, generation):
@@ -241,7 +306,7 @@ def update_static_nvram_loc(config, generation):
             generation == 'c':
         nv1 = (1263, 28)
         nv2 = (1813, 28)
-    else:
+    elif generation != "xl":
         nv1 = (1255, 20)
         nv2 = (1805, 20)
 
@@ -262,6 +327,7 @@ def update_static_mezz_loc(config, generation):
     else:
         config[key]['ct0_mezz_loc'] = (709, 44)
         config[key]['ct1_mezz_loc'] = (709, 421)
+    
 
 
 def update_static_model_loc(config, generation):
@@ -272,6 +338,8 @@ def update_static_model_loc(config, generation):
     if generation == 'x' or \
             generation == 'c':
         loc = (2759, 83)
+    elif generation == 'xl':
+        loc = (22, 330)
     else:
         loc = (2745, 120)
 
@@ -285,13 +353,16 @@ def add_ports_to_key(ports_loc, key, port_type, config):
 
 
 def update_static_card_port_loc(config):
+    # calculate the port location based on the offset. 
 
+    
     ports_loc = [(158, 40), (256, 40)]
     keys = [['png/pure_fa_2ethbaset_fh.png', 'eth'],
             ['png/pure_fa_2ethbaset_hh.png', 'eth'],
             ['png/pure_fa_2eth_hh.png', 'eth'],
             ['png/pure_fa_2fc_fh.png', 'fc'],
             ['png/pure_fa_2fc_hh.png', 'fc']]
+
     for k in keys:
         add_ports_to_key(ports_loc, k[0], k[1], config)
 
@@ -304,6 +375,13 @@ def update_static_card_port_loc(config):
 
 
 def update_static_model_port_loc(config):
+
+    ## adding the LOM  port locations
+
+    #################################
+    ## FA Chassis Flash Modules for M / X / C
+    ######################
+
 
     # These are all the ct0 ports
     ct0ports = [
@@ -342,7 +420,9 @@ def update_static_model_port_loc(config):
         config[key] = {}
     config[key]['ports'] = ct0ports + ct1ports
 
+    ##########################
     # NVME Shelf BAck
+    ##########################
 
     ct0ports = [
         {'loc': (735, 315),
@@ -371,6 +451,33 @@ def update_static_model_port_loc(config):
     if key not in config:
         config[key] = {}
     config[key]['ports'] = ct0ports + ct1ports
+
+
+    #################################
+    ## FA Chassis Flash Modules for XL
+    ######################
+
+    ct0ports = [
+        {'loc': (846, 704),
+         'port_type': 'eth',
+         'name': 'ct0.eht0'},
+        {'loc': (964, 704),
+         'port_type': 'eth',
+         'name': 'ct0.eht1'}]
+
+    ct1ports = []
+    for p in ct0ports:
+        loc = (p['loc'][0], p['loc'][1] + 493)
+        name = p['name'].replace('ct0', 'ct1')
+        ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+
+
+    key = 'png/pure_fa_xl_back.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['ports'] = ct0ports + ct1ports
+
+
 
     #### PureFB Back #####
 
@@ -406,13 +513,13 @@ def update_static_model_port_loc(config):
     ct0ports = [
         {'loc': (1362, 224),
          'port_type': 'eth',
-         'name': 'fm0.eht1'},
+         'name': 'fm0.eth1'},
         {'loc': (1362, 314),
          'port_type': 'eth',
-         'name': 'fm0.eht2'},
+         'name': 'fm0.eth2'},
         {'loc': (1482, 224),
          'port_type': 'eth',
-         'name': 'fm0.eht3'},
+         'name': 'fm0.eth3'},
         {'loc': (1482, 314),
          'port_type': 'eth',
          'name': 'fm0.eth4'}]

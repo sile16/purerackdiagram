@@ -23,10 +23,25 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
-            "model": "fa-x70r3",
-            "datapacks": "19.2/0-31/63-0/0",
+            "model": "fa-xl130",
+            "datapacks": "91/91/91",
             "chassis": 2,
-            "addoncards": "4fc,4fc,2eth",
+            "addoncards": "",
+            "face": "front",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+
+      {
+        "queryStringParameters": {
+            "model": "fa-xl130",
+            "datapacks": "63/0",
+            "chassis": 2,
+            "addoncards": "",
             "face": "back",
             "fm_label": True,
             "dp_label": True,
@@ -144,8 +159,7 @@ more_tests = [
 
 def test_lambda():
     # Single test functions
-    # local_delay puts a delay into build_img so
-    # they we can test the cache lookkup
+
 
     results = lambdaentry.handler(more_tests[0], None)
 

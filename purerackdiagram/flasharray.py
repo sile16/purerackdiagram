@@ -226,10 +226,16 @@ class FAChassis():
 
     async def add_card(self, slot, card_type):
 
-        if slot < 2:
-            height = "fh"
+        if self.config['generation'] == 'xl':
+            if slot in [2, 3]:
+                height = "fh"
+            else:
+                height = "hh"
         else:
-            height = "hh"
+            if slot < 2:
+                height = "fh"
+            else:
+                height = "hh"
 
         key = "png/pure_fa_{}_{}.png".format(card_type, height)
 
@@ -277,7 +283,7 @@ class FAChassis():
         for dp_i in range(dp_count):
             dp = self.config["chassis_datapacks"][dp_i]
             # see if this is the last data pack or not
-            if dp_i + 1 == dp_count:
+            if dp_i > 0 and dp_i + 1 == dp_count:
                 # If it's m or X need to populated the 
                 # last datapack from the right side
                 if self.config['generation'] != 'xl':
@@ -443,7 +449,7 @@ class FADiagram():
                     hh_order = [0, 1, 4, 6, 7, 8]
                 else:
                     fh_order = [0, 1]
-                    hh_order = [0, 1, 4, 6, 7, 8]
+                    hh_order = [2, 0, 1, 3]
                 order = fh_order
                 if card == "2fc" or card == "2eth" or card == "2ethbaset":
                     # card population order for a half or full card slot
