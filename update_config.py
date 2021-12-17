@@ -237,12 +237,12 @@ def update_static_fm_loc(config):
 
     # XL is different lets start over for XL
     ch0_fm_loc = [None] * 40
-    ch0_fm_loc[0] = (161, 75)
-    ch0_fm_loc[10] = (1471, 75)
-    ch0_fm_loc[20] = (161, 746)
-    ch0_fm_loc[30] = (1471, 746)
+    ch0_fm_loc[0] = (161, 175)
+    ch0_fm_loc[10] = (1460, 175)
+    ch0_fm_loc[20] = (161, 730)
+    ch0_fm_loc[30] = (1460, 730)
     
-    x_offset = 125
+    x_offset = 126
 
     for x in range(len(ch0_fm_loc)):
         if ch0_fm_loc[x] is None:  # skips anchor locations
@@ -369,8 +369,17 @@ def update_static_card_port_loc(config):
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_fh.png', 'eth40', config)
 
+    ports_loc = [(70, 40), (245, 40) ]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_hh.png', 'eth40', config)
+
     ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_4fc_fh.png', 'fc', config)
+
+    ports_loc = [(48, 40), (138, 40), (230, 40), (322, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_4fc_hh.png', 'fc', config)
+
+    # close enough, todo make better? 
+    add_ports_to_key(ports_loc, 'png/pure_fa_sas_hh.png', 'sas', config)
 
 
 
