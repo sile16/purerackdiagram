@@ -128,7 +128,7 @@ $(function () {
   })
 
   $("#fa_option_model > select").change(function () {
-     if (fa_option_model.val() == 'fa-c60') {
+     if (fa_option_model.val().includes('fa-c')) {
        $('#csize').show();
        $('#datapacks').hide();
        $('#mezz').hide();

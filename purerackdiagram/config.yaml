@@ -182,7 +182,7 @@ pci_config_lookup:
   fa-c60r1-fc:
   - 4fc
   - null
-  - 2fc
+  - null
   - null
   fa-m10r2-eth:
   - null
@@ -1274,7 +1274,7 @@ png/pure_fa_xl_front.png:
     - 730
   model_text_loc: !!python/tuple
   - 22
-  - 230
+  - 245
 png/pure_fb_back_efm110.png:
   ports:
   - loc: !!python/tuple

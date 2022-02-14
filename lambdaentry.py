@@ -80,7 +80,9 @@ def handler(event, context):
         # save original image dimensions needed for port pixel->in calculation
         img_original_size = img.size
 
-        if 'ports' in params and params['ports']:
+        if 'ports' in params and ( 
+            params['ports'].upper() == "TRUE"
+            or params['ports'].upper() == "YES"):
 
             # Draw
             draw = ImageDraw.Draw(img)
