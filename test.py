@@ -180,8 +180,7 @@ def test_lambda():
 
 
 def create_test_image(item, count, total):
-    file_name = ""
-    for n in ['model', 'addoncards', 'face', 'dp_label', 'fm_label', 'datapacks']:
+    for n in ['model', 'addoncards', 'face', 'dp_label', 'fm_label', 'csize', 'datapacks']:
         if n in item:
             if n == 'datapacks':
                 file_name += str(item[n]).replace('/', '-') + "_"
@@ -216,7 +215,11 @@ def create_test_image(item, count, total):
 def get_all_tests():
     models = global_config['pci_config_lookup']
     dps = ['45/45-31/63-45', '3/127-24']
-    csizes = ['366', '879', '1390']
+    csizes = ['247', '296', '345', '366', '395', '492', '494', 
+             '590', '688', '787', '839', 
+             '879', '885', '984', '1182',
+             '1185', '1329', '1390', '1476', '1531', '1574', 
+             '1672', '1771', '1869', '1877', '1877']
 
     count = 0
     # front:

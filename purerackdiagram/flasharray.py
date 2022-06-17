@@ -637,13 +637,27 @@ class FADiagram():
 
         if config['generation'] == 'c':
             csize_lookup = utils.global_config['csize_lookup']
-            csize = params.get('csize', '')
-            if csize not in csize_lookup:
-                raise Exception(
-                    "Please use a valid csize: {}".format(
-                        pformat(csize_lookup.keys())))
 
-            params['datapacks'] = csize_lookup[csize]
+            if 'csize' in params and params['csize'] != '':
+                csize = params.get('csize', '')
+                if csize in utils.global_config['chassis_dp_size_lookup']:
+                    # we have a direct data pack for that size.
+                    params['datapacks'] = csize
+
+                elif csize in csize_lookup:
+                    # we have a lookup translation, lets use it
+                    params['datapacks'] = csize_lookup[csize]
+        
+                else:
+                    raise Exception(
+                        "Please use a valid csize: {}".format(
+                            pformat(csize_lookup.keys())))
+
+            elif 'datapacks' in params and params['datapacks'] != '':
+                #they specified the datapacks use those.
+                pass
+            else:
+                raise Exception("Please provide either csize or datapacks")
 
         # need for both as shelf type is encoded in DP sizes
         self._init_datapacks(config, params)

@@ -130,13 +130,13 @@ $(function () {
   $("#fa_option_model > select").change(function () {
      if (fa_option_model.val().includes('fa-c')) {
        $('#csize').show();
-       $('#datapacks').hide();
+       //$('#datapacks').hide();
        $('#mezz').hide();
        $("#ports").hide();
      }
      else {
       $('#csize').hide();
-      $('#datapacks').show();
+      //$('#datapacks').show();
       if ( fa_option_face.val() == 'back'){
         $("#mezz").show();
         $("#ports").show();
