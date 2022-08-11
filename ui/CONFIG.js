@@ -36,3 +36,12 @@ var FB_OPTIONS = {
     efm: ['', 'efm110', 'efm310'],
     ports: ['FALSE', 'TRUE']
 };
+
+var FBS_OPTIONS = {
+    model: ['fb-s200', 'fb-s500'],
+    face: ['front', 'back'],
+    xfm: ['', 'FALSE', 'TRUE'],
+    direction: ['up', 'down'],
+    blades: '18',
+    ports: ['FALSE', 'TRUE']
+};
