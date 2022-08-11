@@ -129,10 +129,10 @@ $(function () {
     }
     else if (active_tab_idx == 1) {
       url = fb_url();
-    };
+    }
     else if (active_tab_idx == 2){
       url = fbs_url();
-    }
+    };
 
     console.log(url);
     $('#rack_digram').attr('src', url);
