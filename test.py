@@ -20,7 +20,21 @@ save_dir = 'test_results/'
 
 # 38/38-31/63-127/0
 # 0/38-0/45-0/45-0/63
+
+
+
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fb-s200",
+            "no_of_blades": 17,
+            "face": "back",
+            "no_of_drives_per_blade": 3,
+            "drive_size": 24,
+            "ports": "TRUE"
+        }
+    },
+
     {
         "queryStringParameters": {
             "model": "fa-xl130",
@@ -36,12 +50,27 @@ more_tests = [
         }
     },
 
-      {
+    {
         "queryStringParameters": {
             "model": "fa-xl130",
             "datapacks": "63/0",
             "chassis": 2,
             "addoncards": "",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+
+    {
+        "queryStringParameters": {
+            "model": "fa-xl130",
+            "datapacks": "63/0",
+            "chassis": 2,
+            "addoncards": "sas,2fc,4fc,2eth,2ethbaset,2eth40,2fc,2fc,2fc",
             "face": "back",
             "fm_label": True,
             "dp_label": True,
@@ -180,7 +209,9 @@ def test_lambda():
 
 
 def create_test_image(item, count, total):
-    for n in ['model', 'addoncards', 'face', 'dp_label', 'fm_label', 'csize', 'datapacks']:
+    file_name = ""
+    for n in ['model', 'addoncards', 'face', 'dp_label', 'fm_label', 'csize', 'datapacks', 
+    'no_of_chassis', 'no_of_blades', 'drive_size', 'no_of_drives_per_blade' ]:
         if n in item:
             if n == 'datapacks':
                 file_name += str(item[n]).replace('/', '-') + "_"
@@ -224,6 +255,7 @@ def get_all_tests():
     count = 0
     # front:
     for model in models:
+        continue
         model = model[:8]
         for dp_label in [True, False]:
             if 'c' in model:
@@ -250,6 +282,7 @@ def get_all_tests():
     addon_cards = global_config['pci_valid_cards']
 
     for model in models:
+        continue
         model = model[:8]
         for card in addon_cards:
             if 'c' in model:
@@ -268,8 +301,20 @@ def get_all_tests():
                     yield params
 
     for test in more_tests:
+        continue
         yield test['queryStringParameters']
 
+    for blades in [7, 10, 15, 30]:
+        for dfms in [1, 2, 3, 4]:
+            for size in [24.0, 48.2]:
+                for face in ['front', 'back']:
+                    params = {"model": "fb-s200",
+                              "no_of_blades": blades,
+                              "face": face,
+                              "no_of_drives_per_blade": dfms,
+                              "drive_size": size,
+                              "ports": "TRUE"}
+                    yield params
 
 def test_all(args):
 

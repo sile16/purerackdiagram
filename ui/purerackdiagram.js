@@ -41,6 +41,15 @@ $(function () {
   var fb_option_efm = build_select('#fb_option_efm', FB_OPTIONS.efm);
   var fb_option_ports = build_select('#fb_option_ports', FB_OPTIONS.ports);
 
+  var fbs_option_model = build_select('#fbs_option_model', FBS_OPTIONS.model);
+  var fbs_option_dfm_size = build_select('#fbs_option_dfm_size', FBS_OPTIONS.dfm_size);
+  var fbs_option_dfm_count = build_select('#fbs_option_dfm_count', FBS_OPTIONS.dfm_count);
+  var fbs_option_face = build_select('#fbs_option_face', FBS_OPTIONS.face);
+  var fbs_option_direction = build_select('#fbs_option_direction', FBS_OPTIONS.direction);
+  var fbs_option_xfm = build_select('#fbs_option_xfm', FBS_OPTIONS.xfm);
+  var fbs_option_blades = build_input('#fbs_option_blades', FBS_OPTIONS.blades);
+  var fbs_option_ports = build_select('#fbs_option_ports', FBS_OPTIONS.ports);
+
 
 
   var fa_url = function(){
@@ -94,6 +103,29 @@ $(function () {
     return url;
   };
 
+  var fbs_url = function() {
+    // the function to generate the url for FB image based on options
+
+    var url = API_ENDPOINT;
+    url += "&model="  + fbs_option_model.val();
+    url += "&face="  + fbs_option_face.val();
+    url += "&direction="  + fbs_option_direction.val();
+    url += "&xfm=" + fbs_option_xfm.val();
+    url += "&no_of_blades=" + fbs_option_blades.val();
+    url += "&no_of_drives_per_blade=" + fbs_option_dfm_count.val();
+    url += "&drive_size=" + fbs_option_dfm_size.val();
+ 
+    
+    fbs_option_dfm_size
+
+    var ports_val = fbs_option_ports.val();
+    if (ports_val){
+      url += "&ports=" + ports_val;
+    }
+
+    return url;
+  };
+
   var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
 
   var get_url = function() {
@@ -105,6 +137,9 @@ $(function () {
     }
     else if (active_tab_idx == 1) {
       url = fb_url();
+    }
+    else if (active_tab_idx == 2){
+      url = fbs_url();
     };
 
     console.log(url);

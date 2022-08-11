@@ -1,4 +1,5 @@
 from .flashblade import FBDiagram
+from .flashblades import FBSDiagram
 from .flasharray import FADiagram
 from io import BytesIO
 import asyncio
@@ -12,12 +13,14 @@ def get_diagram(params):
 
     if model.startswith("fa"):
         diagram = FADiagram(params)
+    elif model.startswith("fb-s"):
+        diagram = FBSDiagram(params)
     elif model.startswith("fb"):
         diagram = FBDiagram(params)
-    # elif model.startswith("oe"):
+    # elif model.startswith("fr"):
     #    diagram = OEDiagram(params)
     else:
-        raise Exception("Error unknown model, looking for fa or fb ")
+        raise Exception("Error unknown model, looking for fa or fb or fbs ")
 
     return diagram
 

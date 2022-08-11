@@ -1121,60 +1121,60 @@ png/pure_fa_x_smezz.png:
 png/pure_fa_xl_back.png:
   ct0_pci_loc:
   - !!python/tuple
-    - 325
-    - 373
+    - 330
+    - 365
   - !!python/tuple
-    - 325
-    - 497
+    - 330
+    - 480
   - !!python/tuple
-    - 893
-    - 373
+    - 885
+    - 365
   - !!python/tuple
-    - 893
-    - 497
+    - 885
+    - 480
   - !!python/tuple
-    - 1626
-    - 373
+    - 1609
+    - 365
   - !!python/tuple
-    - 1626
-    - 497
+    - 1609
+    - 480
   - !!python/tuple
-    - 2179
-    - 373
+    - 2150
+    - 365
   - !!python/tuple
-    - 2179
-    - 497
+    - 2150
+    - 480
   - !!python/tuple
-    - 2179
-    - 615
+    - 2150
+    - 603
   ct1_pci_loc:
   - !!python/tuple
-    - 325
-    - 870
+    - 330
+    - 845
   - !!python/tuple
-    - 325
-    - 994
+    - 330
+    - 960
   - !!python/tuple
-    - 893
-    - 870
+    - 885
+    - 845
   - !!python/tuple
-    - 893
-    - 994
+    - 885
+    - 960
   - !!python/tuple
-    - 1626
-    - 870
+    - 1609
+    - 845
   - !!python/tuple
-    - 1626
-    - 994
+    - 1609
+    - 960
   - !!python/tuple
-    - 2179
-    - 870
+    - 2150
+    - 845
   - !!python/tuple
-    - 2179
-    - 994
+    - 2150
+    - 960
   - !!python/tuple
-    - 2179
-    - 1112
+    - 2150
+    - 1083
   ports:
   - loc: !!python/tuple
     - 846
@@ -1582,6 +1582,144 @@ png/pure_fb_xfm_back.png:
     - 103
     name: mgmt
     port_type: eth
+png/pure_fbs_back.png:
+  ports:
+  - loc: !!python/tuple
+    - 350
+    - 420
+    name: fm0.eht1
+    port_type: eth
+  - loc: !!python/tuple
+    - 463
+    - 420
+    name: fm0.eht2
+    port_type: eth
+  - loc: !!python/tuple
+    - 572
+    - 420
+    name: fm0.eht3
+    port_type: eth
+  - loc: !!python/tuple
+    - 687
+    - 420
+    name: fm0.eth4
+    port_type: eth
+  - loc: !!python/tuple
+    - 1923
+    - 420
+    name: fm0.eht5
+    port_type: eth
+  - loc: !!python/tuple
+    - 2029
+    - 420
+    name: fm0.eht6
+    port_type: eth
+  - loc: !!python/tuple
+    - 2146
+    - 420
+    name: fm0.eht7
+    port_type: eth
+  - loc: !!python/tuple
+    - 2256
+    - 425
+    name: fm0.eth8
+    port_type: eth
+  - loc: !!python/tuple
+    - 1149
+    - 364
+    name: mgmt
+    port_type: eth
+  - loc: !!python/tuple
+    - 350
+    - 910
+    name: fm1.eht1
+    port_type: eth
+  - loc: !!python/tuple
+    - 463
+    - 910
+    name: fm1.eht2
+    port_type: eth
+  - loc: !!python/tuple
+    - 572
+    - 910
+    name: fm1.eht3
+    port_type: eth
+  - loc: !!python/tuple
+    - 687
+    - 910
+    name: fm1.eth4
+    port_type: eth
+  - loc: !!python/tuple
+    - 1923
+    - 910
+    name: fm1.eht5
+    port_type: eth
+  - loc: !!python/tuple
+    - 2029
+    - 910
+    name: fm1.eht6
+    port_type: eth
+  - loc: !!python/tuple
+    - 2146
+    - 910
+    name: fm1.eht7
+    port_type: eth
+  - loc: !!python/tuple
+    - 2256
+    - 915
+    name: fm1.eth8
+    port_type: eth
+  - loc: !!python/tuple
+    - 1149
+    - 854
+    name: mgmt
+    port_type: eth
+png/pure_fbs_blade.png:
+  fm_loc:
+  - !!python/tuple
+    - 10
+    - 16
+  - !!python/tuple
+    - 122
+    - 16
+  - !!python/tuple
+    - 10
+    - 630
+  - !!python/tuple
+    - 122
+    - 630
+png/pure_fbs_front.png:
+  blade_loc:
+  - !!python/tuple
+    - 163
+    - 34
+  - !!python/tuple
+    - 418
+    - 34
+  - !!python/tuple
+    - 673
+    - 34
+  - !!python/tuple
+    - 928
+    - 34
+  - !!python/tuple
+    - 1183
+    - 34
+  - !!python/tuple
+    - 1438
+    - 34
+  - !!python/tuple
+    - 1693
+    - 34
+  - !!python/tuple
+    - 1948
+    - 34
+  - !!python/tuple
+    - 2203
+    - 34
+  - !!python/tuple
+    - 2458
+    - 34
 shelf_dp_size_lookup:
   '0':
   - Blank

@@ -26,9 +26,10 @@ def main():
     update_static_card_port_loc(config)
     update_static_mezz_port_loc(config)
 
+    update_static_fbs_blade_loc(config)
+
     with open('purerackdiagram/config.yaml', 'w') as f:
         yaml.dump(config, f, default_flow_style=False)
-
 
 def static_global_config():
     return {
@@ -192,6 +193,27 @@ def static_global_config():
     }
 
 
+def update_static_fbs_blade_loc(config):
+    key = 'png/pure_fbs_front.png'
+
+    blade_loc = [None] * 10
+    blade_loc[0] = (163, 34)
+    blade_offset = 255
+    for x in range(10):
+        if blade_loc[x] is None:
+            loc = list(blade_loc[x - 1])
+            loc[0] += blade_offset
+            blade_loc[x] = tuple(loc)
+    config[key] = {'blade_loc': blade_loc}
+
+    key = 'png/pure_fbs_blade.png'
+    fm_loc = [
+        (10, 16), (122, 16),
+        (10, 630), (122, 630)
+    ]
+    config[key] = {'fm_loc': fm_loc }
+
+
 def update_static_fm_loc(config):
     # Location of Flash Module Location
 
@@ -314,11 +336,11 @@ def update_static_pci_loc(config, generation):
         ct1_y_offset = 378
 
     elif generation == 'xl':
-        pci_loc = [(325, 373), (325, 497), 
-                   (893, 373), (893, 497),
-                   (1626, 373),(1626, 497),
-                   (2179, 373), (2179, 497), (2179, 615)]
-        ct1_y_offset = 497
+        pci_loc = [(330, 365), (330, 480), 
+                   (885, 365), (885, 480),
+                   (1609, 365),(1609, 480),
+                   (2150, 365), (2150, 480), (2150, 603)]
+        ct1_y_offset = 480
 
 
     key = f'png/pure_fa_{generation}_back.png'
@@ -587,7 +609,51 @@ def update_static_model_port_loc(config):
     key = 'png/pure_fb_back_efm110.png'
     if key not in config:
         config[key] = {}
-    config[key]['ports'] = ct0ports[0:4] + ct1ports[0:4]
+    config[key]['ports'] = ct0ports[0:5] + ct1ports[0:5]
+
+    # Pure FB /S Back Ports
+
+    ct0ports = [
+        {'loc': (350, 420),
+         'port_type': 'eth',
+         'name': 'fm0.eht1'},
+        {'loc': (463, 420),
+         'port_type': 'eth',
+         'name': 'fm0.eht2'},
+        {'loc': (572, 420),
+         'port_type': 'eth',
+         'name': 'fm0.eht3'},
+        {'loc': (687, 420),
+         'port_type': 'eth',
+         'name': 'fm0.eth4'},
+        {'loc': (1923, 420),
+         'port_type': 'eth',
+         'name': 'fm0.eht5'},
+        {'loc': (2029, 420),
+         'port_type': 'eth',
+         'name': 'fm0.eht6'},
+        {'loc': (2146, 420),
+         'port_type': 'eth',
+         'name': 'fm0.eht7'},
+        {'loc': (2256, 425),
+         'port_type': 'eth',
+         'name': 'fm0.eth8'},
+        {'loc': (1149, 364),
+         'port_type': 'eth',
+         'name': 'mgmt'}]
+
+    ct1ports = []
+    for p in ct0ports:
+        new_port = p.copy()
+        new_port['loc'] = p['loc'][0], p['loc'][1] + 490
+        new_port['name'] = p['name'].replace('fm0', 'fm1')
+        ct1ports.append(new_port)
+
+    key = 'png/pure_fbs_back.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['ports'] = ct0ports[0:9] + ct1ports[0:9]
+
 
     # Pure FB BAck XFM
 
