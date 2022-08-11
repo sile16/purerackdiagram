@@ -43,5 +43,7 @@ var FBS_OPTIONS = {
     xfm: ['', 'FALSE', 'TRUE'],
     direction: ['up', 'down'],
     blades: '18',
-    ports: ['FALSE', 'TRUE']
+    ports: ['FALSE', 'TRUE'],
+    dfm_size: ['24', '48'],
+    dfm_count: ['1', '2', '3', '4']
 };
