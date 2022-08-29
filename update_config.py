@@ -71,6 +71,10 @@ def static_global_config():
             "fa-c40r1-fc": ["4fc", None, None, None],
             "fa-c60r1-eth": ["2eth", None, None, None],
             "fa-c60r1-fc": ["4fc", None, None, None],
+            "fa-c40r3-eth": [None, None, None, None],
+            "fa-c40r3-fc": ["2fc", None, None, None],
+            "fa-c60r3-eth": ["2eth", None, None, None],
+            "fa-c60r3-fc": ["4fc", None, None, None],
             "fa-xl130r1-eth": [None, "2eth", None, None, None, None, None, None, None],
             "fa-xl130r1-fc": [None, "4fc", None, None, None, None, None, None, "2fc"],
             "fa-xl170r1-eth": [None, "2eth", None, None, None, None, None, None, None],
@@ -211,7 +215,12 @@ def update_static_fbs_blade_loc(config):
         (10, 16), (122, 16),
         (10, 630), (122, 630)
     ]
-    config[key] = {'fm_loc': fm_loc }
+   
+
+    model_text_loc =  (199, 549)
+
+    config[key] = {'fm_loc': fm_loc,
+                   'model_text_loc': model_text_loc }
 
 
 def update_static_fm_loc(config):

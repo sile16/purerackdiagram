@@ -1,7 +1,9 @@
 import asyncio
+from cmath import exp
 from os.path import join
 import re
 from PIL import ImageDraw
+from PIL import Image
 from PIL import ImageFont
 from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
 
@@ -79,9 +81,46 @@ class FBSDiagram():
         for x in range(self.config['dfm_count']):
             blade_img.paste(fm_img, fm_loc[x])
 
+        ##########################################
+        # Add model label.
+        label_loc = global_config[key]['model_text_loc']
+        
+        # todo: add this into utilities as a more generic function to apply 
+        # rotated tet.
+        ttf_path = global_config['ttf_path']
+
+        model_text = self.config['model'].split("-")[1].upper()
+        font_size = 25
+
+        font = ImageFont.truetype(ttf_path, size=font_size)
+        txt_size = font.getsize(model_text)
+        
+        ##make backgroun grey
+        txtimg = Image.new("RGB", txt_size, (38, 38, 38))
+        txtimg_draw = ImageDraw.Draw(txtimg)
+        txtimg_draw.text((0,0), model_text, font=font, fill= (255, 255, 255))
+
+        #Crop the top a little to remove extra spacing along the top
+        top_crop = 3
+        txtimg = txtimg.crop((0, top_crop, txt_size[0], txt_size[1]))
+
+        #apply_text(txtimg, model_text, 0, 0, font_size=font_size)
+        txtimg = txtimg.rotate(270, expand=1)
+        blade_img.paste(txtimg, label_loc)
+
+
+        ############################
         # Paste in the blades.
         for x in range(number_of_blades):
             base_img.paste(blade_img, self.img_info['blade_loc'][x])
+
+        
+
+
+        
+
+      
+        
 
 
     async def build_chassis(self, number_of_blades):

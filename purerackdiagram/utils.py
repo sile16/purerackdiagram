@@ -22,6 +22,7 @@ ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
 global_config = None
 with open(os.path.join(root_path, 'config.yaml'), 'r') as f:
     global_config = yaml.full_load(f)
+global_config['ttf_path'] = ttf_path
 
 
 class RackImage():
@@ -130,13 +131,14 @@ def combine_images_vertically(image_ports):
     return new_im, all_ports
 
 
-def apply_text(img, text, x_loc, y_loc, font_size=15):
+def apply_text(img, text, x_loc, y_loc, font_size=15, rotate_degrees=0):
     global ttf_path
 
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(ttf_path, size=font_size)
     w, _ = draw.textsize(text, font=font)
     x_loc = x_loc - w // 2
+    
     draw.text((x_loc, y_loc), text, fill=(199, 89, 40), font=font)
 
 

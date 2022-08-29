@@ -220,12 +220,32 @@ pci_config_lookup:
   - null
   - null
   - null
+  fa-c40r3-eth:
+  - null
+  - null
+  - null
+  - null
+  fa-c40r3-fc:
+  - 2fc
+  - null
+  - null
+  - null
   fa-c60r1-eth:
   - 2eth
   - null
   - null
   - null
   fa-c60r1-fc:
+  - 4fc
+  - null
+  - null
+  - null
+  fa-c60r3-eth:
+  - 2eth
+  - null
+  - null
+  - null
+  fa-c60r3-fc:
   - 4fc
   - null
   - null
@@ -1688,6 +1708,9 @@ png/pure_fbs_blade.png:
   - !!python/tuple
     - 122
     - 630
+  model_text_loc: !!python/tuple
+  - 199
+  - 549
 png/pure_fbs_front.png:
   blade_loc:
   - !!python/tuple

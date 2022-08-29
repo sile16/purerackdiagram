@@ -24,14 +24,29 @@ save_dir = 'test_results/'
 
 
 more_tests = [
+    
     {
         "queryStringParameters": {
             "model": "fb-s200",
-            "no_of_blades": 17,
-            "face": "back",
+            "no_of_blades": 10,
+            "face": "front",
             "no_of_drives_per_blade": 3,
             "drive_size": 24,
             "ports": "TRUE"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-c40r3",
+            "datapacks": "63/0",
+            "protocol": "eth",
+            "chassis": 2,
+            "addoncards": "",
+            "face": "back",
+            "fm_label": "True",
+            "dp_label": "True",
+            "local_delay": 0,
+            "ports": "True"
         }
     },
 
