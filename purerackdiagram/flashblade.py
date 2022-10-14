@@ -14,10 +14,14 @@ class FBDiagram():
         config["chassis"] = int(params.get("chassis", 1))
         config['ru'] = config["chassis"]*4
         config["face"] = params.get("face", "front").lower()
+        config["xfm_face"] = params.get("xfm_face", "").lower()
         config['direction'] = params.get("direction", "up").lower()
         config['efm'] = params.get('efm', 'efm310').lower()
         if not config['efm']:
             config['efm'] = "efm310"
+
+        if config['xfm_face'] == "":
+            config['xfm_face'] = config['face']
 
         valid_efm = ['efm110', 'efm310']
         if config['efm'] not in valid_efm:
@@ -63,7 +67,7 @@ class FBDiagram():
         if config['xfm'] == "":
             config['xfm'] = default_xfm
 
-        for item in ["xfm", "xfm_show_front"]:
+        for item in ["xfm" ]:
             if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:
                 config[item] = False
 
@@ -114,13 +118,10 @@ class FBDiagram():
             tasks.append(self.build_chassis(i))
 
         if self.config['xfm']:
-            face = self.config["face"]
-            if self.config["xfm_show_front"]:
-                face = "front"
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_face']}.png"))
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_face']}.png"))
 
         all_images = await asyncio.gather(*tasks)
         if self.config["direction"] == "up":

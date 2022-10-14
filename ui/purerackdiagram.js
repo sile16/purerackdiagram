@@ -40,7 +40,7 @@ $(function () {
   var fb_option_blades = build_input('#fb_option_blades', FB_OPTIONS.blades);
   var fb_option_efm = build_select('#fb_option_efm', FB_OPTIONS.efm);
   var fb_option_ports = build_select('#fb_option_ports', FB_OPTIONS.ports);
-  var fb_option_xfm_show_front = build_select('#fb_option_xfm_show_front', FB_OPTIONS.xfm_show_front);
+  var fb_option_xfm_face = build_select('#fb_option_xfm_face', FB_OPTIONS.xfm_face);
 
   var fbs_option_model = build_select('#fbs_option_model', FBS_OPTIONS.model);
   var fbs_option_dfm_size = build_select('#fbs_option_dfm_size', FBS_OPTIONS.dfm_size);
@@ -50,7 +50,7 @@ $(function () {
   var fbs_option_xfm = build_select('#fbs_option_xfm', FBS_OPTIONS.xfm);
   var fbs_option_blades = build_input('#fbs_option_blades', FBS_OPTIONS.blades);
   var fbs_option_ports = build_select('#fbs_option_ports', FBS_OPTIONS.ports);
-  var fbs_option_xfm_show_front = build_select('#fbs_option_xfm_show_front', FBS_OPTIONS.xfm_show_front);
+  var fbs_option_xfm_face = build_select('#fbs_option_xfm_face', FBS_OPTIONS.xfm_face);
 
 
 
@@ -96,7 +96,7 @@ $(function () {
     url += "&xfm=" + fb_option_xfm.val();
     url += "&blades=" + fb_option_blades.val();
     url += "&efm=" + fb_option_efm.val();
-    url += "&xfm_show_front=" + fb_option_xfm_show_front.val();
+    url += "&xfm_face=" + fb_option_xfm_face.val();
 
     var ports_val = fb_option_ports.val();
     if (ports_val){
@@ -117,7 +117,7 @@ $(function () {
     url += "&no_of_blades=" + fbs_option_blades.val();
     url += "&no_of_drives_per_blade=" + fbs_option_dfm_count.val();
     url += "&drive_size=" + fbs_option_dfm_size.val();
-    url += "&xfm_show_front=" + fbs_option_xfm_show_front.val();
+    url += "&xfm_face=" + fbs_option_xfm_face.val();
  
     
     fbs_option_dfm_size

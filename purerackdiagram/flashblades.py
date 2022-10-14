@@ -19,11 +19,15 @@ class FBSDiagram():
         config["chassis"] = int(params.get("no_of_chassis", 1))
         config['ru'] = config["chassis"]*5
         config["face"] = params.get("face", "front").lower()
+        config["xfm_face"] = params.get("xfm_face", "").lower()
         config["bezel"] = params.get("bezel", False)
         config['direction'] = params.get("direction", "up").lower()
         config['dfm_size'] = float(params.get("drive_size", 24))
         config['dfm_count'] = int(params.get("no_of_drives_per_blade", 1))
         config['blades'] = int(params.get("no_of_blades", 7))
+
+        if config['xfm_face'] == "":
+            config['xfm_face'] = config['face']
 
 
         valid_models = ['fb-s200', 'fb-s500']
@@ -56,7 +60,7 @@ class FBSDiagram():
         if config['xfm'] == "":
             config['xfm'] = default_xfm
 
-        for item in ["xfm", "bezel", "xfm_show_front"]:
+        for item in ["xfm", "bezel"]:
             # we don't need to worry about true, because any text will eval to true
             if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:
                 config[item] = False
@@ -164,13 +168,11 @@ class FBSDiagram():
             blades_left -= 10
 
         if self.config['xfm']:
-            face = c["face"]
-            if self.config["xfm_show_front"]:
-                face = "front"
+
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{c['xfm_face']}.png"))
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{c['xfm_face']}.png"))
 
         all_images = await asyncio.gather(*tasks)
         if self.config["direction"] == "up":
