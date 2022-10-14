@@ -51,11 +51,12 @@ class FBSDiagram():
             default_xfm = True
 
         config["xfm"] = params.get("xfm", default_xfm)
+        config["xfm_show_front"] = params.get("xfm_show_front", False)
 
         if config['xfm'] == "":
             config['xfm'] = default_xfm
 
-        for item in ["xfm", "bezel"]:
+        for item in ["xfm", "bezel", "xfm_show_front"]:
             # we don't need to worry about true, because any text will eval to true
             if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:
                 config[item] = False
@@ -163,10 +164,13 @@ class FBSDiagram():
             blades_left -= 10
 
         if self.config['xfm']:
+            face = c["face"]
+            if self.config["xfm_show_front"]:
+                face = "front"
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{c['face']}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{c['face']}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
 
         all_images = await asyncio.gather(*tasks)
         if self.config["direction"] == "up":

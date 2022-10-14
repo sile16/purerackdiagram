@@ -58,11 +58,12 @@ class FBDiagram():
             default_xfm = True
 
         config["xfm"] = params.get("xfm", default_xfm)
+        config["xfm_show_front"] = params.get("xfm_show_front", False)
 
         if config['xfm'] == "":
             config['xfm'] = default_xfm
 
-        for item in ["xfm"]:
+        for item in ["xfm", "xfm_show_front"]:
             if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:
                 config[item] = False
 
@@ -113,10 +114,13 @@ class FBDiagram():
             tasks.append(self.build_chassis(i))
 
         if self.config['xfm']:
+            face = self.config["face"]
+            if self.config["xfm_show_front"]:
+                face = "front"
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['face']}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
             tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['face']}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{face}.png"))
 
         all_images = await asyncio.gather(*tasks)
         if self.config["direction"] == "up":
