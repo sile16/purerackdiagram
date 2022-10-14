@@ -35,7 +35,7 @@ var FB_OPTIONS = {
     blades: '17:0-14,52:15-129',
     efm: ['', 'efm110', 'efm310'],
     ports: ['FALSE', 'TRUE'],
-    xfm_show_front: ['FALSE', 'TRUE']
+    xfm_show_front: ['', 'FALSE', 'TRUE']
 };
 
 var FBS_OPTIONS = {
@@ -47,5 +47,5 @@ var FBS_OPTIONS = {
     ports: ['FALSE', 'TRUE'],
     dfm_size: ['24', '48'],
     dfm_count: ['1', '2', '3', '4'],
-    xfm_show_front: ['FALSE', 'TRUE']
+    xfm_show_front: ['', 'FALSE', 'TRUE']
 };

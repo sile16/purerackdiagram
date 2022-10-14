@@ -96,7 +96,7 @@ $(function () {
     url += "&xfm=" + fb_option_xfm.val();
     url += "&blades=" + fb_option_blades.val();
     url += "&efm=" + fb_option_efm.val();
-    url += "&xfm_show_front=" + fb_option_efm.val();
+    url += "&xfm_show_front=" + fb_option_xfm_show_front.val();
 
     var ports_val = fb_option_ports.val();
     if (ports_val){
@@ -117,7 +117,7 @@ $(function () {
     url += "&no_of_blades=" + fbs_option_blades.val();
     url += "&no_of_drives_per_blade=" + fbs_option_dfm_count.val();
     url += "&drive_size=" + fbs_option_dfm_size.val();
-    url += "&xfm_show_front=" + fb_option_efm.val();
+    url += "&xfm_show_front=" + fbs_option_xfm_show_front.val();
  
     
     fbs_option_dfm_size
