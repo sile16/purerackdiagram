@@ -59,6 +59,11 @@ chassis_dp_size_lookup:
   - nvme
   - 10
   - '22'
+  '240':
+  - 24.0TB
+  - nvme-qlc
+  - 10
+  - '240'
   '247':
   - 24.7TB
   - nvme-qlc
@@ -74,6 +79,11 @@ chassis_dp_size_lookup:
   - nvme
   - 14
   - '256'
+  '288':
+  - 24.0TB
+  - nvme-qlc
+  - 12
+  - '288'
   '292':
   - 18.3TB
   - nvme
@@ -89,6 +99,11 @@ chassis_dp_size_lookup:
   - scm
   - 4
   - DM Cache 3
+  '336':
+  - 24.0TB
+  - nvme-qlc
+  - 14
+  - '336'
   '345':
   - 24.7TB
   - nvme-qlc
@@ -104,6 +119,11 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '38'
+  '384':
+  - 24.0TB
+  - nvme-qlc
+  - 16
+  - '384'
   '395':
   - 24.7TB
   - nvme-qlc
@@ -114,6 +134,11 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '4.8'
+  '432':
+  - 24.0TB
+  - nvme-qlc
+  - 18
+  - '432'
   '444':
   - 24.7TB
   - nvme-qlc
@@ -124,6 +149,16 @@ chassis_dp_size_lookup:
   - nvme
   - 10
   - '45'
+  '480':
+  - 24.0TB
+  - nvme-qlc
+  - 20
+  - '480'
+  '482':
+  - 48.2TB
+  - nvme-qlc
+  - 10
+  - '480'
   '492':
   - 49.2TB
   - nvme-qlc
@@ -139,6 +174,11 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '5'
+  '578':
+  - 48.2TB
+  - nvme-qlc
+  - 12
+  - '578'
   '590':
   - 49.2TB
   - nvme-qlc
@@ -154,6 +194,11 @@ chassis_dp_size_lookup:
   - nvme
   - 14
   - '63'
+  '674':
+  - 48.2TB
+  - nvme-qlc
+  - 14
+  - '674'
   '688':
   - 49.2TB
   - nvme-qlc
@@ -169,11 +214,21 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '76'
+  '771':
+  - 48.2TB
+  - nvme-qlc
+  - 16
+  - '771'
   '787':
   - 49.2TB
   - nvme-qlc
   - 16
   - '787'
+  '867':
+  - 48.2TB
+  - nvme-qlc
+  - 18
+  - '867'
   '885':
   - 49.2TB
   - nvme-qlc
@@ -189,23 +244,41 @@ chassis_dp_size_lookup:
   - nvme
   - 10
   - '91'
+  '964':
+  - 48.2TB
+  - nvme-qlc
+  - 20
+  - '964'
   '984':
   - 49.2TB
   - nvme-qlc
   - 20
   - '984'
 csize_lookup:
+  '1154': 480-674
   '1182': 494-688
   '1185': 494-345/345
+  '1300': 964-336
   '1329': 984-345
   '1390': 366-512-512
+  '1446': 964-482
+  '1448': 964-674-336
   '1476': 984-492
   '1531': 494-345/345-345
+  '1542': 964-578
   '1574': 984-590
+  '1638': 964-674
   '1672': 984-688
+  '1735': 964-771
   '1771': 984-787
+  '1824': 480-674-674
+  '1831': 964-867
   '1869': 984-885
   '1877': 494-345/345-345/345
+  '1928': 964-964
+  '2120': 964-1253
+  '2313': 964-1349
+  '816': 480-336
   '839': 494-345
   '879': 366-512
 fb_blade_reg_pattern: ^([0-9]+:[0-9]+(-[0-9]+)?,?)+$
@@ -1625,31 +1698,6 @@ png/pure_fbs_back.png:
     name: fm0.eth4
     port_type: eth
   - loc: !!python/tuple
-    - 1923
-    - 420
-    name: fm0.eht5
-    port_type: eth
-  - loc: !!python/tuple
-    - 2029
-    - 420
-    name: fm0.eht6
-    port_type: eth
-  - loc: !!python/tuple
-    - 2146
-    - 420
-    name: fm0.eht7
-    port_type: eth
-  - loc: !!python/tuple
-    - 2256
-    - 425
-    name: fm0.eth8
-    port_type: eth
-  - loc: !!python/tuple
-    - 1149
-    - 364
-    name: mgmt
-    port_type: eth
-  - loc: !!python/tuple
     - 350
     - 910
     name: fm1.eht1
@@ -1668,31 +1716,6 @@ png/pure_fbs_back.png:
     - 687
     - 910
     name: fm1.eth4
-    port_type: eth
-  - loc: !!python/tuple
-    - 1923
-    - 910
-    name: fm1.eht5
-    port_type: eth
-  - loc: !!python/tuple
-    - 2029
-    - 910
-    name: fm1.eht6
-    port_type: eth
-  - loc: !!python/tuple
-    - 2146
-    - 910
-    name: fm1.eht7
-    port_type: eth
-  - loc: !!python/tuple
-    - 2256
-    - 915
-    name: fm1.eth8
-    port_type: eth
-  - loc: !!python/tuple
-    - 1149
-    - 854
-    name: mgmt
     port_type: eth
 png/pure_fbs_blade.png:
   fm_loc:
@@ -1749,6 +1772,11 @@ shelf_dp_size_lookup:
   - blank
   - 12
   - '0'
+  '1060':
+  - 48.2TB
+  - nvme-qlc
+  - 22
+  - '1060'
   '1082':
   - 49.2TB
   - nvme-qlc
@@ -1759,6 +1787,11 @@ shelf_dp_size_lookup:
   - sas
   - 12
   - '11'
+  '1156':
+  - 48.2TB
+  - nvme-qlc
+  - 24
+  - '1156'
   '1180':
   - 49.2TB
   - nvme-qlc
@@ -1769,6 +1802,11 @@ shelf_dp_size_lookup:
   - sas
   - 24
   - '12'
+  '1253':
+  - 48.2TB
+  - nvme-qlc
+  - 26
+  - '1253'
   '127':
   - 9.1TB
   - nvme
@@ -1779,6 +1817,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 26
   - '1279'
+  '1349':
+  - 48.2TB
+  - nvme-qlc
+  - 28
+  - '1349'
   '1377':
   - 49.2TB
   - nvme-qlc
@@ -1799,6 +1842,11 @@ shelf_dp_size_lookup:
   - sas
   - 24
   - '24'
+  '240':
+  - 24.0TB
+  - nvme-qlc
+  - 10
+  - '240'
   '247':
   - 24.7TB
   - nvme-qlc
@@ -1809,6 +1857,11 @@ shelf_dp_size_lookup:
   - nvme
   - 14
   - '256'
+  '288':
+  - 24.0TB
+  - nvme-qlc
+  - 12
+  - '288'
   '296':
   - 24.7TB
   - nvme-qlc
@@ -1819,16 +1872,31 @@ shelf_dp_size_lookup:
   - nvme
   - 14
   - '31'
+  '336':
+  - 24.0TB
+  - nvme-qlc
+  - 14
+  - '336'
   '345':
   - 24.7TB
   - nvme-qlc
   - 14
   - '345'
+  '384':
+  - 24.0TB
+  - nvme-qlc
+  - 16
+  - '384'
   '395':
   - 24.7TB
   - nvme-qlc
   - 16
   - '395'
+  '432':
+  - 24.0TB
+  - nvme-qlc
+  - 18
+  - '432'
   '444':
   - 24.7TB
   - nvme-qlc
@@ -1839,6 +1907,16 @@ shelf_dp_size_lookup:
   - sas
   - 12
   - '45'
+  '480':
+  - 24.0TB
+  - nvme-qlc
+  - 20
+  - '480'
+  '482':
+  - 48.2TB
+  - nvme-qlc
+  - 10
+  - '480'
   '492':
   - 49.2TB
   - nvme-qlc
@@ -1854,11 +1932,26 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 28
   - '512'
+  '528':
+  - 24.0TB
+  - nvme-qlc
+  - 22
+  - '528'
   '543':
   - 24.7TB
   - nvme-qlc
   - 22
   - '543'
+  '576':
+  - 24.0TB
+  - nvme-qlc
+  - 24
+  - '576'
+  '578':
+  - 48.2TB
+  - nvme-qlc
+  - 12
+  - '578'
   '590':
   - 49.2TB
   - nvme-qlc
@@ -1874,6 +1967,11 @@ shelf_dp_size_lookup:
   - sas
   - 24
   - '6'
+  '624':
+  - 24.0TB
+  - nvme-qlc
+  - 26
+  - '624'
   '63':
   - 4.5TB
   - nvme
@@ -1884,6 +1982,16 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 26
   - '642'
+  '672':
+  - 24.0TB
+  - nvme-qlc
+  - 28
+  - '672'
+  '674':
+  - 48.2TB
+  - nvme-qlc
+  - 14
+  - '674'
   '688':
   - 49.2TB
   - nvme-qlc
@@ -1894,11 +2002,21 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 28
   - '691'
+  '771':
+  - 48.2TB
+  - nvme-qlc
+  - 16
+  - '771'
   '787':
   - 49.2TB
   - nvme-qlc
   - 16
   - '787'
+  '867':
+  - 48.2TB
+  - nvme-qlc
+  - 18
+  - '867'
   '885':
   - 49.2TB
   - nvme-qlc
@@ -1909,6 +2027,11 @@ shelf_dp_size_lookup:
   - sas
   - 12
   - '90'
+  '964':
+  - 48.2TB
+  - nvme-qlc
+  - 20
+  - '964'
   '984':
   - 49.2TB
   - nvme-qlc

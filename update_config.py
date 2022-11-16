@@ -105,13 +105,32 @@ def static_global_config():
             # this is legacy //C when we used tlc actually
             "366": ["18.3TB", "nvme-qlc", 20, "366"],
 
+            # //C 24.0 TB PACKS, added 11/16/2022, new drive size
+            "240": ["24.0TB", "nvme-qlc", 10, "240"],
+            "288": ["24.0TB", "nvme-qlc", 12, "288"],
+            "336": ["24.0TB", "nvme-qlc", 14, "336"],
+            "384": ["24.0TB", "nvme-qlc", 16, "384"],
+            "432": ["24.0TB", "nvme-qlc", 18, "432"],
+            "480": ["24.0TB", "nvme-qlc", 20, "480"],
+
+
             # //C 24.7 TB PACKS
+            
             "247": ["24.7TB", "nvme-qlc", 10, "247"],
             "296": ["24.7TB", "nvme-qlc", 12, "296"],
             "345": ["24.7TB", "nvme-qlc", 14, "345"],
             "395": ["24.7TB", "nvme-qlc", 16, "395"],
             "444": ["24.7TB", "nvme-qlc", 18, "444"],
             "494": ["24.7TB", "nvme-qlc", 20, "494"],
+
+            # //C 48.2 TB PACKS, added 11/16/2022, new drive size
+            "482": ["48.2TB", "nvme-qlc", 10, "480"],
+            "578": ["48.2TB", "nvme-qlc", 12, "578"],
+            "674": ["48.2TB", "nvme-qlc", 14, "674"],
+            "771": ["48.2TB", "nvme-qlc", 16, "771"],
+            "867": ["48.2TB", "nvme-qlc", 18, "867"],
+            "964": ["48.2TB", "nvme-qlc", 20, "964"],
+
 
             # //C 49.2 TB PACKS
             "492": ["49.2TB", "nvme-qlc", 10, "492"],
@@ -133,6 +152,7 @@ def static_global_config():
         },
 
         "csize_lookup": {
+            
             "839": "494-345",
             "879": "366-512",
             "1182": "494-688",
@@ -140,12 +160,31 @@ def static_global_config():
             "1329": "984-345",
             "1390": "366-512-512",
             "1476": "984-492",
+            "1448": "964-674",
             "1531": "494-345/345-345",
             "1574": "984-590",
             "1672": "984-688",
             "1771": "984-787",
             "1869": "984-885",
-            "1877": "494-345/345-345/345"
+            "1877": "494-345/345-345/345",
+
+            #added 11/16/2022 the new 24.0 & 48.2 TB packs
+            "816": "480-336",
+            "1154": "480-674",
+            "1300": "964-336",
+            "1446": "964-482",
+            "1448": "964-674-336",
+            "1542": "964-578",
+            "1638": "964-674",
+            "1735": "964-771",
+            "1824": "480-674-674",
+            "1831": "964-867",
+            "1928": "964-964",
+            "2120": "964-1253",
+            "2313": "964-1349",
+
+
+
         },
 
         "shelf_dp_size_lookup": {
@@ -159,6 +198,19 @@ def static_global_config():
              # this is legacy //C when we used tlc actually
             "512": ["18.3TB", "nvme-qlc", 28, "512"],
 
+
+            # //C 24.0 TB PACKS added 11/16/2022, new drive size
+            "240": ["24.0TB", "nvme-qlc", 10, "240"],
+            "288": ["24.0TB", "nvme-qlc", 12, "288"],
+            "336": ["24.0TB", "nvme-qlc", 14, "336"],
+            "384": ["24.0TB", "nvme-qlc", 16, "384"],
+            "432": ["24.0TB", "nvme-qlc", 18, "432"],
+            "480": ["24.0TB", "nvme-qlc", 20, "480"],
+            "528": ["24.0TB", "nvme-qlc", 22, "528"],
+            "576": ["24.0TB", "nvme-qlc", 24, "576"],
+            "624": ["24.0TB", "nvme-qlc", 26, "624"],
+            "672": ["24.0TB", "nvme-qlc", 28, "672"],
+
             # //C 24.7 TB PACKS
             "247": ["24.7TB", "nvme-qlc", 10, "247"],
             "296": ["24.7TB", "nvme-qlc", 12, "296"],
@@ -170,6 +222,18 @@ def static_global_config():
             "592": ["24.7TB", "nvme-qlc", 24, "592"],
             "642": ["24.7TB", "nvme-qlc", 26, "642"],
             "691": ["24.7TB", "nvme-qlc", 28, "691"],
+
+            # //C 48.2 TB PACKS added 11/16/2022, new drive size
+            "482": ["48.2TB", "nvme-qlc", 10, "480"],
+            "578": ["48.2TB", "nvme-qlc", 12, "578"],
+            "674": ["48.2TB", "nvme-qlc", 14, "674"],
+            "771": ["48.2TB", "nvme-qlc", 16, "771"],
+            "867": ["48.2TB", "nvme-qlc", 18, "867"],
+            "964": ["48.2TB", "nvme-qlc", 20, "964"],
+            "1060": ["48.2TB", "nvme-qlc", 22, "1060"],
+            "1156": ["48.2TB", "nvme-qlc", 24, "1156"],
+            "1253": ["48.2TB", "nvme-qlc", 26, "1253"],
+            "1349": ["48.2TB", "nvme-qlc", 28, "1349"],
 
             # //C 49.2 TB PACKS
             "492": ["49.2TB", "nvme-qlc", 10, "492"],
@@ -634,22 +698,27 @@ def update_static_model_port_loc(config):
          'name': 'fm0.eht3'},
         {'loc': (687, 420),
          'port_type': 'eth',
-         'name': 'fm0.eth4'},
-        {'loc': (1923, 420),
-         'port_type': 'eth',
-         'name': 'fm0.eht5'},
-        {'loc': (2029, 420),
-         'port_type': 'eth',
-         'name': 'fm0.eht6'},
-        {'loc': (2146, 420),
-         'port_type': 'eth',
-         'name': 'fm0.eht7'},
-        {'loc': (2256, 425),
-         'port_type': 'eth',
-         'name': 'fm0.eth8'},
-        {'loc': (1149, 364),
-         'port_type': 'eth',
-         'name': 'mgmt'}]
+         'name': 'fm0.eth4'}
+
+         # Removing last 4 ports because they are ianctive from request of 
+         # the Pure Advisor team.
+         
+#        {'loc': (1923, 420),
+#         'port_type': 'eth',
+#         'name': 'fm0.eht5'},
+#        {'loc': (2029, 420),
+#         'port_type': 'eth',
+#         'name': 'fm0.eht6'},
+#        {'loc': (2146, 420),
+#         'port_type': 'eth',
+#         'name': 'fm0.eht7'},
+#        {'loc': (2256, 425),
+#         'port_type': 'eth',
+#         'name': 'fm0.eth8'},
+#        {'loc': (1149, 364),
+#         'port_type': 'eth',
+#         'name': 'mgmt'}
+    ]
 
     ct1ports = []
     for p in ct0ports:

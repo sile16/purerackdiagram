@@ -261,16 +261,20 @@ def create_test_image(item, count, total):
 def get_all_tests():
     models = global_config['pci_config_lookup']
     dps = ['45/45-31/63-45', '3/127-24']
-    csizes = ['247', '296', '345', '366', '395', '492', '494', 
-             '590', '688', '787', '839', 
-             '879', '885', '984', '1182',
-             '1185', '1329', '1390', '1476', '1531', '1574', 
-             '1672', '1771', '1869', '1877', '1877']
+
+    # get the keys of diction csize_lookup
+    csizes = list(global_config['csize_lookup'].keys())
+    #global_config.csize_lookup
+    #csizes = ['247', '296', '345', '366', '395', '492', '494', 
+    #         '590', '688', '787', '839', 
+    #         '879', '885', '984', '1182',
+    #         '1185', '1329', '1390', '1476', '1531', '1574', 
+    #         '1672', '1771', '1869', '1877', '1877']
 
     count = 0
     # front:
     for model in models:
-        continue
+        #continue
         model = model[:8]
         for dp_label in [True, False]:
             if 'c' in model:
@@ -297,7 +301,7 @@ def get_all_tests():
     addon_cards = global_config['pci_valid_cards']
 
     for model in models:
-        continue
+        #continue
         model = model[:8]
         for card in addon_cards:
             if 'c' in model:
