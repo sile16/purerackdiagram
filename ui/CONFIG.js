@@ -5,10 +5,10 @@ API_ENDPOINT = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/default/r
 // the options values for FlashArray configurations
 //
 var FA_OPTIONS = {
-    model: ['fa-x10r3', 'fa-x20r3', 'fa-x50r3', 'fa-x70r3', 'fa-x90r3',
+    model: ['fa-x10r3', 'fa-x20r3', 'fa-x50r3', 'fa-x70r3', 'fa-x90r3','fa-xl130', 'fa-xl170',
             'fa-x10r2', 'fa-x20r2', 'fa-x50r2', 'fa-x70r2', 'fa-x90r2',
             'fa-x70r1', 'fa-c40', 'fa-c60', 'fa-c40r3', 'fa-c60r3', 'fa-m10r2', 'fa-m20r2', 'fa-m50r2', 'fa-m70r2',
-            'fa-xl130', 'fa-xl170'],
+            ],
     protocol: ['fc', 'eth'],
     face: ['front', 'back'],
     datapacks: '',

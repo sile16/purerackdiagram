@@ -88,14 +88,17 @@ def handler(event, context):
             draw = ImageDraw.Draw(img)
 
             for p in diagram.ports:
+                size = 20
                 if p['port_type'] == 'eth':
                     color = 'brown'
-                else:
-                    color = 'orange'
-                size = 20
-                draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
+                    draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
                               p['loc'][0] + size, p['loc'][1] + size),
                              fill=color, outline=color)
+                else:
+                    color = 'orange'
+                    draw.triangle((p['loc'][0] - size, p['loc'][1] - size,
+                                 p['loc'][0] + size, p['loc'][1] + size),
+                                fill=color, outline=color)
 
         # resize if too large:
         # will break google slides if file is too big

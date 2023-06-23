@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   
@@ -40,7 +41,7 @@ Select the options, then click the Display button at the bottom to load the imag
         <div id="tabs-fa">
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">model:</div>
-            <div class="col-xs-8 col-sm-8"><span data-tooltip="C models now available" id="fa_option_model"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="C & XL models now available" id="fa_option_model"></span></div>
             <br/>
             <br/>
           </div>
@@ -51,7 +52,7 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
             <br/>
           </div>
-          
+          <br/>
 
           <div class="row" id="datapacks">
             <div class="col-xs-4 col-sm-4 option_label">datapacks:</div>
@@ -61,6 +62,22 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
             <br/>
           </div>
+
+          <div>
+            <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link main-tab active" id="chassis-tab" data-toggle="tab" href="#chassis" role="tab" aria-controls="chassis" aria-selected="true">Chassis</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link main-tab" id="shelf-tab" data-toggle="tab" href="#shelf" role="tab" aria-controls="shelf" aria-selected="false">Shelf</a>
+              </li>
+            </ul>
+            <div class="tab-content" id="mainTabsContent">
+              <div class="tab-pane fade " id="chassis" role="tabpanel" aria-labelledby="chassis-tab"></div>
+              <div class="tab-pane fade" id="shelf" role="tabpanel" aria-labelledby="shelf-tab"></div>
+            </div>
+          </div>
+          <br/>
 
 
           <div class="row">
@@ -111,7 +128,7 @@ Select the options, then click the Display button at the bottom to load the imag
           </div>
 
           <div class="row" id='addoncards' hidden="true">
-            <div class="col-xs-4 col-sm-4 option_label">addoncards:</div>
+            <div class="col-xs-4 col-sm-4 option_label">addoncards :</div>
             <div class="col-xs-8 col-sm-8">
               <p>
                 <a href="#" id='2fc' class="addon_card">
@@ -150,6 +167,25 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
           </div>
           <br/>
+
+          
+          <div class="row" id="pci_dropdowns" hidden="true">
+            <p> Specific PCI Slot Override</p>
+            <div class="col-xs-4 col-sm-4 option_label">PCI:</div>
+            <div class="col-xs-8 col-sm-8">
+              <span id="pci_select_0"></span>
+              <span id="pci_select_1"></span>
+              <span id="pci_select_2"></span>
+              <span id="pci_select_3"></span>
+              <span id="pci_select_4"></span>
+              <span id="pci_select_5"></span>
+              <span id="pci_select_6"></span>
+              <span id="pci_select_7"></span>
+              <span id="pci_select_8"></span>
+            </div>
+            <br>
+            <br>
+          </div>
           
           <div class="row" id="mezz" hidden="true">
             <div class="col-xs-4 col-sm-4 option_label">mezz:</div>
@@ -161,7 +197,7 @@ Select the options, then click the Display button at the bottom to load the imag
 
           <div class="row" id="ports" hidden="false">
             <div class="col-xs-4 col-sm-4 option_label">ports:</div>
-            <div class="col-xs-8 col-sm-8"><span data-tooltip="Put dots on ports" id="fa_option_ports"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="Put icons on ports" id="fa_option_ports"></span></div>
             <br/>
             <br/>
           </div>

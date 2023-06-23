@@ -31,6 +31,10 @@ def main():
     with open('purerackdiagram/config.yaml', 'w') as f:
         yaml.dump(config, f, default_flow_style=False)
 
+    with open('ui/config.yaml', 'w') as f:
+        yaml.dump(config, f, default_flow_style=False)
+    
+
 def static_global_config():
     return {
 
@@ -124,7 +128,7 @@ def static_global_config():
             "494": ["24.7TB", "nvme-qlc", 20, "494"],
 
             # //C 48.2 TB PACKS, added 11/16/2022, new drive size
-            "482": ["48.2TB", "nvme-qlc", 10, "480"],
+            "482": ["48.2TB", "nvme-qlc", 10, "482"],
             "578": ["48.2TB", "nvme-qlc", 12, "578"],
             "674": ["48.2TB", "nvme-qlc", 14, "674"],
             "771": ["48.2TB", "nvme-qlc", 16, "771"],
@@ -188,13 +192,13 @@ def static_global_config():
         },
 
         "shelf_dp_size_lookup": {
-            "0": ["Blank", "blank", 12, "0"],
+            "0": ["Blank", "blank", 14, "0"],
             "15": ["1.1TB", "nvme", 14, "15"],
             "31": ["2.2TB", "nvme", 14, "31"],
             "63": ["4.5TB", "nvme", 14, "63"],
             "127": ["9.1TB", "nvme", 14, "127"],
             "256": ["18.3TB", "nvme", 14, "256"],
-           
+
              # this is legacy //C when we used tlc actually
             "512": ["18.3TB", "nvme-qlc", 28, "512"],
 
