@@ -13,15 +13,17 @@ def main():
     update_static_fm_loc(config)
     update_static_model_port_loc(config)
 
-    for gen in ['m', 'x', 'c']:
-        update_static_pci_loc(config, gen)
-        update_static_mezz_loc(config, gen)
-        update_static_model_loc(config, gen)
-        update_static_nvram_loc(config, gen)
+    for rev in [1, 2, 3, 4]:
+        for gen in ['m', 'x', 'c']:
+            update_static_pci_loc(config, gen, rev)
+            update_static_mezz_loc(config, gen, rev)
+            update_static_model_loc(config, gen, rev)
+            update_static_nvram_loc(config, gen, rev)
 
-    for gen in ['xl']:
-        update_static_pci_loc(config, gen)
-        update_static_model_loc(config, gen)
+        for gen in ['xl']:
+            update_static_pci_loc(config, gen, rev)
+            update_static_model_loc(config, gen, rev)
+
 
     update_static_card_port_loc(config)
     update_static_mezz_port_loc(config)
@@ -41,6 +43,27 @@ def static_global_config():
         "pci_valid_cards": ["2eth", "2eth40", "2fc", "4fc", "sas", "2ethbaset"],
 
         "pci_config_lookup": {
+            # New x R4
+            "fa-x20r4-fc": ["2ethbaset", None, None, "2fc", None],
+            "fa-x50r4-fc": ["2ethbaset", "4fc", None, None, None],
+            "fa-x70r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-x90r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            
+            "fa-x20r4-eth": ["2ethbaset", None, None, "2eth", None],
+            "fa-x50r4-eth": ["2ethbaset", "2eth", None, "2eth", None],
+            "fa-x70r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-x90r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+
+            # New C R4
+            "fa-c50r4-fc": ["2ethbaset", "4fc", None, None, None],
+            "fa-c70r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-c90r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+
+            "fa-c50r4-eth": ["2ethbaset", "2eth", None, None, None],
+            "fa-c70r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-c90r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+
+
             "fa-x10r3-fc": [None, None, "2fc", None],
             "fa-x20r3-fc": [None, None, "2fc", None],
             "fa-x50r3-fc": ["4fc", None, None, None],
@@ -402,11 +425,17 @@ def update_static_fm_loc(config):
 
 
 
-def update_static_pci_loc(config, generation):
+def update_static_pci_loc(config, generation, revision):
     pci_loc = None
-    if generation == 'x' or generation == 'c':
+    if (generation == 'x' or generation == 'c') and generation < 4:
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
         ct1_y_offset = 378
+
+    # R4
+    elif (generation == 'x' or generation == 'c') and generation == 4:
+        pci_loc = [(679, 80), (1225, 80), (1225, 208), (2067, 80), (2067, 208)]
+        ct1_y_offset = 378
+
 
     elif generation == 'm':
         pci_loc = [(1317, 87), (1317, 201), (2182, 87), (2182, 201)]
@@ -458,7 +487,7 @@ def update_static_nvram_loc(config, generation):
     return config
 
 
-def update_static_mezz_loc(config, generation):
+def update_static_mezz_loc(config, generation, revision):
     key = f'png/pure_fa_{generation}_back.png'
     if key not in config:
         config[key] = {}
