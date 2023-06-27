@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   
@@ -40,7 +41,7 @@ Select the options, then click the Display button at the bottom to load the imag
         <div id="tabs-fa">
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">model:</div>
-            <div class="col-xs-8 col-sm-8"><span data-tooltip="C models now available" id="fa_option_model"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="C & XL models now available" id="fa_option_model"></span></div>
             <br/>
             <br/>
           </div>
@@ -51,7 +52,7 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
             <br/>
           </div>
-          
+          <br/>
 
           <div class="row" id="datapacks">
             <div class="col-xs-4 col-sm-4 option_label">datapacks:</div>
@@ -61,7 +62,25 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
             <br/>
           </div>
-
+          <button id="datapack-chart-button" onclick="$('#datapack-tabs').toggle('hidden');console.log('hello')">Show/Hide Datapack Chart</button>
+          <br/>
+          <div id="datapack-chart" >
+            <!-- button to hide and show datapack-chart div-->
+            
+          <div id="datapack-tabs" hidden="true">
+            <ul>
+              <li><a href="#chassis-dp">Chassis DPs</a></li>
+              <li><a href="#shelf-dp">Shelf DPs</a></li>
+            </ul>
+            <div id="chassis-dp">
+              <!-- Gets filled in by the script, populated from the config.yaml -->
+            </div>
+            <div id="shelf-dp">
+              <!-- Gets filled in by the script, populated from the config.yaml -->
+            </div>
+          </div>
+          <br/>
+          </div>
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">face:</div>
@@ -99,9 +118,6 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
           </div>
           
-
-
-          
           
           <div class="row" id="protocol" hidden="true">
             <div class="col-xs-4 col-sm-4 option_label">protocol:</div>
@@ -111,7 +127,7 @@ Select the options, then click the Display button at the bottom to load the imag
           </div>
 
           <div class="row" id='addoncards' hidden="true">
-            <div class="col-xs-4 col-sm-4 option_label">addoncards:</div>
+            <div class="col-xs-4 col-sm-4 option_label">addoncards :</div>
             <div class="col-xs-8 col-sm-8">
               <p>
                 <a href="#" id='2fc' class="addon_card">
@@ -150,6 +166,25 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
           </div>
           <br/>
+
+          
+          <div class="row" id="pci_dropdowns" hidden="true">
+            <p> Specific PCI Slot Override</p>
+            <div class="col-xs-4 col-sm-4 option_label">PCI:</div>
+            <div class="col-xs-8 col-sm-8" data-tooltip="This will override default cards and addon cards">
+              <span id="pci_select_0">0:</span><br/>
+              <span id="pci_select_1">1:</span><br/>
+              <span id="pci_select_2">2:</span><br/>
+              <span id="pci_select_3">3:</span><br/>
+              <span id="pci_select_4">4:</span><br/>
+              <span id="pci_select_5" hidden="true">5:</span><br/>
+              <span id="pci_select_6" hidden="true">6:</span><br/>
+              <span id="pci_select_7" hidden="true">7:</span><br/>
+              <span id="pci_select_8" hidden="true">8:</span><br/>
+            </div>
+            <br/>
+            <br/>
+          </div>
           
           <div class="row" id="mezz" hidden="true">
             <div class="col-xs-4 col-sm-4 option_label">mezz:</div>
@@ -161,7 +196,7 @@ Select the options, then click the Display button at the bottom to load the imag
 
           <div class="row" id="ports" hidden="false">
             <div class="col-xs-4 col-sm-4 option_label">ports:</div>
-            <div class="col-xs-8 col-sm-8"><span data-tooltip="Put dots on ports" id="fa_option_ports"></span></div>
+            <div class="col-xs-8 col-sm-8"><span data-tooltip="Put icons on ports" id="fa_option_ports"></span></div>
             <br/>
             <br/>
           </div>

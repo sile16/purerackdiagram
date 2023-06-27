@@ -13,15 +13,20 @@ def main():
     update_static_fm_loc(config)
     update_static_model_port_loc(config)
 
-    for gen in ['m', 'x', 'c']:
-        update_static_pci_loc(config, gen)
-        update_static_mezz_loc(config, gen)
-        update_static_model_loc(config, gen)
-        update_static_nvram_loc(config, gen)
+    # it will generate non existent model / revision combinations
+    # but it's okay, we won't ever use them, or when an XL-130r2 comes out
+    # we can go in a add it to the config special cased if necessary.
+    for rev in [1, 2, 3, 4]:
+        for gen in ['m', 'x', 'c']:
+            update_static_pci_loc(config, gen, rev)
+            update_static_mezz_loc(config, gen, rev)
+            update_static_model_loc(config, gen, rev)
+            update_static_nvram_loc(config, gen, rev)
 
-    for gen in ['xl']:
-        update_static_pci_loc(config, gen)
-        update_static_model_loc(config, gen)
+        for gen in ['xl']:
+            update_static_pci_loc(config, gen, rev)
+            update_static_model_loc(config, gen, rev)
+
 
     update_static_card_port_loc(config)
     update_static_mezz_port_loc(config)
@@ -31,12 +36,38 @@ def main():
     with open('purerackdiagram/config.yaml', 'w') as f:
         yaml.dump(config, f, default_flow_style=False)
 
+    with open('ui/config.yaml', 'w') as f:
+        yaml.dump(config, f, default_flow_style=False)
+    
+
 def static_global_config():
     return {
 
-        "pci_valid_cards": ["2eth", "2eth40", "2fc", "4fc", "sas", "2ethbaset"],
+        "pci_valid_cards": ["2eth", "2eth40", "2eth100", "2fc", "4fc", "sas", "2ethbaset", "2eth10gbaset", "dca"],                
+
 
         "pci_config_lookup": {
+            # New x R4
+            "fa-x20r4-fc": ["2ethbaset", None, None, "2fc", None],
+            "fa-x50r4-fc": ["2ethbaset", "4fc", None, None, None],
+            "fa-x70r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-x90r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            
+            "fa-x20r4-eth": ["2ethbaset", None, None, "2eth", None],
+            "fa-x50r4-eth": ["2ethbaset", "2eth", None, "2eth", None],
+            "fa-x70r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-x90r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+
+            # New C R4
+            "fa-c50r4-fc": ["2ethbaset", "4fc", None, None, None],
+            "fa-c70r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-c90r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+
+            "fa-c50r4-eth": ["2ethbaset", "2eth", None, None, None],
+            "fa-c70r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-c90r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+
+
             "fa-x10r3-fc": [None, None, "2fc", None],
             "fa-x20r3-fc": [None, None, "2fc", None],
             "fa-x50r3-fc": ["4fc", None, None, None],
@@ -84,23 +115,47 @@ def static_global_config():
 
         "chassis_dp_size_lookup": {
             "0": ["Blank", "blank", 10, "0"],
+            "0.02": ["Blank", "blank", 2, "0"],
+            "0.04": ["Blank", "blank", 4, "0"],
+            "0.06": ["Blank", "blank", 6, "0"],
+            "0.08": ["Blank", "blank", 8, "0"],
+            "0.10": ["Blank", "blank", 10, "0"],
+            "0.12": ["Blank", "blank", 12, "0"],
+            "0.14": ["Blank", "blank", 14, "0"],
+            "0.16": ["Blank", "blank", 16, "0"],
+            "0.18": ["Blank", "blank", 18, "0"],
+
             "3": ["750GB", "scm", 4, "DM Cache 3"],
             "6": ["750GB", "scm", 8, "DM Cache 6"],
+
             "11": ["1.1TB", "nvme", 10, "11"],
+            "13": ["1.1TB", "nvme", 12, "13"],
+            "15": ["1.1TB", "nvme", 14, "15"],
+            "18": ["1.1TB", "nvme", 16, "18"],
+            "20": ["1.1TB", "nvme", 18, "20"],
+
             "22": ["2.2TB", "nvme", 10, "22"],
+            "27": ["2.2TB", "nvme", 12, "27"],
+            "31": ["2.2TB", "nvme", 14, "31"],
+            "36": ["2.2TB", "nvme", 16, "36"],
+            "40": ["2.2TB", "nvme", 18, "40"],
+
             "45": ["4.5TB", "nvme", 10, "45"],
             "63": ["4.5TB", "nvme", 14, "63"],
             "72": ["4.5TB", "nvme", 16, "72"],
+            "81": ["4.5TB", "nvme", 18, "81"],
+            
             "91": ["9.1TB", "nvme", 10, "91"],
             "109": ["9.1TB", "nvme", 12, "109"],
-            "126": ["4.5TB", "nvme", 24, "126"],
             "127": ["9.1TB", "nvme", 14, "127"],
             "145": ["9.1TB", "nvme", 16, "145"],
+            "164": ["9.1TB", "nvme", 18, "164"],
+
             "183": ["18.3TB", "nvme", 10, "183"],
             "219": ["18.3TB", "nvme", 12, "219"],
-            "254": ["9.1TB", "nvme", 24, "254"],
             "256": ["18.3TB", "nvme", 14, "256"],
             "292": ["18.3TB", "nvme", 16, "292"],
+            "329": ["18.3TB", "nvme", 18, "329"],
 
             # this is legacy //C when we used tlc actually
             "366": ["18.3TB", "nvme-qlc", 20, "366"],
@@ -124,7 +179,7 @@ def static_global_config():
             "494": ["24.7TB", "nvme-qlc", 20, "494"],
 
             # //C 48.2 TB PACKS, added 11/16/2022, new drive size
-            "482": ["48.2TB", "nvme-qlc", 10, "480"],
+            "482": ["48.2TB", "nvme-qlc", 10, "482"],
             "578": ["48.2TB", "nvme-qlc", 12, "578"],
             "674": ["48.2TB", "nvme-qlc", 14, "674"],
             "771": ["48.2TB", "nvme-qlc", 16, "771"],
@@ -142,13 +197,13 @@ def static_global_config():
 
             # SAS PACKS
             "4.8": ["480GB", "sas", 10, "4.8"],
-            "5": ["500GB", "sas", 10, "5"],
+            "5.0": ["500GB", "sas", 10, "5"],
             "9.6": ["960GB", "sas", 10, "9.6"],
-            "10": ["1TB", "sas", 10, "10"],
+            "10.0": ["1TB", "sas", 10, "10"],
             "19.2": ["1.9TB", "sas", 10, "19.2"],
-            "20": ["2TB", "sas", 10, "20"],
-            "38": ["3.8TB", "sas", 10, "38"],
-            "76": ["7.6TB", "sas", 10, "76"]
+            "20.0": ["2TB", "sas", 10, "20"],
+            "38.0": ["3.8TB", "sas", 10, "38"],
+            "76.0": ["7.6TB", "sas", 10, "76"]
         },
 
         "csize_lookup": {
@@ -160,7 +215,6 @@ def static_global_config():
             "1329": "984-345",
             "1390": "366-512-512",
             "1476": "984-492",
-            "1448": "964-674",
             "1531": "494-345/345-345",
             "1574": "984-590",
             "1672": "984-688",
@@ -188,13 +242,48 @@ def static_global_config():
         },
 
         "shelf_dp_size_lookup": {
-            "0": ["Blank", "blank", 12, "0"],
+            "0": ["Blank", "blank", 14, "0"],
+            "0.02": ["Blank", "blank", 2, "0"],
+            "0.04": ["Blank", "blank", 4, "0"],
+            "0.06": ["Blank", "blank", 6, "0"],
+            "0.08": ["Blank", "blank", 8, "0"],
+            "0.10": ["Blank", "blank", 10, "0"],
+            "0.12": ["Blank", "blank", 12, "0"],
+            "0.14": ["Blank", "blank", 14, "0"],
+            "0.16": ["Blank", "blank", 16, "0"],
+            "0.18": ["Blank", "blank", 18, "0"],
+
+            "11": ["1.1TB", "nvme", 10, "11"],
+            "13": ["1.1TB", "nvme", 12, "13"],
             "15": ["1.1TB", "nvme", 14, "15"],
+            "18": ["1.1TB", "nvme", 16, "18"],
+            "20": ["1.1TB", "nvme", 18, "20"],
+
+            "22": ["2.2TB", "nvme", 10, "22"],
+            "27": ["2.2TB", "nvme", 12, "27"],
             "31": ["2.2TB", "nvme", 14, "31"],
+            "36": ["2.2TB", "nvme", 16, "36"],
+            "40": ["2.2TB", "nvme", 18, "40"],
+
+            "45": ["4.5TB", "nvme", 10, "45"],
             "63": ["4.5TB", "nvme", 14, "63"],
+            "72": ["4.5TB", "nvme", 16, "72"],
+            "81": ["4.5TB", "nvme", 18, "81"],
+            
+            "91": ["9.1TB", "nvme", 10, "91"],
+            "109": ["9.1TB", "nvme", 12, "109"],
             "127": ["9.1TB", "nvme", 14, "127"],
+            "145": ["9.1TB", "nvme", 16, "145"],
+            "164": ["9.1TB", "nvme", 18, "164"],
+
+            "183": ["18.3TB", "nvme", 10, "183"],
+            "219": ["18.3TB", "nvme", 12, "219"],
             "256": ["18.3TB", "nvme", 14, "256"],
-           
+            "292": ["18.3TB", "nvme", 16, "292"],
+            "329": ["18.3TB", "nvme", 18, "329"],
+
+
+
              # this is legacy //C when we used tlc actually
             "512": ["18.3TB", "nvme-qlc", 28, "512"],
 
@@ -248,13 +337,14 @@ def static_global_config():
             "1377": ["49.2TB", "nvme-qlc", 28, "1377"],
 
             # SAS Shelves
-            "6": ["256GB", "sas", 24, "6"],
-            "11": ["960GB", "sas", 12, "11"],
-            "12": ["512GB", "sas", 24, "12"],
-            "22": ["1.9TB", "sas", 12, "22"],
-            "24": ["1TB", "sas", 24, "24"],
-            "45": ["3.8TB", "sas", 12, "45"],
-            "90": ["7.6TB", "sas", 12, "90"]
+            # added decimals to old SAS media to avoid conflict with new nvme sizes.
+            "6.1": ["256GB", "sas", 24, "6"],
+            "11.5": ["960GB", "sas", 12, "11"],
+            "12.3": ["512GB", "sas", 24, "12"],
+            "22.8": ["1.9TB", "sas", 12, "23"],
+            "24.0": ["1TB", "sas", 24, "24"],
+            "45.6": ["3.8TB", "sas", 12, "45"],
+            "91.2": ["7.6TB", "sas", 12, "91"]
         },
 
         "fb_blade_reg_pattern": "^([0-9]+:[0-9]+(-[0-9]+)?,?)+$"
@@ -344,16 +434,17 @@ def update_static_fm_loc(config):
             ch0_fm_loc[x] = tuple(loc)
 
     # add chassis
-    key = 'png/pure_fa_x_front.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['fm_loc'] = ch0_fm_loc.copy()
+    for rev in range(1, 5):
+        key = f'png/pure_fa_x_r{rev}_front.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['fm_loc'] = ch0_fm_loc.copy()
 
-    # C is the same:
-    key = 'png/pure_fa_c_front.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['fm_loc'] = ch0_fm_loc.copy()
+        # C is the same:
+        key = f'png/pure_fa_c_r{rev}_front.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['fm_loc'] = ch0_fm_loc.copy()
 
     # nvme shelves are the same:
     key = 'png/pure_fa_nvme_shelf_front.png'
@@ -365,10 +456,11 @@ def update_static_fm_loc(config):
     for x in range(len(ch0_fm_loc)):
         ch0_fm_loc[x] = (ch0_fm_loc[x][0] - 9, ch0_fm_loc[x][1] - 7)
 
-    key = 'png/pure_fa_m_front.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['fm_loc'] = ch0_fm_loc.copy()
+    for rev in range(1, 3):
+        key = f'png/pure_fa_m_r{rev}_front.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['fm_loc'] = ch0_fm_loc.copy()
 
     #################################
     ## FA Chassis Flash Modules for XL
@@ -389,7 +481,7 @@ def update_static_fm_loc(config):
             loc[0] += int(x_offset)
             ch0_fm_loc[x] = tuple(loc)
     
-    key = 'png/pure_fa_xl_front.png'
+    key = 'png/pure_fa_xl_r1_front.png'
     if key not in config:
         config[key] = {}
     config[key]['fm_loc']= ch0_fm_loc.copy()
@@ -398,11 +490,17 @@ def update_static_fm_loc(config):
 
 
 
-def update_static_pci_loc(config, generation):
+def update_static_pci_loc(config, generation, revision):
     pci_loc = None
-    if generation == 'x' or generation == 'c':
+    if (generation == 'x' or generation == 'c') and revision < 4:
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
+        ct1_y_offset = 380
+
+    # R4
+    elif (generation == 'x' or generation == 'c') and revision == 4:
+        pci_loc = [(679, 83), (1225, 83), (1225, 203), (2075, 83), (2075, 203)]
         ct1_y_offset = 378
+
 
     elif generation == 'm':
         pci_loc = [(1317, 87), (1317, 201), (2182, 87), (2182, 201)]
@@ -416,7 +514,7 @@ def update_static_pci_loc(config, generation):
         ct1_y_offset = 480
 
 
-    key = f'png/pure_fa_{generation}_back.png'
+    key = f'png/pure_fa_{generation}_r{revision}_back.png'
     if key not in config:
         config[key] = {}
 
@@ -436,8 +534,8 @@ def update_static_pci_loc(config, generation):
     
 
 
-def update_static_nvram_loc(config, generation):
-    key = f'png/pure_fa_{generation}_front.png'
+def update_static_nvram_loc(config, generation, revision):
+    key = f'png/pure_fa_{generation}_r{revision}_front.png'
     if key not in config:
         config[key] = {}
 
@@ -454,8 +552,8 @@ def update_static_nvram_loc(config, generation):
     return config
 
 
-def update_static_mezz_loc(config, generation):
-    key = f'png/pure_fa_{generation}_back.png'
+def update_static_mezz_loc(config, generation, revision):
+    key = f'png/pure_fa_{generation}_r{revision}_back.png'
     if key not in config:
         config[key] = {}
 
@@ -469,8 +567,8 @@ def update_static_mezz_loc(config, generation):
     
 
 
-def update_static_model_loc(config, generation):
-    key = f'png/pure_fa_{generation}_front.png'
+def update_static_model_loc(config, generation, revision):
+    key = f'png/pure_fa_{generation}_r{revision}_front.png'
     if key not in config:
         config[key] = {}
 
@@ -496,11 +594,18 @@ def update_static_card_port_loc(config):
 
     
     ports_loc = [(158, 40), (256, 40)]
-    keys = [['png/pure_fa_2ethbaset_fh.png', 'eth'],
-            ['png/pure_fa_2ethbaset_hh.png', 'eth'],
-            ['png/pure_fa_2eth_hh.png', 'eth'],
+    keys = [['png/pure_fa_2eth_hh.png', 'eth'],
             ['png/pure_fa_2fc_fh.png', 'fc'],
             ['png/pure_fa_2fc_hh.png', 'fc']]
+
+    for k in keys:
+        add_ports_to_key(ports_loc, k[0], k[1], config)
+
+    ports_loc = [(155, 40), (265, 40)]
+    keys = [['png/pure_fa_2ethbaset_fh.png', 'eth'],
+            ['png/pure_fa_2ethbaset_hh.png', 'eth'],
+            ['png/pure_fa_2eth10gbaset_fh.png', 'eth'],
+            ['png/pure_fa_2eth10gbaset_hh.png', 'eth']]
 
     for k in keys:
         add_ports_to_key(ports_loc, k[0], k[1], config)
@@ -530,43 +635,100 @@ def update_static_model_port_loc(config):
     ## FA Chassis Flash Modules for M / X / C
     ######################
 
+    for rev in [1, 2, 3, 4]:
+        ct0ports = None
+        if rev == 4:
+            ct0ports = [ {'loc': (671, 308),
+                'name': 'ct0.eht0',
+                'port_type': 'eth',
+                'port_connector': 'qsfp28',
+                'port_speeds': ['50g', '100g'],
+                'services': ['shelf'] },
+                {'loc': (786, 308),
+                'port_type': 'eth',
+                'port_connector': 'qsfp28',
+                'port_speeds': ['50g', '100g'],
+                'name': 'ct0.eht1',
+                'services': ['shelf']},
+                {'loc': (902, 308),
+                'port_type': 'eth',
+                'port_connector': 'qsfp',
+                'port_speeds': ['10g', '25g'],
+                'name': 'ct0.eht2',
+                'services': ['iSCSI', 'replication', 'file']},
+                {'loc': (990, 308),
+                'port_type': 'eth',
+                'port_connector': 'qsfp',
+                'port_speeds': ['10g', '25g'],
+                'services': ['iSCSI', 'replication', 'file'],
+                'name': 'ct0.eth3'},
+                {'loc': (1945, 220),
+                'port_type': 'eth',
+                'port_connector': 'rj45',
+                'port_speeds': ['1g'],
+                'services': ['management'],
+                'name': 'ct0.eth4'} ]
+        else:
+        # These are all the ct0 ports
+            ct0ports = [
+            {'loc': (671, 316),
+            'port_type': 'eth',
+            'name': 'ct0.eht0'},
+            {'loc': (788, 316),
+            'port_type': 'eth',
+            'name': 'ct0.eht1'},
+            {'loc': (1880, 221),
+            'port_type': 'eth',
+            'name': 'ct0.eht2'},
+            {'loc': (1880, 293),
+            'port_type': 'eth',
+            'name': 'ct0.eth3'},
+            {'loc': (1965, 221),
+            'port_type': 'eth',
+            'name': 'ct0.eth4'},
+            {'loc': (1965, 293),
+            'port_type': 'eth',
+            'name': 'ct0.eth5'}]
 
-    # These are all the ct0 ports
-    ct0ports = [
-        {'loc': (671, 316),
-         'port_type': 'eth',
-         'name': 'ct0.eht0'},
-        {'loc': (788, 316),
-         'port_type': 'eth',
-         'name': 'ct0.eht1'},
-        {'loc': (1880, 221),
-         'port_type': 'eth',
-         'name': 'ct0.eht2'},
-        {'loc': (1880, 293),
-         'port_type': 'eth',
-         'name': 'ct0.eth3'},
-        {'loc': (1965, 221),
-         'port_type': 'eth',
-         'name': 'ct0.eth4'},
-        {'loc': (1965, 293),
-         'port_type': 'eth',
-         'name': 'ct0.eth5'}]
+        ct1ports = []
+        for p in ct0ports:
+            loc = (p['loc'][0], p['loc'][1] + 380)
+            name = p['name'].replace('ct0', 'ct1')
+            ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
 
-    ct1ports = []
-    for p in ct0ports:
-        loc = (p['loc'][0], p['loc'][1] + 380)
-        name = p['name'].replace('ct0', 'ct1')
-        ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+        key = f'png/pure_fa_x_r{rev}_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ct0ports + ct1ports
 
-    key = 'png/pure_fa_x_back.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['ports'] = ct0ports + ct1ports
+        key = f'png/pure_fa_c_r{rev}_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ct0ports + ct1ports
 
-    key = 'png/pure_fa_c_back.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['ports'] = ct0ports + ct1ports
+        #################################
+        ## FA Chassis Flash Modules for XL
+        ######################
+
+        ct0ports = [
+            {'loc': (846, 704),
+            'port_type': 'eth',
+            'name': 'ct0.eht0'},
+            {'loc': (964, 704),
+            'port_type': 'eth',
+            'name': 'ct0.eht1'}]
+
+        ct1ports = []
+        for p in ct0ports:
+            loc = (p['loc'][0], p['loc'][1] + 493)
+            name = p['name'].replace('ct0', 'ct1')
+            ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+
+
+        key = 'png/pure_fa_xl_r1_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ct0ports + ct1ports
 
     ##########################
     # NVME Shelf BAck
@@ -601,29 +763,7 @@ def update_static_model_port_loc(config):
     config[key]['ports'] = ct0ports + ct1ports
 
 
-    #################################
-    ## FA Chassis Flash Modules for XL
-    ######################
 
-    ct0ports = [
-        {'loc': (846, 704),
-         'port_type': 'eth',
-         'name': 'ct0.eht0'},
-        {'loc': (964, 704),
-         'port_type': 'eth',
-         'name': 'ct0.eht1'}]
-
-    ct1ports = []
-    for p in ct0ports:
-        loc = (p['loc'][0], p['loc'][1] + 493)
-        name = p['name'].replace('ct0', 'ct1')
-        ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
-
-
-    key = 'png/pure_fa_xl_back.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['ports'] = ct0ports + ct1ports
 
 
 

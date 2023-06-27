@@ -162,7 +162,7 @@ class FAChassis():
     async def get_image(self):
         # build the image
         c = self.config
-        key = "png/pure_fa_{}".format(c["generation"])
+        key = "png/pure_fa_{}_r{}".format(c["generation"], c['release'])
 
         if c["face"] == "front" and c["bezel"]:
             key += "_bezel.png"
@@ -225,9 +225,16 @@ class FAChassis():
         await asyncio.gather(*tasks)
 
     async def add_card(self, slot, card_type):
+        # todo: add this model specific info to the config.yaml
 
         if self.config['generation'] == 'xl':
             if slot in [2, 3]:
+                height = "fh"
+            else:
+                height = "hh"
+        elif (self.config['generation'] == 'c' or self.config['generation'] == 'x') and self.config['release'] == 4:
+
+            if slot in [1, 2]:
                 height = "fh"
             else:
                 height = "hh"
@@ -256,6 +263,9 @@ class FAChassis():
 
     async def add_mezz(self):
         if self.config["generation"] == "xl":
+            return
+        
+        if self.config["release"] == 4:
             return
 
         if self.config['mezz']:
@@ -454,6 +464,9 @@ class FADiagram():
                 if config["generation"] == 'xl':
                     fh_order = [2, 3]
                     hh_order = [0, 1, 4, 6, 7, 8]
+                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4:
+                    fh_order = [1, 2]
+                    hh_order = [0, 3, 4]
                 else:
                     fh_order = [0, 1]
                     hh_order = [2, 0, 1, 3]
