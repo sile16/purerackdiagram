@@ -4,7 +4,52 @@ chassis_dp_size_lookup:
   - blank
   - 10
   - '0'
-  '10':
+  '0.02':
+  - Blank
+  - blank
+  - 2
+  - '0'
+  '0.04':
+  - Blank
+  - blank
+  - 4
+  - '0'
+  '0.06':
+  - Blank
+  - blank
+  - 6
+  - '0'
+  '0.08':
+  - Blank
+  - blank
+  - 8
+  - '0'
+  '0.10':
+  - Blank
+  - blank
+  - 10
+  - '0'
+  '0.12':
+  - Blank
+  - blank
+  - 12
+  - '0'
+  '0.14':
+  - Blank
+  - blank
+  - 14
+  - '0'
+  '0.16':
+  - Blank
+  - blank
+  - 16
+  - '0'
+  '0.18':
+  - Blank
+  - blank
+  - 18
+  - '0'
+  '10.0':
   - 1TB
   - sas
   - 10
@@ -19,21 +64,36 @@ chassis_dp_size_lookup:
   - nvme
   - 10
   - '11'
-  '126':
-  - 4.5TB
-  - nvme
-  - 24
-  - '126'
   '127':
   - 9.1TB
   - nvme
   - 14
   - '127'
+  '13':
+  - 1.1TB
+  - nvme
+  - 12
+  - '13'
   '145':
   - 9.1TB
   - nvme
   - 16
   - '145'
+  '15':
+  - 1.1TB
+  - nvme
+  - 14
+  - '15'
+  '164':
+  - 9.1TB
+  - nvme
+  - 18
+  - '164'
+  '18':
+  - 1.1TB
+  - nvme
+  - 16
+  - '18'
   '183':
   - 18.3TB
   - nvme
@@ -45,6 +105,11 @@ chassis_dp_size_lookup:
   - 10
   - '19.2'
   '20':
+  - 1.1TB
+  - nvme
+  - 18
+  - '20'
+  '20.0':
   - 2TB
   - sas
   - 10
@@ -69,16 +134,16 @@ chassis_dp_size_lookup:
   - nvme-qlc
   - 10
   - '247'
-  '254':
-  - 9.1TB
-  - nvme
-  - 24
-  - '254'
   '256':
   - 18.3TB
   - nvme
   - 14
   - '256'
+  '27':
+  - 2.2TB
+  - nvme
+  - 12
+  - '27'
   '288':
   - 24.0TB
   - nvme-qlc
@@ -99,6 +164,16 @@ chassis_dp_size_lookup:
   - scm
   - 4
   - DM Cache 3
+  '31':
+  - 2.2TB
+  - nvme
+  - 14
+  - '31'
+  '329':
+  - 18.3TB
+  - nvme
+  - 18
+  - '329'
   '336':
   - 24.0TB
   - nvme-qlc
@@ -109,12 +184,17 @@ chassis_dp_size_lookup:
   - nvme-qlc
   - 14
   - '345'
+  '36':
+  - 2.2TB
+  - nvme
+  - 16
+  - '36'
   '366':
   - 18.3TB
   - nvme-qlc
   - 20
   - '366'
-  '38':
+  '38.0':
   - 3.8TB
   - sas
   - 10
@@ -134,6 +214,11 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '4.8'
+  '40':
+  - 2.2TB
+  - nvme
+  - 18
+  - '40'
   '432':
   - 24.0TB
   - nvme-qlc
@@ -169,7 +254,7 @@ chassis_dp_size_lookup:
   - nvme-qlc
   - 20
   - '494'
-  '5':
+  '5.0':
   - 500GB
   - sas
   - 10
@@ -209,7 +294,7 @@ chassis_dp_size_lookup:
   - nvme
   - 16
   - '72'
-  '76':
+  '76.0':
   - 7.6TB
   - sas
   - 10
@@ -224,6 +309,11 @@ chassis_dp_size_lookup:
   - nvme-qlc
   - 16
   - '787'
+  '81':
+  - 4.5TB
+  - nvme
+  - 18
+  - '81'
   '867':
   - 48.2TB
   - nvme-qlc
@@ -600,10 +690,29 @@ pci_config_lookup:
 pci_valid_cards:
 - 2eth
 - 2eth40
+- 2eth100
 - 2fc
 - 4fc
 - sas
 - 2ethbaset
+- 2eth10gbaset
+- dca
+png/pure_fa_2eth10gbaset_fh.png:
+  ports:
+  - loc: &id001 !!python/tuple
+    - 155
+    - 40
+    port_type: eth
+  - loc: &id002 !!python/tuple
+    - 265
+    - 40
+    port_type: eth
+png/pure_fa_2eth10gbaset_hh.png:
+  ports:
+  - loc: *id001
+    port_type: eth
+  - loc: *id002
+    port_type: eth
 png/pure_fa_2eth40_fh.png:
   ports:
   - loc: !!python/tuple
@@ -626,11 +735,11 @@ png/pure_fa_2eth40_hh.png:
     port_type: eth
 png/pure_fa_2eth_hh.png:
   ports:
-  - loc: &id001 !!python/tuple
+  - loc: &id003 !!python/tuple
     - 158
     - 40
     port_type: eth
-  - loc: &id002 !!python/tuple
+  - loc: &id004 !!python/tuple
     - 256
     - 40
     port_type: eth
@@ -648,15 +757,15 @@ png/pure_fa_2ethbaset_hh.png:
     port_type: eth
 png/pure_fa_2fc_fh.png:
   ports:
-  - loc: *id001
+  - loc: *id003
     port_type: fc
-  - loc: *id002
+  - loc: *id004
     port_type: fc
 png/pure_fa_2fc_hh.png:
   ports:
-  - loc: *id001
+  - loc: *id003
     port_type: fc
-  - loc: *id002
+  - loc: *id004
     port_type: fc
 png/pure_fa_4fc_fh.png:
   ports:
@@ -678,128 +787,22 @@ png/pure_fa_4fc_fh.png:
     port_type: fc
 png/pure_fa_4fc_hh.png:
   ports:
-  - loc: &id055 !!python/tuple
+  - loc: &id085 !!python/tuple
     - 48
     - 40
     port_type: fc
-  - loc: &id056 !!python/tuple
+  - loc: &id086 !!python/tuple
     - 138
     - 40
     port_type: fc
-  - loc: &id057 !!python/tuple
+  - loc: &id087 !!python/tuple
     - 230
     - 40
     port_type: fc
-  - loc: &id058 !!python/tuple
+  - loc: &id088 !!python/tuple
     - 322
     - 40
     port_type: fc
-png/pure_fa_c_1_front.png:
-  nvram_loc:
-  - &id003 !!python/tuple
-    - 1263
-    - 28
-  - &id004 !!python/tuple
-    - 1813
-    - 28
-png/pure_fa_c_2_front.png:
-  nvram_loc:
-  - *id003
-  - *id004
-png/pure_fa_c_3_front.png:
-  nvram_loc:
-  - *id003
-  - *id004
-png/pure_fa_c_4_front.png:
-  nvram_loc:
-  - *id003
-  - *id004
-png/pure_fa_c_front.png:
-  fm_loc:
-  - &id027 !!python/tuple
-    - 165
-    - 250
-  - &id028 !!python/tuple
-    - 270
-    - 250
-  - &id029 !!python/tuple
-    - 375
-    - 250
-  - &id030 !!python/tuple
-    - 480
-    - 250
-  - &id031 !!python/tuple
-    - 714
-    - 250
-  - &id032 !!python/tuple
-    - 819
-    - 250
-  - &id033 !!python/tuple
-    - 924
-    - 250
-  - &id034 !!python/tuple
-    - 1029
-    - 250
-  - &id035 !!python/tuple
-    - 1265
-    - 250
-  - &id036 !!python/tuple
-    - 1370
-    - 250
-  - &id037 !!python/tuple
-    - 1475
-    - 250
-  - &id038 !!python/tuple
-    - 1580
-    - 250
-  - &id039 !!python/tuple
-    - 1817
-    - 250
-  - &id040 !!python/tuple
-    - 1922
-    - 250
-  - &id041 !!python/tuple
-    - 2027
-    - 250
-  - &id042 !!python/tuple
-    - 2132
-    - 250
-  - &id043 !!python/tuple
-    - 2237
-    - 250
-  - &id044 !!python/tuple
-    - 2342
-    - 250
-  - &id045 !!python/tuple
-    - 2447
-    - 250
-  - &id046 !!python/tuple
-    - 2552
-    - 250
-  - &id047 !!python/tuple
-    - 164
-    - 27
-  - &id048 !!python/tuple
-    - 164
-    - 132
-  - &id049 !!python/tuple
-    - 714
-    - 27
-  - &id050 !!python/tuple
-    - 714
-    - 132
-  - &id051 !!python/tuple
-    - 1264
-    - 27
-  - &id052 !!python/tuple
-    - 1264
-    - 132
-  - &id053 !!python/tuple
-    - 1814
-    - 27
-  - &id054 !!python/tuple
-    - 1814
-    - 132
 png/pure_fa_c_r1_back.png:
   ct0_mezz_loc: &id005 !!python/tuple
   - 585
@@ -834,82 +837,174 @@ png/pure_fa_c_r1_back.png:
     - 2069
     - 583
   ports:
-  - &id059
+  - &id089
     loc: &id011 !!python/tuple
     - 671
     - 316
     name: ct0.eht0
     port_type: eth
-  - &id060
+  - &id090
     loc: &id012 !!python/tuple
     - 788
     - 316
     name: ct0.eht1
     port_type: eth
-  - &id061
+  - &id091
     loc: &id013 !!python/tuple
     - 1880
     - 221
     name: ct0.eht2
     port_type: eth
-  - &id062
+  - &id092
     loc: &id014 !!python/tuple
     - 1880
     - 293
     name: ct0.eth3
     port_type: eth
-  - &id063
+  - &id093
     loc: &id015 !!python/tuple
     - 1965
     - 221
     name: ct0.eth4
     port_type: eth
-  - &id064
+  - &id094
     loc: &id016 !!python/tuple
     - 1965
     - 293
     name: ct0.eth5
     port_type: eth
-  - &id065
+  - &id095
     loc: !!python/tuple
     - 671
     - 696
     name: ct1.eht0
     port_type: eth
-  - &id066
+  - &id096
     loc: !!python/tuple
     - 788
     - 696
     name: ct1.eht1
     port_type: eth
-  - &id067
+  - &id097
     loc: !!python/tuple
     - 1880
     - 601
     name: ct1.eht2
     port_type: eth
-  - &id068
+  - &id098
     loc: !!python/tuple
     - 1880
     - 673
     name: ct1.eth3
     port_type: eth
-  - &id069
+  - &id099
     loc: !!python/tuple
     - 1965
     - 601
     name: ct1.eth4
     port_type: eth
-  - &id070
+  - &id100
     loc: !!python/tuple
     - 1965
     - 673
     name: ct1.eth5
     port_type: eth
 png/pure_fa_c_r1_front.png:
-  model_text_loc: &id017 !!python/tuple
+  fm_loc:
+  - &id017 !!python/tuple
+    - 165
+    - 250
+  - &id018 !!python/tuple
+    - 270
+    - 250
+  - &id019 !!python/tuple
+    - 375
+    - 250
+  - &id020 !!python/tuple
+    - 480
+    - 250
+  - &id021 !!python/tuple
+    - 714
+    - 250
+  - &id022 !!python/tuple
+    - 819
+    - 250
+  - &id023 !!python/tuple
+    - 924
+    - 250
+  - &id024 !!python/tuple
+    - 1029
+    - 250
+  - &id025 !!python/tuple
+    - 1265
+    - 250
+  - &id026 !!python/tuple
+    - 1370
+    - 250
+  - &id027 !!python/tuple
+    - 1475
+    - 250
+  - &id028 !!python/tuple
+    - 1580
+    - 250
+  - &id029 !!python/tuple
+    - 1817
+    - 250
+  - &id030 !!python/tuple
+    - 1922
+    - 250
+  - &id031 !!python/tuple
+    - 2027
+    - 250
+  - &id032 !!python/tuple
+    - 2132
+    - 250
+  - &id033 !!python/tuple
+    - 2237
+    - 250
+  - &id034 !!python/tuple
+    - 2342
+    - 250
+  - &id035 !!python/tuple
+    - 2447
+    - 250
+  - &id036 !!python/tuple
+    - 2552
+    - 250
+  - &id037 !!python/tuple
+    - 164
+    - 27
+  - &id038 !!python/tuple
+    - 164
+    - 132
+  - &id039 !!python/tuple
+    - 714
+    - 27
+  - &id040 !!python/tuple
+    - 714
+    - 132
+  - &id041 !!python/tuple
+    - 1264
+    - 27
+  - &id042 !!python/tuple
+    - 1264
+    - 132
+  - &id043 !!python/tuple
+    - 1814
+    - 27
+  - &id044 !!python/tuple
+    - 1814
+    - 132
+  model_text_loc: &id045 !!python/tuple
   - 2759
   - 83
+  nvram_loc:
+  - &id046 !!python/tuple
+    - 1263
+    - 28
+  - &id047 !!python/tuple
+    - 1813
+    - 28
 png/pure_fa_c_r2_back.png:
   ct0_mezz_loc: *id005
   ct0_pci_loc:
@@ -932,68 +1027,100 @@ png/pure_fa_c_r2_back.png:
     - 2069
     - 583
   ports:
-  - &id071
+  - &id101
     loc: *id011
     name: ct0.eht0
     port_type: eth
-  - &id072
+  - &id102
     loc: *id012
     name: ct0.eht1
     port_type: eth
-  - &id073
+  - &id103
     loc: *id013
     name: ct0.eht2
     port_type: eth
-  - &id074
+  - &id104
     loc: *id014
     name: ct0.eth3
     port_type: eth
-  - &id075
+  - &id105
     loc: *id015
     name: ct0.eth4
     port_type: eth
-  - &id076
+  - &id106
     loc: *id016
     name: ct0.eth5
     port_type: eth
-  - &id077
+  - &id107
     loc: !!python/tuple
     - 671
     - 696
     name: ct1.eht0
     port_type: eth
-  - &id078
+  - &id108
     loc: !!python/tuple
     - 788
     - 696
     name: ct1.eht1
     port_type: eth
-  - &id079
+  - &id109
     loc: !!python/tuple
     - 1880
     - 601
     name: ct1.eht2
     port_type: eth
-  - &id080
+  - &id110
     loc: !!python/tuple
     - 1880
     - 673
     name: ct1.eth3
     port_type: eth
-  - &id081
+  - &id111
     loc: !!python/tuple
     - 1965
     - 601
     name: ct1.eth4
     port_type: eth
-  - &id082
+  - &id112
     loc: !!python/tuple
     - 1965
     - 673
     name: ct1.eth5
     port_type: eth
 png/pure_fa_c_r2_front.png:
-  model_text_loc: *id017
+  fm_loc:
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  model_text_loc: *id045
+  nvram_loc:
+  - *id046
+  - *id047
 png/pure_fa_c_r3_back.png:
   ct0_mezz_loc: *id005
   ct0_pci_loc:
@@ -1016,84 +1143,116 @@ png/pure_fa_c_r3_back.png:
     - 2069
     - 583
   ports:
-  - &id083
+  - &id113
     loc: *id011
     name: ct0.eht0
     port_type: eth
-  - &id084
+  - &id114
     loc: *id012
     name: ct0.eht1
     port_type: eth
-  - &id085
+  - &id115
     loc: *id013
     name: ct0.eht2
     port_type: eth
-  - &id086
+  - &id116
     loc: *id014
     name: ct0.eth3
     port_type: eth
-  - &id087
+  - &id117
     loc: *id015
     name: ct0.eth4
     port_type: eth
-  - &id088
+  - &id118
     loc: *id016
     name: ct0.eth5
     port_type: eth
-  - &id089
+  - &id119
     loc: !!python/tuple
     - 671
     - 696
     name: ct1.eht0
     port_type: eth
-  - &id090
+  - &id120
     loc: !!python/tuple
     - 788
     - 696
     name: ct1.eht1
     port_type: eth
-  - &id091
+  - &id121
     loc: !!python/tuple
     - 1880
     - 601
     name: ct1.eht2
     port_type: eth
-  - &id092
+  - &id122
     loc: !!python/tuple
     - 1880
     - 673
     name: ct1.eth3
     port_type: eth
-  - &id093
+  - &id123
     loc: !!python/tuple
     - 1965
     - 601
     name: ct1.eth4
     port_type: eth
-  - &id094
+  - &id124
     loc: !!python/tuple
     - 1965
     - 673
     name: ct1.eth5
     port_type: eth
 png/pure_fa_c_r3_front.png:
-  model_text_loc: *id017
+  fm_loc:
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  model_text_loc: *id045
+  nvram_loc:
+  - *id046
+  - *id047
 png/pure_fa_c_r4_back.png:
   ct0_mezz_loc: *id005
   ct0_pci_loc:
-  - &id095 !!python/tuple
+  - &id125 !!python/tuple
     - 679
     - 83
-  - &id096 !!python/tuple
+  - &id126 !!python/tuple
     - 1225
     - 83
-  - &id097 !!python/tuple
+  - &id127 !!python/tuple
     - 1225
     - 203
-  - &id098 !!python/tuple
+  - &id128 !!python/tuple
     - 2075
     - 83
-  - &id099 !!python/tuple
+  - &id129 !!python/tuple
     - 2075
     - 203
   ct1_mezz_loc: *id010
@@ -1114,7 +1273,7 @@ png/pure_fa_c_r4_back.png:
     - 2075
     - 581
   ports:
-  - &id100
+  - &id130
     loc: !!python/tuple
     - 671
     - 308
@@ -1126,7 +1285,7 @@ png/pure_fa_c_r4_back.png:
     port_type: eth
     services:
     - shelf
-  - &id101
+  - &id131
     loc: !!python/tuple
     - 786
     - 308
@@ -1138,7 +1297,7 @@ png/pure_fa_c_r4_back.png:
     port_type: eth
     services:
     - shelf
-  - &id102
+  - &id132
     loc: !!python/tuple
     - 902
     - 308
@@ -1152,7 +1311,7 @@ png/pure_fa_c_r4_back.png:
     - iSCSI
     - replication
     - file
-  - &id103
+  - &id133
     loc: !!python/tuple
     - 990
     - 308
@@ -1166,7 +1325,7 @@ png/pure_fa_c_r4_back.png:
     - iSCSI
     - replication
     - file
-  - &id104
+  - &id134
     loc: !!python/tuple
     - 1945
     - 220
@@ -1177,162 +1336,88 @@ png/pure_fa_c_r4_back.png:
     port_type: eth
     services:
     - management
-  - &id105
+  - &id135
     loc: !!python/tuple
     - 671
     - 688
     name: ct1.eht0
     port_type: eth
-  - &id106
+  - &id136
     loc: !!python/tuple
     - 786
     - 688
     name: ct1.eht1
     port_type: eth
-  - &id107
+  - &id137
     loc: !!python/tuple
     - 902
     - 688
     name: ct1.eht2
     port_type: eth
-  - &id108
+  - &id138
     loc: !!python/tuple
     - 990
     - 688
     name: ct1.eth3
     port_type: eth
-  - &id109
+  - &id139
     loc: !!python/tuple
     - 1945
     - 600
     name: ct1.eth4
     port_type: eth
 png/pure_fa_c_r4_front.png:
-  model_text_loc: *id017
-png/pure_fa_m_1_front.png:
-  nvram_loc:
-  - &id018 !!python/tuple
-    - 1255
-    - 20
-  - &id019 !!python/tuple
-    - 1805
-    - 20
-png/pure_fa_m_2_front.png:
-  nvram_loc:
-  - *id018
-  - *id019
-png/pure_fa_m_3_front.png:
-  nvram_loc:
-  - *id018
-  - *id019
-png/pure_fa_m_4_front.png:
-  nvram_loc:
-  - *id018
-  - *id019
-png/pure_fa_m_front.png:
   fm_loc:
-  - !!python/tuple
-    - 156
-    - 243
-  - !!python/tuple
-    - 261
-    - 243
-  - !!python/tuple
-    - 366
-    - 243
-  - !!python/tuple
-    - 471
-    - 243
-  - !!python/tuple
-    - 705
-    - 243
-  - !!python/tuple
-    - 810
-    - 243
-  - !!python/tuple
-    - 915
-    - 243
-  - !!python/tuple
-    - 1020
-    - 243
-  - !!python/tuple
-    - 1256
-    - 243
-  - !!python/tuple
-    - 1361
-    - 243
-  - !!python/tuple
-    - 1466
-    - 243
-  - !!python/tuple
-    - 1571
-    - 243
-  - !!python/tuple
-    - 1808
-    - 243
-  - !!python/tuple
-    - 1913
-    - 243
-  - !!python/tuple
-    - 2018
-    - 243
-  - !!python/tuple
-    - 2123
-    - 243
-  - !!python/tuple
-    - 2228
-    - 243
-  - !!python/tuple
-    - 2333
-    - 243
-  - !!python/tuple
-    - 2438
-    - 243
-  - !!python/tuple
-    - 2543
-    - 243
-  - !!python/tuple
-    - 155
-    - 20
-  - !!python/tuple
-    - 155
-    - 125
-  - !!python/tuple
-    - 705
-    - 20
-  - !!python/tuple
-    - 705
-    - 125
-  - !!python/tuple
-    - 1255
-    - 20
-  - !!python/tuple
-    - 1255
-    - 125
-  - !!python/tuple
-    - 1805
-    - 20
-  - !!python/tuple
-    - 1805
-    - 125
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  model_text_loc: *id045
+  nvram_loc:
+  - *id046
+  - *id047
 png/pure_fa_m_r1_back.png:
-  ct0_mezz_loc: &id020 !!python/tuple
+  ct0_mezz_loc: &id048 !!python/tuple
   - 709
   - 44
   ct0_pci_loc:
-  - &id021 !!python/tuple
+  - &id049 !!python/tuple
     - 1317
     - 87
-  - &id022 !!python/tuple
+  - &id050 !!python/tuple
     - 1317
     - 201
-  - &id023 !!python/tuple
+  - &id051 !!python/tuple
     - 2182
     - 87
-  - &id024 !!python/tuple
+  - &id052 !!python/tuple
     - 2182
     - 201
-  ct1_mezz_loc: &id025 !!python/tuple
+  ct1_mezz_loc: &id053 !!python/tuple
   - 709
   - 421
   ct1_pci_loc:
@@ -1349,17 +1434,109 @@ png/pure_fa_m_r1_back.png:
     - 2182
     - 579
 png/pure_fa_m_r1_front.png:
-  model_text_loc: &id026 !!python/tuple
+  fm_loc:
+  - &id054 !!python/tuple
+    - 156
+    - 243
+  - &id055 !!python/tuple
+    - 261
+    - 243
+  - &id056 !!python/tuple
+    - 366
+    - 243
+  - &id057 !!python/tuple
+    - 471
+    - 243
+  - &id058 !!python/tuple
+    - 705
+    - 243
+  - &id059 !!python/tuple
+    - 810
+    - 243
+  - &id060 !!python/tuple
+    - 915
+    - 243
+  - &id061 !!python/tuple
+    - 1020
+    - 243
+  - &id062 !!python/tuple
+    - 1256
+    - 243
+  - &id063 !!python/tuple
+    - 1361
+    - 243
+  - &id064 !!python/tuple
+    - 1466
+    - 243
+  - &id065 !!python/tuple
+    - 1571
+    - 243
+  - &id066 !!python/tuple
+    - 1808
+    - 243
+  - &id067 !!python/tuple
+    - 1913
+    - 243
+  - &id068 !!python/tuple
+    - 2018
+    - 243
+  - &id069 !!python/tuple
+    - 2123
+    - 243
+  - &id070 !!python/tuple
+    - 2228
+    - 243
+  - &id071 !!python/tuple
+    - 2333
+    - 243
+  - &id072 !!python/tuple
+    - 2438
+    - 243
+  - &id073 !!python/tuple
+    - 2543
+    - 243
+  - &id074 !!python/tuple
+    - 155
+    - 20
+  - &id075 !!python/tuple
+    - 155
+    - 125
+  - &id076 !!python/tuple
+    - 705
+    - 20
+  - &id077 !!python/tuple
+    - 705
+    - 125
+  - &id078 !!python/tuple
+    - 1255
+    - 20
+  - &id079 !!python/tuple
+    - 1255
+    - 125
+  - &id080 !!python/tuple
+    - 1805
+    - 20
+  - &id081 !!python/tuple
+    - 1805
+    - 125
+  model_text_loc: &id082 !!python/tuple
   - 2745
   - 120
+  nvram_loc:
+  - &id083 !!python/tuple
+    - 1255
+    - 20
+  - &id084 !!python/tuple
+    - 1805
+    - 20
 png/pure_fa_m_r2_back.png:
-  ct0_mezz_loc: *id020
+  ct0_mezz_loc: *id048
   ct0_pci_loc:
-  - *id021
-  - *id022
-  - *id023
-  - *id024
-  ct1_mezz_loc: *id025
+  - *id049
+  - *id050
+  - *id051
+  - *id052
+  ct1_mezz_loc: *id053
   ct1_pci_loc:
   - !!python/tuple
     - 1317
@@ -1374,15 +1551,47 @@ png/pure_fa_m_r2_back.png:
     - 2182
     - 579
 png/pure_fa_m_r2_front.png:
-  model_text_loc: *id026
+  fm_loc:
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  - *id080
+  - *id081
+  model_text_loc: *id082
+  nvram_loc:
+  - *id083
+  - *id084
 png/pure_fa_m_r3_back.png:
-  ct0_mezz_loc: *id020
+  ct0_mezz_loc: *id048
   ct0_pci_loc:
-  - *id021
-  - *id022
-  - *id023
-  - *id024
-  ct1_mezz_loc: *id025
+  - *id049
+  - *id050
+  - *id051
+  - *id052
+  ct1_mezz_loc: *id053
   ct1_pci_loc:
   - !!python/tuple
     - 1317
@@ -1397,15 +1606,18 @@ png/pure_fa_m_r3_back.png:
     - 2182
     - 579
 png/pure_fa_m_r3_front.png:
-  model_text_loc: *id026
+  model_text_loc: *id082
+  nvram_loc:
+  - *id083
+  - *id084
 png/pure_fa_m_r4_back.png:
-  ct0_mezz_loc: *id020
+  ct0_mezz_loc: *id048
   ct0_pci_loc:
-  - *id021
-  - *id022
-  - *id023
-  - *id024
-  ct1_mezz_loc: *id025
+  - *id049
+  - *id050
+  - *id051
+  - *id052
+  ct1_mezz_loc: *id053
   ct1_pci_loc:
   - !!python/tuple
     - 1317
@@ -1420,7 +1632,10 @@ png/pure_fa_m_r4_back.png:
     - 2182
     - 579
 png/pure_fa_m_r4_front.png:
-  model_text_loc: *id026
+  model_text_loc: *id082
+  nvram_loc:
+  - *id083
+  - *id084
 png/pure_fa_nvme_shelf_back.png:
   ports:
   - loc: !!python/tuple
@@ -1475,6 +1690,16 @@ png/pure_fa_nvme_shelf_back.png:
     port_type: eth
 png/pure_fa_nvme_shelf_front.png:
   fm_loc:
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
   - *id027
   - *id028
   - *id029
@@ -1493,25 +1718,15 @@ png/pure_fa_nvme_shelf_front.png:
   - *id042
   - *id043
   - *id044
-  - *id045
-  - *id046
-  - *id047
-  - *id048
-  - *id049
-  - *id050
-  - *id051
-  - *id052
-  - *id053
-  - *id054
 png/pure_fa_sas_hh.png:
   ports:
-  - loc: *id055
+  - loc: *id085
     port_type: sas
-  - loc: *id056
+  - loc: *id086
     port_type: sas
-  - loc: *id057
+  - loc: *id087
     port_type: sas
-  - loc: *id058
+  - loc: *id088
     port_type: sas
 png/pure_fa_sas_shelf_front.png:
   fm_loc:
@@ -1587,22 +1802,6 @@ png/pure_fa_sas_shelf_front.png:
   - !!python/tuple
     - 2605
     - 1
-png/pure_fa_x_1_front.png:
-  nvram_loc:
-  - *id003
-  - *id004
-png/pure_fa_x_2_front.png:
-  nvram_loc:
-  - *id003
-  - *id004
-png/pure_fa_x_3_front.png:
-  nvram_loc:
-  - *id003
-  - *id004
-png/pure_fa_x_4_front.png:
-  nvram_loc:
-  - *id003
-  - *id004
 png/pure_fa_x_emezz.png:
   ports:
   - loc: !!python/tuple
@@ -1621,36 +1820,6 @@ png/pure_fa_x_emezz.png:
     - 396
     - 112
     port_type: nvme
-png/pure_fa_x_front.png:
-  fm_loc:
-  - *id027
-  - *id028
-  - *id029
-  - *id030
-  - *id031
-  - *id032
-  - *id033
-  - *id034
-  - *id035
-  - *id036
-  - *id037
-  - *id038
-  - *id039
-  - *id040
-  - *id041
-  - *id042
-  - *id043
-  - *id044
-  - *id045
-  - *id046
-  - *id047
-  - *id048
-  - *id049
-  - *id050
-  - *id051
-  - *id052
-  - *id053
-  - *id054
 png/pure_fa_x_r1_back.png:
   ct0_mezz_loc: *id005
   ct0_pci_loc:
@@ -1673,20 +1842,52 @@ png/pure_fa_x_r1_back.png:
     - 2069
     - 583
   ports:
-  - *id059
-  - *id060
-  - *id061
-  - *id062
-  - *id063
-  - *id064
-  - *id065
-  - *id066
-  - *id067
-  - *id068
-  - *id069
-  - *id070
+  - *id089
+  - *id090
+  - *id091
+  - *id092
+  - *id093
+  - *id094
+  - *id095
+  - *id096
+  - *id097
+  - *id098
+  - *id099
+  - *id100
 png/pure_fa_x_r1_front.png:
-  model_text_loc: *id017
+  fm_loc:
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  model_text_loc: *id045
+  nvram_loc:
+  - *id046
+  - *id047
 png/pure_fa_x_r2_back.png:
   ct0_mezz_loc: *id005
   ct0_pci_loc:
@@ -1709,20 +1910,52 @@ png/pure_fa_x_r2_back.png:
     - 2069
     - 583
   ports:
-  - *id071
-  - *id072
-  - *id073
-  - *id074
-  - *id075
-  - *id076
-  - *id077
-  - *id078
-  - *id079
-  - *id080
-  - *id081
-  - *id082
+  - *id101
+  - *id102
+  - *id103
+  - *id104
+  - *id105
+  - *id106
+  - *id107
+  - *id108
+  - *id109
+  - *id110
+  - *id111
+  - *id112
 png/pure_fa_x_r2_front.png:
-  model_text_loc: *id017
+  fm_loc:
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  model_text_loc: *id045
+  nvram_loc:
+  - *id046
+  - *id047
 png/pure_fa_x_r3_back.png:
   ct0_mezz_loc: *id005
   ct0_pci_loc:
@@ -1745,28 +1978,60 @@ png/pure_fa_x_r3_back.png:
     - 2069
     - 583
   ports:
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  - *id088
-  - *id089
-  - *id090
-  - *id091
-  - *id092
-  - *id093
-  - *id094
+  - *id113
+  - *id114
+  - *id115
+  - *id116
+  - *id117
+  - *id118
+  - *id119
+  - *id120
+  - *id121
+  - *id122
+  - *id123
+  - *id124
 png/pure_fa_x_r3_front.png:
-  model_text_loc: *id017
+  fm_loc:
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  model_text_loc: *id045
+  nvram_loc:
+  - *id046
+  - *id047
 png/pure_fa_x_r4_back.png:
   ct0_mezz_loc: *id005
   ct0_pci_loc:
-  - *id095
-  - *id096
-  - *id097
-  - *id098
-  - *id099
+  - *id125
+  - *id126
+  - *id127
+  - *id128
+  - *id129
   ct1_mezz_loc: *id010
   ct1_pci_loc:
   - !!python/tuple
@@ -1785,18 +2050,50 @@ png/pure_fa_x_r4_back.png:
     - 2075
     - 581
   ports:
-  - *id100
-  - *id101
-  - *id102
-  - *id103
-  - *id104
-  - *id105
-  - *id106
-  - *id107
-  - *id108
-  - *id109
+  - *id130
+  - *id131
+  - *id132
+  - *id133
+  - *id134
+  - *id135
+  - *id136
+  - *id137
+  - *id138
+  - *id139
 png/pure_fa_x_r4_front.png:
-  model_text_loc: *id017
+  fm_loc:
+  - *id017
+  - *id018
+  - *id019
+  - *id020
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  - *id032
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  model_text_loc: *id045
+  nvram_loc:
+  - *id046
+  - *id047
 png/pure_fa_x_smezz.png:
   ports:
   - loc: !!python/tuple
@@ -1815,155 +2112,33 @@ png/pure_fa_x_smezz.png:
     - 341
     - 110
     port_type: sas
-png/pure_fa_xl_front.png:
-  fm_loc:
-  - !!python/tuple
-    - 161
-    - 175
-  - !!python/tuple
-    - 287
-    - 175
-  - !!python/tuple
-    - 413
-    - 175
-  - !!python/tuple
-    - 539
-    - 175
-  - !!python/tuple
-    - 665
-    - 175
-  - !!python/tuple
-    - 791
-    - 175
-  - !!python/tuple
-    - 917
-    - 175
-  - !!python/tuple
-    - 1043
-    - 175
-  - !!python/tuple
-    - 1169
-    - 175
-  - !!python/tuple
-    - 1295
-    - 175
-  - !!python/tuple
-    - 1460
-    - 175
-  - !!python/tuple
-    - 1586
-    - 175
-  - !!python/tuple
-    - 1712
-    - 175
-  - !!python/tuple
-    - 1838
-    - 175
-  - !!python/tuple
-    - 1964
-    - 175
-  - !!python/tuple
-    - 2090
-    - 175
-  - !!python/tuple
-    - 2216
-    - 175
-  - !!python/tuple
-    - 2342
-    - 175
-  - !!python/tuple
-    - 2468
-    - 175
-  - !!python/tuple
-    - 2594
-    - 175
-  - !!python/tuple
-    - 161
-    - 730
-  - !!python/tuple
-    - 287
-    - 730
-  - !!python/tuple
-    - 413
-    - 730
-  - !!python/tuple
-    - 539
-    - 730
-  - !!python/tuple
-    - 665
-    - 730
-  - !!python/tuple
-    - 791
-    - 730
-  - !!python/tuple
-    - 917
-    - 730
-  - !!python/tuple
-    - 1043
-    - 730
-  - !!python/tuple
-    - 1169
-    - 730
-  - !!python/tuple
-    - 1295
-    - 730
-  - !!python/tuple
-    - 1460
-    - 730
-  - !!python/tuple
-    - 1586
-    - 730
-  - !!python/tuple
-    - 1712
-    - 730
-  - !!python/tuple
-    - 1838
-    - 730
-  - !!python/tuple
-    - 1964
-    - 730
-  - !!python/tuple
-    - 2090
-    - 730
-  - !!python/tuple
-    - 2216
-    - 730
-  - !!python/tuple
-    - 2342
-    - 730
-  - !!python/tuple
-    - 2468
-    - 730
-  - !!python/tuple
-    - 2594
-    - 730
 png/pure_fa_xl_r1_back.png:
   ct0_pci_loc:
-  - &id110 !!python/tuple
+  - &id140 !!python/tuple
     - 330
     - 365
-  - &id111 !!python/tuple
+  - &id141 !!python/tuple
     - 330
     - 480
-  - &id112 !!python/tuple
+  - &id142 !!python/tuple
     - 885
     - 365
-  - &id113 !!python/tuple
+  - &id143 !!python/tuple
     - 885
     - 480
-  - &id114 !!python/tuple
+  - &id144 !!python/tuple
     - 1609
     - 365
-  - &id115 !!python/tuple
+  - &id145 !!python/tuple
     - 1609
     - 480
-  - &id116 !!python/tuple
+  - &id146 !!python/tuple
     - 2150
     - 365
-  - &id117 !!python/tuple
+  - &id147 !!python/tuple
     - 2150
     - 480
-  - &id118 !!python/tuple
+  - &id148 !!python/tuple
     - 2150
     - 603
   ct1_pci_loc:
@@ -2016,20 +2191,141 @@ png/pure_fa_xl_r1_back.png:
     name: ct1.eht1
     port_type: eth
 png/pure_fa_xl_r1_front.png:
-  model_text_loc: &id119 !!python/tuple
+  fm_loc:
+  - !!python/tuple
+    - 161
+    - 175
+  - !!python/tuple
+    - 287
+    - 175
+  - !!python/tuple
+    - 413
+    - 175
+  - !!python/tuple
+    - 539
+    - 175
+  - !!python/tuple
+    - 665
+    - 175
+  - !!python/tuple
+    - 791
+    - 175
+  - !!python/tuple
+    - 917
+    - 175
+  - !!python/tuple
+    - 1043
+    - 175
+  - !!python/tuple
+    - 1169
+    - 175
+  - !!python/tuple
+    - 1295
+    - 175
+  - !!python/tuple
+    - 1460
+    - 175
+  - !!python/tuple
+    - 1586
+    - 175
+  - !!python/tuple
+    - 1712
+    - 175
+  - !!python/tuple
+    - 1838
+    - 175
+  - !!python/tuple
+    - 1964
+    - 175
+  - !!python/tuple
+    - 2090
+    - 175
+  - !!python/tuple
+    - 2216
+    - 175
+  - !!python/tuple
+    - 2342
+    - 175
+  - !!python/tuple
+    - 2468
+    - 175
+  - !!python/tuple
+    - 2594
+    - 175
+  - !!python/tuple
+    - 161
+    - 730
+  - !!python/tuple
+    - 287
+    - 730
+  - !!python/tuple
+    - 413
+    - 730
+  - !!python/tuple
+    - 539
+    - 730
+  - !!python/tuple
+    - 665
+    - 730
+  - !!python/tuple
+    - 791
+    - 730
+  - !!python/tuple
+    - 917
+    - 730
+  - !!python/tuple
+    - 1043
+    - 730
+  - !!python/tuple
+    - 1169
+    - 730
+  - !!python/tuple
+    - 1295
+    - 730
+  - !!python/tuple
+    - 1460
+    - 730
+  - !!python/tuple
+    - 1586
+    - 730
+  - !!python/tuple
+    - 1712
+    - 730
+  - !!python/tuple
+    - 1838
+    - 730
+  - !!python/tuple
+    - 1964
+    - 730
+  - !!python/tuple
+    - 2090
+    - 730
+  - !!python/tuple
+    - 2216
+    - 730
+  - !!python/tuple
+    - 2342
+    - 730
+  - !!python/tuple
+    - 2468
+    - 730
+  - !!python/tuple
+    - 2594
+    - 730
+  model_text_loc: &id149 !!python/tuple
   - 22
   - 245
 png/pure_fa_xl_r2_back.png:
   ct0_pci_loc:
-  - *id110
-  - *id111
-  - *id112
-  - *id113
-  - *id114
-  - *id115
-  - *id116
-  - *id117
-  - *id118
+  - *id140
+  - *id141
+  - *id142
+  - *id143
+  - *id144
+  - *id145
+  - *id146
+  - *id147
+  - *id148
   ct1_pci_loc:
   - !!python/tuple
     - 330
@@ -2059,18 +2355,18 @@ png/pure_fa_xl_r2_back.png:
     - 2150
     - 1083
 png/pure_fa_xl_r2_front.png:
-  model_text_loc: *id119
+  model_text_loc: *id149
 png/pure_fa_xl_r3_back.png:
   ct0_pci_loc:
-  - *id110
-  - *id111
-  - *id112
-  - *id113
-  - *id114
-  - *id115
-  - *id116
-  - *id117
-  - *id118
+  - *id140
+  - *id141
+  - *id142
+  - *id143
+  - *id144
+  - *id145
+  - *id146
+  - *id147
+  - *id148
   ct1_pci_loc:
   - !!python/tuple
     - 330
@@ -2100,18 +2396,18 @@ png/pure_fa_xl_r3_back.png:
     - 2150
     - 1083
 png/pure_fa_xl_r3_front.png:
-  model_text_loc: *id119
+  model_text_loc: *id149
 png/pure_fa_xl_r4_back.png:
   ct0_pci_loc:
-  - *id110
-  - *id111
-  - *id112
-  - *id113
-  - *id114
-  - *id115
-  - *id116
-  - *id117
-  - *id118
+  - *id140
+  - *id141
+  - *id142
+  - *id143
+  - *id144
+  - *id145
+  - *id146
+  - *id147
+  - *id148
   ct1_pci_loc:
   - !!python/tuple
     - 330
@@ -2141,7 +2437,7 @@ png/pure_fa_xl_r4_back.png:
     - 2150
     - 1083
 png/pure_fa_xl_r4_front.png:
-  model_text_loc: *id119
+  model_text_loc: *id149
 png/pure_fb_back_efm110.png:
   ports:
   - loc: !!python/tuple
@@ -2500,6 +2796,51 @@ shelf_dp_size_lookup:
   - blank
   - 14
   - '0'
+  '0.02':
+  - Blank
+  - blank
+  - 2
+  - '0'
+  '0.04':
+  - Blank
+  - blank
+  - 4
+  - '0'
+  '0.06':
+  - Blank
+  - blank
+  - 6
+  - '0'
+  '0.08':
+  - Blank
+  - blank
+  - 8
+  - '0'
+  '0.10':
+  - Blank
+  - blank
+  - 10
+  - '0'
+  '0.12':
+  - Blank
+  - blank
+  - 12
+  - '0'
+  '0.14':
+  - Blank
+  - blank
+  - 14
+  - '0'
+  '0.16':
+  - Blank
+  - blank
+  - 16
+  - '0'
+  '0.18':
+  - Blank
+  - blank
+  - 18
+  - '0'
   '1060':
   - 48.2TB
   - nvme-qlc
@@ -2510,7 +2851,17 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 22
   - '1082'
+  '109':
+  - 9.1TB
+  - nvme
+  - 12
+  - '109'
   '11':
+  - 1.1TB
+  - nvme
+  - 10
+  - '11'
+  '11.5':
   - 960GB
   - sas
   - 12
@@ -2525,7 +2876,7 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 24
   - '1180'
-  '12':
+  '12.3':
   - 512GB
   - sas
   - 24
@@ -2545,6 +2896,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 26
   - '1279'
+  '13':
+  - 1.1TB
+  - nvme
+  - 12
+  - '13'
   '1349':
   - 48.2TB
   - nvme-qlc
@@ -2555,17 +2911,52 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 28
   - '1377'
+  '145':
+  - 9.1TB
+  - nvme
+  - 16
+  - '145'
   '15':
   - 1.1TB
   - nvme
   - 14
   - '15'
+  '164':
+  - 9.1TB
+  - nvme
+  - 18
+  - '164'
+  '18':
+  - 1.1TB
+  - nvme
+  - 16
+  - '18'
+  '183':
+  - 18.3TB
+  - nvme
+  - 10
+  - '183'
+  '20':
+  - 1.1TB
+  - nvme
+  - 18
+  - '20'
+  '219':
+  - 18.3TB
+  - nvme
+  - 12
+  - '219'
   '22':
+  - 2.2TB
+  - nvme
+  - 10
+  - '22'
+  '22.8':
   - 1.9TB
   - sas
   - 12
-  - '22'
-  '24':
+  - '23'
+  '24.0':
   - 1TB
   - sas
   - 24
@@ -2585,11 +2976,21 @@ shelf_dp_size_lookup:
   - nvme
   - 14
   - '256'
+  '27':
+  - 2.2TB
+  - nvme
+  - 12
+  - '27'
   '288':
   - 24.0TB
   - nvme-qlc
   - 12
   - '288'
+  '292':
+  - 18.3TB
+  - nvme
+  - 16
+  - '292'
   '296':
   - 24.7TB
   - nvme-qlc
@@ -2600,6 +3001,11 @@ shelf_dp_size_lookup:
   - nvme
   - 14
   - '31'
+  '329':
+  - 18.3TB
+  - nvme
+  - 18
+  - '329'
   '336':
   - 24.0TB
   - nvme-qlc
@@ -2610,6 +3016,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 14
   - '345'
+  '36':
+  - 2.2TB
+  - nvme
+  - 16
+  - '36'
   '384':
   - 24.0TB
   - nvme-qlc
@@ -2620,6 +3031,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 16
   - '395'
+  '40':
+  - 2.2TB
+  - nvme
+  - 18
+  - '40'
   '432':
   - 24.0TB
   - nvme-qlc
@@ -2631,6 +3047,11 @@ shelf_dp_size_lookup:
   - 18
   - '444'
   '45':
+  - 4.5TB
+  - nvme
+  - 10
+  - '45'
+  '45.6':
   - 3.8TB
   - sas
   - 12
@@ -2690,7 +3111,7 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 24
   - '592'
-  '6':
+  '6.1':
   - 256GB
   - sas
   - 24
@@ -2730,6 +3151,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 28
   - '691'
+  '72':
+  - 4.5TB
+  - nvme
+  - 16
+  - '72'
   '771':
   - 48.2TB
   - nvme-qlc
@@ -2740,6 +3166,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 16
   - '787'
+  '81':
+  - 4.5TB
+  - nvme
+  - 18
+  - '81'
   '867':
   - 48.2TB
   - nvme-qlc
@@ -2750,11 +3181,16 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 18
   - '885'
-  '90':
+  '91':
+  - 9.1TB
+  - nvme
+  - 10
+  - '91'
+  '91.2':
   - 7.6TB
   - sas
   - 12
-  - '90'
+  - '91'
   '964':
   - 48.2TB
   - nvme-qlc

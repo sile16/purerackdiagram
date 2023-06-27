@@ -62,8 +62,12 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
             <br/>
           </div>
-
-          <div id="datapack-tabs">
+          <button id="datapack-chart-button" onclick="$('#datapack-tabs').toggle('hidden');console.log('hello')">Show/Hide Datapack Chart</button>
+          <br/>
+          <div id="datapack-chart" >
+            <!-- button to hide and show datapack-chart div-->
+            
+          <div id="datapack-tabs" hidden="true">
             <ul>
               <li><a href="#chassis-dp">Chassis DPs</a></li>
               <li><a href="#shelf-dp">Shelf DPs</a></li>
@@ -76,6 +80,7 @@ Select the options, then click the Display button at the bottom to load the imag
             </div>
           </div>
           <br/>
+          </div>
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">face:</div>
@@ -167,18 +172,18 @@ Select the options, then click the Display button at the bottom to load the imag
             <p> Specific PCI Slot Override</p>
             <div class="col-xs-4 col-sm-4 option_label">PCI:</div>
             <div class="col-xs-8 col-sm-8" data-tooltip="This will override default cards and addon cards">
-              <span id="pci_select_0">0:</span>
-              <span id="pci_select_1">1:</span>
-              <span id="pci_select_2">2:</span>
-              <span id="pci_select_3">3:</span>
-              <span id="pci_select_4">4:</span>
-              <span id="pci_select_5">5:</span>
-              <span id="pci_select_6">6:</span>
-              <span id="pci_select_7">7:</span>
-              <span id="pci_select_8">8:</span>
+              <span id="pci_select_0">0:</span><br/>
+              <span id="pci_select_1">1:</span><br/>
+              <span id="pci_select_2">2:</span><br/>
+              <span id="pci_select_3">3:</span><br/>
+              <span id="pci_select_4">4:</span><br/>
+              <span id="pci_select_5" hidden="true">5:</span><br/>
+              <span id="pci_select_6" hidden="true">6:</span><br/>
+              <span id="pci_select_7" hidden="true">7:</span><br/>
+              <span id="pci_select_8" hidden="true">8:</span><br/>
             </div>
-            <br>
-            <br>
+            <br/>
+            <br/>
           </div>
           
           <div class="row" id="mezz" hidden="true">

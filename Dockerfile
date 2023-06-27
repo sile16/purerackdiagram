@@ -1,4 +1,5 @@
 FROM lambci/lambda:build-python3.8
+#FROM public.ecr.aws/lambda/python:3.10
 
 WORKDIR /var/task
 ENV WORKDIR /var/task

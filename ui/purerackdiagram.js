@@ -46,21 +46,23 @@ $(function () {
           <table class="table-responsive">
             <thead>
               <tr>
-                <th class="sortable">DP Size TB <span class="sort-arrow">&nbsp;</span></th>
+                <th class="sortable">DP Size TB<span class="sort-arrow">&nbsp;</span></th>
                 <th class="sortable">Module Count <span class="sort-arrow">&nbsp;</span></th>
                 <th class="sortable">Module Size <span class="sort-arrow">&nbsp;</span></th>
+                <th class="sortable">DP Label <span class="sort-arrow">&nbsp;</span></th>
               </tr>
             </thead>
             <tbody>
         `;
 
-        Object.values(lookupData).forEach((item) => {
+        Object.entries(lookupData).forEach(([key, item]) => {
           if (categories.includes(item[1])) {
             tableHtml += `
               <tr>
-                <td>${item[3]}</td>
+                <td>${key}</td>
                 <td>${item[2]}</td>
                 <td>${item[0]}</td>
+                <td>${item[3]}</td>
               </tr>
             `;
           }
@@ -89,8 +91,13 @@ $(function () {
             <li><a href="#${parentId}-${category}">${category}</a></li>
           `;
 
-          // Filter the lookup data based on the category
-          const filteredData = Object.values(lookupData).filter(item => item[1] === category);
+          // iterated through the lookupData dictionary of arrays, and filter
+          // to include only the category stored in 1 index of the array we are interested in.
+          // end filtered_data is a dictionary of arrays maintaining the
+          // original key value pairs.
+          const filteredData = Object.fromEntries(
+            Object.entries(lookupData).filter(([key, value]) => value[1] === category)
+          );
 
           // Create the content Divs for each tab.
           subTabContentHtml += `
@@ -367,14 +374,20 @@ $(function () {
       $('#pci_select_8').show();
       
     }
-    else {
+    else if (fa_option_model.val().includes('r4'))  {
+        $('#pci_select_4').show();
+        $('#pci_select_5').hide();
+        $('#pci_select_6').hide();
+        $('#pci_select_7').hide();
+        $('#pci_select_8').hide();
+    
+    } else {
       $('#pci_select_4').hide();
       $('#pci_select_5').hide();
       $('#pci_select_6').hide();
       $('#pci_select_7').hide();
       $('#pci_select_8').hide();
     }
-
 
   });
 
