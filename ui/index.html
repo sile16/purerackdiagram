@@ -63,22 +63,19 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
           </div>
 
-          <div>
-            <ul class="nav nav-tabs" id="mainTabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <a class="nav-link main-tab active" id="chassis-tab" data-toggle="tab" href="#chassis" role="tab" aria-controls="chassis" aria-selected="true">Chassis</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                <a class="nav-link main-tab" id="shelf-tab" data-toggle="tab" href="#shelf" role="tab" aria-controls="shelf" aria-selected="false">Shelf</a>
-              </li>
+          <div id="datapack-tabs">
+            <ul>
+              <li><a href="#chassis-dp">Chassis DPs</a></li>
+              <li><a href="#shelf-dp">Shelf DPs</a></li>
             </ul>
-            <div class="tab-content" id="mainTabsContent">
-              <div class="tab-pane fade " id="chassis" role="tabpanel" aria-labelledby="chassis-tab"></div>
-              <div class="tab-pane fade" id="shelf" role="tabpanel" aria-labelledby="shelf-tab"></div>
+            <div id="chassis-dp">
+              <!-- Gets filled in by the script, populated from the config.yaml -->
+            </div>
+            <div id="shelf-dp">
+              <!-- Gets filled in by the script, populated from the config.yaml -->
             </div>
           </div>
           <br/>
-
 
           <div class="row">
             <div class="col-xs-4 col-sm-4 option_label">face:</div>
@@ -115,9 +112,6 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
             <br/>
           </div>
-          
-
-
           
           
           <div class="row" id="protocol" hidden="true">
@@ -172,16 +166,16 @@ Select the options, then click the Display button at the bottom to load the imag
           <div class="row" id="pci_dropdowns" hidden="true">
             <p> Specific PCI Slot Override</p>
             <div class="col-xs-4 col-sm-4 option_label">PCI:</div>
-            <div class="col-xs-8 col-sm-8">
-              <span id="pci_select_0"></span>
-              <span id="pci_select_1"></span>
-              <span id="pci_select_2"></span>
-              <span id="pci_select_3"></span>
-              <span id="pci_select_4"></span>
-              <span id="pci_select_5"></span>
-              <span id="pci_select_6"></span>
-              <span id="pci_select_7"></span>
-              <span id="pci_select_8"></span>
+            <div class="col-xs-8 col-sm-8" data-tooltip="This will override default cards and addon cards">
+              <span id="pci_select_0">0:</span>
+              <span id="pci_select_1">1:</span>
+              <span id="pci_select_2">2:</span>
+              <span id="pci_select_3">3:</span>
+              <span id="pci_select_4">4:</span>
+              <span id="pci_select_5">5:</span>
+              <span id="pci_select_6">6:</span>
+              <span id="pci_select_7">7:</span>
+              <span id="pci_select_8">8:</span>
             </div>
             <br>
             <br>

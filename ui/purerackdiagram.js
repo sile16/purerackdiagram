@@ -8,8 +8,6 @@ const pythonTupleType = new jsyaml.Type('tag:yaml.org,2002:python/tuple', {
 const customSchema = jsyaml.DEFAULT_SCHEMA.extend([pythonTupleType]);
 
 
-
-
 $(function () {
   console.log("ready!");
 
@@ -23,7 +21,7 @@ $(function () {
       console.log('Loaded data:', data); // Log the loaded data
 
       // Populate the chart with the data from the YAML file
-      const categories = ["nvme", "nvme-qlc", "sas"];
+      const categories = ["nvme", "scm", "nvme-qlc", "sas", "blank"];
 
       const sortTable = (table, columnIndex, order) => {
         const rows = Array.from(table.querySelectorAll('tbody tr'));
@@ -78,36 +76,33 @@ $(function () {
       let activeTabIndex = -1;
 
       const createSubTabs = (lookupData, parentId) => {
-        let subTabsHtml = `
-          <ul class="nav nav-tabs" role="tablist">
-        `;
-        let subTabContentHtml = `
-          <div class="tab-content">
-        `;
 
+        subTabsHtml = `<div id="${parentId}-dp-tabs">`;
+        subTabsHtml += '<ul>';
+        subTabContentHtml = '';
+
+        // iterate through the categories, Blank, SCM, NVMe, NVMe-QLC, SAS
         categories.forEach((category, index) => {
-          const activeClass = index === activeTabIndex ? 'active' : '';
-          const showClass = index === activeTabIndex ? 'show' : '';
-          const dNoneClass = index === activeTabIndex ? '' : 'd-none';
-
+          
+          //create the list in parallel in this loop
           subTabsHtml += `
-            <li class="nav-item" role="presentation">
-              <a class="nav-link ${activeClass}" id="${parentId}-${category}-tab" data-toggle="tab" href="#${parentId}-${category}" role="tab" aria-controls="${parentId}-${category}" aria-selected="${index === activeTabIndex}">${category}</a>
-            </li>
+            <li><a href="#${parentId}-${category}">${category}</a></li>
           `;
 
           // Filter the lookup data based on the category
           const filteredData = Object.values(lookupData).filter(item => item[1] === category);
 
+          // Create the content Divs for each tab.
           subTabContentHtml += `
-              <div class="tab-pane fade ${showClass} ${activeClass} ${dNoneClass}" id="${parentId}-${category}" role="tabpanel" aria-labelledby="${parentId}-${category}-tab">
-              ${createTable(filteredData)}
-            </div>
+              <div id="${parentId}-${category}">
+                ${createTable(filteredData)}
+              </div>
           `;
         });
 
-        subTabsHtml += `</ul>`;
-        subTabContentHtml += `</div>`;
+        //end the list
+        subTabsHtml += '</ul>';
+        subTabContentHtml += '</div>';
 
         return subTabsHtml + subTabContentHtml;
       };
@@ -115,8 +110,10 @@ $(function () {
       const chassisLookupData = data.chassis_dp_size_lookup;
       const shelfLookupData = data.shelf_dp_size_lookup;
 
-      document.querySelector("#chassis").innerHTML = createSubTabs(chassisLookupData, 'chassis');
-      document.querySelector("#shelf").innerHTML = createSubTabs(shelfLookupData, 'shelf');
+      document.querySelector("#chassis-dp").innerHTML = createSubTabs(chassisLookupData, 'chassis');
+      document.querySelector("#shelf-dp").innerHTML = createSubTabs(shelfLookupData, 'shelf');
+      $("#chassis-dp-tabs").tabs();
+      $("#shelf-dp-tabs").tabs();
 
       // Event delegation for sorting table headers
       document.addEventListener("click", (event) => {
@@ -154,94 +151,6 @@ $(function () {
         }
       });
 
-      document.querySelectorAll(".main-tab").forEach((tab) => {
-        tab.addEventListener("click", (event) => {
-          const tabLink = event.target;
-          const tabContentId = tabLink.getAttribute("href");
-          const tabContent = document.querySelector(tabContentId);
-          const subTabContainer = tabContent.querySelector(".nav");
-      
-          // Hide all other tab contents except the active one
-          found_active = false;
-          document.querySelectorAll(".tab-pane").forEach((pane) => {
-            if (pane.classList.contains("active")) {
-              if (found_active == true ){
-                pane.classList.remove("show", "active");
-              } else {
-                pane.classList.add("show");
-                found_active = true;
-              }
-            }
-            else {
-              pane.classList.remove("show");
-            }
-            
-            
-          });
-
-          // if no active pane found make the first one active
-          // get the first .tab-pane and make active and show
-          if (found_active == false) {
-            document.querySelectorAll(".tab-pane").forEach((pane) => {
-              pane.classList.remove("show", "active");
-            });
-            document.querySelectorAll(".tab-pane")[0].classList.add("show", "active");
-          }
-      
-          if (tabLink.classList.contains("active")) {
-            // If the tab is already active, remove the active class and hide the content
-            tabLink.classList.remove("active");
-            tabContent.classList.remove("show", "active");
-            if (subTabContainer) {
-              subTabContainer.classList.add("d-none");
-            }
-          } else {
-            // If the tab is not active, add the active class, show the content, and remove the active class from other tabs
-            document.querySelectorAll(".main-tab").forEach((otherTab) => {
-              otherTab.classList.remove("active");
-            });
-      
-            tabLink.classList.add("active");
-            tabContent.classList.add("show", "active");
-            if (subTabContainer) {
-              subTabContainer.classList.remove("d-none");
-            }
-          }
-        });
-      });
-      
-      
-      document.querySelectorAll(".nav-link").forEach((subtab) => {
-        subtab.addEventListener("click", (event) => {
-          const subtabLink = event.target;
-          const subtabContentId = subtabLink.getAttribute("href");
-          const subtabContent = document.querySelector(subtabContentId);
-      
-          if (!subtabLink.classList.contains("active")) {
-            // If a different subtab is open, switch to the clicked subtab
-            const parentTabContent = subtabLink.closest(".tab-content");
-            if (parentTabContent) {
-              parentTabContent.querySelectorAll(".nav-link").forEach((otherSubtab) => {
-                otherSubtab.classList.remove("active");
-                const otherSubtabContentId = otherSubtab.getAttribute("href");
-                const otherSubtabContent = document.querySelector(otherSubtabContentId);
-                if (otherSubtabContent) {
-                  otherSubtabContent.classList.remove("show", "active");
-                }
-              });
-            }
-      
-            subtabLink.classList.add("active");
-            subtabContent.classList.add("show", "active");
-          }
-        });
-      });
-      
-      
-      
-      
-      
-
     } catch (error) {
       console.error('Error loading YAML data:', error);
     }
@@ -251,6 +160,9 @@ $(function () {
 
 
   $('#option-tabs').tabs();
+  $('#datapack-tabs').tabs();
+  $('#chassis-dp-tabs').tabs();
+  $('#shelf-dp-tabs').tabs();
 
   var fa_option_model = build_select('#fa_option_model', FA_OPTIONS.model);
   var fa_option_protocol = build_select('#fa_option_protocol', FA_OPTIONS.protocol);
@@ -334,13 +246,10 @@ $(function () {
       }
     }
     
-
-
     var  ports_val = fa_option_ports.val();
     if (ports_val){
       url += "&ports=" + ports_val;
     }
-    
 
     var mezz_val = fa_option_mezz.val();
     console.log(mezz_val);

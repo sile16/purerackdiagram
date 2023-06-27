@@ -427,13 +427,13 @@ def update_static_fm_loc(config):
 
 def update_static_pci_loc(config, generation, revision):
     pci_loc = None
-    if (generation == 'x' or generation == 'c') and generation < 4:
+    if (generation == 'x' or generation == 'c') and revision < 4:
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
-        ct1_y_offset = 378
+        ct1_y_offset = 380
 
     # R4
-    elif (generation == 'x' or generation == 'c') and generation == 4:
-        pci_loc = [(679, 80), (1225, 80), (1225, 208), (2067, 80), (2067, 208)]
+    elif (generation == 'x' or generation == 'c') and revision == 4:
+        pci_loc = [(679, 83), (1225, 83), (1225, 203), (2075, 83), (2075, 203)]
         ct1_y_offset = 378
 
 
@@ -449,7 +449,7 @@ def update_static_pci_loc(config, generation, revision):
         ct1_y_offset = 480
 
 
-    key = f'png/pure_fa_{generation}_back.png'
+    key = f'png/pure_fa_{generation}_r{revision}_back.png'
     if key not in config:
         config[key] = {}
 
@@ -469,8 +469,8 @@ def update_static_pci_loc(config, generation, revision):
     
 
 
-def update_static_nvram_loc(config, generation):
-    key = f'png/pure_fa_{generation}_front.png'
+def update_static_nvram_loc(config, generation, revision):
+    key = f'png/pure_fa_{generation}_{revision}_front.png'
     if key not in config:
         config[key] = {}
 
@@ -488,7 +488,7 @@ def update_static_nvram_loc(config, generation):
 
 
 def update_static_mezz_loc(config, generation, revision):
-    key = f'png/pure_fa_{generation}_back.png'
+    key = f'png/pure_fa_{generation}_r{revision}_back.png'
     if key not in config:
         config[key] = {}
 
@@ -502,8 +502,8 @@ def update_static_mezz_loc(config, generation, revision):
     
 
 
-def update_static_model_loc(config, generation):
-    key = f'png/pure_fa_{generation}_front.png'
+def update_static_model_loc(config, generation, revision):
+    key = f'png/pure_fa_{generation}_r{revision}_front.png'
     if key not in config:
         config[key] = {}
 
@@ -563,43 +563,100 @@ def update_static_model_port_loc(config):
     ## FA Chassis Flash Modules for M / X / C
     ######################
 
+    for rev in [1, 2, 3, 4]:
+        ct0ports = None
+        if rev == 4:
+            ct0ports = [ {'loc': (671, 308),
+                'name': 'ct0.eht0',
+                'port_type': 'eth',
+                'port_connector': 'qsfp28',
+                'port_speeds': ['50g', '100g'],
+                'services': ['shelf'] },
+                {'loc': (786, 308),
+                'port_type': 'eth',
+                'port_connector': 'qsfp28',
+                'port_speeds': ['50g', '100g'],
+                'name': 'ct0.eht1',
+                'services': ['shelf']},
+                {'loc': (902, 308),
+                'port_type': 'eth',
+                'port_connector': 'qsfp',
+                'port_speeds': ['10g', '25g'],
+                'name': 'ct0.eht2',
+                'services': ['iSCSI', 'replication', 'file']},
+                {'loc': (990, 308),
+                'port_type': 'eth',
+                'port_connector': 'qsfp',
+                'port_speeds': ['10g', '25g'],
+                'services': ['iSCSI', 'replication', 'file'],
+                'name': 'ct0.eth3'},
+                {'loc': (1945, 220),
+                'port_type': 'eth',
+                'port_connector': 'rj45',
+                'port_speeds': ['1g'],
+                'services': ['management'],
+                'name': 'ct0.eth4'} ]
+        else:
+        # These are all the ct0 ports
+            ct0ports = [
+            {'loc': (671, 316),
+            'port_type': 'eth',
+            'name': 'ct0.eht0'},
+            {'loc': (788, 316),
+            'port_type': 'eth',
+            'name': 'ct0.eht1'},
+            {'loc': (1880, 221),
+            'port_type': 'eth',
+            'name': 'ct0.eht2'},
+            {'loc': (1880, 293),
+            'port_type': 'eth',
+            'name': 'ct0.eth3'},
+            {'loc': (1965, 221),
+            'port_type': 'eth',
+            'name': 'ct0.eth4'},
+            {'loc': (1965, 293),
+            'port_type': 'eth',
+            'name': 'ct0.eth5'}]
 
-    # These are all the ct0 ports
-    ct0ports = [
-        {'loc': (671, 316),
-         'port_type': 'eth',
-         'name': 'ct0.eht0'},
-        {'loc': (788, 316),
-         'port_type': 'eth',
-         'name': 'ct0.eht1'},
-        {'loc': (1880, 221),
-         'port_type': 'eth',
-         'name': 'ct0.eht2'},
-        {'loc': (1880, 293),
-         'port_type': 'eth',
-         'name': 'ct0.eth3'},
-        {'loc': (1965, 221),
-         'port_type': 'eth',
-         'name': 'ct0.eth4'},
-        {'loc': (1965, 293),
-         'port_type': 'eth',
-         'name': 'ct0.eth5'}]
+        ct1ports = []
+        for p in ct0ports:
+            loc = (p['loc'][0], p['loc'][1] + 380)
+            name = p['name'].replace('ct0', 'ct1')
+            ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
 
-    ct1ports = []
-    for p in ct0ports:
-        loc = (p['loc'][0], p['loc'][1] + 380)
-        name = p['name'].replace('ct0', 'ct1')
-        ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+        key = f'png/pure_fa_x_r{rev}_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ct0ports + ct1ports
 
-    key = 'png/pure_fa_x_back.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['ports'] = ct0ports + ct1ports
+        key = f'png/pure_fa_c_r{rev}_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ct0ports + ct1ports
 
-    key = 'png/pure_fa_c_back.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['ports'] = ct0ports + ct1ports
+        #################################
+        ## FA Chassis Flash Modules for XL
+        ######################
+
+        ct0ports = [
+            {'loc': (846, 704),
+            'port_type': 'eth',
+            'name': 'ct0.eht0'},
+            {'loc': (964, 704),
+            'port_type': 'eth',
+            'name': 'ct0.eht1'}]
+
+        ct1ports = []
+        for p in ct0ports:
+            loc = (p['loc'][0], p['loc'][1] + 493)
+            name = p['name'].replace('ct0', 'ct1')
+            ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+
+
+        key = f'png/pure_fa_xl_r1_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ct0ports + ct1ports
 
     ##########################
     # NVME Shelf BAck
@@ -634,29 +691,7 @@ def update_static_model_port_loc(config):
     config[key]['ports'] = ct0ports + ct1ports
 
 
-    #################################
-    ## FA Chassis Flash Modules for XL
-    ######################
 
-    ct0ports = [
-        {'loc': (846, 704),
-         'port_type': 'eth',
-         'name': 'ct0.eht0'},
-        {'loc': (964, 704),
-         'port_type': 'eth',
-         'name': 'ct0.eht1'}]
-
-    ct1ports = []
-    for p in ct0ports:
-        loc = (p['loc'][0], p['loc'][1] + 493)
-        name = p['name'].replace('ct0', 'ct1')
-        ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
-
-
-    key = 'png/pure_fa_xl_back.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['ports'] = ct0ports + ct1ports
 
 
 

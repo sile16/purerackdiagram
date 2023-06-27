@@ -52,6 +52,11 @@ def text_to_image(text, width):
 
     return img
 
+# function to draw a triangle to a PIL image using polygon
+def draw_triangle(draw, x, y, size, color):
+    draw.polygon([(x, y - size), (x + size, y + size), (x - size, y + size)],
+                 fill=color, outline=color)
+    
 
 def handler(event, context):
     """ Lambda Entry
@@ -96,9 +101,7 @@ def handler(event, context):
                              fill=color, outline=color)
                 else:
                     color = 'orange'
-                    draw.triangle((p['loc'][0] - size, p['loc'][1] - size,
-                                 p['loc'][0] + size, p['loc'][1] + size),
-                                fill=color, outline=color)
+                    draw_triangle(draw, p['loc'][0], p['loc'][1], size, color)
 
         # resize if too large:
         # will break google slides if file is too big
