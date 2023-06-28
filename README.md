@@ -45,7 +45,7 @@ by adding 0.02 is 2 blanks, 0.12 , is 12 blanks,  You can use blanks to add spac
 With XL the population order is always slot 0-> slot 39.  The right most reverse ordering doesn't apply to XL chassis.
 
 
-## Shelfs
+## Shelves
 The shelf type is automatically determined by the media type.  SAS will be a SAS shelf and NVMe - NVMe shelf.
 
 ## PCI Slots
