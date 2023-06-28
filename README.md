@@ -47,7 +47,9 @@ For the XL, the population order is always from slot 0 to slot 39. The right-mos
 
 ## Shelves
 
+
 The shelf type is automatically determined by the media type. SAS will be a SAS shelf and NVMe will be an NVMe shelf.
+
 
 ## PCI Slots
 
