@@ -15,6 +15,8 @@ def get_diagram(params):
         diagram = FADiagram(params)
     elif model.startswith("fb-s"):
         diagram = FBSDiagram(params)
+    elif model.startswith("fb-e"):
+        diagram = FBSDiagram(params)
     elif model.startswith("fb"):
         diagram = FBDiagram(params)
     # elif model.startswith("fr"):
