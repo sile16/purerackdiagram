@@ -25,7 +25,7 @@ By default, this tool tries to select suitable configurations, offering the opti
 - End of Life, controllers, datapacks (not checked)
 - Mezz Selection
 
-For valid configurations, consider using [PureSizer](sizer.purestorage.com).
+For valid configurations, consider using [PureSizer](https://sizer.purestorage.com).
 
 ## Datapacks Line
 

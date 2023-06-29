@@ -30,7 +30,7 @@ class FBSDiagram():
             config['xfm_face'] = config['face']
 
 
-        valid_models = ['fb-s200', 'fb-s500']
+        valid_models = ['fb-s200', 'fb-s500', 'fb-e']
         if config['model'] not in valid_models:
             raise Exception('please provide a valid model: {}'.format(valid_models))
 
@@ -72,7 +72,7 @@ class FBSDiagram():
         self.config = config
     
 
-    async def add_blades(self, base_img, number_of_blades):
+    async def add_blades(self, base_img, number_of_blades, blade_model_text):
         
         key = 'png/pure_fbs_blade.png'
         blade_img = await RackImage(key).get_image()
@@ -93,17 +93,15 @@ class FBSDiagram():
         # todo: add this into utilities as a more generic function to apply 
         # rotated tet.
         ttf_path = global_config['ttf_path']
-
-        model_text = self.config['model'].split("-")[1].upper()
         font_size = 25
 
         font = ImageFont.truetype(ttf_path, size=font_size)
-        txt_size = font.getsize(model_text)
+        txt_size = font.getsize(blade_model_text)
         
         ##make backgroun grey
         txtimg = Image.new("RGB", txt_size, (38, 38, 38))
         txtimg_draw = ImageDraw.Draw(txtimg)
-        txtimg_draw.text((0,0), model_text, font=font, fill= (255, 255, 255))
+        txtimg_draw.text((0,0), blade_model_text, font=font, fill= (255, 255, 255))
 
         #Crop the top a little to remove extra spacing along the top
         top_crop = 3
@@ -119,16 +117,8 @@ class FBSDiagram():
         for x in range(number_of_blades):
             base_img.paste(blade_img, self.img_info['blade_loc'][x])
 
-        
 
-
-        
-
-      
-        
-
-
-    async def build_chassis(self, number_of_blades):
+    async def build_chassis(self, number_of_blades, blade_model_text):
         number_of_blades = min(10, number_of_blades)
         face = self.config["face"]
         if face == 'front':
@@ -148,7 +138,7 @@ class FBSDiagram():
         base_img = await RackImage(img_key).get_image()
 
         if img_key == "png/pure_fbs_front.png":
-            await self.add_blades(base_img, number_of_blades)
+            await self.add_blades(base_img, number_of_blades, blade_model_text)
 
         return {'img': base_img, 'ports': ports}
 
@@ -162,10 +152,20 @@ class FBSDiagram():
 
         c = self.config
 
+        blade_model_text = self.config['model'].split("-")[1].upper()
+
+        if blade_model_text == "E":
+            blade_model_text = "EC"
+
         blades_left = c['blades']
         for i in range(self.config["chassis"]):
-            tasks.append(self.build_chassis( blades_left))
+            tasks.append(self.build_chassis( blades_left, blade_model_text))
             blades_left -= 10
+
+            # expansions shelves we change the blade model to EX
+            if blade_model_text == "EC":
+                blade_model_text = "EX"
+
 
         if self.config['xfm']:
 
