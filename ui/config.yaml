@@ -2749,6 +2749,38 @@ png/pure_fbe_back.png:
     - 910
     name: fm1.eth4
     port_type: eth
+png/pure_fbe_front.png:
+  blade_loc:
+  - &id158 !!python/tuple
+    - 163
+    - 34
+  - !!python/tuple
+    - 418
+    - 34
+  - !!python/tuple
+    - 673
+    - 34
+  - !!python/tuple
+    - 928
+    - 34
+  - !!python/tuple
+    - 1183
+    - 34
+  - !!python/tuple
+    - 1438
+    - 34
+  - !!python/tuple
+    - 1693
+    - 34
+  - !!python/tuple
+    - 1948
+    - 34
+  - !!python/tuple
+    - 2203
+    - 34
+  - !!python/tuple
+    - 2458
+    - 34
 png/pure_fbs_back.png:
   ports:
   - *id150
@@ -2778,9 +2810,7 @@ png/pure_fbs_blade.png:
   - 549
 png/pure_fbs_front.png:
   blade_loc:
-  - !!python/tuple
-    - 163
-    - 34
+  - *id158
   - !!python/tuple
     - 418
     - 34

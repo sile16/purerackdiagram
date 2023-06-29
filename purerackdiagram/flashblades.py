@@ -140,7 +140,7 @@ class FBSDiagram():
 
         base_img = await RackImage(img_key).get_image()
 
-        if img_key == "png/pure_fbs_front.png":
+        if "front" in img_key:
             await self.add_blades(base_img, number_of_blades, blade_model_text)
 
         return {'img': base_img, 'ports': ports}
