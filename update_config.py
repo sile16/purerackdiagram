@@ -352,17 +352,18 @@ def static_global_config():
 
 
 def update_static_fbs_blade_loc(config):
-    key = 'png/pure_fbs_front.png'
 
-    blade_loc = [None] * 10
-    blade_loc[0] = (163, 34)
-    blade_offset = 255
-    for x in range(10):
-        if blade_loc[x] is None:
-            loc = list(blade_loc[x - 1])
-            loc[0] += blade_offset
-            blade_loc[x] = tuple(loc)
-    config[key] = {'blade_loc': blade_loc}
+    for key in ['png/pure_fbs_front.png', 'png/pure_fbe_front.png']:
+
+        blade_loc = [None] * 10
+        blade_loc[0] = (163, 34)
+        blade_offset = 255
+        for x in range(10):
+            if blade_loc[x] is None:
+                loc = list(blade_loc[x - 1])
+                loc[0] += blade_offset
+                blade_loc[x] = tuple(loc)
+        config[key] = {'blade_loc': blade_loc}
 
     key = 'png/pure_fbs_blade.png'
     fm_loc = [
@@ -868,6 +869,11 @@ def update_static_model_port_loc(config):
         ct1ports.append(new_port)
 
     key = 'png/pure_fbs_back.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['ports'] = ct0ports[0:9] + ct1ports[0:9]
+
+    key = 'png/pure_fbe_back.png'
     if key not in config:
         config[key] = {}
     config[key]['ports'] = ct0ports[0:9] + ct1ports[0:9]

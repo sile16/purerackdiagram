@@ -121,13 +121,16 @@ class FBSDiagram():
     async def build_chassis(self, number_of_blades, blade_model_text):
         number_of_blades = min(10, number_of_blades)
         face = self.config["face"]
+
+        model = blade_model_text[0].lower()
+
         if face == 'front':
             if self.config['bezel']:
-                img_key = "png/pure_fbs_bezel.png"
+                img_key = f"png/pure_fb{model}_bezel.png"
             else:
-                img_key = "png/pure_fbs_front.png"
+                img_key = f"png/pure_fb{model}_front.png"
         else:
-            img_key = "png/pure_fbs_back.png"
+            img_key = f"png/pure_fb{model}_back.png"
 
         if img_key in global_config:
             self.img_info = global_config[img_key]
@@ -137,7 +140,7 @@ class FBSDiagram():
 
         base_img = await RackImage(img_key).get_image()
 
-        if img_key == "png/pure_fbs_front.png":
+        if "front" in img_key:
             await self.add_blades(base_img, number_of_blades, blade_model_text)
 
         return {'img': base_img, 'ports': ports}
