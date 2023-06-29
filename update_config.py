@@ -872,6 +872,11 @@ def update_static_model_port_loc(config):
         config[key] = {}
     config[key]['ports'] = ct0ports[0:9] + ct1ports[0:9]
 
+    key = 'png/pure_fbe_back.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['ports'] = ct0ports[0:9] + ct1ports[0:9]
+
 
     # Pure FB BAck XFM
 
