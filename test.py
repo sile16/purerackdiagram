@@ -24,6 +24,19 @@ save_dir = 'test_results/'
 
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r4",
+            "datapacks": "63/0",
+            "protocol": "FC",
+            "addoncards": "",
+            "face": "back",
+            "fm_label": "True",
+            "dp_label": "True",
+            "local_delay": 0,
+            "ports": "True"
+        }
+    },
         {
         "queryStringParameters": {
             "model": "fb-e",

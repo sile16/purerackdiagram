@@ -6,7 +6,7 @@ API_ENDPOINT = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/default/r
 //
 var FA_OPTIONS = {
     model: ['fa-x20r4', 'fa-x50r4', 'fa-x70r4', 'fa-x90r4',
-            'fa-c50r3', 'fa-c60r3',
+            'fa-c50r4', 'fa-c70r4', 'fa-c90r4',
             'fa-x10r3', 'fa-x20r3', 'fa-x50r3', 'fa-x70r3', 'fa-x90r3',
             'fa-xl130', 'fa-xl170',
             'fa-x10r2', 'fa-x20r2', 'fa-x50r2', 'fa-x70r2', 'fa-x90r2',
@@ -41,7 +41,8 @@ var FB_OPTIONS = {
     blades: '17:0-14,52:15-129',
     efm: ['', 'efm110', 'efm310'],
     ports: ['FALSE', 'TRUE'],
-    xfm_face: ['', 'front', 'back']
+    xfm_face: ['', 'front', 'back'],
+    bezel: ['FALSE', 'TRUE']
 };
 
 var FBS_OPTIONS = {
@@ -53,5 +54,6 @@ var FBS_OPTIONS = {
     ports: ['FALSE', 'TRUE'],
     dfm_size: ['24', '48'],
     dfm_count: ['1', '2', '3', '4'],
-    xfm_face: ['', 'front', 'back']
+    xfm_face: ['', 'front', 'back'],
+    bezel: ['FALSE', 'TRUE']
 };

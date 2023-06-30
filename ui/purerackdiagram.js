@@ -11,7 +11,7 @@ const customSchema = jsyaml.DEFAULT_SCHEMA.extend([pythonTupleType]);
 $(function () {
   console.log("ready!");
 
-  fetch("../purerackdiagram/config.yaml")
+  fetch("config.yaml")
   .then((response) => response.text())
   .then((yamlText) => {
 
@@ -218,6 +218,7 @@ $(function () {
   var fb_option_efm = build_select('#fb_option_efm', FB_OPTIONS.efm);
   var fb_option_ports = build_select('#fb_option_ports', FB_OPTIONS.ports);
   var fb_option_xfm_face = build_select('#fb_option_xfm_face', FB_OPTIONS.xfm_face);
+  var fb_option_bezel = build_select('#fb_option_bezel', FB_OPTIONS.bezel);
 
   var fbs_option_model = build_select('#fbs_option_model', FBS_OPTIONS.model);
   var fbs_option_dfm_size = build_select('#fbs_option_dfm_size', FBS_OPTIONS.dfm_size);
@@ -228,6 +229,7 @@ $(function () {
   var fbs_option_blades = build_input('#fbs_option_blades', FBS_OPTIONS.blades);
   var fbs_option_ports = build_select('#fbs_option_ports', FBS_OPTIONS.ports);
   var fbs_option_xfm_face = build_select('#fbs_option_xfm_face', FBS_OPTIONS.xfm_face);
+  var fbs_option_bezel = build_select('#fbs_option_bezel', FBS_OPTIONS.bezel);
 
 
 
@@ -280,6 +282,7 @@ $(function () {
     url += "&blades=" + fb_option_blades.val();
     url += "&efm=" + fb_option_efm.val();
     url += "&xfm_face=" + fb_option_xfm_face.val();
+    url += "&bezel=" + fb_option_bezel.val();
 
     var ports_val = fb_option_ports.val();
     if (ports_val){
@@ -301,6 +304,7 @@ $(function () {
     url += "&no_of_drives_per_blade=" + fbs_option_dfm_count.val();
     url += "&drive_size=" + fbs_option_dfm_size.val();
     url += "&xfm_face=" + fbs_option_xfm_face.val();
+    url += "&bezel=" + fbs_option_bezel.val();
  
     
     fbs_option_dfm_size
@@ -393,9 +397,9 @@ $(function () {
 
   $("#fa_option_face > select").change(function () {
     if (fa_option_face.val() == 'front') {
-      $('#fm_label').show();
-      $('#dp_label').show();
-      $('#bezel').show();
+      $('#fa_fm_label').show();
+      $('#fa_dp_label').show();
+      $('#fa_bezel').show();
 
       $('#mezz').hide();
       $('#ports').hide();
@@ -405,9 +409,9 @@ $(function () {
       $('#pci_dropdowns').hide();
     }
     else {
-      $('#fm_label').hide();
-      $('#dp_label').hide();
-      $('#bezel').hide();
+      $('#fa_fm_label').hide();
+      $('#fa_dp_label').hide();
+      $('#fa_bezel').hide();
       
       $('#protocol').show();
       $('#addoncards').show();
