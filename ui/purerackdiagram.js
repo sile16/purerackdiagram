@@ -163,9 +163,6 @@ $(function () {
     }
   });
 
-
-
-
   $('#option-tabs').tabs();
   $('#datapack-tabs').tabs();
   $('#chassis-dp-tabs').tabs();
@@ -182,6 +179,7 @@ $(function () {
   var fa_option_dp_label = build_select('#fa_option_dp_label', FA_OPTIONS.dp_label);
   var fa_option_addoncards = build_input('#fa_option_addoncards', "");
   var fa_option_ports = build_select('#fa_option_ports', FA_OPTIONS.ports);
+  var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
   
   var fa_option_pci = [];
 
@@ -218,7 +216,7 @@ $(function () {
   var fb_option_efm = build_select('#fb_option_efm', FB_OPTIONS.efm);
   var fb_option_ports = build_select('#fb_option_ports', FB_OPTIONS.ports);
   var fb_option_xfm_face = build_select('#fb_option_xfm_face', FB_OPTIONS.xfm_face);
-  var fb_option_bezel = build_select('#fb_option_bezel', FB_OPTIONS.bezel);
+  
 
   var fbs_option_model = build_select('#fbs_option_model', FBS_OPTIONS.model);
   var fbs_option_dfm_size = build_select('#fbs_option_dfm_size', FBS_OPTIONS.dfm_size);
@@ -282,7 +280,7 @@ $(function () {
     url += "&blades=" + fb_option_blades.val();
     url += "&efm=" + fb_option_efm.val();
     url += "&xfm_face=" + fb_option_xfm_face.val();
-    url += "&bezel=" + fb_option_bezel.val();
+
 
     var ports_val = fb_option_ports.val();
     if (ports_val){
@@ -307,7 +305,7 @@ $(function () {
     url += "&bezel=" + fbs_option_bezel.val();
  
     
-    fbs_option_dfm_size
+    //fbs_option_dfm_size
 
     var ports_val = fbs_option_ports.val();
     if (ports_val){
@@ -317,7 +315,7 @@ $(function () {
     return url;
   };
 
-  var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
+  
 
   var get_url = function() {
     var active_tab_idx = $('#option-tabs').tabs( "option", "active" );
