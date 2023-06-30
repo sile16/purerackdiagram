@@ -41,8 +41,7 @@ var FB_OPTIONS = {
     blades: '17:0-14,52:15-129',
     efm: ['', 'efm110', 'efm310'],
     ports: ['FALSE', 'TRUE'],
-    xfm_face: ['', 'front', 'back'],
-    bezel: ['FALSE', 'TRUE']
+    xfm_face: ['', 'front', 'back']
 };
 
 var FBS_OPTIONS = {
