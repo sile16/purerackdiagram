@@ -43,7 +43,8 @@ def main():
 def static_global_config():
     return {
 
-        "pci_valid_cards": ["2eth", "2eth40", "2eth100", "2fc", "4fc", "sas", "2ethbaset", "2eth10gbaset", "dca"],                
+        "pci_valid_cards": ["2eth", "2eth40", "2eth100", "2fc", "4fc", 
+                            "sas", "2ethbaset", "2eth10gbaset", "dca", "blank"],                
 
 
         "pci_config_lookup": {

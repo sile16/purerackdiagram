@@ -697,6 +697,7 @@ pci_valid_cards:
 - 2ethbaset
 - 2eth10gbaset
 - dca
+- blank
 png/pure_fa_2eth10gbaset_fh.png:
   ports:
   - loc: &id001 !!python/tuple

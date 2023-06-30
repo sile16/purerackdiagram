@@ -79,6 +79,9 @@ Blades are in the format ```<Size>:<Start Blade#>-<End Blade#>,<...>```. Blade s
 
 For example, 1 chassis of 17TB blades, and 1 chassis of 52, would be ```17:0-14,52:15-29```.
 
+## FlashBlade E
+When building the E, select the appropriate DFM counts and sizes and chassis. The blades will be labelled EC in the first chassis and EX in subsequent chassis when E is selected.
+
 ### Lambda Notes
 
 This is my first Lambda project. I built this tool to explore AWS Lambda and Python 3.7 asyncio.
