@@ -1,4 +1,3 @@
-
 import yaml
 
 # Updates the config.yaml file with location information
@@ -351,7 +350,7 @@ def static_global_config():
         "fb_blade_reg_pattern": "^([0-9]+:[0-9]+(-[0-9]+)?,?)+$"
     }
 
-
+## Add FlashBlade S blade locations in the chassis.
 def update_static_fbs_blade_loc(config):
 
     for key in ['png/pure_fbs_front.png', 'png/pure_fbe_front.png']:
@@ -378,7 +377,7 @@ def update_static_fbs_blade_loc(config):
     config[key] = {'fm_loc': fm_loc,
                    'model_text_loc': model_text_loc }
 
-
+## Add FlashModules locations on the front of the chassis.
 def update_static_fm_loc(config):
     # Location of Flash Module Location
 
@@ -584,48 +583,121 @@ def update_static_model_loc(config, generation, revision):
 
     config[key]['model_text_loc'] = loc
 
-def add_ports_to_key(ports_loc, key, port_type, config):
+def add_ports_to_key(ports_loc, key, port_info, config):
     ports = []
     for ploc in ports_loc:
-        ports.append({'loc': ploc, 'port_type': port_type})
+        port_info_copy = port_info.copy()
+        port_info_copy['loc'] = ploc 
+        ports.append(port_info_copy)
     config[key] = {'ports': ports}
 
 
 def update_static_card_port_loc(config):
     # calculate the port location based on the offset. 
 
-    
+    ###  All the FC cards.
+
+    port_info = {'port_type': 'fc',
+                'port_connector': 'sfp',
+                'port_speeds': ['16g', '32g'],
+                'port_sfp_present': True,
+                'port_sfp_speed': ['16g'] ,
+                'port_sfp_connector': 'lc',
+                'services': ['data', 'replication']}
+     
+     
     ports_loc = [(158, 40), (256, 40)]
-    keys = [['png/pure_fa_2eth_hh.png', 'eth'],
-            ['png/pure_fa_2fc_fh.png', 'fc'],
-            ['png/pure_fa_2fc_hh.png', 'fc']]
+    keys = ['png/pure_fa_2fc_fh.png', 'png/pure_fa_2fc_hh.png']
 
     for k in keys:
-        add_ports_to_key(ports_loc, k[0], k[1], config)
-
-    ports_loc = [(155, 40), (265, 40)]
-    keys = [['png/pure_fa_2ethbaset_fh.png', 'eth'],
-            ['png/pure_fa_2ethbaset_hh.png', 'eth'],
-            ['png/pure_fa_2eth10gbaset_fh.png', 'eth'],
-            ['png/pure_fa_2eth10gbaset_hh.png', 'eth']]
-
-    for k in keys:
-        add_ports_to_key(ports_loc, k[0], k[1], config)
-
-    ports_loc = [(210, 40), (410, 40)]
-    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_fh.png', 'eth', config)
-
-    ports_loc = [(70, 40), (245, 40) ]
-    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_hh.png', 'eth', config)
-
+        add_ports_to_key(ports_loc, k, port_info, config)
+    
     ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
-    add_ports_to_key(ports_loc, 'png/pure_fa_4fc_fh.png', 'fc', config)
+    add_ports_to_key(ports_loc, 'png/pure_fa_4fc_fh.png',  port_info, config)
 
     ports_loc = [(48, 40), (138, 40), (230, 40), (322, 40)]
-    add_ports_to_key(ports_loc, 'png/pure_fa_4fc_hh.png', 'fc', config)
+    add_ports_to_key(ports_loc, 'png/pure_fa_4fc_hh.png', port_info, config)
+    
+    
+    k = 'png/pure_fa_2eth_hh.png'
+    ports_loc = [(158, 40), (256, 40)]
+
+    port_info = {'port_type': 'eth',
+                'port_connector': 'sfp',
+                'port_speeds': ['10g', '25g'],
+                'port_sfp_present': True,
+                'port_sfp_speed': ['10g'],
+                'port_sfp_connector': 'lc',
+                'services': ['data', 'replication', 'management', 'file']}
+    
+    add_ports_to_key(ports_loc, k, port_info, config)
+
+
+    ports_loc = [(155, 40), (265, 40)]
+    keys = ['png/pure_fa_2ethbaset_fh.png',
+            'png/pure_fa_2ethbaset_hh.png']
+    
+    port_info = {'port_type': 'eth',
+                'port_connector': 'rj45',
+                'port_speeds': ['1g'],
+                'port_sfp_present': False,
+                'port_sfp_speed': [] ,
+                'port_sfp_connector': None,
+                'services': ['data', 'replication', 'management', 'file']}
+
+    for k in keys:
+        add_ports_to_key(ports_loc, k , port_info, config)
+
+
+    keys = [
+        'png/pure_fa_2eth10gbaset_fh.png',
+        'png/pure_fa_2eth10gbaset_hh.png']
+
+    port_info = {'port_type': 'eth',
+                'port_connector': 'rj45',
+                'port_speeds': ['1g', '10g',],
+                'port_sfp_present': False,
+                'port_sfp_speed': [] ,
+                'port_sfp_connector': None,
+                'services': ['data', 'replication', 'management', 'file']}
+
+    for k in keys:
+        add_ports_to_key(ports_loc, k, port_info, config)
+
+
+    port_info = {'port_type': 'eth',
+            'port_connector': 'qsfp',
+            'port_speeds': ['40g'],
+            'port_sfp_present': False,
+            'port_sfp_speed': [] ,
+            'port_sfp_connector': None,
+            'services': ['data', 'replication', 'management', 'file']}
+
+    ports_loc = [(210, 40), (410, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_fh.png', port_info, config)
+   
+
+    ports_loc = [(70, 40), (245, 40) ]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_hh.png', port_info, config)
+
+    port_info['port_speeds'] = ['40g', '100g']
+    ports_loc = [(210, 40), (410, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_fh.png', port_info, config)
+   
+
+    ports_loc = [(70, 40), (245, 40) ]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_hh.png', port_info, config)
+
+    port_info = {'port_type': 'sas',
+            'port_connector': 'sas',
+            'port_speeds': ['6g', '12g'],
+            'port_sfp_present': False,
+            'port_sfp_speed': [] ,
+            'port_sfp_connector': None,
+            'services': ['shelf']}
 
     # close enough, todo make better? 
-    add_ports_to_key(ports_loc, 'png/pure_fa_sas_hh.png', 'sas', config)
+    add_ports_to_key(ports_loc, 'png/pure_fa_sas_hh.png', port_info, config)
 
 
 
@@ -645,31 +717,58 @@ def update_static_model_port_loc(config):
                 'port_type': 'eth',
                 'port_connector': 'qsfp28',
                 'port_speeds': ['50g', '100g'],
+                'port_sfp_present': False,
+                'port_sfp_speed': [] ,
+                'port_sfp_connector': None,
                 'services': ['shelf'] },
+
                 {'loc': (786, 308),
+                'name': 'ct0.eht1',
                 'port_type': 'eth',
                 'port_connector': 'qsfp28',
                 'port_speeds': ['50g', '100g'],
-                'name': 'ct0.eht1',
+                'port_sfp_present': False,
+                'port_sfp_speed': [],
+                'port_sfp_connector': None,
                 'services': ['shelf']},
+
                 {'loc': (902, 308),
-                'port_type': 'eth',
-                'port_connector': 'qsfp',
-                'port_speeds': ['10g', '25g'],
                 'name': 'ct0.eht2',
-                'services': ['iSCSI', 'replication', 'file']},
-                {'loc': (990, 308),
                 'port_type': 'eth',
                 'port_connector': 'qsfp',
                 'port_speeds': ['10g', '25g'],
-                'services': ['iSCSI', 'replication', 'file'],
-                'name': 'ct0.eth3'},
+                
+                'port_sfp_present': True,
+                'port_sfp_speeds': ['10g'] ,
+                'port_sfp_connector': 'LC',
+
+                'services': ['iSCSI', 'replication', 'file']},
+                
+                {'loc': (990, 308),
+                 'name': 'ct0.eth3',
+
+                'port_type': 'eth',
+                'port_connector': 'qsfp',
+                'port_speeds': ['10g', '25g'],
+
+                'port_sfp_present': True,
+                'port_sfp_speed': ['10g'] ,
+                'port_sfp_connector': 'LC',
+
+                'services': ['iSCSI', 'replication', 'file']},
+
                 {'loc': (1945, 220),
+                'name': 'ct0.eth4',
                 'port_type': 'eth',
                 'port_connector': 'rj45',
                 'port_speeds': ['1g'],
-                'services': ['management'],
-                'name': 'ct0.eth4'} ]
+                
+                'port_sfp_present': False,
+                'port_sfp_speed': [],
+                'port_sfp_connector': None,
+
+                'services': ['management']}
+                ]
         else:
         # These are all the ct0 ports
             ct0ports = [
@@ -709,22 +808,40 @@ def update_static_model_port_loc(config):
         config[key]['ports'] = ct0ports + ct1ports
 
         #################################
-        ## FA Chassis Flash Modules for XL
+        ## FA Chassis Rear Ports for XL
         ######################
 
         ct0ports = [
-            {'loc': (846, 704),
+            {'loc': (837, 685),
             'port_type': 'eth',
-            'name': 'ct0.eht0'},
-            {'loc': (964, 704),
+            'name': 'ct0.eht0',
+            
+            'port_connector': 'rj45',
+            'port_speeds': ['1g'],
+            
+            'port_sfp_present': False,
+            'port_sfp_speeds': [] ,
+            'port_sfp_connector': None,
+            'services': ['management']},
+
+            {'loc': (955, 685),
             'port_type': 'eth',
-            'name': 'ct0.eht1'}]
+            'name': 'ct0.eht1',            
+            
+            'port_connector': 'rj45',
+            'port_speeds': ['1g'],
+            
+            'port_sfp_present': False,
+            'port_sfp_speeds': [] ,
+            'port_sfp_connector': None,
+            'services': ['management']}]
 
         ct1ports = []
         for p in ct0ports:
-            loc = (p['loc'][0], p['loc'][1] + 493)
-            name = p['name'].replace('ct0', 'ct1')
-            ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+            p_copy = p.copy()
+            p_copy['loc'] = (p['loc'][0], p['loc'][1] + 478)
+            p_copy['name'] = p_copy['name'].replace('ct0', 'ct1')
+            ct1ports.append(p_copy)
 
 
         key = 'png/pure_fa_xl_r1_back.png'
@@ -739,19 +856,51 @@ def update_static_model_port_loc(config):
     ct0ports = [
         {'loc': (735, 315),
          'port_type': 'eth',
-         'name': 'ct0.eht0'},
+         'name': 'ct0.eht0',
+         'port_connector': 'qsfp28',
+        'port_speeds': ['50g', '100g'],
+        'port_sfp_present': False,
+        'port_sfp_speed': [] ,
+        'port_sfp_connector': None,
+        'services': ['shelf']
+         },
         {'loc': (854, 315),
          'port_type': 'eth',
-         'name': 'ct0.eht1'},
+         'name': 'ct0.eht1',
+         'port_speeds': ['50g', '100g'],
+        'port_sfp_present': False,
+        'port_sfp_speed': [] ,
+        'port_sfp_connector': None,
+        'services': ['shelf'],
+        'port_connector': 'qsfp28'},
         {'loc': (976, 315),
          'port_type': 'eth',
-         'name': 'ct0.eht2'},
+         'name': 'ct0.eht2',
+         'port_speeds': ['50g', '100g'],
+        'port_sfp_present': False,
+        'port_sfp_speed': [] ,
+        'port_sfp_connector': None,
+        'services': ['shelf'],
+        'port_connector': 'qsfp28'},
         {'loc': (1090, 315),
          'port_type': 'eth',
-         'name': 'ct0.eth3'},
+         'name': 'ct0.eth3',
+         'port_speeds': ['50g', '100g'],
+        'port_sfp_present': False,
+        'port_sfp_speed': [] ,
+        'port_sfp_connector': None,
+        'services': ['shelf'], 
+        'port_connector': 'qsfp28'},
         {'loc': (2009, 318),
          'port_type': 'eth',
-         'name': 'ct0.eth4'}]
+         'name': 'ct0.eth4',
+         'port_speeds': ['50g', '100g'],
+        'port_sfp_present': False,
+        'port_sfp_speed': [] ,
+        'port_sfp_connector': None,
+        'services': ['shelf'], 
+        'port_connector': 'qsfp28'
+        }]
 
     ct1ports = []
     for p in ct0ports:
@@ -763,10 +912,6 @@ def update_static_model_port_loc(config):
     if key not in config:
         config[key] = {}
     config[key]['ports'] = ct0ports + ct1ports
-
-
-
-
 
 
     #### PureFB Back #####
@@ -831,16 +976,41 @@ def update_static_model_port_loc(config):
     ct0ports = [
         {'loc': (350, 420),
          'port_type': 'eth',
-         'name': 'fm0.eht1'},
+         'name': 'fm0.eht1',
+         'port_connector': 'qsfp28',
+         'port_speeds': ['10g', '25g', '40g', '100g'],
+         'port_sfp_present': False,
+         'port_sfp_speed': [] ,
+         'port_sfp_connector': None,
+         'services': ['data, replication, management'] 
+        },
         {'loc': (463, 420),
          'port_type': 'eth',
-         'name': 'fm0.eht2'},
+         'name': 'fm0.eht2',
+         'port_connector': 'qsfp28',
+         'port_speeds': ['10g', '25g', '40g', '100g'],
+         'port_sfp_present': False,
+         'port_sfp_speed': [] ,
+         'port_sfp_connector': None,
+         'services': ['data, replication, management']},
         {'loc': (572, 420),
          'port_type': 'eth',
-         'name': 'fm0.eht3'},
+         'name': 'fm0.eht3',
+         'port_connector': 'qsfp28',
+         'port_speeds': ['10g', '25g', '40g', '100g'],
+         'port_sfp_present': False,
+         'port_sfp_speed': [] ,
+         'port_sfp_connector': None,
+         'services': ['data, replication, management']},
         {'loc': (687, 420),
          'port_type': 'eth',
-         'name': 'fm0.eth4'}
+         'name': 'fm0.eth4',
+         'port_connector': 'qsfp28',
+         'port_speeds': ['10g', '25g', '40g', '100g'],
+         'port_sfp_present': False,
+         'port_sfp_speed': [] ,
+         'port_sfp_connector': None,
+         'services': ['data, replication, management']}
 
          # Removing last 4 ports because they are ianctive from request of 
          # the Pure Advisor team.
@@ -890,22 +1060,60 @@ def update_static_model_port_loc(config):
     ports = []
     curr_loc = start
     for p in range(0, 32, 4):
+        services = ['shelf']
+        if p > 20:
+            services = ['data', 'replication', 'management']
+        if p == 28:
+            services = ['reserved']
+    
         ports.append({'loc': curr_loc,
                       'port_type': 'eth',
-                      'name': f'eth{p}'})
+                      'name': f'eth{p}',
+                      'port_connector': 'qsfp28',
+                      'port_speeds': ['10g', '25g', '40g', '100g'],
+                      'port_sfp_present': False,
+                      'port_sfp_speed': [] ,
+                      'port_sfp_connector': None,
+                      'services': services})
         ports.append({'loc': (curr_loc[0], curr_loc[1] + y_offset),
                       'port_type': 'eth',
-                      'name': f'eth{p + 1}'})
+                      'name': f'eth{p + 1}',
+                      'port_connector': 'qsfp28',
+                      'port_speeds': ['10g', '25g', '40g', '100g'],
+                      'port_sfp_present': False,
+                      'port_sfp_speed': [] ,
+                      'port_sfp_connector': None,
+                      'services': services})
+        if p == 28:
+            services = ['Cross Connect']
         ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] ),
                       'port_type': 'eth',
-                      'name': f'eth{p + 2}'})
+                      'name': f'eth{p + 2}',
+                      'port_connector': 'qsfp28',
+                      'port_speeds': ['10g', '25g', '40g', '100g'],
+                      'port_sfp_present': False,
+                      'port_sfp_speed': [] ,
+                      'port_sfp_connector': None,
+                      'services': services})
         ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] + y_offset),
                       'port_type': 'eth',
-                      'name': f'eth{p + 3}'})
+                      'name': f'eth{p + 3}',
+                      'port_connector': 'qsfp28',
+                      'port_speeds': ['10g', '25g', '40g', '100g'],
+                      'port_sfp_present': False,
+                      'port_sfp_speed': [] ,
+                      'port_sfp_connector': None,
+                      'services': services})
         curr_loc = (curr_loc[0] + x2_offset, curr_loc[1])
     ports.append({'loc': (2455, 103),
                   'port_type': 'eth',
-                  'name': 'mgmt'})
+                  'name': 'mgmt',
+                  'port_connector': 'rj45',
+                  'port_speeds': ['1g'],
+                  'port_sfp_present': False,
+                  'port_sfp_speed': [] ,
+                  'port_sfp_connector': None,
+                  'services': ['management']})
 
     key = 'png/pure_fb_xfm_back.png'
     if key not in config:

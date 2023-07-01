@@ -22,7 +22,7 @@ def get_diagram(params):
     # elif model.startswith("fr"):
     #    diagram = OEDiagram(params)
     else:
-        raise Exception("Error unknown model, looking for fa or fb or fbs ")
+        raise Exception("Error unknown model, looking for fa or fb or fb-s or fb-e ")
 
     return diagram
 

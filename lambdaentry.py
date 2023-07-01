@@ -10,20 +10,22 @@ from io import BytesIO
 import asyncio
 import base64
 import logging
-import purerackdiagram
+import os
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-import os
+
+import purerackdiagram
+
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-version = 4
+VERSION = 4
 program_time_s = time.time()
 
 
-def text_to_image(text, width):
+def text_to_image(text):
     root_path = os.path.dirname(purerackdiagram.__file__)
     ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
     font = ImageFont.truetype(ttf_path, size=36)
@@ -63,7 +65,7 @@ def handler(event, context):
     """
     global program_time_s
     program_time_s = time.time()
-    params = "unknown"
+    params = {}
 
     try:
         if ("queryStringParameters" not in event
@@ -85,7 +87,8 @@ def handler(event, context):
         # save original image dimensions needed for port pixel->in calculation
         img_original_size = img.size
 
-        if 'ports' in params and ( 
+        if 'ports' in params and (
+            params['ports'] == True or
             params['ports'].upper() == "TRUE"
             or params['ports'].upper() == "YES"):
 
@@ -230,36 +233,67 @@ def handler(event, context):
             return return_data
 
         else:
-
             # convert to base64 and encode utf-8
             # this is required for a binary object passed back
             # through amazon API gateway
             img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+            return_data = None
 
-            # when running in lambda we HAVE to wait until
-            # upload done before returning
-            return_data = {
+            data = {"image_type": "png",
+                    "config": diagram.config,
+                    "ports": diagram.ports,
+                    #"execution_duration": time.time() - program_time_s,
+                    "error": None,
+                    "params": params, "image": img_str,}
+
+            if 'json' in params and params['json']:
+                return_data = {
+                    "statusCode": 200,
+                    "body": data,
+                    "headers": {"Content-Type": "application/json"}
+                }
+
+            else:
+
+                # when running in lambda we HAVE to wait until
+                # upload done before returning
+                return_data = {
+                    "statusCode": 200,
+                    "body": img_str,
+                    "headers": {"Content-Type": "image/png"},
+                    "isBase64Encoded": True
+                }
+
+            return return_data
+
+    except Exception as except_e:
+        error_msg = str(except_e)
+        #logger.error("{}\nOriginal Params: {}".format(error_msg, params))
+
+        if 'json' in params and params['json']:
+
+            data = {"image_type": None,
+                    "image": None,
+                    "diagram": diagram.config,
+                    "execution_duration": time.time() - program_time_s,
+                    "error": error_msg,
+                    "params": params }
+            
+            return {
+                    "statusCode": 200,
+                    "body": data,
+                    "headers": {"Content-Type": "application/json"} }
+        
+        else:
+             # return the error message as an image
+            img = text_to_image(error_msg)
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+            return {
                 "statusCode": 200,
                 "body": img_str,
                 "headers": {"Content-Type": "image/png"},
                 "isBase64Encoded": True
             }
-
-            return return_data
-
-    except Exception as e:
-        error_msg = str(e)
-        logger.error("{}\nOriginal Params: {}".format(error_msg, params))
-
-        # return the error message as an image
-        img = text_to_image(error_msg, 1024)
-        buffered = BytesIO()
-        img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
-        return {
-            "statusCode": 200,
-            "body": img_str,
-            "headers": {"Content-Type": "image/png"},
-            "isBase64Encoded": True
-        }

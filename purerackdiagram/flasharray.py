@@ -546,7 +546,7 @@ class FADiagram():
                 for dp in shelf.split("/"):
                     if dp in shelf_dp_size_lookup:
                         datapacks.append(shelf_dp_size_lookup[dp])
-                        if dp != '0':
+                        if not dp.startswith('0') :
                             shelf_type = shelf_dp_size_lookup[dp][1]
                             if 'nvme' in shelf_type:
                                 shelf_type = 'nvme'

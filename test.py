@@ -26,6 +26,20 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-xl130",
+            "datapacks": "91/91/91",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-x50r4",
             "datapacks": "63/0",
             "protocol": "FC",
@@ -35,6 +49,34 @@ more_tests = [
             "dp_label": "True",
             "local_delay": 0,
             "ports": "True"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r4",
+            "datapacks": "63/0",
+            "protocol": "FC",
+            "addoncards": "",
+            "face": "back",
+            "fm_label": "True",
+            "dp_label": "True",
+            "local_delay": 0,
+            "ports": "True",
+            "vssx": "True"
+        }
+    },
+        {
+        "queryStringParameters": {
+            "model": "fa-x50r4",
+            "datapacks": "63/0",
+            "protocol": "FC",
+            "addoncards": "",
+            "face": "back",
+            "fm_label": "True",
+            "dp_label": "True",
+            "local_delay": 0,
+            "ports": "True",
+            "json": "True"
         }
     },
         {
@@ -130,7 +172,7 @@ more_tests = [
             "model": "fa-xl130",
             "datapacks": "63/0",
             "chassis": 2,
-            "addoncards": "sas,2fc,4fc,2eth,2ethbaset,2eth40,2fc,2fc,2fc",
+            "addoncards": "sas,2fc,4fc,2eth,2ethbaset,2eth40,2fc,2fc,2fc,2fc",
             "face": "back",
             "fm_label": True,
             "dp_label": True,
@@ -246,130 +288,185 @@ more_tests = [
 ]
 
 
-def test_lambda():
+def test_lambda(params, outputfile):
     # Single test functions
 
 
-    results = lambdaentry.handler(more_tests[0], None)
+    results = lambdaentry.handler(params, None)
 
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
-            with open('tmp.png', 'wb') as outfile:
+            with open(outputfile + '.png', 'wb') as outfile:
                 outfile.write(img_str)
-            del results['body']
+            #del results['body']
     elif results['headers'].get("Content-Type") == 'application/vnd.ms-visio.stencil':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
-            with open('stencil.vssx', 'wb') as outfile:
+            with open(outputfile + '.vssx', 'wb') as outfile:
                 outfile.write(img_str)
-            del results['body']
+            #del results['body']
+    elif results['headers'].get("Content-Type") == 'application/json':
+        if 'body' in results:
+            img_str = json.dumps(results['body'], indent=4)
+            with open(outputfile + '.json', 'w') as outfile:
+                outfile.write(img_str)
+            #del results['body']
 
-    pprint(results)
+    return results
 
 
 def create_test_image(item, count, total):
-    file_name = ""
-    for n in ['model', 'addoncards', 'face', 'dp_label', 'fm_label', 'csize', 'datapacks', 
-    'no_of_chassis', 'no_of_blades', 'drive_size', 'no_of_drives_per_blade' ]:
+    folder = "test_results"
+    file_name = f"{item['model']}"
+    for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
+    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json' ]:
         if n in item:
             if n == 'datapacks':
-                file_name += str(item[n]).replace('/', '-') + "_"
+                file_name += f"_{str(item[n]).replace('/', '-')}"
             else:
-                file_name += str(item[n]) + "_"
-    file_name += '.png'
+                file_name += f"_{n}-{item[n]}"
+    
+
 
 
     try:
-        img = purerackdiagram.get_image_sync(item)
+        results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name))
+
+        h = hashlib.sha256()
+        if results['headers'].get("Content-Type") == 'application/json':
+            h.update(json.dumps(results['body']).encode('utf-8'))
+        else:
+            h.update(results['body'].encode('utf-8'))
+        
+        print(f"{count} of {total}   {file_name}")
+        return({file_name: h.hexdigest()})
     
-    except Exception as e:
+    except Exception as ex_unknown:
         print(f"Caught exeption in image: {file_name} ")
 
         traceback.print_exc()
         print()
-        raise e
+        raise ex_unknown
 
 
-    h = hashlib.sha256()
-    with io.BytesIO() as memf:
-        img.save(memf, 'PNG')
-        data = memf.getvalue()
-        h.update(data)
-        img.save(os.path.join(save_dir, file_name))
-
-        # result_q.put({file_name: h.hexdigest()})
-        print(f"{count} of {total}   {file_name}")
-        return({file_name: h.hexdigest()})
+    
 
 
 def get_all_tests():
     models = global_config['pci_config_lookup']
-    dps = ['45/45-31/63-45', '3/127-24']
+    dps = ['45/45-31/63-45-24.0', '3/127-24.0-45']
+
+    valid_chassis_dps = list(global_config['chassis_dp_size_lookup'].keys())
+    valid_shelf_dps = list(global_config['shelf_dp_size_lookup'].keys())
 
     # get the keys of diction csize_lookup
     csizes = list(global_config['csize_lookup'].keys())
+    #csizes = ['964', '984']
     #global_config.csize_lookup
-    #csizes = ['247', '296', '345', '366', '395', '492', '494', 
-    #         '590', '688', '787', '839', 
-    #         '879', '885', '984', '1182',
-    #         '1185', '1329', '1390', '1476', '1531', '1574', 
-    #         '1672', '1771', '1869', '1877', '1877']
 
     count = 0
-    # front:
+
+    for test in more_tests:
+        yield test['queryStringParameters']
+        count += 1
+    
+    # Test all Models with a front data pack and shelf.
     for model in models:
         #continue
         model = model[:8]
-        for dp_label in [True, False]:
-            if 'c' in model:
-                for csize in csizes:
-                    count += 1
-                    params = {"model": model,
-                              "fm_label": True,
-                              "dp_label": dp_label,
-                              "csize": csize}
-                    yield params
-            else:
-                for dp in dps:
-                    # if count > 3:
-                    #    break
-                    count += 1
-                    params = {"model": model,
-                              "fm_label": True,
-                              "dp_label": dp_label,
-                              "datapacks": dp}
+        if 'c' in model:
+            count += 1
+            params = {"model": model,
+                        "fm_label": True,
+                        "dp_label": True,
+                        "csize": '984'}
+            yield params
+        else:
+            for dp in dps:
+                count += 1
+                params = {"model": model,
+                            "fm_label": True,
+                            "dp_label": True,
+                            "datapacks": dp}
+                yield params
 
-                    yield params
+        # The bezel.
+        params = {"model": model,
+                    "fm_label": True,
+                    "dp_label": True,
+                    "bezel": True,
+                    "datapacks": '45-31'}
+        yield params
+
+    for csize in csizes:
+        count += 1
+        params = {"model": 'fa-c60',
+                    "fm_label": True,
+                    "dp_label": True,
+                    "csize": csize}
+        yield params
+    
+    #Test all Datapacks on the front.
+    for dp in valid_chassis_dps:
+        count += 1
+        params = {"model": "fa-x70r1",
+                    "fm_label": True,
+                    "dp_label": True,
+                    "datapacks": dp}
+        yield params
+
+    for dp in valid_shelf_dps:
+        count += 1
+        params = {"model": "fa-x70r4",
+                    "fm_label": True,
+                    "dp_label": True,
+                    "datapacks": f"63-{dp}"}
+        yield params
+            
 
     # back:
     addon_cards = global_config['pci_valid_cards']
 
+    #every model and shelf back view.
     for model in models:
         #continue
         model = model[:8]
+        
+        if 'c' in model:
+            params = {"model": model,
+                        "addoncards": '4fc',
+                        "face": "back",
+                        "csize": '984',
+                        "ports": True}
+            count += 1
+            yield params
+
+        else:
+            params = {"model": model,
+                        "datapacks": "63-24.0-45",
+                        "addoncards": '4fc',
+                        "face": "back",
+                        "ports": True}
+            count += 1
+            yield params
+
+        # every model with each card.
         for card in addon_cards:
-            if 'c' in model:
-                for csize in csizes:
-                    params = {"model": model,
-                              "addoncards": card,
-                              "face": "back",
-                              "csize": csize}
-                    yield params
-            else:
-                for dp in dps:
-                    params = {"model": model,
-                              "datapacks": dp,
-                              "addoncards": card,
-                              "face": "back"}
-                    yield params
+            params = {"model": model,
+                        "datapacks": "45",
+                        "addoncards": card,
+                        "face": "back",
+                        "ports": True}
+            count += 1
+            yield params
 
-    for test in more_tests:
-        continue
-        yield test['queryStringParameters']
 
-    for blades in [7, 10, 15, 30]:
-        for dfms in [1, 2, 3, 4]:
+
+    
+
+    for blades in [10, 15, 30]:
+        for dfms in [2, 4]:
             for size in [24.0, 48.2]:
                 for face in ['front', 'back']:
                     params = {"model": "fb-s200",
@@ -377,7 +474,16 @@ def get_all_tests():
                               "face": face,
                               "no_of_drives_per_blade": dfms,
                               "drive_size": size,
+                              "ports": True}
+                    count += 1
+                    yield params
+                    params = {"model": "fb-e",
+                              "no_of_blades": blades,
+                              "face": face,
+                              "no_of_drives_per_blade": dfms,
+                              "drive_size": size,
                               "ports": "TRUE"}
+                    count += 1
                     yield params
 
 def test_all(args):
@@ -427,7 +533,7 @@ def main(args):
     if args.testtype == 'all':
         test_all(args)
     else:
-        test_lambda()
+        test_lambda(more_tests[0], 'tmp')
 
 
 if __name__ == "__main__":
