@@ -235,7 +235,7 @@ $(function () {
     // the function to generate the url for FA image based on options
 
     var url = API_ENDPOINT;
-    url += "&model="  + fa_option_model.val();
+    url += "model="  + fa_option_model.val();
     url += "&protocol="  + fa_option_protocol.val();
     url += "&face="  + fa_option_face.val();
     url += "&datapacks="  + fa_option_datapacks.val();
@@ -272,7 +272,7 @@ $(function () {
     // the function to generate the url for FB image based on options
 
     var url = API_ENDPOINT;
-    url += "&model=fb"; // it is fixed value, but reserved for future expension
+    url += "model=fb"; // it is fixed value, but reserved for future expension
     url += "&chassis="  + fb_option_chassis.val();
     url += "&face="  + fb_option_face.val();
     url += "&direction="  + fb_option_direction.val();
@@ -294,7 +294,7 @@ $(function () {
     // the function to generate the url for FB image based on options
 
     var url = API_ENDPOINT;
-    url += "&model="  + fbs_option_model.val();
+    url += "model="  + fbs_option_model.val();
     url += "&face="  + fbs_option_face.val();
     url += "&direction="  + fbs_option_direction.val();
     url += "&xfm=" + fbs_option_xfm.val();
@@ -317,7 +317,7 @@ $(function () {
 
   
 
-  var get_url = function() {
+  async function get_url() {
     var active_tab_idx = $('#option-tabs').tabs( "option", "active" );
     console.log(active_tab_idx);
 
@@ -331,15 +331,33 @@ $(function () {
       url = fbs_url();
     };
 
-    console.log(url);
-    $('#rack_digram').attr('src', url);
+
+
+    //console.log(url);
+    //$('#rack_digram').attr('src', url);
+
+    
     
     visio_url = url + "&vssx=True";
     
     $('#img_url').html('<a target="_blank" href="' + url + '">' + url + '</a>');
     $('#visio_url').html('<a target="_blank" href="' + visio_url + '">' + visio_url + '</a>');
-    
-    return url
+
+    const response = await fetch(url+"&json=True");
+    var diagram = await response.json();
+
+    if ( diagram.error ) {
+      $('#rack_digram').attr('src', "");
+    } else {
+      const img_base64encoded = await fetch(`data:image/png;base64,${diagram.image}`);
+      const blob = await img_base64encoded.blob();
+      var objectURL = await URL.createObjectURL(blob);
+      delete diagram.image;
+      $('#rack_digram').attr('src', objectURL);
+    }
+
+    $('#img_info').text(JSON.stringify(diagram, null, 3));
+
   }
 
   $("#display").click(function () {

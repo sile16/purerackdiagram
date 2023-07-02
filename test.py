@@ -24,6 +24,30 @@ save_dir = 'test_results/'
 
 
 more_tests = [
+    {  ## keep this as an error message on purpose.
+        "queryStringParameters": {
+            "model": "fa-x90r2",
+            "datapacks": "38.0/38.0-31/63-127/0",
+            "direction": "down",
+            "chassis": 2,
+            "face": "front",
+            "dp_label": "True",
+            "fm_label": "True",
+            "json": "True"
+        }
+    },
+     {  ## keep this as an error message on purpose.
+        "queryStringParameters": {
+            "model": "fa-x90r2",
+            "datapacks": "38/38-31/63-127/0",
+            "direction": "down",
+            "chassis": 2,
+            "face": "front",
+            "dp_label": "True",
+            "fm_label": "True",
+            "json": "True"
+        }
+    },
     {
         "queryStringParameters": {
             "model": "fa-xl130",
@@ -35,7 +59,8 @@ more_tests = [
             "dp_label": True,
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": True,
+            "json": "True"
         }
     },
     {

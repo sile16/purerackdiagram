@@ -713,7 +713,7 @@ def update_static_model_port_loc(config):
         ct0ports = None
         if rev == 4:
             ct0ports = [ {'loc': (671, 308),
-                'name': 'ct0.eht0',
+                'name': 'ct0.eth0',
                 'port_type': 'eth',
                 'port_connector': 'qsfp28',
                 'port_speeds': ['50g', '100g'],
@@ -723,7 +723,7 @@ def update_static_model_port_loc(config):
                 'services': ['shelf'] },
 
                 {'loc': (786, 308),
-                'name': 'ct0.eht1',
+                'name': 'ct0.eth1',
                 'port_type': 'eth',
                 'port_connector': 'qsfp28',
                 'port_speeds': ['50g', '100g'],
@@ -733,7 +733,7 @@ def update_static_model_port_loc(config):
                 'services': ['shelf']},
 
                 {'loc': (902, 308),
-                'name': 'ct0.eht2',
+                'name': 'ct0.eth2',
                 'port_type': 'eth',
                 'port_connector': 'qsfp',
                 'port_speeds': ['10g', '25g'],
@@ -774,13 +774,13 @@ def update_static_model_port_loc(config):
             ct0ports = [
             {'loc': (671, 316),
             'port_type': 'eth',
-            'name': 'ct0.eht0'},
+            'name': 'ct0.eth0'},
             {'loc': (788, 316),
             'port_type': 'eth',
-            'name': 'ct0.eht1'},
+            'name': 'ct0.eth1'},
             {'loc': (1880, 221),
             'port_type': 'eth',
-            'name': 'ct0.eht2'},
+            'name': 'ct0.eth2'},
             {'loc': (1880, 293),
             'port_type': 'eth',
             'name': 'ct0.eth3'},
@@ -793,9 +793,10 @@ def update_static_model_port_loc(config):
 
         ct1ports = []
         for p in ct0ports:
-            loc = (p['loc'][0], p['loc'][1] + 380)
-            name = p['name'].replace('ct0', 'ct1')
-            ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+            p_copy = p.copy()
+            p_copy['loc'] = (p['loc'][0], p['loc'][1] + 380)
+            p_copy['name'] = p_copy['name'].replace('ct0', 'ct1')
+            ct1ports.append(p_copy)
 
         key = f'png/pure_fa_x_r{rev}_back.png'
         if key not in config:
@@ -814,7 +815,7 @@ def update_static_model_port_loc(config):
         ct0ports = [
             {'loc': (837, 685),
             'port_type': 'eth',
-            'name': 'ct0.eht0',
+            'name': 'ct0.eth0',
             
             'port_connector': 'rj45',
             'port_speeds': ['1g'],
@@ -826,7 +827,7 @@ def update_static_model_port_loc(config):
 
             {'loc': (955, 685),
             'port_type': 'eth',
-            'name': 'ct0.eht1',            
+            'name': 'ct0.eth1',            
             
             'port_connector': 'rj45',
             'port_speeds': ['1g'],
@@ -856,7 +857,7 @@ def update_static_model_port_loc(config):
     ct0ports = [
         {'loc': (735, 315),
          'port_type': 'eth',
-         'name': 'ct0.eht0',
+         'name': 'ct0.eth0',
          'port_connector': 'qsfp28',
         'port_speeds': ['50g', '100g'],
         'port_sfp_present': False,
@@ -866,7 +867,7 @@ def update_static_model_port_loc(config):
          },
         {'loc': (854, 315),
          'port_type': 'eth',
-         'name': 'ct0.eht1',
+         'name': 'ct0.eth1',
          'port_speeds': ['50g', '100g'],
         'port_sfp_present': False,
         'port_sfp_speed': [] ,
@@ -875,7 +876,7 @@ def update_static_model_port_loc(config):
         'port_connector': 'qsfp28'},
         {'loc': (976, 315),
          'port_type': 'eth',
-         'name': 'ct0.eht2',
+         'name': 'ct0.eth2',
          'port_speeds': ['50g', '100g'],
         'port_sfp_present': False,
         'port_sfp_speed': [] ,
@@ -919,13 +920,13 @@ def update_static_model_port_loc(config):
     ct0ports = [
         {'loc': (1362, 200),
          'port_type': 'eth',
-         'name': 'fm0.eht1'},
+         'name': 'fm0.eth1'},
         {'loc': (1362, 290),
          'port_type': 'eth',
-         'name': 'fm0.eht2'},
+         'name': 'fm0.eth2'},
         {'loc': (1482, 200),
          'port_type': 'eth',
-         'name': 'fm0.eht3'},
+         'name': 'fm0.eth3'},
         {'loc': (1482, 290),
          'port_type': 'eth',
          'name': 'fm0.eth4'},
@@ -976,7 +977,7 @@ def update_static_model_port_loc(config):
     ct0ports = [
         {'loc': (350, 420),
          'port_type': 'eth',
-         'name': 'fm0.eht1',
+         'name': 'fm0.eth1',
          'port_connector': 'qsfp28',
          'port_speeds': ['10g', '25g', '40g', '100g'],
          'port_sfp_present': False,
@@ -986,7 +987,7 @@ def update_static_model_port_loc(config):
         },
         {'loc': (463, 420),
          'port_type': 'eth',
-         'name': 'fm0.eht2',
+         'name': 'fm0.eth2',
          'port_connector': 'qsfp28',
          'port_speeds': ['10g', '25g', '40g', '100g'],
          'port_sfp_present': False,
@@ -995,7 +996,7 @@ def update_static_model_port_loc(config):
          'services': ['data, replication, management']},
         {'loc': (572, 420),
          'port_type': 'eth',
-         'name': 'fm0.eht3',
+         'name': 'fm0.eth3',
          'port_connector': 'qsfp28',
          'port_speeds': ['10g', '25g', '40g', '100g'],
          'port_sfp_present': False,
@@ -1017,13 +1018,13 @@ def update_static_model_port_loc(config):
          
 #        {'loc': (1923, 420),
 #         'port_type': 'eth',
-#         'name': 'fm0.eht5'},
+#         'name': 'fm0.eth5'},
 #        {'loc': (2029, 420),
 #         'port_type': 'eth',
-#         'name': 'fm0.eht6'},
+#         'name': 'fm0.eth6'},
 #        {'loc': (2146, 420),
 #         'port_type': 'eth',
-#         'name': 'fm0.eht7'},
+#         'name': 'fm0.eth7'},
 #        {'loc': (2256, 425),
 #         'port_type': 'eth',
 #         'name': 'fm0.eth8'},

@@ -66,15 +66,25 @@ def handler(event, context):
     global program_time_s
     program_time_s = time.time()
     params = {}
+    diagram = None
 
     try:
         if ("queryStringParameters" not in event
                 or event["queryStringParameters"] is None):
+            
+            return {
+                'statusCode': 200,
+                'headers': {
+                    "Content-Type": "text/plain",
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET'
+                },
+                'body': 'Hello from Lambda!' }
 
-            return {"statusCode": 500,
-                    "body": "no query params. event={} and context={}".format(
-                        event,
-                        vars(context))}
+            # return {"statusCode": 500,
+            #        "body": "no query params. event={} and context={}".format(
+            #            event,
+            #            vars(context))}
 
         params = event["queryStringParameters"]
 
@@ -242,15 +252,20 @@ def handler(event, context):
             data = {"image_type": "png",
                     "config": diagram.config,
                     "ports": diagram.ports,
-                    #"execution_duration": time.time() - program_time_s,
+                    "execution_duration": time.time() - program_time_s,
                     "error": None,
-                    "params": params, "image": img_str,}
-
+                    "params": params, 
+                    "image": img_str}
+            
+            
+            import json
             if 'json' in params and params['json']:
                 return_data = {
                     "statusCode": 200,
-                    "body": data,
-                    "headers": {"Content-Type": "application/json"}
+                    "body": json.dumps(data, indent=4),
+                    "headers": {"Content-Type": "application/json", 
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET'}
                 }
 
             else:
@@ -260,7 +275,9 @@ def handler(event, context):
                 return_data = {
                     "statusCode": 200,
                     "body": img_str,
-                    "headers": {"Content-Type": "image/png"},
+                    "headers": {"Content-Type": "image/png", 
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET'},
                     "isBase64Encoded": True
                 }
 
@@ -272,16 +289,21 @@ def handler(event, context):
 
         if 'json' in params and params['json']:
 
-            data = {"image_type": None,
-                    "image": None,
-                    "diagram": diagram.config,
-                    "execution_duration": time.time() - program_time_s,
-                    "error": error_msg,
-                    "params": params }
+            data = {}
+            if diagram:
+                data["config"] = diagram.config
+                data["ports"] = diagram.ports
             
+            data["error"] = error_msg
+            data["execution_duration"] = time.time() - program_time_s
+            data["params"] = params
+            data["image_type"] = None
+            data["image"] = None
+
+            import json
             return {
                     "statusCode": 200,
-                    "body": data,
+                    "body": json.dumps(data, indent=4),
                     "headers": {"Content-Type": "application/json"} }
         
         else:
