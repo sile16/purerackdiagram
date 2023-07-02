@@ -236,7 +236,9 @@ def handler(event, context):
                 "statusCode": 200,
                 "body": zip_str,
                 "headers": {"Content-Type": "application/vnd.ms-visio.stencil",
-                            'content-disposition': content_disposition},
+                            'content-disposition': content_disposition,
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET'},
                 "isBase64Encoded": True
             }
 
@@ -304,7 +306,9 @@ def handler(event, context):
             return {
                     "statusCode": 200,
                     "body": json.dumps(data, indent=4),
-                    "headers": {"Content-Type": "application/json"} }
+                    "headers": {"Content-Type": "application/json",
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET'} }
         
         else:
              # return the error message as an image
@@ -316,6 +320,8 @@ def handler(event, context):
             return {
                 "statusCode": 200,
                 "body": img_str,
-                "headers": {"Content-Type": "image/png"},
+                "headers": {"Content-Type": "image/png",
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET'},
                 "isBase64Encoded": True
             }

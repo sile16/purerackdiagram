@@ -348,12 +348,18 @@ $(function () {
 
     if ( diagram.error ) {
       $('#rack_digram').attr('src', "");
+      $('#error_msg').text(diagram.error);
+      $("#error-div").show();
+      $('#rack_diagram').hide();
     } else {
+      $('#error_msg').text("");
+      $("#error-div").hide();
       const img_base64encoded = await fetch(`data:image/png;base64,${diagram.image}`);
       const blob = await img_base64encoded.blob();
       var objectURL = await URL.createObjectURL(blob);
       delete diagram.image;
       $('#rack_digram').attr('src', objectURL);
+      $('#rack_diagram').show();
     }
 
     $('#img_info').text(JSON.stringify(diagram, null, 3));
