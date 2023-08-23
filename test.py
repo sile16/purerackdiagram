@@ -18,13 +18,19 @@ logger.addHandler(ch)
 
 save_dir = 'test_results/'
 
-# 38/38-31/63-127/0
-# 0/38-0/45-0/45-0/63
-
-
-
 more_tests = [
-    {  ## keep this as an error message on purpose.
+    
+    {
+        "queryStringParameters": {
+            "model": "fb-e",
+            "no_of_blades": 80,
+            "face": "back",
+            "no_of_drives_per_blade": 4,
+            "drive_size": 48,
+            "ports": "TRUE"
+        }
+    },
+     {  ## keep this as an error message on purpose.
         "queryStringParameters": {
             "model": "fa-x90r2",
             "datapacks": "38.0/38.0-31/63-127/0",
@@ -39,7 +45,7 @@ more_tests = [
      {  ## keep this as an error message on purpose.
         "queryStringParameters": {
             "model": "fa-x90r2",
-            "datapacks": "38/38-31/63-127/0",
+            "datapacks": "38.0/38.0-31/63-127/0",
             "direction": "down",
             "chassis": 2,
             "face": "front",
@@ -197,7 +203,7 @@ more_tests = [
             "model": "fa-xl130",
             "datapacks": "63/0",
             "chassis": 2,
-            "addoncards": "sas,2fc,4fc,2eth,2eth10gbaset,2eth40,2fc,2fc,2fc,2fc",
+            "addoncards": "sas,2fc,4fc,2eth,2ethbaset,2eth40,2fc,2fc,2fc,2fc",
             "face": "back",
             "fm_label": True,
             "dp_label": True,

@@ -27,7 +27,7 @@
             "request": "launch",
             "program": "test.py",
             "args": [
-                "all","-t","12"
+                "all","-t","4"
             ],
             "console": "integratedTerminal"
         }
