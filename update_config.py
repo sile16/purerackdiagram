@@ -42,8 +42,11 @@ def main():
 def static_global_config():
     return {
 
-        "pci_valid_cards": ["2eth", "2eth40", "2eth100", "2fc", "4fc", 
-                            "sas", "2ethbaset", "2eth10gbaset", "dca", "blank"],                
+        "pci_valid_cards": ["2eth", "2eth40", "2eth100",
+                            "2eth25", "4eth25", "2ethbaset",
+                            "2fc", "4fc",
+                            "sas", "dca", "blank"],   
+                                         
 
 
         "pci_config_lookup": {
@@ -599,9 +602,9 @@ def update_static_card_port_loc(config):
 
     port_info = {'port_type': 'fc',
                 'port_connector': 'sfp',
-                'port_speeds': ['16g', '32g'],
+                'port_speeds': ['16g', '32g', '64g'],
                 'port_sfp_present': True,
-                'port_sfp_speed': ['16g'] ,
+                'port_sfp_speed': ['32g'] ,
                 'port_sfp_connector': 'lc',
                 'services': ['data', 'replication']}
      
@@ -609,16 +612,19 @@ def update_static_card_port_loc(config):
     ports_loc = [(158, 40), (256, 40)]
     keys = ['png/pure_fa_2fc_fh.png', 'png/pure_fa_2fc_hh.png']
 
+    # the ports are in the same location on both fh and hh cards, so we can use the same port_info
     for k in keys:
         add_ports_to_key(ports_loc, k, port_info, config)
     
+    # same port info for 4 port cards, but differnt locations on fh and hh
     ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_4fc_fh.png',  port_info, config)
 
     ports_loc = [(48, 40), (138, 40), (230, 40), (322, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_4fc_hh.png', port_info, config)
     
-    
+
+    #2 Eth 10/25Gb Optical - FA-XCR4-25G-iSCSI/ROCE 2-Port
     k = 'png/pure_fa_2eth_hh.png'
     ports_loc = [(158, 40), (256, 40)]
 
@@ -632,14 +638,25 @@ def update_static_card_port_loc(config):
     
     add_ports_to_key(ports_loc, k, port_info, config)
 
+    #4 Eth 10/25Gb Optical - FA-25G-ETH/TCP 4-Port
 
+    # same port info for 4 port cards, but differnt locations on fh and hh
+    ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_4eth25_fh.png',  port_info, config)
+
+    ports_loc = [(48, 40), (138, 40), (230, 40), (322, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_4eth25_hh.png', port_info, config)
+
+
+
+    # 2 Eth 10Gb 10GBaseT - FA-CNTRL-10GBaseT 2-Port 
     ports_loc = [(155, 40), (265, 40)]
     keys = ['png/pure_fa_2ethbaset_fh.png',
             'png/pure_fa_2ethbaset_hh.png']
     
     port_info = {'port_type': 'eth',
                 'port_connector': 'rj45',
-                'port_speeds': ['1g'],
+                'port_speeds': ['1g' ,'10g'],
                 'port_sfp_present': False,
                 'port_sfp_speed': [] ,
                 'port_sfp_connector': None,
@@ -648,21 +665,7 @@ def update_static_card_port_loc(config):
     for k in keys:
         add_ports_to_key(ports_loc, k , port_info, config)
 
-
-    keys = [
-        'png/pure_fa_2eth10gbaset_fh.png',
-        'png/pure_fa_2eth10gbaset_hh.png']
-
-    port_info = {'port_type': 'eth',
-                'port_connector': 'rj45',
-                'port_speeds': ['1g', '10g',],
-                'port_sfp_present': False,
-                'port_sfp_speed': [] ,
-                'port_sfp_connector': None,
-                'services': ['data', 'replication', 'management', 'file']}
-
-    for k in keys:
-        add_ports_to_key(ports_loc, k, port_info, config)
+   # 2 Eth 40Gb - FA-CNTRL-40G-iSCSI 2-Port
 
 
     port_info = {'port_type': 'eth',
@@ -680,13 +683,22 @@ def update_static_card_port_loc(config):
     ports_loc = [(70, 40), (245, 40) ]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_hh.png', port_info, config)
 
+    # 2 Eth 100Gb - FA-100G-ETH/TCP 2-Port
     port_info['port_speeds'] = ['40g', '100g']
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_fh.png', port_info, config)
    
-
     ports_loc = [(70, 40), (245, 40) ]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_hh.png', port_info, config)
+
+    #2 Eth 100Gb RoCE - FA-XCR4-100G-iSCSI/ROCE 2-Port
+
+    port_info['services'] = ['data', 'replication', 'management', 'file', 'shelf']
+    ports_loc = [(210, 40), (410, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth100roce_fh.png', port_info, config)
+   
+    ports_loc = [(70, 40), (245, 40) ]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth100roce_hh.png', port_info, config)
 
     port_info = {'port_type': 'sas',
             'port_connector': 'sas',
@@ -695,8 +707,13 @@ def update_static_card_port_loc(config):
             'port_sfp_speed': [] ,
             'port_sfp_connector': None,
             'services': ['shelf']}
+    
+    # add_ports_to_key(ports_loc, 'png/pure_fa_sas_hh.png', port_info, config)
+    # same port info for 4 port cards, but differnt locations on fh and hh
+    ports_loc = [(191, 46), (263, 46), (340, 46), (412, 46)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_sas_fh.png',  port_info, config)
 
-    # close enough, todo make better? 
+    ports_loc = [(69, 40), (148, 40), (225, 40), (303, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_sas_hh.png', port_info, config)
 
 

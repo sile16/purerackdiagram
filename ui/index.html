@@ -24,8 +24,12 @@
 <h1>Pure Rack Diagram Builder</h1>
 <h4>Instructions:</h4>
 Select the options, then click the Display button at the bottom to load the image. </BR>
+
 </BR>
 <a href="https://sile16.github.io/purerackdiagram/">Some Examples and more info.</a>
+<p>Note: All SAS Data packs and shelves have changed label sizes.  They all include a decimal point to differntiate from DFMs  
+  Open the datapack list to see the new values.
+</p>
 
 <div class="container">
   <div class="row">
@@ -126,38 +130,55 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
           </div>
 
-          <div class="row" id='addoncards' hidden="true">
-            <div class="col-xs-4 col-sm-4 option_label">addoncards :</div>
-            <div class="col-xs-8 col-sm-8">
+          <div class="row" id="addoncards" hidden="true">
+            <p>Addoncards:</p>
+            
+            <div class="col" style="font-size: 10px;">
               <p>
-                <a href="#" id='2fc' class="addon_card">
-                  <span class="glyphicon glyphicon-plus-sign"></span>
-                </a> 2 Port FC
+                <span id='2fc' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                2 Port FC - FA-XCR4-CNTRL-FC32 2-Port
               </p>
               <p>
-                <a href="#" id='4fc' class="addon_card">
-                  <span class="glyphicon glyphicon-plus-sign"></span>
-                </a> 4 Port FC
+                <span id='4fc' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                 4 Port FC - FA-XCR4-CNTRL-FC32 4-Port
               </p>
               <p>
-                <a href="#" id='2eth' class="addon_card">
-                  <span class="glyphicon glyphicon-plus-sign"></span>
-                </a> 2 Eth 10Gb Optical
+                <span id='2eth' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                 2 Eth 10/25Gb Optical - FA-XCR4-25G-iSCSI/ROCE 2-Port
               </p>
               <p>
-                <a href="#" id='2ethbaset' class="addon_card">
-                  <span class="glyphicon glyphicon-plus-sign"></span>
-                </a> 2 Eth 10Gb 10GBaseT
+                <span id='4eth25' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                 4 Eth 10/25Gb Optical - FA-25G-ETH/TCP 4-Port
               </p>
               <p>
-                <a href="#" id='2eth40' class="addon_card">
-                  <span class="glyphicon glyphicon-plus-sign"></span>
-                </a> 2 Eth 40Gb
+                <span id='2eth10baset' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                 2 Eth 10Gb 10GBaseT - FA-CNTRL-10GBaseT 2-Port 
+              </p>
+              
+              <p>
+                <span id='2eth40' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>  
+                2 Eth 40Gb - FA-CNTRL-40G-iSCSI 2-Port
               </p>
               <p>
-                <a href="#" id='sas' class="addon_card">
-                  <span class="glyphicon glyphicon-plus-sign"></span>
-                </a> SAS Expander
+                <span id='2eth100' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                2 Eth 100Gb - FA-100G-ETH/TCP 2-Port
+              </p>
+              <p>
+                <span id='2eth100roce' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                2 Eth 100Gb RoCE - FA-XCR4-100G-iSCSI/ROCE 2-Port
+              </p>
+              <p>
+                <span id='sas' class="addon_card">
+                  <span class="glyphicon glyphicon-plus-sign"></span></span>
+                 SAS Expander
               </p>
 
               <span id="fa_option_addoncards" data-tooltip="Add cards in order to the default cards included with this model array."></span>
@@ -386,6 +407,7 @@ Select the options, then click the Display button at the bottom to load the imag
 
     <div class="col-md-7">
       <h3>Image Info JSON:</h3>
+      <p> Note: Card port info added to older models (xr3 and below) may be inaccurate.</p>
       <br/>
       <pre id="img_info"></pre>
     </div>

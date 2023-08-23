@@ -471,7 +471,7 @@ class FADiagram():
                     fh_order = [0, 1]
                     hh_order = [2, 0, 1, 3]
                 order = fh_order
-                if card == "2fc" or card == "2eth" or card == "2ethbaset":
+                if card == "2fc" or card == "2eth" or card == "2eth10gbaset":
                     # card population order for a half or full card slot
                     order = hh_order
 

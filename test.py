@@ -197,7 +197,7 @@ more_tests = [
             "model": "fa-xl130",
             "datapacks": "63/0",
             "chassis": 2,
-            "addoncards": "sas,2fc,4fc,2eth,2ethbaset,2eth40,2fc,2fc,2fc,2fc",
+            "addoncards": "sas,2fc,4fc,2eth,2eth10gbaset,2eth40,2fc,2fc,2fc,2fc",
             "face": "back",
             "fm_label": True,
             "dp_label": True,
