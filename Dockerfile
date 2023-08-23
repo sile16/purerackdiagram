@@ -1,5 +1,6 @@
-FROM lambci/lambda:build-python3.8
+#FROM lambci/lambda:build-python3.8
 #FROM public.ecr.aws/lambda/python:3.10
+FROM public.ecr.aws/sam/build-python3.11
 
 WORKDIR /var/task
 ENV WORKDIR /var/task
@@ -21,7 +22,7 @@ COPY purerackdiagram/*.ttf "$WORKDIR/deploy/purerackdiagram/"
 COPY purerackdiagram/png/*.png "$WORKDIR/deploy/purerackdiagram/png/"
 
 #pre-compile.pyc
-RUN python -m compileall .  
+#RUN python -m compileall .  
 
 # Compress all source codes.
 RUN cd deploy && zip -r9 $WORKDIR/lambda.zip .

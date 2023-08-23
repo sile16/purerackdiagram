@@ -1601,7 +1601,7 @@ png/pure_fa_c_r4_back.png:
     - 902
     - 308
     name: ct0.eth2
-    port_connector: qsfp
+    port_connector: sfp
     port_sfp_connector: LC
     port_sfp_present: true
     port_sfp_speeds: &id080
@@ -1619,7 +1619,7 @@ png/pure_fa_c_r4_back.png:
     - 990
     - 308
     name: ct0.eth3
-    port_connector: qsfp
+    port_connector: sfp
     port_sfp_connector: LC
     port_sfp_present: true
     port_sfp_speed: &id083
@@ -1675,7 +1675,7 @@ png/pure_fa_c_r4_back.png:
     - 902
     - 688
     name: ct1.eth2
-    port_connector: qsfp
+    port_connector: sfp
     port_sfp_connector: LC
     port_sfp_present: true
     port_sfp_speeds: *id080
@@ -1687,7 +1687,7 @@ png/pure_fa_c_r4_back.png:
     - 990
     - 688
     name: ct1.eth3
-    port_connector: qsfp
+    port_connector: sfp
     port_sfp_connector: LC
     port_sfp_present: true
     port_sfp_speed: *id083

@@ -750,7 +750,7 @@ def update_static_model_port_loc(config):
                 {'loc': (902, 308),
                 'name': 'ct0.eth2',
                 'port_type': 'eth',
-                'port_connector': 'qsfp',
+                'port_connector': 'sfp',
                 'port_speeds': ['10g', '25g'],
                 
                 'port_sfp_present': True,
@@ -763,7 +763,7 @@ def update_static_model_port_loc(config):
                  'name': 'ct0.eth3',
 
                 'port_type': 'eth',
-                'port_connector': 'qsfp',
+                'port_connector': 'sfp',
                 'port_speeds': ['10g', '25g'],
 
                 'port_sfp_present': True,

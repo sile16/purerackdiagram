@@ -15,11 +15,18 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
+
 import purerackdiagram
 
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+
+if len(logging.getLogger().handlers) > 0:
+    # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
+    # `.basicConfig` does not execute. Thus we set the level directly.
+    logging.getLogger().setLevel(logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.DEBUG)
 
 VERSION = 4
 program_time_s = time.time()
@@ -81,11 +88,6 @@ def handler(event, context):
                 },
                 'body': 'Hello from Lambda!' }
 
-            # return {"statusCode": 500,
-            #        "body": "no query params. event={} and context={}".format(
-            #            event,
-            #            vars(context))}
-
         params = event["queryStringParameters"]
 
         # Initialize our diagram from the params, parse all the params
@@ -123,6 +125,18 @@ def handler(event, context):
             wpercent = (max_height / float(img.size[1]))
             hsize = int((float(img.size[0]) * float(wpercent)))
             img = img.resize((hsize, max_height), Image.ANTIALIAS)
+
+            #Also need to resize all the port locations in the json
+            #Since we are resizing the image
+            if 'ports' in params and (
+                params['ports'] == True or
+                params['ports'].upper() == "TRUE"
+                or params['ports'].upper() == "YES"):
+
+                for p in diagram.ports:
+                    p['loc'][0] = int(p['loc'][0] * wpercent)
+                    p['loc'][1] = int(p['loc'][1] * wpercent)
+
 
         # reformat image to be passed back directly to API caller
         buffered = BytesIO()
@@ -248,21 +262,33 @@ def handler(event, context):
             # convert to base64 and encode utf-8
             # this is required for a binary object passed back
             # through amazon API gateway
-            img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-            return_data = None
-
+            
             data = {"image_type": "png",
                     "config": diagram.config,
                     "ports": diagram.ports,
                     "execution_duration": time.time() - program_time_s,
                     "error": None,
                     "params": params, 
-                    "image": img_str}
+                    "image": None}
             
             
             import json
+            if 'json_only' in params:
+                return {
+                    "statusCode": 200,
+                    "body": json.dumps(data, indent=4),
+                    "headers": {"Content-Type": "application/json", 
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET'} }
+            
+            
+            img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+            data["image"] = img_str
+
+            return_data = None
+
             if 'json' in params and params['json']:
-                return_data = {
+                return {
                     "statusCode": 200,
                     "body": json.dumps(data, indent=4),
                     "headers": {"Content-Type": "application/json", 
@@ -270,24 +296,20 @@ def handler(event, context):
                                 'Access-Control-Allow-Methods': 'GET'}
                 }
 
-            else:
-
-                # when running in lambda we HAVE to wait until
-                # upload done before returning
-                return_data = {
-                    "statusCode": 200,
-                    "body": img_str,
-                    "headers": {"Content-Type": "image/png", 
-                                'Access-Control-Allow-Origin': '*',
-                                'Access-Control-Allow-Methods': 'GET'},
-                    "isBase64Encoded": True
-                }
-
-            return return_data
+            # when running in lambda we HAVE to wait until
+            # upload done before returning
+            return {
+                "statusCode": 200,
+                "body": img_str,
+                "headers": {"Content-Type": "image/png", 
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET'},
+                "isBase64Encoded": True
+            }
 
     except Exception as except_e:
         error_msg = str(except_e)
-        #logger.error("{}\nOriginal Params: {}".format(error_msg, params))
+        logger.error("{}\nOriginal Params: {}".format(error_msg, params))
 
         if 'json' in params and params['json']:
 
