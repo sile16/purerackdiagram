@@ -211,10 +211,6 @@ def static_global_config():
             "1200": ["75TB", "nvme-qlc", 16, "1200"],
             "1350": ["75TB", "nvme-qlc", 18, "1350"],
             "1500": ["75TB", "nvme-qlc", 20, "1500"],
-            "1650": ["75TB", "nvme-qlc", 22, "1650"],
-            "1800": ["75TB", "nvme-qlc", 24, "1800"],
-            "1950": ["75TB", "nvme-qlc", 26, "1950"],
-            "2100": ["75TB", "nvme-qlc", 28, "2100"],
 
             # SAS PACKS
             "4.8": ["480GB", "sas", 10, "4.8"],
@@ -356,6 +352,19 @@ def static_global_config():
             "1180": ["49.2TB", "nvme-qlc", 24, "1180"],
             "1279": ["49.2TB", "nvme-qlc", 26, "1279"],
             "1377": ["49.2TB", "nvme-qlc", 28, "1377"],
+
+            # E Data packs
+            # // E 75 TB Packs
+            "750": ["75TB", "nvme-qlc", 10, "750"],
+            "900": ["75TB", "nvme-qlc", 12, "900"],
+            "1050": ["75TB", "nvme-qlc", 14, "1050"],
+            "1200": ["75TB", "nvme-qlc", 16, "1200"],
+            "1350": ["75TB", "nvme-qlc", 18, "1350"],
+            "1500": ["75TB", "nvme-qlc", 20, "1500"],
+            "1650": ["75TB", "nvme-qlc", 22, "1650"],
+            "1800": ["75TB", "nvme-qlc", 24, "1800"],
+            "1950": ["75TB", "nvme-qlc", 26, "1950"],
+            "2100": ["75TB", "nvme-qlc", 28, "2100"],
 
             # SAS Shelves
             # added decimals to old SAS media to avoid conflict with new nvme sizes.

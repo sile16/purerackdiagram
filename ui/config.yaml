@@ -109,21 +109,11 @@ chassis_dp_size_lookup:
   - nvme
   - 18
   - '164'
-  '1650':
-  - 75TB
-  - nvme-qlc
-  - 22
-  - '1650'
   '18':
   - 1.1TB
   - nvme
   - 16
   - '18'
-  '1800':
-  - 75TB
-  - nvme-qlc
-  - 24
-  - '1800'
   '183':
   - 18.3TB
   - nvme
@@ -134,11 +124,6 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '19.2'
-  '1950':
-  - 75TB
-  - nvme-qlc
-  - 26
-  - '1950'
   '20':
   - 1.1TB
   - nvme
@@ -149,11 +134,6 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '20'
-  '2100':
-  - 75TB
-  - nvme-qlc
-  - 28
-  - '2100'
   '219':
   - 18.3TB
   - nvme
@@ -4002,6 +3982,11 @@ shelf_dp_size_lookup:
   - blank
   - 18
   - '0'
+  '1050':
+  - 75TB
+  - nvme-qlc
+  - 14
+  - '1050'
   '1060':
   - 48.2TB
   - nvme-qlc
@@ -4042,6 +4027,11 @@ shelf_dp_size_lookup:
   - sas
   - 24
   - '12'
+  '1200':
+  - 75TB
+  - nvme-qlc
+  - 16
+  - '1200'
   '1253':
   - 48.2TB
   - nvme-qlc
@@ -4067,6 +4057,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 28
   - '1349'
+  '1350':
+  - 75TB
+  - nvme-qlc
+  - 18
+  - '1350'
   '1377':
   - 49.2TB
   - nvme-qlc
@@ -4082,26 +4077,51 @@ shelf_dp_size_lookup:
   - nvme
   - 14
   - '15'
+  '1500':
+  - 75TB
+  - nvme-qlc
+  - 20
+  - '1500'
   '164':
   - 9.1TB
   - nvme
   - 18
   - '164'
+  '1650':
+  - 75TB
+  - nvme-qlc
+  - 22
+  - '1650'
   '18':
   - 1.1TB
   - nvme
   - 16
   - '18'
+  '1800':
+  - 75TB
+  - nvme-qlc
+  - 24
+  - '1800'
   '183':
   - 18.3TB
   - nvme
   - 10
   - '183'
+  '1950':
+  - 75TB
+  - nvme-qlc
+  - 26
+  - '1950'
   '20':
   - 1.1TB
   - nvme
   - 18
   - '20'
+  '2100':
+  - 75TB
+  - nvme-qlc
+  - 28
+  - '2100'
   '219':
   - 18.3TB
   - nvme
@@ -4317,6 +4337,11 @@ shelf_dp_size_lookup:
   - nvme
   - 16
   - '72'
+  '750':
+  - 75TB
+  - nvme-qlc
+  - 10
+  - '750'
   '771':
   - 48.2TB
   - nvme-qlc
@@ -4342,6 +4367,11 @@ shelf_dp_size_lookup:
   - nvme-qlc
   - 18
   - '885'
+  '900':
+  - 75TB
+  - nvme-qlc
+  - 12
+  - '900'
   '91':
   - 9.1TB
   - nvme
