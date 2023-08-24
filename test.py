@@ -20,6 +20,75 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fa-e",
+            "datapacks": "750",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "front",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-e",
+            "datapacks": "750",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "bezel": True,
+            "face": "front",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-er1",
+            "datapacks": "750",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-xl130",
+            "datapacks": "91",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {  ## keep this as an error message on purpose.
+        "queryStringParameters": {
+            "model": "fa-x90r2",
+            "datapacks": "38.0-31",
+            "direction": "down",
+            "chassis": 2,
+            "face": "front",
+            "dp_label": "True",
+            "fm_label": "True",
+            "json": "True"
+        }
+    },
     
     {
         "queryStringParameters": {

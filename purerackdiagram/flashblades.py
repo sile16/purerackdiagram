@@ -103,7 +103,7 @@ class FBSDiagram():
         txt_size = font.getsize(blade_model_text)
         
         ##make backgroun grey
-        txtimg = Image.new("RGB", txt_size, (38, 38, 38))
+        txtimg = Image.new("RGBA", txt_size, (38, 38, 38))
         txtimg_draw = ImageDraw.Draw(txtimg)
         txtimg_draw.text((0,0), blade_model_text, font=font, fill= (255, 255, 255))
 
@@ -123,7 +123,7 @@ class FBSDiagram():
 
 
     async def build_chassis(self, number_of_blades, blade_model_text):
-        logging.info("Building chassis with %s blades", number_of_blades)
+        logging.debug("Building chassis with %s blades", number_of_blades)
         number_of_blades = min(10, number_of_blades)
         face = self.config["face"]
 

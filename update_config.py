@@ -15,8 +15,9 @@ def main():
     # it will generate non existent model / revision combinations
     # but it's okay, we won't ever use them, or when an XL-130r2 comes out
     # we can go in a add it to the config special cased if necessary.
+    
     for rev in [1, 2, 3, 4]:
-        for gen in ['m', 'x', 'c']:
+        for gen in ['m', 'x', 'c', 'e']:
             update_static_pci_loc(config, gen, rev)
             update_static_mezz_loc(config, gen, rev)
             update_static_model_loc(config, gen, rev)
@@ -25,6 +26,9 @@ def main():
         for gen in ['xl']:
             update_static_pci_loc(config, gen, rev)
             update_static_model_loc(config, gen, rev)
+
+
+    
 
 
     update_static_card_port_loc(config)
@@ -48,6 +52,9 @@ def static_global_config():
                             "sas", "dca", "blank"],   
 
         "pci_config_lookup": {
+            # New E R1
+             "fa-er1-fc": ["2eth100roce", "2eth", None, None, None],
+
             # New x R4
             "fa-x20r4-fc": ["2ethbaset", None, None, "2fc", None],
             "fa-x50r4-fc": ["2ethbaset", "4fc", None, None, None],
@@ -114,6 +121,7 @@ def static_global_config():
 
         },
 
+        # the UI Datapack chart loads directly from this as well. 
         "chassis_dp_size_lookup": {
             "0": ["Blank", "blank", 10, "0"],
             "0.02": ["Blank", "blank", 2, "0"],
@@ -195,6 +203,18 @@ def static_global_config():
             "787": ["49.2TB", "nvme-qlc", 16, "787"],
             "885": ["49.2TB", "nvme-qlc", 18, "885"],
             "984": ["49.2TB", "nvme-qlc", 20, "984"],
+
+            # // E 75 TB Packs
+            "750": ["75TB", "nvme-qlc", 10, "750"],
+            "900": ["75TB", "nvme-qlc", 12, "900"],
+            "1050": ["75TB", "nvme-qlc", 14, "1050"],
+            "1200": ["75TB", "nvme-qlc", 16, "1200"],
+            "1350": ["75TB", "nvme-qlc", 18, "1350"],
+            "1500": ["75TB", "nvme-qlc", 20, "1500"],
+            "1650": ["75TB", "nvme-qlc", 22, "1650"],
+            "1800": ["75TB", "nvme-qlc", 24, "1800"],
+            "1950": ["75TB", "nvme-qlc", 26, "1950"],
+            "2100": ["75TB", "nvme-qlc", 28, "2100"],
 
             # SAS PACKS
             "4.8": ["480GB", "sas", 10, "4.8"],
@@ -448,6 +468,13 @@ def update_static_fm_loc(config):
             config[key] = {}
         config[key]['fm_loc'] = ch0_fm_loc.copy()
 
+        # E is the same:
+        if rev == 1:
+            key = f'png/pure_fa_e_r{rev}_front.png'
+            if key not in config:
+                config[key] = {}
+            config[key]['fm_loc'] = ch0_fm_loc.copy()
+
     # nvme shelves are the same:
     key = 'png/pure_fa_nvme_shelf_front.png'
     if key not in config:
@@ -503,6 +530,11 @@ def update_static_pci_loc(config, generation, revision):
         pci_loc = [(679, 83), (1225, 83), (1225, 203), (2075, 83), (2075, 203)]
         ct1_y_offset = 378
 
+    # E r1
+    elif generation == 'e':
+        pci_loc = [(679, 83), (1225, 83), (1225, 203), (2075, 83), (2075, 203)]
+        ct1_y_offset = 378
+
 
     elif generation == 'm':
         pci_loc = [(1317, 87), (1317, 201), (2182, 87), (2182, 201)]
@@ -542,7 +574,7 @@ def update_static_nvram_loc(config, generation, revision):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c':
+            generation == 'c' or generation == 'e':
         nv1 = (1263, 28)
         nv2 = (1813, 28)
     elif generation != "xl":
@@ -575,7 +607,7 @@ def update_static_model_loc(config, generation, revision):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c':
+            generation == 'c' or generation == 'e':
         loc = (2759, 83)
     elif generation == 'xl':
         loc = (22, 245)
@@ -726,7 +758,7 @@ def update_static_model_port_loc(config):
 
     for rev in [1, 2, 3, 4]:
         ct0ports = None
-        if rev == 4:
+        if rev == 4: 
             ct0ports = [ {'loc': (671, 308),
                 'name': 'ct0.eth0',
                 'port_type': 'eth',
@@ -822,6 +854,14 @@ def update_static_model_port_loc(config):
         if key not in config:
             config[key] = {}
         config[key]['ports'] = ct0ports + ct1ports
+
+        
+        # E is the same as Xr4, 
+        if rev == 4:
+            key = f'png/pure_fa_e_r1_back.png'
+            if key not in config:
+                config[key] = {}
+            config[key]['ports'] = ct0ports + ct1ports
 
         #################################
         ## FA Chassis Rear Ports for XL

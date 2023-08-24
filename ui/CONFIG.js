@@ -13,6 +13,7 @@ var FA_OPTIONS = {
             'C Arrays:', 'fa-c50r4', 'fa-c70r4', 'fa-c90r4',
                          'fa-c40r3', 'fa-c60r3',
                          'fa-c40r1', 'fa-c60r1',
+            'E Arrays:', 'fa-Er1',
             'M Arrays:', 'fa-m10r2', 'fa-m20r2', 'fa-m50r2', 'fa-m70r2'],
     protocol: ['fc', 'eth'],
     face: ['front', 'back'],

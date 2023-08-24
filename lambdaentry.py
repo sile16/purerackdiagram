@@ -26,7 +26,7 @@ bucket_name = "images.purestorage"
 
 use_s3_size_limit = 4  # useing 4MiB with base64 encoding to stay under 6MIB limit
 
-log_level = os.getenv('log_level', 'INFO').upper()
+log_level = os.getenv('log_level', 'WARNING').upper()
 
 if len(logger.handlers) > 0:
     # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
@@ -184,7 +184,9 @@ def handler(event, context):
         logger.debug("converting image to base64")
         buffered = BytesIO()
         img.save(buffered, format="PNG")
-        size_of_buffered_in_mib = len(buffered.getvalue()) / ( 1024 * 1024 ) 
+        size_of_buffered_in_mib = len(buffered.getvalue()) / ( 1024 * 1024 )
+        logger.debug(f"Max size const: {use_s3_size_limit} MiB") 
+        logger.debug(f"size of buffered image: {size_of_buffered_in_mib} MiB")
 
         # do we want a visio template or the raw image:
         if 'vssx' in params and params['vssx']:
@@ -286,9 +288,11 @@ def handler(event, context):
                 zipf.writestr('visio/masters/masters.xml', masters)
                     
             zip_file_size = zipfile_buffered.tell()
+            logger.debug(f"zip file size: {zip_file_size}")
             zipfile_buffered.seek(0)
 
             if zip_file_size > use_s3_size_limit:  # If more than 5.5 MiB
+                
                 logger.debug("uploading vssx to s3")
                 
                 s3_link = upload_to_s3(zipfile_buffered, "vssx", "application/vnd.ms-visio.stencil", f'attachment; filename="{name}.vssx"')

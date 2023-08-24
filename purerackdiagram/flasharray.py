@@ -5,7 +5,7 @@ from PIL import ImageFont
 import asyncio
 from . import utils
 from .utils import RackImage, combine_images_vertically, add_ports_at_offset
-# import logging
+import logging
 import os
 from pprint import pformat
 import re
@@ -13,6 +13,7 @@ import re
 root_path = os.path.dirname(utils.__file__)
 ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
 
+logger = logging.getLogger()
 
 class FAShelf():
     def __init__(self, params):
@@ -198,11 +199,15 @@ class FAChassis():
         self.start_img_event.set()
 
     async def add_nvram(self):
-        
+        #base image already has 1 NVRAM populated, so this is only for the second one.
 
         if self.config['generation'] == 'c':
             # always add second nvram on 'c' array
             pass
+        elif  self.config['generation'] == 'e':
+            #e probably has only 1 nvram, but i'm not sure.
+            #todo: check nvrams on e
+            return
         elif self.config['generation'] == 'xl':
             return
         elif self.config["model_num"] < 70:
@@ -247,7 +252,7 @@ class FAChassis():
         key = "png/pure_fa_{}_{}.png".format(card_type, height)
 
         card_img = await RackImage(key).get_image()
-        await self.start_img_event.wait()
+        await self.start_img_event.wait() # why is this here ? 
 
         # ct0
         cord = self.img_info['ct0_pci_loc'][slot]
@@ -374,7 +379,7 @@ class FAChassis():
         draw = ImageDraw.Draw(self.tmp_img)
 
         font = ImageFont.truetype(ttf_path, size=24)
-        if c['generation'] == 'xl':
+        if c['generation'] == 'xl' or c['generation'] == 'e':
             text = "{}r{}".format(c['model_num'],
                                     c['release'])
         else:
@@ -422,9 +427,12 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
     w, h = draw.textsize(dp_size + "TB", font=font)
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
     draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220), font=font)
-
+    logger.debug("converting image to RGBA")
     alpha_tmp = img.convert("RGBA")
-    return Image.alpha_composite(alpha_tmp, tmp)
+    logger.debug("converted image to RGBA, doing composite")
+    composite_img = Image.alpha_composite(alpha_tmp, tmp)
+    logger.debug("done composite")
+    return composite_img
 
 
 # FADiagram does most of the logical config parsing and validation of configuration
@@ -583,11 +591,18 @@ class FADiagram():
 
         # mode-str of type  "fa-m70r2" or "fa-x70" or "fa-xl130" or fa-xl170r2
         # Split string on the - and transition to numbers
-        results = re.split('(\d+)|-', config["model_str"])
+        results = re.split('(\d+)|-|r', config["model_str"])
         config["generation"] = results[2]
-        config['model_num'] = int(results[3])
+        if config['generation'] == 'e':
+            config['model_num'] = ""
+        else:
+            config['model_num'] = int(results[3])
+
         if "r" in config["model_str"]:
-            config["release"] = int(results[5])
+            if config['generation'] == 'e':
+                config["release"] = int(results[5])
+            else:
+                config["release"] = int(results[7])
         else:
             config["release"] = 1
         

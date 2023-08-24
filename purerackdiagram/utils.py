@@ -12,7 +12,7 @@ import purerackdiagram
 
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+
 
 cache = {}
 cache_lock = asyncio.Lock()
@@ -81,7 +81,18 @@ class RackImage():
         # load image from disk
 
         self.img = Image.open(self.key)
+        
+        # check and convet to RGBA:
+        if self.img.format == 'PNG':
+            # and is not RGBA
+            if not self.img.mode == 'RGBA':
+                logger.debug("!!Converting image {self.key} to RGBA")
+                self.img = self.img.convert("RGBA")
+            else:
+                logger.debug("Image {self.key} already in RGBA")
         self.img.load()
+           
+
         logger.debug("Loaded: {}".format(self.key))
 
 def add_ports_at_offset(key, offset, all_ports):
@@ -107,7 +118,8 @@ def combine_images_vertically(image_ports):
     total_height = sum(heights)
     total_width = max(widths)
 
-    new_im = Image.new("RGB", (total_width, total_height))
+    logger.debug("Combining images vertically")
+    new_im = Image.new("RGBA", (total_width, total_height))
 
     y_offset = 0
     all_ports = []
@@ -128,6 +140,11 @@ def combine_images_vertically(image_ports):
             all_ports.append(new_port)
 
         y_offset += im.size[1]
+
+    #convert from RGBA to RGB to reduce file size
+    logger.debug("Converting image to RGB")
+    new_im = new_im.convert('RGB')
+
     return new_im, all_ports
 
 
