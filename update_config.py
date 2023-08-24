@@ -1076,7 +1076,7 @@ def update_static_model_port_loc(config):
     ports = []
     curr_loc = start
     for p in range(0, 32, 4):
-        services = ['shelf']
+        services = ['chassis uplink']
         if p > 20:
             services = ['data', 'replication', 'management']
         if p == 28:
