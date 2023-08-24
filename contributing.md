@@ -1,14 +1,13 @@
 
-## Feature Wish List
- - Add XL
- - Make data packs a radio button to add like the PCI cards.
- - Add 2 drive add flexibility to be able to create any valid config.
- - Add FlashRecover
- - Add cabling diagrams
- - Instead of passing back an image only, allow to pass back an image plus some json info about port locations the config etc.  And the image can be base64 encoded in there and be interpreted by the js UI.  It would improve error reporting as well as allow more info being returned from the function.
- 
+## Overal Operation
+We take the input params.  We start with a base image from png/ and then we copy and paste all the elements,
+FlashModules, shelves, addon cards, using Pillow Image procesing to build the final image.
 
-## Lambda_package.sh
+## Feature Wish List
+ - Add cabling diagrams
+ - Add SFP configs. 
+
+## Lambdaentry.py
 
 This is the entry point for the lambda function.  It maily routes to the correct function call under purerackdiagram\flasharray or flashblade , and turns errors into images, it also adds in the ports for an odd reason, probably isn't good to have the ports being added in there but it was the easiest way.
 
@@ -25,7 +24,8 @@ Running this will create a docker container, add all the files, pull down depend
 
 ## Update_config.py
 
-This is the source of truth for the configuration information for the different models and where each image lands, the location of each PCI card etc.  I used code blocks to create the different points.   This updates the config file purerackdiagram/config.yaml 
+This is the source of truth for the configuration information for the different models and where each image lands, the location of each PCI card etc.  I used code blocks to create the different points.   This updates the config file purerackdiagram/config.yaml .  This is also available in
+the ui as well and is used to build the datapack chart.  However, there is a little overlap in that the UI originally only used CONFIG.js.  A todo would be to migrate out of CONFIG.js compeletely in the UI and only use the Update_config.py output.
 
 ## purerackdiagram/config.yaml 
 Do not edit, edit update_config.py and run python3 update_config.py

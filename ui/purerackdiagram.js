@@ -354,11 +354,17 @@ $(function () {
     } else {
       $('#error_msg').text("");
       $("#error-div").hide();
-      const img_base64encoded = await fetch(`data:image/png;base64,${diagram.image}`);
-      const blob = await img_base64encoded.blob();
-      var objectURL = await URL.createObjectURL(blob);
-      delete diagram.image;
-      $('#rack_digram').attr('src', objectURL);
+      if ( diagram.image_type == "png" ) {
+        const img_base64encoded = await fetch(`data:image/png;base64,${diagram.image}`);
+        const blob = await img_base64encoded.blob();
+        var objectURL = await URL.createObjectURL(blob);
+        delete diagram.image;
+        $('#rack_digram').attr('src', objectURL);
+      }
+      else if (diagram.image_type == "link" ) {
+        $('#rack_digram').attr('src', diagram.image);
+      }
+
       $('#rack_diagram').show();
     }
 

@@ -3,13 +3,14 @@ import logging
 import base64
 from multiprocessing import Pool
 import hashlib
-import io
+
 import os
 import lambdaentry
 from purerackdiagram.utils import global_config
-import purerackdiagram
+
 import json
 import traceback
+import requests
 
 logger = logging.getLogger()
 ch = logging.StreamHandler()
@@ -23,7 +24,7 @@ more_tests = [
     {
         "queryStringParameters": {
             "model": "fb-e",
-            "no_of_blades": 80,
+            "no_of_blades": 100,
             "face": "back",
             "no_of_drives_per_blade": 4,
             "drive_size": 48,
@@ -320,11 +321,34 @@ more_tests = [
 
 
 def test_lambda(params, outputfile):
-    # Single test functions
-
-
     results = lambdaentry.handler(params, None)
 
+    # If statusCode is 302, follow the redirect
+    if results['statusCode'] == 302:
+        location = results['headers']['Location']
+        response = requests.get(location)
+        content_type = response.headers.get('Content-Type')
+        logger.info(f"Redirected to {location} with content type {content_type}")
+        
+        # Update the body and headers of the results to hide the redirect
+        results['body'] = base64.b64encode(response.content).decode('utf-8')
+        results['headers']['Content-Type'] = content_type
+        results['statusCode'] = 200  # Update status code to OK
+        
+        # Save the response content to the appropriate file
+        if content_type == 'image/png':
+            ext = '.png'
+        elif content_type == 'application/vnd.ms-visio.stencil':
+            ext = '.vssx'
+        elif content_type == 'application/json':
+            ext = '.json'
+        else:
+            ext = ''
+        
+        with open(outputfile + ext, 'wb') as outfile:
+            outfile.write(response.content)
+
+    
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
@@ -365,21 +389,22 @@ def create_test_image(item, count, total):
         results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name))
 
         h = hashlib.sha256()
-        if results['headers'].get("Content-Type") == 'application/json':
+        content_type = results['headers'].get("Content-Type")
+
+        # For JSON content, serialize before hashing
+        if content_type == 'application/json':
             h.update(json.dumps(results['body']).encode('utf-8'))
         else:
+            # For other content types, use the body directly
             h.update(results['body'].encode('utf-8'))
         
         print(f"{count} of {total}   {file_name}")
         return({file_name: h.hexdigest()})
-    
+
     except Exception as ex_unknown:
-        print(f"Caught exeption in image: {file_name} ")
-
+        print(f"Caught exception in image: {file_name}")
         traceback.print_exc()
-        print()
         raise ex_unknown
-
 
     
 

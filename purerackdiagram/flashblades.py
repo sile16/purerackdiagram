@@ -1,13 +1,16 @@
 import asyncio
 from cmath import exp
 from os.path import join
-import re
 from PIL import ImageDraw
 from PIL import Image
 from PIL import ImageFont
 from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
 
 from .flasharray import apply_fm_label
+import logging
+
+logging = logging.getLogger(__name__)
+
 
 
 class FBSDiagram():
@@ -73,6 +76,7 @@ class FBSDiagram():
     
 
     async def add_blades(self, base_img, number_of_blades, blade_model_text):
+        logging.debug("Adding blades to the image")
         
         key = 'png/pure_fbs_blade.png'
         blade_img = await RackImage(key).get_image()
@@ -119,6 +123,7 @@ class FBSDiagram():
 
 
     async def build_chassis(self, number_of_blades, blade_model_text):
+        logging.info("Building chassis with %s blades", number_of_blades)
         number_of_blades = min(10, number_of_blades)
         face = self.config["face"]
 
@@ -152,6 +157,8 @@ class FBSDiagram():
 
     async def get_image(self):
         tasks = []
+
+        logging.debug("Starting to get image for configuration: %s", str(self.config))
 
         c = self.config
 

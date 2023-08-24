@@ -80,15 +80,10 @@ Blades are in the format ```<Size>:<Start Blade#>-<End Blade#>,<...>```. Blade s
 For example, 1 chassis of 17TB blades, and 1 chassis of 52, would be ```17:0-14,52:15-29```.
 
 ## FlashBlade E
+
 When building the E, select the appropriate DFM counts and sizes and chassis. The blades will be labelled EC in the first chassis and EX in subsequent chassis when E is selected.
 
 ### Lambda Notes
-
-This is my first Lambda project. I built this tool to explore AWS Lambda and Python 3.7 asyncio.
-
-I started by basing the data-flow on [this design pattern](https://aws.amazon.com/blogs/compute/resize-images-on-the-fly-with-amazon-s3-aws-lambda-and-amazon-api-gateway/).
-
-First, I built a caching object store so I could request an object from multiple places, but it would be pulled down only once and asynchronously. Although this was somewhat time-consuming, it worked quite well. However, it's quite latency-sensitive; even with asyncIO, I'm pulling down 8-10 images, checking if they exist, and then pushing out a new object and caching it. It usually takes between 5-15 seconds to generate an image.
 
 The PNG images I'm building from are small enough to be included in the code ZIP file directly, which significantly reduces the latency of multiple pulls. Even though this executes in about 300 ms on my local machine, it still takes a few seconds in Lambda.
 

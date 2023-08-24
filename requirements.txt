@@ -1,3 +1,2 @@
 Pillow
 pyyaml
-aws-lambda-logging

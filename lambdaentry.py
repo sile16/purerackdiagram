@@ -15,21 +15,57 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
+import uuid
+import boto3
+
 
 import purerackdiagram
 
-
 logger = logging.getLogger()
+bucket_name = "images.purestorage"
 
-if len(logging.getLogger().handlers) > 0:
+use_s3_size_limit = 4  # useing 4MiB with base64 encoding to stay under 6MIB limit
+
+log_level = os.getenv('log_level', 'INFO').upper()
+
+if len(logger.handlers) > 0:
     # The Lambda environment pre-configures a handler logging to stderr. If a handler is already configured,
     # `.basicConfig` does not execute. Thus we set the level directly.
-    logging.getLogger().setLevel(logging.DEBUG)
+    logger.setLevel(log_level)
 else:
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=log_level)
 
-VERSION = 4
+VERSION = 5
 program_time_s = time.time()
+
+
+
+def upload_to_s3(buffered, extension, contenttype, disposition):
+    """ Uploads a file to S3 """
+    logger.debug("uploading to s3")
+    s3 = boto3.client('s3')
+    
+    unique_key = str(uuid.uuid4())
+    file_key = f"cache/{unique_key}.{extension}"
+    
+    # Reset the buffer's pointer to the beginning
+    buffered.seek(0)
+
+    try:
+        s3.put_object(
+            Bucket=bucket_name,
+            Key=file_key,
+            Body=buffered.getvalue(),
+            ContentType=contenttype,
+            ContentDisposition=disposition
+        )
+    except Exception as e:
+        # Log the exception or handle as you see fit
+        print(f"Error uploading to S3: {e}")
+        return None
+
+    # Return the complete S3 URL or just the file key based on your requirements
+    return f"https://s3.amazonaws.com/{bucket_name}/{file_key}"
 
 
 def text_to_image(text):
@@ -92,18 +128,22 @@ def handler(event, context):
 
         # Initialize our diagram from the params, parse all the params
         diagram = purerackdiagram.get_diagram(params)
+        logger.debug(f"diagram: {diagram}")
 
         # do the work to generate the image
         img = asyncio.run(diagram.get_image())
+        logger.debug("img created Succefully")
 
         # save original image dimensions needed for port pixel->in calculation
         img_original_size = img.size
 
         if 'ports' in params and (
+            
             params['ports'] == True or
             params['ports'].upper() == "TRUE"
             or params['ports'].upper() == "YES"):
 
+            logger.debug("adding ports to image")
             # Draw
             draw = ImageDraw.Draw(img)
 
@@ -122,6 +162,7 @@ def handler(event, context):
         # will break google slides if file is too big
         max_height = 4604
         if img.size[1] > max_height:
+            logger.debug("resizing image")
             wpercent = (max_height / float(img.size[1]))
             hsize = int((float(img.size[0]) * float(wpercent)))
             img = img.resize((hsize, max_height), Image.ANTIALIAS)
@@ -133,17 +174,21 @@ def handler(event, context):
                 params['ports'].upper() == "TRUE"
                 or params['ports'].upper() == "YES"):
 
+                #resizing the port locations
                 for p in diagram.ports:
-                    p['loc'][0] = int(p['loc'][0] * wpercent)
-                    p['loc'][1] = int(p['loc'][1] * wpercent)
+                     p['loc'] = (int(p['loc'][0] * wpercent), int(p['loc'][1] * wpercent))
+
 
 
         # reformat image to be passed back directly to API caller
+        logger.debug("converting image to base64")
         buffered = BytesIO()
         img.save(buffered, format="PNG")
+        size_of_buffered_in_mib = len(buffered.getvalue()) / ( 1024 * 1024 ) 
 
         # do we want a visio template or the raw image:
         if 'vssx' in params and params['vssx']:
+            logger.debug("creating a visio template")
             ru = diagram.config['ru']
             h_inches = "{:.2f}".format(ru*1.75)
 
@@ -226,6 +271,7 @@ def handler(event, context):
             import io
 
             # read file into memory
+            logger.debug("zipping the vssx file")
             zipfile_raw = None
             with open(vssx_path, 'rb') as vssx_file:
                 zipfile_raw = vssx_file.read()
@@ -233,15 +279,30 @@ def handler(event, context):
             zipfile_buffered = io.BytesIO(zipfile_raw)
 
             # add the image and master1 file to zip file.
-            with zipfile_buffered as zfb:
-                with zipfile.ZipFile(zfb, 'a') as zipf:
-                    # Add a file located at the source_path to the destination within the zip
-                    zipf.writestr('visio/media/image1.png',
-                                  buffered.getvalue())
-                    zipf.writestr('visio/masters/master1.xml', master1)
-                    zipf.writestr('visio/masters/masters.xml', masters)
-                    zipf.close()
-                zip_str = base64.b64encode(zfb.getvalue()).decode('utf-8')
+            with zipfile.ZipFile(zipfile_buffered, 'a') as zipf:
+                # Add a file located at the source_path to the destination within the zip
+                zipf.writestr('visio/media/image1.png', buffered.getvalue())
+                zipf.writestr('visio/masters/master1.xml', master1)
+                zipf.writestr('visio/masters/masters.xml', masters)
+                    
+            zip_file_size = zipfile_buffered.tell()
+            zipfile_buffered.seek(0)
+
+            if zip_file_size > use_s3_size_limit:  # If more than 5.5 MiB
+                logger.debug("uploading vssx to s3")
+                
+                s3_link = upload_to_s3(zipfile_buffered, "vssx", "application/vnd.ms-visio.stencil", f'attachment; filename="{name}.vssx"')
+                
+                return {
+                    "statusCode": 302,
+                    "headers": {
+                        "Location": s3_link, 
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET'
+                    }
+
+                }
+            zip_str = base64.b64encode(zipfile_buffered.getvalue()).decode('utf-8')
 
             # when running in lambda we HAVE to wait until
             # upload done before returning
@@ -268,12 +329,16 @@ def handler(event, context):
                     "ports": diagram.ports,
                     "execution_duration": time.time() - program_time_s,
                     "error": None,
+                    "image_size": img.size,
+                    "image_mib": size_of_buffered_in_mib,
                     "params": params, 
                     "image": None}
             
             
             import json
+
             if 'json_only' in params:
+                logger.debug("returning json only")
                 return {
                     "statusCode": 200,
                     "body": json.dumps(data, indent=4),
@@ -281,13 +346,20 @@ def handler(event, context):
                                 'Access-Control-Allow-Origin': '*',
                                 'Access-Control-Allow-Methods': 'GET'} }
             
-            
-            img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-            data["image"] = img_str
+            logger.debug("base64 encoding image")
+            img_str = ""
 
-            return_data = None
+            if size_of_buffered_in_mib > use_s3_size_limit:
+                logger.debug("image is too large, uploading to s3")
+                link = upload_to_s3(buffered, "png", "image/png", 'inline')
+                data["image"] = link
+                data['image_type'] = "link"
+            else:
+                data["image"] = base64.b64encode(buffered.getvalue()).decode('utf-8')
+                data['image_type'] = "png"
 
             if 'json' in params and params['json']:
+                logger.debug("returning json")
                 return {
                     "statusCode": 200,
                     "body": json.dumps(data, indent=4),
@@ -298,9 +370,20 @@ def handler(event, context):
 
             # when running in lambda we HAVE to wait until
             # upload done before returning
+            if size_of_buffered_in_mib > use_s3_size_limit:
+                logger.debug("returning image link")
+                
+                return {
+                    "statusCode": 302,
+                    "headers": {"Location": data["image"], 
+                                'Access-Control-Allow-Origin': '*',
+                                'Access-Control-Allow-Methods': 'GET'}
+                }
+            
+            logger.debug("returning image in png format")
             return {
                 "statusCode": 200,
-                "body": img_str,
+                "body": data['image'],
                 "headers": {"Content-Type": "image/png", 
                             'Access-Control-Allow-Origin': '*',
                             'Access-Control-Allow-Methods': 'GET'},
@@ -333,7 +416,9 @@ def handler(event, context):
                                 'Access-Control-Allow-Methods': 'GET'} }
         
         else:
-             # return the error message as an image
+            # return the error message as an image
+            # returning the error as an image so that it can be
+            logger.debug("converting the error into an image")
             img = text_to_image(error_msg)
             buffered = BytesIO()
             img.save(buffered, format="PNG")
