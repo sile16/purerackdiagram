@@ -666,8 +666,7 @@ def update_static_card_port_loc(config):
     
 
     #2 Eth 10/25Gb Optical - FA-XCR4-25G-iSCSI/ROCE 2-Port
-    k = 'png/pure_fa_2eth_hh.png'
-    ports_loc = [(158, 40), (256, 40)]
+    
 
     port_info = {'port_type': 'eth',
                 'port_connector': 'sfp',
@@ -677,7 +676,13 @@ def update_static_card_port_loc(config):
                 'port_sfp_connector': 'lc',
                 'services': ['data', 'replication', 'management', 'file']}
     
+    k = 'png/pure_fa_2eth_hh.png'
+    ports_loc = [(158, 40), (256, 40)]
     add_ports_to_key(ports_loc, k, port_info, config)
+
+    k = 'png/pure_fa_2eth_fh.png'
+    add_ports_to_key(ports_loc, k, port_info, config)
+    
 
     #4 Eth 10/25Gb Optical - FA-25G-ETH/TCP 4-Port
 

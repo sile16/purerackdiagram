@@ -863,9 +863,9 @@ png/pure_fa_2eth40_hh.png:
     port_speeds: *id009
     port_type: eth
     services: *id003
-png/pure_fa_2eth_hh.png:
+png/pure_fa_2eth_fh.png:
   ports:
-  - loc: &id018 !!python/tuple
+  - loc: &id013 !!python/tuple
     - 158
     - 40
     port_connector: sfp
@@ -882,7 +882,7 @@ png/pure_fa_2eth_hh.png:
     - replication
     - management
     - file
-  - loc: &id019 !!python/tuple
+  - loc: &id014 !!python/tuple
     - 256
     - 40
     port_connector: sfp
@@ -892,55 +892,73 @@ png/pure_fa_2eth_hh.png:
     port_speeds: *id011
     port_type: eth
     services: *id012
+png/pure_fa_2eth_hh.png:
+  ports:
+  - loc: *id013
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id010
+    port_speeds: *id011
+    port_type: eth
+    services: *id012
+  - loc: *id014
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id010
+    port_speeds: *id011
+    port_type: eth
+    services: *id012
 png/pure_fa_2ethbaset_fh.png:
   ports:
-  - loc: &id016 !!python/tuple
+  - loc: &id018 !!python/tuple
     - 155
     - 40
     port_connector: rj45
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: &id013 []
-    port_speeds: &id014
+    port_sfp_speed: &id015 []
+    port_speeds: &id016
     - 1g
     - 10g
     port_type: eth
-    services: &id015
+    services: &id017
     - data
     - replication
     - management
     - file
-  - loc: &id017 !!python/tuple
+  - loc: &id019 !!python/tuple
     - 265
     - 40
     port_connector: rj45
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id013
-    port_speeds: *id014
+    port_sfp_speed: *id015
+    port_speeds: *id016
     port_type: eth
-    services: *id015
+    services: *id017
 png/pure_fa_2ethbaset_hh.png:
   ports:
-  - loc: *id016
+  - loc: *id018
     port_connector: rj45
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id013
-    port_speeds: *id014
+    port_sfp_speed: *id015
+    port_speeds: *id016
     port_type: eth
-    services: *id015
-  - loc: *id017
+    services: *id017
+  - loc: *id019
     port_connector: rj45
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id013
-    port_speeds: *id014
+    port_sfp_speed: *id015
+    port_speeds: *id016
     port_type: eth
-    services: *id015
+    services: *id017
 png/pure_fa_2fc_fh.png:
   ports:
-  - loc: *id018
+  - loc: *id013
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
@@ -954,7 +972,7 @@ png/pure_fa_2fc_fh.png:
     services: &id022
     - data
     - replication
-  - loc: *id019
+  - loc: *id014
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
@@ -964,7 +982,7 @@ png/pure_fa_2fc_fh.png:
     services: *id022
 png/pure_fa_2fc_hh.png:
   ports:
-  - loc: *id018
+  - loc: *id013
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
@@ -972,7 +990,7 @@ png/pure_fa_2fc_hh.png:
     port_speeds: *id021
     port_type: fc
     services: *id022
-  - loc: *id019
+  - loc: *id014
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
