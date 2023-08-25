@@ -232,7 +232,13 @@ class FAChassis():
     async def add_card(self, slot, card_type):
         # todo: add this model specific info to the config.yaml
 
-        if self.config['generation'] == 'xl':
+        if self.config['generation'] == 'e':
+            if slot in [1,2]:
+                height = "fh"
+            else:
+                height = "hh"
+
+        elif self.config['generation'] == 'xl':
             if slot in [2, 3]:
                 height = "fh"
             else:
@@ -271,6 +277,9 @@ class FAChassis():
             return
         
         if self.config["release"] == 4:
+            return
+    
+        if self.config["generation"] == 'e':
             return
 
         if self.config['mezz']:
@@ -478,6 +487,9 @@ class FADiagram():
                 if config["generation"] == 'xl':
                     fh_order = [2, 3]
                     hh_order = [0, 1, 4, 6, 7, 8]
+                elif config["generation"] == 'e':
+                    fh_order = [1, 2]
+                    hh_order = [0, 3, 4]
                 elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4:
                     fh_order = [1, 2]
                     hh_order = [0, 3, 4]

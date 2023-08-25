@@ -22,6 +22,20 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-er1",
+            "datapacks": "750",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-e",
             "datapacks": "750",
             "chassis": 2,
@@ -49,20 +63,7 @@ more_tests = [
             "ports": True
         }
     },
-    {
-        "queryStringParameters": {
-            "model": "fa-er1",
-            "datapacks": "750",
-            "chassis": 2,
-            "addoncards": "2eth100",
-            "face": "back",
-            "fm_label": True,
-            "dp_label": True,
-            "mezz": "smezz",
-            "local_delay": 0,
-            "ports": True
-        }
-    },
+    
     {
         "queryStringParameters": {
             "model": "fa-xl130",
