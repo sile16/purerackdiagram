@@ -148,15 +148,37 @@ def handler(event, context):
             draw = ImageDraw.Draw(img)
 
             for p in diagram.ports:
-                size = 20
+                size = 16
                 if p['port_type'] == 'eth':
                     color = 'brown'
                     draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
                               p['loc'][0] + size, p['loc'][1] + size),
                              fill=color, outline=color)
-                else:
-                    color = 'orange'
+                elif p['port_type'] == 'fc':
+                    # pick the color :
+                    # use Pillow to define a color with rgb values: 235, 149, 52
+                    # then convert to hex
+                    # https://stackoverflow.com/questions/3380726/converting-a-rgb-color-tuple-to-a-six-digit-code-in-python
+                    color = '#%02x%02x%02x' % (235, 149, 52)
+
                     draw_triangle(draw, p['loc'][0], p['loc'][1], size, color)
+                elif p['port_type'] == 'sas':
+                    color = 'blue'
+                    #draw a square
+                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size,
+                              p['loc'][0] + size, p['loc'][1] + size),
+                             fill=color, outline=color)
+                else:
+                    logger.warning(f"Unknown port type: {p['port_type']}")
+                    # draw a diamond with color of green
+                    color = 'green'
+                    draw.polygon([(p['loc'][0], p['loc'][1] - size),
+                                  (p['loc'][0] + size, p['loc'][1]),
+                                  (p['loc'][0], p['loc'][1] + size),
+                                  (p['loc'][0] - size, p['loc'][1])],
+                                 fill=color, outline=color)
+                    
+                    
 
         # resize if too large:
         # will break google slides if file is too big

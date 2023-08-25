@@ -2485,19 +2485,19 @@ png/pure_fa_x_emezz.png:
   - loc: !!python/tuple
     - 80
     - 112
-    port_type: nvme
+    port_type: eth
   - loc: !!python/tuple
     - 184
     - 112
-    port_type: nvme
+    port_type: eth
   - loc: !!python/tuple
     - 292
     - 112
-    port_type: nvme
+    port_type: eth
   - loc: !!python/tuple
     - 396
     - 112
-    port_type: nvme
+    port_type: eth
 png/pure_fa_x_r1_back.png:
   ct0_mezz_loc: *id031
   ct0_pci_loc:

@@ -1196,7 +1196,7 @@ def update_static_model_port_loc(config):
 def update_static_mezz_port_loc(config):
     ports = [(80, 112), (184, 112), (292, 112), (396, 112)]
     key = 'png/pure_fa_x_emezz.png'
-    port_type = 'nvme'
+    port_type = 'eth'
     all_ports = []
     for p in ports:
         all_ports.append({'loc': p, 'port_type': port_type})
