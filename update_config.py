@@ -616,8 +616,10 @@ def update_static_model_loc(config, generation, revision):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c' or generation == 'e':
+            generation == 'c' :
         loc = (2759, 83)
+    elif generation == 'e':
+        loc = (2770, 222)
     elif generation == 'xl':
         loc = (22, 245)
     else:

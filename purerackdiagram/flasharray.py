@@ -379,9 +379,15 @@ class FAChassis():
         draw = ImageDraw.Draw(self.tmp_img)
 
         font = ImageFont.truetype(ttf_path, size=24)
-        if c['generation'] == 'xl' or c['generation'] == 'e':
+        if c['generation'] == 'xl' :
             text = "{}r{}".format(c['model_num'],
                                     c['release'])
+        elif c['generation'] == 'e':
+            if c['release'] == 1:
+                text = ""
+            else:
+                text = "{}r{}".format(c['generation'].upper(),
+                                    c['model_num'])
         else:
             text = "{}{}r{}".format(c['generation'].upper(),
                                     c['model_num'],
