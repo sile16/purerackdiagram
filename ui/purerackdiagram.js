@@ -410,7 +410,7 @@ $(function () {
       $('#pci_select_8').show();
       
     }
-    else if (fa_option_model.val().includes('r4'))  {
+    else if (fa_option_model.val().includes('r4') || fa_option_model.val().includes('e'))  {
         $('#pci_select_4').show();
         $('#pci_select_5').hide();
         $('#pci_select_6').hide();
