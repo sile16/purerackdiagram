@@ -169,6 +169,10 @@ $(function () {
   $('#shelf-dp-tabs').tabs();
 
   var fa_option_model = build_select('#fa_option_model', FA_OPTIONS.model);
+  
+  // set selected option for fa_option_model to x20r4
+  fa_option_model.val('fa-x20r4');
+
   var fa_option_protocol = build_select('#fa_option_protocol', FA_OPTIONS.protocol);
   var fa_option_face = build_select('#fa_option_face', FA_OPTIONS.face);
   var fa_option_datapacks = build_input('#fa_option_datapacks', "63");
