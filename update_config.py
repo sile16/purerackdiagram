@@ -46,7 +46,7 @@ def main():
 def static_global_config():
     return {
 
-        "pci_valid_cards": ["2eth", "2eth40", "2eth100", "2eth100roce",
+        "pci_valid_cards": ["2eth", "2eth25roce", "2eth40", "2eth100", "2eth100roce",
                             "4eth25", "2ethbaset",
                             "2fc", "4fc",
                             "sas", "dca", "blank"],   
@@ -665,7 +665,7 @@ def update_static_card_port_loc(config):
     add_ports_to_key(ports_loc, 'png/pure_fa_4fc_hh.png', port_info, config)
     
 
-    #2 Eth 10/25Gb Optical - FA-XCR4-25G-iSCSI/ROCE 2-Port
+    #2 Eth 10/25Gb Optical - FA-XCR4-25G-iSCSI 2-Port
     
 
     port_info = {'port_type': 'eth',
@@ -682,6 +682,23 @@ def update_static_card_port_loc(config):
 
     k = 'png/pure_fa_2eth_fh.png'
     add_ports_to_key(ports_loc, k, port_info, config)
+
+
+     #2 Eth 10/25Gb Optical - FA-XCR4-25G-iSCSI/ROCE 2-Port
+    port_info = {'port_type': 'eth',
+                'port_connector': 'sfp',
+                'port_speeds': ['10g', '25g'],
+                'port_sfp_present': True,
+                'port_sfp_speed': ['10g'],
+                'port_sfp_connector': 'lc',
+                'services': ['data', 'replication', 'management', 'file']}
+    
+    k = 'png/pure_fa_2eth25roce_hh.png'
+    ports_loc = [(158, 40), (256, 40)]
+    add_ports_to_key(ports_loc, k, port_info, config)
+
+    k = 'png/pure_fa_2eth25roce_fh.png'
+    add_ports_to_key(ports_loc, k, port_info, config)
     
 
     #4 Eth 10/25Gb Optical - FA-25G-ETH/TCP 4-Port
@@ -695,7 +712,7 @@ def update_static_card_port_loc(config):
 
 
 
-    # 2 Eth 10Gb 10GBaseT - FA-CNTRL-10GBaseT 2-Port 
+    # 2 Eth 10/25Gb 10GBaseT - FA-CNTRL-10GBaseT 2-Port 
     ports_loc = [(155, 40), (265, 40)]
     keys = ['png/pure_fa_2ethbaset_fh.png',
             'png/pure_fa_2ethbaset_hh.png']
@@ -710,6 +727,8 @@ def update_static_card_port_loc(config):
 
     for k in keys:
         add_ports_to_key(ports_loc, k , port_info, config)
+
+
 
    # 2 Eth 40Gb - FA-CNTRL-40G-iSCSI 2-Port
 

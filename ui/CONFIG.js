@@ -30,7 +30,7 @@ var FA_OPTIONS = {
     direction: ['up', 'down'],
     fm_label: ['TRUE', 'FALSE'],
     dp_label: ['FALSE', 'TRUE'],
-    addoncards: [ '2fc', '4fc', '2ethbaset', '2eth', '4eth25', '2eth40', '2eth100', '2eth100roce', 'sas', 'dca', 'blank'],
+    addoncards: [ '2fc', '4fc', '2ethbaset', '2eth', '2eth25roce', '4eth25', '2eth40', '2eth100', '2eth100roce', 'sas', 'dca', 'blank'],
     mezz: ['', 'smezz', 'emezz'],
     ports: ['FALSE', 'TRUE']
 };

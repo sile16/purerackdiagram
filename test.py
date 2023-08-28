@@ -581,7 +581,7 @@ def get_all_tests():
         for card in addon_cards:
             params = {"model": model,
                         "datapacks": "45",
-                        "addoncards": card,
+                        "addoncards": f"{card},{card},{card}",
                         "face": "back",
                         "ports": True}
             count += 1
