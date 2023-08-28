@@ -20,6 +20,19 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+    {  ## keep this as an error message on purpose.
+        "queryStringParameters": {
+            "model": "fa-x90r4",
+            "datapacks": "31",
+            "direction": "down",
+            "chassis": 2,
+            "face": "back",
+            "dp_label": "True",
+            "fm_label": "True",
+            "addoncards": "2eth100,4eth25,2eth25roce,2eth",
+            "ports": "True"
+        }
+    },
     {
         "queryStringParameters": {
             "model": "fa-er1",

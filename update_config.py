@@ -47,7 +47,7 @@ def static_global_config():
     return {
 
         "pci_valid_cards": ["2eth", "2eth25roce", "2eth40", "2eth100", "2eth100roce",
-                            "4eth25", "2ethbaset",
+                            "4eth25", "2ethbaset", "mgmt2ethbaset",
                             "2fc", "4fc",
                             "sas", "dca", "blank"],   
 
@@ -56,24 +56,24 @@ def static_global_config():
              "fa-er1-fc": ["2eth100roce", "2eth", None, None, None],
 
             # New x R4
-            "fa-x20r4-fc": ["2ethbaset", None, None, "2fc", None],
-            "fa-x50r4-fc": ["2ethbaset", "4fc", None, None, None],
-            "fa-x70r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
-            "fa-x90r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-x20r4-fc": ["mgmt2ethbaset", None, None, "2fc", None],
+            "fa-x50r4-fc": ["mgmt2ethbaset", "4fc", None, None, None],
+            "fa-x70r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-x90r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
             
-            "fa-x20r4-eth": ["2ethbaset", None, None, "2eth", None],
-            "fa-x50r4-eth": ["2ethbaset", "2eth", None, "2eth", None],
-            "fa-x70r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
-            "fa-x90r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-x20r4-eth": ["mgmt2ethbaset", None, None, "2eth", None],
+            "fa-x50r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", None],
+            "fa-x70r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-x90r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
 
             # New C R4
-            "fa-c50r4-fc": ["2ethbaset", "4fc", None, None, None],
-            "fa-c70r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
-            "fa-c90r4-fc": ["2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-c50r4-fc": ["mgmt2ethbaset", "4fc", None, None, None],
+            "fa-c70r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
+            "fa-c90r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
 
-            "fa-c50r4-eth": ["2ethbaset", "2eth", None, None, None],
-            "fa-c70r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
-            "fa-c90r4-eth": ["2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-c50r4-eth": ["mgmt2ethbaset", "2eth", None, None, None],
+            "fa-c70r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-c90r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
 
 
             "fa-x10r3-fc": [None, None, "2fc", None],
@@ -674,7 +674,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_present': True,
                 'port_sfp_speed': ['10g'],
                 'port_sfp_connector': 'lc',
-                'services': ['data', 'replication', 'management', 'file']}
+                'services': ['data', 'replication', 'file']}
     
     k = 'png/pure_fa_2eth_hh.png'
     ports_loc = [(158, 40), (256, 40)]
@@ -691,7 +691,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_present': True,
                 'port_sfp_speed': ['10g'],
                 'port_sfp_connector': 'lc',
-                'services': ['data', 'replication', 'management', 'file']}
+                'services': ['data', 'replication', 'file']}
     
     k = 'png/pure_fa_2eth25roce_hh.png'
     ports_loc = [(158, 40), (256, 40)]
@@ -723,10 +723,19 @@ def update_static_card_port_loc(config):
                 'port_sfp_present': False,
                 'port_sfp_speed': [] ,
                 'port_sfp_connector': None,
-                'services': ['data', 'replication', 'management', 'file']}
+                'services': ['data', 'replication', 'file']}
 
     for k in keys:
         add_ports_to_key(ports_loc, k , port_info, config)
+
+    # 2 Eth 10/25Gb 10GBaseT - FA-CNTRL-10GBaseT 2-Port 
+    # Used for management ONLY, used in the XR4
+    # only one port is available, but we will use the same port info
+    ports_loc = [(155, 40)]
+    port_info['services'] = ['management']
+    add_ports_to_key(ports_loc, 'png/pure_fa_mgmt2ethbaset_fh.png', port_info, config )
+    add_ports_to_key(ports_loc, 'png/pure_fa_mgmt2ethbaset_hh.png', port_info, config )
+    
 
 
 
@@ -739,7 +748,7 @@ def update_static_card_port_loc(config):
             'port_sfp_present': False,
             'port_sfp_speed': [] ,
             'port_sfp_connector': None,
-            'services': ['data', 'replication', 'management', 'file']}
+            'services': ['data', 'replication', 'file']}
 
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_fh.png', port_info, config)
@@ -758,7 +767,7 @@ def update_static_card_port_loc(config):
 
     #2 Eth 100Gb RoCE - FA-XCR4-100G-iSCSI/ROCE 2-Port
 
-    port_info['services'] = ['data', 'replication', 'management', 'file', 'shelf']
+    port_info['services'] = ['data', 'replication', 'file', 'shelf']
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100roce_fh.png', port_info, config)
    
@@ -1073,7 +1082,7 @@ def update_static_model_port_loc(config):
          'port_sfp_present': False,
          'port_sfp_speed': [] ,
          'port_sfp_connector': None,
-         'services': ['data, replication, management'] 
+         'services': ['data', 'replication', 'management'] 
         },
         {'loc': (463, 420),
          'port_type': 'eth',
@@ -1083,7 +1092,7 @@ def update_static_model_port_loc(config):
          'port_sfp_present': False,
          'port_sfp_speed': [] ,
          'port_sfp_connector': None,
-         'services': ['data, replication, management']},
+         'services': ['data', 'replication', 'management'] },
         {'loc': (572, 420),
          'port_type': 'eth',
          'name': 'fm0.eth3',
@@ -1092,7 +1101,7 @@ def update_static_model_port_loc(config):
          'port_sfp_present': False,
          'port_sfp_speed': [] ,
          'port_sfp_connector': None,
-         'services': ['data, replication, management']},
+         'services': ['data', 'replication', 'management']},
         {'loc': (687, 420),
          'port_type': 'eth',
          'name': 'fm0.eth4',
@@ -1101,7 +1110,7 @@ def update_static_model_port_loc(config):
          'port_sfp_present': False,
          'port_sfp_speed': [] ,
          'port_sfp_connector': None,
-         'services': ['data, replication, management']}
+         'services': ['data', 'replication', 'management']}
 
          # Removing last 4 ports because they are ianctive from request of 
          # the Pure Advisor team.

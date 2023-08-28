@@ -485,18 +485,19 @@ class FADiagram():
                 # practice for population order, may have to just put this 
                 # back on the SE to select which slot.
                 if config["generation"] == 'xl':
-                    fh_order = [2, 3]
-                    hh_order = [0, 1, 4, 6, 7, 8]
+                    fh_order = [2, 3, 7, 0, 6, 4, 1, 8, 5]
+                    hh_order = [2, 3, 7, 0, 6, 4, 1, 8, 5]
                 elif config["generation"] == 'e':
-                    fh_order = [1, 2]
-                    hh_order = [0, 3, 4]
+                    fh_order = [0, 1, 2, 3, 4]
+                    hh_order = [0, 1, 2, 3, 4]
                 elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4:
-                    fh_order = [1, 2]
-                    hh_order = [0, 3, 4]
+                    fh_order = [0, 1, 2, 3, 4]
+                    hh_order = [0, 1, 2, 3, 4]
                 else:
                     fh_order = [0, 1]
                     hh_order = [2, 0, 1, 3]
                 order = fh_order
+
                 if card == "2fc" or card == "2eth" or card == "2ethbaset":
                     # card population order for a half or full card slot
                     order = hh_order
