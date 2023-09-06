@@ -1,3 +1,8 @@
+
+//global variable to store the vssx_url
+var vssx_url = "";
+
+
 const pythonTupleType = new jsyaml.Type('tag:yaml.org,2002:python/tuple', {
   kind: 'sequence',
   construct: function (data) {
@@ -341,7 +346,8 @@ $(function () {
     //$('#rack_digram').attr('src', url);
 
     
-    
+    //set the global variable vssx_url
+    vssx_url = url + "&vssx=True";
     visio_url = url + "&vssx=True";
     
     $('#img_url').html('<a target="_blank" href="' + url + '">' + url + '</a>');
@@ -380,9 +386,9 @@ $(function () {
     get_url();
   });
 
-  $("#download_visio").click(function () {
-    url = get_url() + "&vssx=True";
-    location.href = url;
+  $("#download_visio").click(async function () {
+    await get_url();
+    location.href = vssx_url;
   })
 
   $("#fa_option_model > select").change(function () {
