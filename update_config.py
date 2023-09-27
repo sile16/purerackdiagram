@@ -685,7 +685,7 @@ def update_static_card_port_loc(config):
 
 
      #2 Eth 10/25Gb Optical - FA-XCR4-25G-iSCSI/ROCE 2-Port
-    port_info = {'port_type': 'eth',
+    port_info = {'port_type': 'eth_roce',
                 'port_connector': 'sfp',
                 'port_speeds': ['10g', '25g'],
                 'port_sfp_present': True,
@@ -704,6 +704,7 @@ def update_static_card_port_loc(config):
     #4 Eth 10/25Gb Optical - FA-25G-ETH/TCP 4-Port
 
     # same port info for 4 port cards, but differnt locations on fh and hh
+    port_info['port_type'] = 'eth'
     ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_4eth25_fh.png',  port_info, config)
 
@@ -723,7 +724,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_present': False,
                 'port_sfp_speed': [] ,
                 'port_sfp_connector': None,
-                'services': ['data', 'replication', 'file']}
+                'services': ['data', 'replication', 'file',]}
 
     for k in keys:
         add_ports_to_key(ports_loc, k , port_info, config)
@@ -767,6 +768,7 @@ def update_static_card_port_loc(config):
 
     #2 Eth 100Gb RoCE - FA-XCR4-100G-iSCSI/ROCE 2-Port
 
+    port_info['port_type'] = 'eth_roce'
     port_info['services'] = ['data', 'replication', 'file', 'shelf']
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100roce_fh.png', port_info, config)
@@ -805,7 +807,7 @@ def update_static_model_port_loc(config):
         if rev == 4: 
             ct0ports = [ {'loc': (671, 308),
                 'name': 'ct0.eth0',
-                'port_type': 'eth',
+                'port_type': 'eth_roce',
                 'port_connector': 'qsfp28',
                 'port_speeds': ['50g', '100g'],
                 'port_sfp_present': False,
@@ -815,7 +817,7 @@ def update_static_model_port_loc(config):
 
                 {'loc': (786, 308),
                 'name': 'ct0.eth1',
-                'port_type': 'eth',
+                'port_type': 'eth_roce',
                 'port_connector': 'qsfp28',
                 'port_speeds': ['50g', '100g'],
                 'port_sfp_present': False,
@@ -1110,7 +1112,16 @@ def update_static_model_port_loc(config):
          'port_sfp_present': False,
          'port_sfp_speed': [] ,
          'port_sfp_connector': None,
-         'services': ['data', 'replication', 'management']}
+         'services': ['data', 'replication', 'management']},
+         {'loc': (1149, 363),
+         'port_type': 'eth',
+         'name': 'fm0.eth5',
+         'port_connector': 'rj45',
+         'port_speeds': ['1g'],
+         'port_sfp_present': False,
+         'port_sfp_speed': [] ,
+         'port_sfp_connector': None,
+         'services': ['management']}
 
          # Removing last 4 ports because they are ianctive from request of 
          # the Pure Advisor team.
@@ -1148,6 +1159,8 @@ def update_static_model_port_loc(config):
     if key not in config:
         config[key] = {}
     config[key]['ports'] = ct0ports[0:9] + ct1ports[0:9]
+    
+    # Pure FB /S Management Port
 
 
     # Pure FB BAck XFM

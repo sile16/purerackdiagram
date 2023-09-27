@@ -20,6 +20,33 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fb-e",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {  ## keep this as an error message on purpose.
+        "queryStringParameters": {
+            "model": "fa-x20r4",
+            "datapacks": "31",
+            "direction": "down",
+            "chassis": 2,
+            "face": "back",
+            "dp_label": "True",
+            "fm_label": "True",
+            "protocol": "fc",
+            "addoncards": "sas,4eth25,4fc",
+            "ports": "True"
+        }
+    },
     {  ## keep this as an error message on purpose.
         "queryStringParameters": {
             "model": "fa-x90r4",

@@ -17,6 +17,7 @@ from PIL import ImageFont
 
 import uuid
 import boto3
+import math
 
 
 import purerackdiagram
@@ -98,10 +99,36 @@ def text_to_image(text):
     return img
 
 # function to draw a triangle to a PIL image using polygon
-def draw_triangle(draw, x, y, size, color):
+def draw_triangle_up(draw, x, y, size, color):
     draw.polygon([(x, y - size), (x + size, y + size), (x - size, y + size)],
                  fill=color, outline=color)
     
+def draw_triangle_down(draw, x, y, size, color):
+    draw.polygon([(x, y + size), (x + size, y - size), (x - size, y - size)],
+                 fill=color, outline=color)
+
+
+def draw_diamond(draw, x, y, size, color):
+    # Top triangle (pointing up)
+    draw.polygon([(x, y - size), (x + size, y), (x - size, y)],
+                 fill=color, outline=color)
+    # Bottom triangle (pointing down)
+    draw.polygon([(x, y + size), (x + size, y), (x - size, y)],
+                 fill=color, outline=color)
+
+
+
+def draw_pentagon(draw, x, y, size, color):
+    # Calculate vertices for the pentagon
+    vertices = []
+    for i in range(5):
+        angle = 2 * math.pi * i / 5
+        vertex_x = x + size * math.sin(angle)
+        vertex_y = y - size * math.cos(angle)  # Subtracting since the y-coordinates in most graphic systems increase downwards
+        vertices.append((vertex_x, vertex_y))
+
+    draw.polygon(vertices, fill=color, outline=color)
+
 
 def handler(event, context):
     """ Lambda Entry
@@ -146,37 +173,70 @@ def handler(event, context):
             logger.debug("adding ports to image")
             # Draw
             draw = ImageDraw.Draw(img)
+            
 
             for p in diagram.ports:
+                services = p.get('services', [])
                 size = 16
-                if p['port_type'] == 'eth':
-                    color = 'brown'
+
+                if 'management' in services and len(services) == 1:
+                    #dedicated management port
+                    #Rose: #D90368
+                    #color = '#%02x%02x%02x' % (217, 3, 104)
+                    color = '#D90368'
                     draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
                               p['loc'][0] + size, p['loc'][1] + size),
                              fill=color, outline=color)
+                
+                    
+                elif 'port_type' not in p:
+                    # we need port type to check any further info.
+                    continue
+                
                 elif p['port_type'] == 'fc':
                     # pick the color :
                     # use Pillow to define a color with rgb values: 235, 149, 52
                     # then convert to hex
                     # https://stackoverflow.com/questions/3380726/converting-a-rgb-color-tuple-to-a-six-digit-code-in-python
-                    color = '#%02x%02x%02x' % (235, 149, 52)
-
-                    draw_triangle(draw, p['loc'][0], p['loc'][1], size, color)
-                elif p['port_type'] == 'sas':
-                    color = 'blue'
-                    #draw a square
+                    # color #FE5000
+                    color = '#FE5000'
+                    
+                    #draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
                     draw.rectangle((p['loc'][0] - size, p['loc'][1] - size,
                               p['loc'][0] + size, p['loc'][1] + size),
                              fill=color, outline=color)
+                elif p['port_type'] == 'sas':
+                    color = 'blue'
+                    #draw a rectangle
+                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size/2,
+                              p['loc'][0] + size, p['loc'][1] + size/2),
+                             fill=color, outline=color)
+                    
+                #elif 'shelf' in services and len(services) == 1:
+                #    color = 'purple'
+                #    draw_diamond(draw, p['loc'][0], p['loc'][1], size, color)
+                #
+                elif p['port_type'] == 'eth_roce':
+                    color = "#00B2A9"
+                    #draw triangle up
+                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
+
+                elif p['port_type'] == 'eth':
+                    color = '#FCDC4D'
+                    #draw triangle down
+                    draw_triangle_down(draw, p['loc'][0], p['loc'][1], size, color)
+                    
                 else:
                     logger.warning(f"Unknown port type: {p['port_type']}")
+
                     # draw a diamond with color of green
-                    color = 'green'
-                    draw.polygon([(p['loc'][0], p['loc'][1] - size),
-                                  (p['loc'][0] + size, p['loc'][1]),
-                                  (p['loc'][0], p['loc'][1] + size),
-                                  (p['loc'][0] - size, p['loc'][1])],
-                                 fill=color, outline=color)
+                    # color = 'green'
+                    
+                    # draw.polygon([(p['loc'][0], p['loc'][1] - size),
+                    #              (p['loc'][0] + size, p['loc'][1]),
+                    #              (p['loc'][0], p['loc'][1] + size),
+                    #              (p['loc'][0] - size, p['loc'][1])],
+                    #             fill=color, outline=color)
                     
                     
 
