@@ -350,6 +350,10 @@ class FAChassis():
                             raise Exception(
                                 "Overlapping datapacks, check data pack sizes dont exceed chassis size of 20.")
                     else:
+                        # check to make sure index is not out of range:
+                        if x >= len(fm_loc):
+                            raise Exception(
+                                "Too many fm modules, check data pack sizes dont exceed chassis size of:"+str(len(fm_loc))) 
                         self.tmp_img.paste(fm_img, fm_loc[x])
                         # keep track of modules, to detect overlaps
                         slots[x] = fm_type

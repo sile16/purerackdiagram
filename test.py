@@ -22,6 +22,20 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-xl130",
+            "datapacks": "91/91/91/36",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "front",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fb-e",
             "chassis": 2,
             "addoncards": "2eth100",
