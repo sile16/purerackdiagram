@@ -178,6 +178,9 @@ def handler(event, context):
             for p in diagram.ports:
                 services = p.get('services', [])
                 size = 16
+                symbol_name = ""
+                symbol_shape = ""
+                symbol_color = ""
 
                 if 'management' in services and len(services) == 1:
                     #dedicated management port
@@ -187,6 +190,10 @@ def handler(event, context):
                     draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
                               p['loc'][0] + size, p['loc'][1] + size),
                              fill=color, outline=color)
+                    
+                    p['symbol_name'] = "Management"
+                    p['symbol_shape'] = "circle"
+                    p['symbol_color'] = color
                 
                     
                 elif 'port_type' not in p:
@@ -205,6 +212,11 @@ def handler(event, context):
                     draw.rectangle((p['loc'][0] - size, p['loc'][1] - size,
                               p['loc'][0] + size, p['loc'][1] + size),
                              fill=color, outline=color)
+                    
+                    p['symbol_name'] = "Fibre Channel"
+                    p['symbol_shape'] = "square"
+                    p['symbol_color'] = color
+
                 elif p['port_type'] == 'sas':
                     color = 'blue'
                     #draw a rectangle
@@ -212,19 +224,34 @@ def handler(event, context):
                               p['loc'][0] + size, p['loc'][1] + size/2),
                              fill=color, outline=color)
                     
+                    p['symbol_name'] = "SAS"
+                    p['symbol_shape'] = "rectangle"
+                    p['symbol_color'] = color
+                    
                 #elif 'shelf' in services and len(services) == 1:
                 #    color = 'purple'
                 #    draw_diamond(draw, p['loc'][0], p['loc'][1], size, color)
+
+
+
                 #
                 elif p['port_type'] == 'eth_roce':
                     color = "#00B2A9"
                     #draw triangle up
                     draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
 
+                    p['symbol_name'] = "Ethernet / RoCE"
+                    p['symbol_shape'] = "triangle up"
+                    p['symbol_color'] = color
+
                 elif p['port_type'] == 'eth':
                     color = '#FCDC4D'
                     #draw triangle down
                     draw_triangle_down(draw, p['loc'][0], p['loc'][1], size, color)
+
+                    p['symbol_name'] = "Ethernet"
+                    p['symbol_shape'] = "triangle down"
+                    p['symbol_color'] = color
                     
                 else:
                     logger.warning(f"Unknown port type: {p['port_type']}")
