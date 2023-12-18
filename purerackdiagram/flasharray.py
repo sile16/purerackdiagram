@@ -529,10 +529,17 @@ class FADiagram():
 
     def _init_datapacks(self, config, params):
         ######################################
-        #  Parse Data Packs & Shelf config
+        #  Parse Data Packs & Shelf 
 
-        chassis_dp_size_lookup = utils.global_config['chassis_dp_size_lookup']
-        shelf_dp_size_lookup = utils.global_config['shelf_dp_size_lookup']
+        chassis_dp_size_lookup = None
+        shelf_dp_size_lookup = None
+        if('x' in config["model_str"] or 'm' in config["model_str"]):
+           
+            chassis_dp_size_lookup = utils.global_config['chassis_dp_size_lookup']
+            shelf_dp_size_lookup = utils.global_config['shelf_dp_size_lookup']
+        else:
+            chassis_dp_size_lookup = utils.global_config['qlc_chassis_dp_size_lookup']
+            shelf_dp_size_lookup = utils.global_config['qlc_shelf_dp_size_lookup']
 
         shelves = []
         config["chassis_datapacks"] = []
@@ -698,7 +705,7 @@ class FADiagram():
 
             if 'csize' in params and params['csize'] != '':
                 csize = params.get('csize', '')
-                if csize in utils.global_config['chassis_dp_size_lookup']:
+                if csize in utils.global_config['qlc_chassis_dp_size_lookup']:
                     # we have a direct data pack for that size.
                     params['datapacks'] = csize
 

@@ -292,7 +292,7 @@ more_tests = [
     {
         "queryStringParameters": {
             "model": "fa-c40r3",
-            "datapacks": "63/0",
+            "datapacks": "366",
             "protocol": "eth",
             "chassis": 2,
             "addoncards": "",
@@ -549,7 +549,9 @@ def get_all_tests():
     dps = ['45/45-31/63-45-24.0', '3/127-24.0-45']
 
     valid_chassis_dps = list(global_config['chassis_dp_size_lookup'].keys())
+    #valid_chassis_dps += list(global_config['qlc_chassis_dp_size_lookup'].keys())
     valid_shelf_dps = list(global_config['shelf_dp_size_lookup'].keys())
+    #valid_shelf_dps += list(global_config['qlc_shelf_dp_size_lookup'].keys())
 
     # get the keys of diction csize_lookup
     csizes = list(global_config['csize_lookup'].keys())
@@ -566,7 +568,7 @@ def get_all_tests():
     for model in models:
         #continue
         model = model[:8]
-        if 'c' in model:
+        if 'c' in model or 'e' in model:
             count += 1
             params = {"model": model,
                         "fm_label": True,
@@ -587,7 +589,7 @@ def get_all_tests():
                     "fm_label": True,
                     "dp_label": True,
                     "bezel": True,
-                    "datapacks": '45-31'}
+                    "datapacks": '366'}
         yield params
 
     for csize in csizes:
@@ -624,7 +626,7 @@ def get_all_tests():
         #continue
         model = model[:8]
         
-        if 'c' in model:
+        if 'c' in model or 'e' in model:
             params = {"model": model,
                         "addoncards": '4fc',
                         "face": "back",
@@ -645,7 +647,7 @@ def get_all_tests():
         # every model with each card.
         for card in addon_cards:
             params = {"model": model,
-                        "datapacks": "45",
+                        "datapacks": "366",
                         "addoncards": f"{card},{card},{card}",
                         "face": "back",
                         "ports": True}

@@ -43,8 +43,8 @@ $(function () {
         table.querySelector('tbody').innerHTML = sortedRows.map(row => row.outerHTML).join('');
       };
 
-      const createTable = (lookupData) => {
-        if (!lookupData || lookupData.length === 0) {
+      const createTable = (lookupList) => {
+        if (!lookupList || lookupList.length === 0) {
           return ''; // Return an empty string if lookupData is null, undefined, or empty
         }
         let tableHtml = `
@@ -60,11 +60,11 @@ $(function () {
             <tbody>
         `;
 
-        Object.entries(lookupData).forEach(([key, item]) => {
+        lookupList.forEach(item => {
           if (categories.includes(item[1])) {
             tableHtml += `
               <tr>
-                <td>${key}</td>
+                <td>${item[4]}</td> <!-- Key is now the last element in the array -->
                 <td>${item[2]}</td>
                 <td>${item[0]}</td>
                 <td>${item[3]}</td>
@@ -82,33 +82,24 @@ $(function () {
 
       let activeTabIndex = -1;
 
-      const createSubTabs = (lookupData, parentId) => {
+      const createSubTabs = (lookupList, parentId) => {
 
         subTabsHtml = `<div id="${parentId}-dp-tabs">`;
         subTabsHtml += '<ul>';
         subTabContentHtml = '';
 
-        // iterate through the categories, Blank, SCM, NVMe, NVMe-QLC, SAS
-        categories.forEach((category, index) => {
-          
-          //create the list in parallel in this loop
-          subTabsHtml += `
-            <li><a href="#${parentId}-${category}">${category}</a></li>
-          `;
+        /// Iterate through the categories
+        categories.forEach((category) => {
+          subTabsHtml += `<li><a href="#${parentId}-${category}">${category}</a></li>`;
 
-          // iterated through the lookupData dictionary of arrays, and filter
-          // to include only the category stored in 1 index of the array we are interested in.
-          // end filtered_data is a dictionary of arrays maintaining the
-          // original key value pairs.
-          const filteredData = Object.fromEntries(
-            Object.entries(lookupData).filter(([key, value]) => value[1] === category)
-          );
+          // Filter the list to include only the desired category
+          const filteredList = lookupList.filter(item => item[1] === category);
 
-          // Create the content Divs for each tab.
+          // Create the content Divs for each tab
           subTabContentHtml += `
-              <div id="${parentId}-${category}">
-                ${createTable(filteredData)}
-              </div>
+            <div id="${parentId}-${category}">
+              ${createTable(filteredList)}
+            </div>
           `;
         });
 
@@ -119,11 +110,27 @@ $(function () {
         return subTabsHtml + subTabContentHtml;
       };
 
-      const chassisLookupData = data.chassis_dp_size_lookup;
-      const shelfLookupData = data.shelf_dp_size_lookup;
+      
+      // Function to convert dictionary objects into lists of arrays
+      const convertDictToList = (dict) => {
+        return Object.entries(dict).map(([key, value]) => [...value, key]);
+      };
 
-      document.querySelector("#chassis-dp").innerHTML = createSubTabs(chassisLookupData, 'chassis');
-      document.querySelector("#shelf-dp").innerHTML = createSubTabs(shelfLookupData, 'shelf');
+      // Converting dictionary objects into lists of arrays
+      const chassisList = convertDictToList(data.chassis_dp_size_lookup);
+      const shelfList = convertDictToList(data.shelf_dp_size_lookup);
+      const qlcChassisList = convertDictToList(data.qlc_chassis_dp_size_lookup);
+      const qlcShelfList = convertDictToList(data.qlc_shelf_dp_size_lookup);
+
+      // Merging lists
+      const mergedChassisList = chassisList.concat(qlcChassisList);
+      const mergedShelfList = shelfList.concat(qlcShelfList);
+
+      
+      document.querySelector("#chassis-dp").innerHTML = createSubTabs(mergedChassisList, 'chassis');
+      //document.querySelector("#chassis-dp").innerHTML = createSubTabs(, 'chassis');
+      document.querySelector("#shelf-dp").innerHTML = createSubTabs(mergedShelfList, 'shelf');
+      //document.querySelector("#shelf-dp").innerHTML = createSubTabs(qlcShelfLookupData, 'shelf');
       $("#chassis-dp-tabs").tabs();
       $("#shelf-dp-tabs").tabs();
 
