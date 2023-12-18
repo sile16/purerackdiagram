@@ -664,10 +664,17 @@ class FADiagram():
             if config['generation'] == 'x' and config["model_num"] >= 20:
                 default_mezz = 'emezz'
             elif config['generation'] == 'c':
-                default_mezz = 'emezz'
+                if config['release'] == 3 and config['model_num'] == 40:
+                    default_mezz = None
+                else:
+                    default_mezz = 'emezz'
+
             config["mezz"] = params.get("mezz", default_mezz)
             if config['mezz'] == "":
                 config['mezz'] = default_mezz
+            
+            if config['mezz'] and config['mezz'].upper() == 'NONE':
+                config['mezz'] = None
 
             if config['mezz'] not in valid_mezz:
                 raise Exception(

@@ -1005,7 +1005,6 @@ png/pure_fa_2fc_fh.png:
     port_sfp_speed: &id023
     - 32g
     port_speeds: &id024
-    - 16g
     - 32g
     - 64g
     port_type: fc

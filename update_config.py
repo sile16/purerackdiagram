@@ -643,7 +643,7 @@ def update_static_card_port_loc(config):
 
     port_info = {'port_type': 'fc',
                 'port_connector': 'sfp',
-                'port_speeds': ['16g', '32g', '64g'],
+                'port_speeds': ['32g', '64g'],
                 'port_sfp_present': True,
                 'port_sfp_speed': ['32g'] ,
                 'port_sfp_connector': 'lc',
