@@ -20,10 +20,20 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+     {
+        "queryStringParameters": {
+            "model": "fa-x90r4",
+            "datapacks": "3/0.02/45",
+            "face": "front",
+            "dp_label": True,
+            "fm_label": True,
+        }
+    },
+
     {
         "queryStringParameters": {
             "model": "fa-xl170",
-            "datapacks": "91/45/72-256/256",
+            "datapacks": "183/72/91",
             "face": "front",
             "dp_label": True,
             "fm_label": True,
@@ -517,7 +527,8 @@ def create_test_image(item, count, total):
                 file_name += f"_{n}-{item[n]}"
     
 
-
+    if "fa-er1-f" in item['model'] :
+        pass
 
     try:
         results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name))
@@ -566,7 +577,7 @@ def get_all_tests():
     # Test all Models with a front data pack and shelf.
     for model in models:
         #continue
-        model = model[:8]
+        model = model.split('-')[0] + '-' + model.split('-')[1]
         if 'c' in model or 'e' in model:
             count += 1
             params = {"model": model,
@@ -623,7 +634,7 @@ def get_all_tests():
     #every model and shelf back view.
     for model in models:
         #continue
-        model = model[:8]
+        model = model.split('-')[0] + '-' + model.split('-')[1]
         
         if 'c' in model or 'e' in model:
             params = {"model": model,

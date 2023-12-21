@@ -165,9 +165,9 @@ chassis_dp_size_lookup:
   - 16
   - '36'
   '366':
-  - 18.3TB
+  - 36.6TB
   - nvme
-  - 20
+  - 10
   - '366'
   '38.0':
   - 3.8TB
@@ -184,6 +184,11 @@ chassis_dp_size_lookup:
   - nvme
   - 18
   - '40'
+  '439':
+  - 36.6TB
+  - nvme
+  - 12
+  - '439'
   '44':
   - 2.2TB
   - nvme
@@ -199,6 +204,16 @@ chassis_dp_size_lookup:
   - sas
   - 10
   - '5'
+  '512':
+  - 36.6TB
+  - nvme
+  - 14
+  - '512'
+  '585':
+  - 36.6TB
+  - nvme
+  - 16
+  - '585'
   '6':
   - 750GB
   - scm
@@ -209,6 +224,11 @@ chassis_dp_size_lookup:
   - nvme
   - 14
   - '63'
+  '658':
+  - 36.6TB
+  - nvme
+  - 18
+  - '658'
   '72':
   - 4.5TB
   - nvme
@@ -4485,11 +4505,21 @@ shelf_dp_size_lookup:
   - nvme
   - 16
   - '36'
+  '366':
+  - 36.6TB
+  - nvme
+  - 10
+  - '366'
   '40':
   - 2.2TB
   - nvme
   - 18
   - '40'
+  '439':
+  - 36.6TB
+  - nvme
+  - 12
+  - '439'
   '45':
   - 4.5TB
   - nvme
@@ -4500,6 +4530,16 @@ shelf_dp_size_lookup:
   - sas
   - 12
   - '45'
+  '512':
+  - 36.6TB
+  - nvme
+  - 14
+  - '512'
+  '585':
+  - 36.6TB
+  - nvme
+  - 16
+  - '585'
   '6.1':
   - 256GB
   - sas
@@ -4510,6 +4550,11 @@ shelf_dp_size_lookup:
   - nvme
   - 14
   - '63'
+  '658':
+  - 36.6TB
+  - nvme
+  - 18
+  - '658'
   '72':
   - 4.5TB
   - nvme

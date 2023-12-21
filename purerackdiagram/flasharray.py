@@ -118,7 +118,7 @@ class FAShelf():
                 #                              right,
                 #                              full)
 
-                self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size, dp[4], dp[5])
+                self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size+"TB", dp[4], dp[5])
                 
 
     async def add_sas_fms(self):
@@ -320,9 +320,13 @@ class FAChassis():
         slots = {}
 
         # of chassis slots
-        total_fm_count = len(self.img_info['fm_loc'])
+        await self.start_img_event.wait()
+
+        total_fm_count = 20
         current_index = 0
         dp_count = len(self.config["chassis_datapacks"])
+        fm_loc = self.img_info['fm_loc']
+
         for dp_i in range(dp_count):
             dp = self.config["chassis_datapacks"][dp_i]
 
@@ -340,28 +344,38 @@ class FAChassis():
 
             file_name = "png/pure_fa_fm_{}.png".format(fm_type)
             fm_img = await RackImage(file_name).get_image()
-            blank_img = await RackImage("png/pure_fa_fm_blank.png").get_image()
+            
 
             if self.config['fm_label']:
                 apply_fm_label(fm_img, fm_str, fm_type)
-                apply_fm_label(blank_img, "Blank", "")
+  
 
             await self.start_img_event.wait()
             if not right:
-                the_range = range(current_index, current_index + num_modules)
+                the_range = list(range(current_index, current_index + num_modules))
                 current_index += num_modules
             else:
                 # this is hard coded 20, probably fine
-                the_range = list(reversed(range(20-num_modules, 20)))
+                the_range = list(range(20-num_modules, 20))
 
-            fm_loc = self.img_info['fm_loc']
+           
 
             first_fm = True # used store the first fm location
             for x in the_range:
                 if first_fm:
                     dp.append(fm_loc[x])
-                    dp.append(fm_loc[the_range[-1]])
+                    dp.append(fm_loc[x])
                     first_fm = False
+                
+                if len(dp) == 6:
+                    if fm_loc[x][0] >= dp[5][0] :
+                        dp[5] = fm_loc[x]
+                    else:
+                        dp.append(fm_loc[x])
+                        dp.append(fm_loc[the_range[-1]])
+
+                
+                
                     
                 
                 # self.tmp_img.save("tmp.png")
@@ -386,9 +400,14 @@ class FAChassis():
                     slots[x] = fm_type
         
         # add blanks to slots without
-        for x in range(len(fm_loc)):
-            if x not in slots:
-                self.tmp_img.paste(blank_img, fm_loc[x])
+        blank_img = await RackImage("png/pure_fa_fm_blank.png").get_image()
+        if self.config['fm_label']:
+            apply_fm_label(blank_img, "Blank", "")
+    
+            for x in range(total_fm_count):
+                if x not in slots:
+                    self.tmp_img.paste(blank_img, fm_loc[x])
+        
 
         
         if self.config['dp_label']:
@@ -403,7 +422,16 @@ class FAChassis():
                     start_loc = dp[4]
                     end_loc = dp[5]
                     # use the new apply_dp_label
-                    self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size, start_loc, end_loc)
+                    self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size + "TB", start_loc, end_loc)
+                    
+                    if len(dp) > 6:
+                        
+                        start_loc = dp[6]
+                        end_loc = dp[7]
+                        self.tmp_img = apply_dp_labelv2(self.tmp_img,"..Continued", start_loc, end_loc)
+        
+                       
+
 
                 else:
                    
@@ -456,7 +484,7 @@ def apply_fm_label(fm_img, fm_str, fm_type):
         utils.apply_text_centered(fm_img, fm_type, 32)
 
 def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided):
-    if dp_size == '0':
+    if dp_size == '0TB':
         return img
     
     global ttf_path
@@ -485,9 +513,9 @@ def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided):
     box_center = ((box_loc[0] + end_loc[0]) // 2,
                   (box_loc[1] + end_loc[1]) // 2)
     font = ImageFont.truetype(ttf_path, size=85)
-    w, h = draw.textsize(dp_size + "TB", font=font)
+    w, h = draw.textsize(dp_size, font=font)
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
-    draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220), font=font)
+    draw.text(text_loc, dp_size , fill=(255, 255, 255, 220), font=font)
     logger.debug("converting image to RGBA")
     alpha_tmp = img.convert("RGBA")
     logger.debug("converted image to RGBA, doing composite")
@@ -550,6 +578,7 @@ class FADiagram():
             config["release"],
             config["protocol"],
         )
+        
         
         pci_config = pci_config_lookup[pci_lookup_str].copy()
 
@@ -699,6 +728,9 @@ class FADiagram():
         self.ports = []
 
         config["model_str"] = params["model"].lower()
+        if config['model_str'] == 'fa-er1-f':
+
+            pass
 
         # mode-str of type  "fa-m70r2" or "fa-x70" or "fa-xl130" or fa-xl170r2
         # Split string on the - and transition to numbers
