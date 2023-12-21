@@ -55,8 +55,15 @@ class FAShelf():
 
     async def add_nvme_fms(self):
         cur_module = 0
+         # wait until the base image is loaded
+        await self.start_img_event.wait()
 
+        fm_loc = self.img_info['fm_loc']
+
+       
         for dp in self.config["datapacks"]:
+            
+
             fm_str = dp[0]
             fm_type = dp[1]
             img_name = 'png/pure_fa_fm_{}.png'.format(fm_type)
@@ -70,17 +77,25 @@ class FAShelf():
             if self.config['fm_label']:
                 apply_fm_label(fm_img, fm_str, fm_type)
 
-            # wait until the base image is loaded
-            await self.start_img_event.wait()
-
-            fm_loc = self.img_info['fm_loc']
+           
             fm_rotated = fm_img.rotate(-90, expand=True)
-
+            
+            
+            first_fm = True
             for x in range(cur_module, min(28, num_modules + cur_module)):
+                if first_fm:
+                    dp.append(fm_loc[x])
+                    dp.append("")
+                    first_fm = False
+
                 if x < 20:
                     self.tmp_img.paste(fm_img, fm_loc[x])
+                    dp[5] = fm_loc[x]
                 else:
                     self.tmp_img.paste(fm_rotated, fm_loc[x])
+                    ## raise the y value of sthe starting point.
+                    dp[4] = (dp[4][0],min(fm_loc[x][1], dp[4][1]))
+                    
             cur_module += num_modules
 
         # add datapack labels
@@ -94,13 +109,17 @@ class FAShelf():
                 dp_size = dp[3]
                 y_offset = 50
                 x_offset = 162
-                self.tmp_img = apply_dp_label(self.tmp_img,
-                                              dp_size,
-                                              x_offset,
-                                              y_offset,
-                                              right,
-                                              full)
                 right = True
+
+                #self.tmp_img = apply_dp_label(self.tmp_img,
+                #                              dp_size,
+                #                              x_offset,
+                #                              y_offset,
+                #                              right,
+                #                              full)
+
+                self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size, dp[4], dp[5])
+                
 
     async def add_sas_fms(self):
         cur_module = 0
@@ -296,7 +315,7 @@ class FAChassis():
 
     async def add_fms(self):
         # is  this the right side data pack ?
-        # starts with no, then we change to yes after first one
+        # starts with no, then we change to yes if it's the last datapack.
         right = False
         slots = {}
 
@@ -306,6 +325,7 @@ class FAChassis():
         dp_count = len(self.config["chassis_datapacks"])
         for dp_i in range(dp_count):
             dp = self.config["chassis_datapacks"][dp_i]
+
             # see if this is the last data pack or not
             if dp_i > 0 and dp_i + 1 == dp_count:
                 # If it's m or X need to populated the 
@@ -324,7 +344,7 @@ class FAChassis():
 
             if self.config['fm_label']:
                 apply_fm_label(fm_img, fm_str, fm_type)
-                apply_fm_label(blank_img, "", "blank")
+                apply_fm_label(blank_img, "Blank", "")
 
             await self.start_img_event.wait()
             if not right:
@@ -332,33 +352,45 @@ class FAChassis():
                 current_index += num_modules
             else:
                 # this is hard coded 20, probably fine
-                the_range = reversed(range(20-num_modules, 20))
+                the_range = list(reversed(range(20-num_modules, 20)))
 
             fm_loc = self.img_info['fm_loc']
 
+            first_fm = True # used store the first fm location
             for x in the_range:
+                if first_fm:
+                    dp.append(fm_loc[x])
+                    dp.append(fm_loc[the_range[-1]])
+                    first_fm = False
+                    
+                
                 # self.tmp_img.save("tmp.png")
-                if not right and x >= num_modules and self.config["generation"] != 'xl':
-                    # for short DMM modules, fill the rest with blanks
-                    self.tmp_img.paste(blank_img, fm_loc[x])
-                else:
+                #if not right and x >= num_modules and self.config["generation"] != 'xl':
+                #    # for short DMM modules, fill the rest with blanks
+                #    self.tmp_img.paste(blank_img, fm_loc[x])
+                #else:
 
-                    if x in slots and slots[x] != "blank":
-                        if fm_type == "blank":
-                            pass
-                        else:
-                            raise Exception(
-                                "Overlapping datapacks, check data pack sizes dont exceed chassis size of 20.")
+                if x in slots and slots[x] != "blank":
+                    if fm_type == "blank":
+                        pass
                     else:
-                        # check to make sure index is not out of range:
-                        if x >= len(fm_loc):
-                            raise Exception(
-                                "Too many fm modules, check data pack sizes dont exceed chassis size of:"+str(len(fm_loc))) 
-                        self.tmp_img.paste(fm_img, fm_loc[x])
-                        # keep track of modules, to detect overlaps
-                        slots[x] = fm_type
+                        raise Exception(
+                            "Overlapping datapacks, check data pack sizes dont exceed chassis size of 20.")
+                else:
+                    # check to make sure index is not out of range:
+                    if x >= len(fm_loc):
+                        raise Exception(
+                            "Too many fm modules, check data pack sizes dont exceed chassis size of:"+str(len(fm_loc))) 
+                    self.tmp_img.paste(fm_img, fm_loc[x])
+                    # keep track of modules, to detect overlaps
+                    slots[x] = fm_type
+        
+        # add blanks to slots without
+        for x in range(len(fm_loc)):
+            if x not in slots:
+                self.tmp_img.paste(blank_img, fm_loc[x])
 
-
+        
         if self.config['dp_label']:
             right = False
             for dp in self.config["chassis_datapacks"]:
@@ -367,20 +399,29 @@ class FAChassis():
                 num_modules = dp[2]
                 dp_size = dp[3]
 
-                y_offset = 244
-                x_offset = 130
-                full = False
-                if num_modules == 20:
-                    full = True
+                if len(dp) > 4:
+                    start_loc = dp[4]
+                    end_loc = dp[5]
+                    # use the new apply_dp_label
+                    self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size, start_loc, end_loc)
 
-                self.tmp_img = apply_dp_label(self.tmp_img,
-                                              dp_size,
-                                              x_offset,
-                                              y_offset,
-                                              right,
-                                              full)
-                # the next DP must be the right side.
-                right = True
+                else:
+                   
+
+                    y_offset = 244
+                    x_offset = 130
+                    full = False
+                    if num_modules == 20:
+                        full = True
+
+                    self.tmp_img = apply_dp_label(self.tmp_img,
+                                                dp_size,
+                                                x_offset,
+                                                y_offset,
+                                                right,
+                                                full)
+                    # the next DP must be the right side.
+                    right = True
 
     async def add_model_text(self):
         global ttf_path
@@ -411,8 +452,48 @@ class FAChassis():
 def apply_fm_label(fm_img, fm_str, fm_type):
     # writing flash module text lables
     utils.apply_text_centered(fm_img, fm_str, 18)
-    utils.apply_text_centered(fm_img, fm_type, 32)
+    if fm_type != "blank":
+        utils.apply_text_centered(fm_img, fm_type, 32)
 
+def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided):
+    if dp_size == '0':
+        return img
+    
+    global ttf_path
+    # temp image same size as our chassis.
+    tmp = Image.new('RGBA', img.size, (0, 0, 0, 0))
+
+    # Create a drawing context for it.
+    draw = ImageDraw.Draw(tmp)
+
+    x_buffer = 50
+    y_buffer = 75
+    y_size = 420
+
+    start_loc = (min(start_loc_provided[0], end_loc_provided[0]),
+                min(start_loc_provided[1], end_loc_provided[1]))
+    end_loc = (max(start_loc_provided[0], end_loc_provided[0]),
+                max(start_loc_provided[1], end_loc_provided[1]))
+
+
+    box_loc = (start_loc[0] + x_buffer, start_loc[1] + y_buffer)
+
+    end_loc = (end_loc[0] + x_buffer,
+                (end_loc[1] + y_size))
+
+    draw.rectangle((box_loc, end_loc), fill=(199, 89, 40, 127))
+    box_center = ((box_loc[0] + end_loc[0]) // 2,
+                  (box_loc[1] + end_loc[1]) // 2)
+    font = ImageFont.truetype(ttf_path, size=85)
+    w, h = draw.textsize(dp_size + "TB", font=font)
+    text_loc = (box_center[0] - w/2, box_center[1] - h/2)
+    draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220), font=font)
+    logger.debug("converting image to RGBA")
+    alpha_tmp = img.convert("RGBA")
+    logger.debug("converted image to RGBA, doing composite")
+    composite_img = Image.alpha_composite(alpha_tmp, tmp)
+    logger.debug("done composite")
+    return composite_img
 
 def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
     global ttf_path
@@ -567,7 +648,7 @@ class FADiagram():
             if not config["bezel"]:
                 for dp in chassis.split("/"):
                     if dp in chassis_dp_size_lookup:
-                        datapacks.append(chassis_dp_size_lookup[dp])
+                        datapacks.append(chassis_dp_size_lookup[dp].copy())
                     elif dp == '0':
                         pass
                     else:
@@ -583,7 +664,7 @@ class FADiagram():
 
                 for dp in shelf.split("/"):
                     if dp in shelf_dp_size_lookup:
-                        datapacks.append(shelf_dp_size_lookup[dp])
+                        datapacks.append(shelf_dp_size_lookup[dp].copy())
                         if not dp.startswith('0') :
                             shelf_type = shelf_dp_size_lookup[dp][1]
                             if 'nvme' in shelf_type:

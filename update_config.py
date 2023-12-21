@@ -133,6 +133,7 @@ def static_global_config():
             "0.14": ["Blank", "blank", 14, "0"],
             "0.16": ["Blank", "blank", 16, "0"],
             "0.18": ["Blank", "blank", 18, "0"],
+            "0.20": ["Blank", "blank", 20, "0"],
 
             "3": ["750GB", "scm", 4, "DM Cache 3"],
             "6": ["750GB", "scm", 8, "DM Cache 6"],

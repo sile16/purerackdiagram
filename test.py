@@ -22,12 +22,11 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
-            "model": "fa-c60r3",
-            "csize": "366",
-            "mezz": "none",
-            "addoncards": "2eth100",
-            "face": "back",
-            "ports": True
+            "model": "fa-xl170",
+            "datapacks": "91/45/72-256/256",
+            "face": "front",
+            "dp_label": True,
+            "fm_label": True,
         }
     },
     {

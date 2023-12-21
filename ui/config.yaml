@@ -49,6 +49,11 @@ chassis_dp_size_lookup:
   - blank
   - 18
   - '0'
+  '0.20':
+  - Blank
+  - blank
+  - 20
+  - '0'
   '10.0':
   - 1TB
   - sas
