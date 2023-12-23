@@ -184,15 +184,35 @@ def handler(event, context):
 
                 if 'management' in services and len(services) == 1:
                     #dedicated management port
-                    #Rose: #D90368
-                    #color = '#%02x%02x%02x' % (217, 3, 104)
-                    color = '#D90368'
-                    draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
-                              p['loc'][0] + size, p['loc'][1] + size),
-                             fill=color, outline=color)
-                    
+                    #on FlashBlade some ports have management & data servcies so we skip those with the len==1
+                    #color = '#D90368'
+                    #draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
+                    #          p['loc'][0] + size, p['loc'][1] + size),
+                    #         fill=color, outline=color)
+                    color = '#00B2A9'
+                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
+
+
                     p['symbol_name'] = "Management"
-                    p['symbol_shape'] = "circle"
+                    p['symbol_shape'] = "triangle_up"
+                    p['symbol_color'] = color
+
+            
+
+                elif services and services[0] == 'replication':
+                    color = '#934DD6'
+                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
+
+                    p['symbol_name'] = "Replication"
+                    p['symbol_shape'] = "triangle_up"
+                    p['symbol_color'] = color
+
+                elif services and services[0] == 'shelf' :
+                    color = '#FCDC4D'
+                    draw_triangle_down(draw, p['loc'][0], p['loc'][1], size, color)
+
+                    p['symbol_name'] = "Shelf"
+                    p['symbol_shape'] = "triangle_down"
                     p['symbol_color'] = color
                 
                     
@@ -227,30 +247,28 @@ def handler(event, context):
                     p['symbol_name'] = "SAS"
                     p['symbol_shape'] = "rectangle"
                     p['symbol_color'] = color
+
+        
+                    continue
                     
-                #elif 'shelf' in services and len(services) == 1:
-                #    color = 'purple'
-                #    draw_diamond(draw, p['loc'][0], p['loc'][1], size, color)
-
-
-
-                #
+                
+                
                 elif p['port_type'] == 'eth_roce':
-                    color = "#00B2A9"
+                    color = "#FD9627"
                     #draw triangle up
                     draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
 
                     p['symbol_name'] = "Ethernet / RoCE"
-                    p['symbol_shape'] = "triangle up"
+                    p['symbol_shape'] = "triangle_up"
                     p['symbol_color'] = color
 
                 elif p['port_type'] == 'eth':
-                    color = '#FCDC4D'
+                    color = '#D90368'
                     #draw triangle down
-                    draw_triangle_down(draw, p['loc'][0], p['loc'][1], size, color)
+                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
 
                     p['symbol_name'] = "Ethernet"
-                    p['symbol_shape'] = "triangle down"
+                    p['symbol_shape'] = "triangle_up"
                     p['symbol_color'] = color
                     
                 else:

@@ -865,7 +865,7 @@ def update_static_model_port_loc(config):
                 'port_sfp_speeds': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['iSCSI', 'replication', 'file']},
+                'services': ['replication', 'file', 'iSCSI']},
                 
                 {'loc': (990, 308),
                  'name': 'ct0.eth3',
@@ -878,7 +878,7 @@ def update_static_model_port_loc(config):
                 'port_sfp_speed': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['iSCSI', 'replication', 'file']},
+                'services': ['replication', 'file', 'iSCSI']},
 
                 {'loc': (1945, 220),
                 'name': 'ct0.eth4',
@@ -895,24 +895,90 @@ def update_static_model_port_loc(config):
         else:
         # These are all the ct0 ports
             ct0ports = [
-            {'loc': (671, 316),
-            'port_type': 'eth',
-            'name': 'ct0.eth0'},
-            {'loc': (788, 316),
-            'port_type': 'eth',
-            'name': 'ct0.eth1'},
-            {'loc': (1880, 221),
-            'port_type': 'eth',
-            'name': 'ct0.eth2'},
-            {'loc': (1880, 293),
-            'port_type': 'eth',
-            'name': 'ct0.eth3'},
-            {'loc': (1965, 221),
-            'port_type': 'eth',
-            'name': 'ct0.eth4'},
-            {'loc': (1965, 293),
-            'port_type': 'eth',
-            'name': 'ct0.eth5'}]
+            {   'loc': (671, 316),
+                'name': 'ct0.eth0',
+                'port_type': 'eth',
+                
+                'port_connector': 'rj45',
+                'port_speeds': ['1g'],
+                'port_sfp_present': False,
+                'port_sfp_speed': [],
+                'port_sfp_connector': None,
+                'services': ['management']
+            },
+
+            {
+                'name': 'ct0.eth1',
+                'loc': (788, 316),
+                'port_type': 'eth',
+
+                'port_connector': 'rj45',
+                'port_speeds': ['1g'],
+                'port_sfp_present': False,
+                'port_sfp_speed': [],
+                'port_sfp_connector': None,
+                'services': ['management']
+            },
+            
+            {
+                'loc': (1880, 221),
+                'port_type': 'eth',
+                'name': 'ct0.eth2',
+
+                'port_type': 'eth',
+                'port_connector': 'sfp',
+                'port_speeds': ['10g', '25g'],
+
+                'port_sfp_present': True,
+                'port_sfp_speed': ['10g'] ,
+                'port_sfp_connector': 'LC',
+
+                'services': ['replication', 'file', 'iSCSI']
+
+            },
+            {
+                'loc': (1880, 293),
+                'port_type': 'eth',
+                'name': 'ct0.eth3',
+                'port_type': 'eth',
+                'port_connector': 'sfp',
+                'port_speeds': ['10g', '25g'],
+
+                'port_sfp_present': True,
+                'port_sfp_speed': ['10g'] ,
+                'port_sfp_connector': 'LC',
+
+                'services': ['replication', 'file', 'iSCSI']
+                
+            },
+            {
+                'loc': (1965, 221),
+                'port_type': 'eth',
+                'name': 'ct0.eth4',
+                
+                'port_type': 'eth',
+                'port_connector': 'sfp',
+                'port_speeds': ['10g', '25g'],
+
+                'port_sfp_present': True,
+                'port_sfp_speed': ['10g'] ,
+                'port_sfp_connector': 'LC',
+
+                'services': ['file', 'iSCSI']},
+            {
+                'loc': (1965, 293),
+                'port_type': 'eth',
+                'name': 'ct0.eth5',
+                'port_type': 'eth',
+
+                'port_connector': 'sfp',
+                'port_speeds': ['10g', '25g'],
+
+                'port_sfp_present': True,
+                'port_sfp_speed': ['10g'] ,
+                'port_sfp_connector': 'LC',
+
+                'services': ['file', 'iSCSI']}]
 
         ct1ports = []
         for p in ct0ports:
@@ -1270,7 +1336,17 @@ def update_static_mezz_port_loc(config):
     port_type = 'eth'
     all_ports = []
     for p in ports:
-        all_ports.append({'loc': p, 'port_type': port_type})
+        all_ports.append({
+            'loc': p, 
+
+            'port_type': 'eth_roce',
+            'port_connector': 'qsfp28',
+            'port_speeds': ['50g'],
+            'port_sfp_present': False,
+            'port_sfp_speed': [] ,
+            'port_sfp_connector': None,
+            'services': ['shelf'] 
+            })
     config[key] = {'ports': all_ports}
 
     ports = [(158, 110), (217, 110), (283, 110), (341, 110)]
