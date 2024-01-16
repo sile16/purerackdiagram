@@ -365,8 +365,8 @@ pci_config_lookup:
   - 2fc
   - dca
   fa-er1-fc:
-  - 2eth100roce
-  - 2eth
+  - mgmt2ethbaset
+  - null
   - null
   - null
   - null

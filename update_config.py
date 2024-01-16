@@ -53,7 +53,7 @@ def static_global_config():
 
         "pci_config_lookup": {
             # New E R1
-             "fa-er1-fc": ["2eth100roce", "2eth", None, None, None],
+             "fa-er1-fc": ["mgmt2ethbaset", None, None, None, None],
 
             # New x R4
             "fa-x20r4-fc": ["mgmt2ethbaset", None, None, "2fc", None],

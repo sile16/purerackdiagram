@@ -466,7 +466,7 @@ def handler(event, context):
                     "image": None}
             
             
-            import json
+            import json 
 
             if 'json_only' in params:
                 logger.debug("returning json only")
