@@ -2,6 +2,12 @@
   text-align: right;
 }
 
+#csize-message {
+  text-align: center; /* Centers the text */
+  display: block; /* Ensures the div is block-level */
+  margin: 0 auto; /* Centers the div if it has a specified width */
+  padding: 10px 0; /* Adds some spacing above and below the text */
+}
 
 
 /* Add this attribute to the element that needs a tooltip */
