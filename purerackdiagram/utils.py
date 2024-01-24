@@ -9,6 +9,7 @@ from PIL import ImageFont
 # from io import BytesIO
 import os
 import purerackdiagram
+import re
 
 
 logger = logging.getLogger()
@@ -95,16 +96,73 @@ class RackImage():
 
         logger.debug("Loaded: {}".format(self.key))
 
-def add_ports_at_offset(key, offset, all_ports):
-    global global_config
 
+
+def add_ports_at_offset(key, offset, all_ports,additional_keys={}, counters=None):
+    global global_config
+        
     if key in global_config:
         if 'ports' in global_config[key]:
             ports = global_config[key]['ports']
             for p in ports:
                 new_port = p.copy()
+                # a port has a name, <controller>.<type><number>
+                # examples ct0.eth0, ct1.eth0, ct0.fc0, ct1.fc0, ct0.fc1,
+                # some ports already have the names defined, for those 
+                # lets keep track of the numbering and increment it per controller
+                # then if the key name is missing from the port p, we'll add it
+                # if it doesn't have a name but has 'controller' = to ct0 or ct1
+                # and it has a 'port_type' = to 'eth' or 'fc' we will add the name
+                # and increment the counter per controller.
+                # Check if the port has a name
+                if counters:
+                    if 'name' in new_port:
+                        # Split the name into controller and port_type
+                        # i.e. ct0.eth1 -> ct0, eth1
+                        match = re.match(r"(ct[0-9]+)\.([a-z]+)([0-9]+)", new_port['name'], re.I)
+
+                        if match:
+                            items = match.groups()
+
+                            controller = items[0]  # 'ct0'
+                            port_type = items[1]  # 'eth'
+                            if port_type == 'eth_roce':
+                                port_type = 'eth'
+                            number = int(items[2])  # 1
+                            
+                            number = int(number)
+
+                            # Check if the counter matches the number in the name
+                            if f"{controller}.{port_type}" in counters:
+                                # Increment the counter
+                                counter_key = f"{controller}.{port_type}"
+                                if number != counters[counter_key]:
+                                    raise Exception(f"Port name {new_port['name']} does not match counter {counters[f'{controller}.{port_type}']}")
+                                counters[counter_key] += 1
+                                
+
+                        
+                    else:
+                        # Check if the port has 'controller' and 'port_type' fields
+                        if 'controller' in additional_keys and 'port_type' in new_port:
+                            controller = additional_keys['controller']
+                            port_type = new_port['port_type']
+                            if port_type == 'eth_roce':
+                                port_type = 'eth'
+
+                            # Add the name to the port
+                            new_port['name'] = f"{controller}.{port_type}{counters[f'{controller}.{port_type}']}"
+                            # Increment the counter
+                            counters[f"{controller}.{port_type}"] += 1
+
+
                 new_loc = (p['loc'][0] + offset[0], p['loc'][1] + offset[1])
                 new_port['loc'] = new_loc
+                # add additional keys
+                
+                for k in additional_keys:
+                    new_port[k] = additional_keys[k]
+
                 all_ports.append(new_port)
 
 def combine_images_vertically(image_ports):

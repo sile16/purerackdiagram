@@ -260,8 +260,9 @@ $(function () {
     url += "&fm_label="  + fa_option_fm_label.val();
     url += "&dp_label="  + fa_option_dp_label.val();
     url += "&addoncards="  + fa_option_addoncards.val();
-    url += "&csize=" + fa_option_csize.val();
-
+    if (fa_option_csize.val() !== "Current Sizes:") {
+      url += "&csize=" + fa_option_csize.val();
+    }
     for (var i = 0; i < fa_option_pci.length; i++) {
       var x = fa_option_pci[i];
       if (x.val() !== "") {
@@ -275,7 +276,6 @@ $(function () {
     }
 
     var mezz_val = fa_option_mezz.val();
-    console.log(mezz_val);
     if (mezz_val) {
         url += "&mezz=" + fa_option_mezz.val();
     }

@@ -6,6 +6,7 @@ import hashlib
 
 import os
 import lambdaentry
+import re
 from purerackdiagram.utils import global_config
 
 import json
@@ -20,8 +21,22 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fa-x90r4",
+            "datapacks": "3/0.02/45",
+            "face": "back",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+            "jsononly": True,
+            'json': True,
+            'addoncards': '2eth100',
+            'pci3': '2eth40'
+        }
+    },
 
-     {
+    {
         "queryStringParameters": {
             "model": "fa-x90r4",
             "datapacks": "3/0.02/45",
@@ -480,6 +495,7 @@ more_tests = [
 
 def test_lambda(params, outputfile):
     results = lambdaentry.handler(params, None)
+    
 
     # If statusCode is 302, follow the redirect
     if results['statusCode'] == 302:
@@ -521,15 +537,21 @@ def test_lambda(params, outputfile):
             #del results['body']
     elif results['headers'].get("Content-Type") == 'application/json':
         if 'body' in results:
-            img_str = json.dumps(results['body'], indent=4)
-            with open(outputfile + '.json', 'w') as outfile:
-                outfile.write(img_str)
+            #img_str = json.dumps(results['body'], indent=4, ensure_ascii=False)
+            # replace this '"execution_duration": 0.8748149871826172', with '"execution_duration": 1',
+            # match for any value
+
+            json_out = re.sub(r'"execution_duration": \d+\.\d+,', '"execution_duration": 1,', results['body'])
+
+            with open(outputfile + '.json', 'w',  encoding='utf-8') as outfile:
+                outfile.write(json_out)
             #del results['body']
 
     return results
 
 
 def create_test_image(item, count, total):
+    
     folder = "test_results"
     file_name = f"{item['model']}"
     for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
@@ -541,10 +563,11 @@ def create_test_image(item, count, total):
                 file_name += f"_{n}-{item[n]}"
     
 
-    if "fa-er1-f" in item['model'] :
-        pass
+#    if "fa-er1-f" in item['model'] :
+#        pass
 
     try:
+
         results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name))
 
         h = hashlib.sha256()

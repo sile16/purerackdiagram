@@ -4279,6 +4279,16 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 20
   - '1500'
+  '186':
+  - 18.6TB
+  - nvme-qlc
+  - 10
+  - '186'
+  '223':
+  - 18.6TB
+  - nvme-qlc
+  - 12
+  - '223'
   '240':
   - 24.0TB
   - nvme-qlc
@@ -4289,6 +4299,11 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 10
   - '247'
+  '260':
+  - 18.6TB
+  - nvme-qlc
+  - 14
+  - '260'
   '288':
   - 24.0TB
   - nvme-qlc
@@ -4299,6 +4314,16 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 12
   - '296'
+  '297':
+  - 18.6TB
+  - nvme-qlc
+  - 16
+  - '297'
+  '334':
+  - 18.6TB
+  - nvme-qlc
+  - 18
+  - '334'
   '336':
   - 24.0TB
   - nvme-qlc
@@ -4485,6 +4510,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 24
   - '1800'
+  '186':
+  - 18.6TB
+  - nvme-qlc
+  - 10
+  - '186'
   '1950':
   - 75TB
   - nvme-qlc
@@ -4495,6 +4525,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 28
   - '2100'
+  '223':
+  - 18.6TB
+  - nvme-qlc
+  - 12
+  - '223'
   '240':
   - 24.0TB
   - nvme-qlc
@@ -4505,6 +4540,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 10
   - '247'
+  '260':
+  - 18.6TB
+  - nvme-qlc
+  - 14
+  - '260'
   '288':
   - 24.0TB
   - nvme-qlc
@@ -4515,6 +4555,16 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 12
   - '296'
+  '297':
+  - 18.6TB
+  - nvme-qlc
+  - 16
+  - '297'
+  '334':
+  - 18.6TB
+  - nvme-qlc
+  - 18
+  - '334'
   '336':
   - 24.0TB
   - nvme-qlc

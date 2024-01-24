@@ -178,6 +178,10 @@ class FAChassis():
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
         self.ports = []
+        self.port_counters = {'ct0.eth': 0, 'ct0.fc': 0, 
+            'ct1.eth': 0, 'ct1.fc': 0,
+            'ct0.sas': 0, 'ct1.sas': 0,
+            'ct0.ib': 0, 'ct1.ib': 0,}
 
     async def get_image(self):
         # build the image
@@ -277,19 +281,37 @@ class FAChassis():
         key = "png/pure_fa_{}_{}.png".format(card_type, height)
 
         card_img = await RackImage(key).get_image()
-        await self.start_img_event.wait() # why is this here ? 
+        await self.start_img_event.wait() # why is this here ?
 
+        # check to see if this is the default card in this slot
+
+        card_is_default = False
+        if self.config['default_pci_config'][slot] == card_type:
+            card_is_default = True
+        
+        height_str = "Full Height"
+        if height == "hh":
+            height_str = "Half Height"
+        
+        #Get port name
+        
+
+        additional_keys  = {'pci_slot': slot,
+                            'pci_slot_height': height_str, 
+                            'pci_card': card_type,
+                            'default_card': card_is_default,
+                            'controller': "ct0" }
         # ct0
         cord = self.img_info['ct0_pci_loc'][slot]
         self.tmp_img.paste(card_img, cord)
-        add_ports_at_offset(key, cord, self.ports)
+
+        add_ports_at_offset(key, cord, self.ports, additional_keys.copy(),self.port_counters)
 
         # ct1
         cord = self.img_info['ct1_pci_loc'][slot]
-        add_ports_at_offset(key, cord, self.ports)
+        additional_keys['controller'] = "ct1"
+        add_ports_at_offset(key, cord, self.ports, additional_keys.copy(),self.port_counters)
         self.tmp_img.paste(card_img, cord)
-    
-
 
     async def add_mezz(self):
         if self.config["generation"] == "xl":
@@ -581,6 +603,7 @@ class FADiagram():
         
         
         pci_config = pci_config_lookup[pci_lookup_str].copy()
+        config['default_pci_config'] = pci_config.copy()
 
         # add on cards
         if "addoncards" in params:

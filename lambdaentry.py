@@ -181,6 +181,7 @@ def handler(event, context):
                 symbol_name = ""
                 symbol_shape = ""
                 symbol_color = ""
+                    
 
                 if 'management' in services and len(services) == 1:
                     #dedicated management port

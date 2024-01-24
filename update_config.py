@@ -199,6 +199,13 @@ def static_global_config():
             # this is legacy //C when we used tlc actually
             "366": ["18.3TB", "nvme-qlc", 20, "366"],
 
+            # // 18.6 TB PACKS, add 1/23/2024
+            "186": ["18.6TB", "nvme-qlc", 10, "186"],
+            "223": ["18.6TB", "nvme-qlc", 12, "223"],
+            "260": ["18.6TB", "nvme-qlc", 14, "260"],
+            "297": ["18.6TB", "nvme-qlc", 16, "297"],
+            "334": ["18.6TB", "nvme-qlc", 18, "334"],
+
             # //C 24.0 TB PACKS, added 11/16/2022, new drive size
             "240": ["24.0TB", "nvme-qlc", 10, "240"],
             "288": ["24.0TB", "nvme-qlc", 12, "288"],
@@ -341,6 +348,13 @@ def static_global_config():
 
              # this is legacy //C when we used tlc actually
             "512": ["18.3TB", "nvme-qlc", 28, "512"],
+
+                        # // 18.6 TB PACKS, add 1/23/2024
+            "186": ["18.6TB", "nvme-qlc", 10, "186"],
+            "223": ["18.6TB", "nvme-qlc", 12, "223"],
+            "260": ["18.6TB", "nvme-qlc", 14, "260"],
+            "297": ["18.6TB", "nvme-qlc", 16, "297"],
+            "334": ["18.6TB", "nvme-qlc", 18, "334"],
 
 
             # //C 24.0 TB PACKS added 11/16/2022, new drive size
@@ -706,6 +720,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_connector': 'lc',
                 'services': ['data', 'replication', 'file']}
     
+
     k = 'png/pure_fa_2eth_hh.png'
     ports_loc = [(158, 40), (256, 40)]
     add_ports_to_key(ports_loc, k, port_info, config)
@@ -723,6 +738,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_connector': 'lc',
                 'services': ['data', 'replication', 'file']}
     
+
     k = 'png/pure_fa_2eth25roce_hh.png'
     ports_loc = [(158, 40), (256, 40)]
     add_ports_to_key(ports_loc, k, port_info, config)
@@ -734,6 +750,7 @@ def update_static_card_port_loc(config):
     #4 Eth 10/25Gb Optical - FA-25G-ETH/TCP 4-Port
 
     # same port info for 4 port cards, but differnt locations on fh and hh
+
     port_info['port_type'] = 'eth'
     ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_4eth25_fh.png',  port_info, config)
@@ -756,6 +773,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_connector': None,
                 'services': ['data', 'replication', 'file',]}
 
+
     for k in keys:
         add_ports_to_key(ports_loc, k , port_info, config)
 
@@ -764,6 +782,7 @@ def update_static_card_port_loc(config):
     # only one port is available, but we will use the same port info
     ports_loc = [(155, 40)]
     port_info['services'] = ['management']
+
     add_ports_to_key(ports_loc, 'png/pure_fa_mgmt2ethbaset_fh.png', port_info, config )
     add_ports_to_key(ports_loc, 'png/pure_fa_mgmt2ethbaset_hh.png', port_info, config )
     
@@ -781,6 +800,7 @@ def update_static_card_port_loc(config):
             'port_sfp_connector': None,
             'services': ['data', 'replication', 'file']}
 
+
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_fh.png', port_info, config)
    
@@ -790,6 +810,7 @@ def update_static_card_port_loc(config):
 
     # 2 Eth 100Gb - FA-100G-ETH/TCP 2-Port
     port_info['port_speeds'] = ['40g', '100g']
+
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_fh.png', port_info, config)
    
@@ -797,6 +818,7 @@ def update_static_card_port_loc(config):
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_hh.png', port_info, config)
 
     #2 Eth 100Gb RoCE - FA-XCR4-100G-iSCSI/ROCE 2-Port
+
 
     port_info['port_type'] = 'eth_roce'
     port_info['services'] = ['data', 'replication', 'file', 'shelf']
@@ -814,6 +836,7 @@ def update_static_card_port_loc(config):
             'port_sfp_connector': None,
             'services': ['shelf']}
     
+
     # add_ports_to_key(ports_loc, 'png/pure_fa_sas_hh.png', port_info, config)
     # same port info for 4 port cards, but differnt locations on fh and hh
     ports_loc = [(191, 46), (263, 46), (340, 46), (412, 46)]
