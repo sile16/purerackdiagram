@@ -747,7 +747,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_present': True,
                 'port_sfp_speed': ['10g'],
                 'port_sfp_connector': 'lc',
-                'services': ['data', 'replication', 'file']}
+                'services': ['data', 'replication']}
     
 
     k = 'png/pure_fa_2eth_hh.png'
@@ -765,7 +765,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_present': True,
                 'port_sfp_speed': ['10g'],
                 'port_sfp_connector': 'lc',
-                'services': ['data', 'replication', 'file']}
+                'services': ['data', 'replication']}
     
 
     k = 'png/pure_fa_2eth25roce_hh.png'
@@ -800,7 +800,7 @@ def update_static_card_port_loc(config):
                 'port_sfp_present': False,
                 'port_sfp_speed': [] ,
                 'port_sfp_connector': None,
-                'services': ['data', 'replication', 'file',]}
+                'services': ['data', 'replication']}
 
 
     for k in keys:
@@ -827,7 +827,7 @@ def update_static_card_port_loc(config):
             'port_sfp_present': False,
             'port_sfp_speed': [] ,
             'port_sfp_connector': None,
-            'services': ['data', 'replication', 'file']}
+            'services': ['data', 'replication']}
 
 
     ports_loc = [(210, 40), (410, 40)]
@@ -850,7 +850,7 @@ def update_static_card_port_loc(config):
 
 
     port_info['port_type'] = 'eth_roce'
-    port_info['services'] = ['data', 'replication', 'file', 'shelf']
+    port_info['services'] = ['data', 'replication', 'shelf']
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100roce_fh.png', port_info, config)
    
@@ -917,7 +917,7 @@ def update_static_model_port_loc(config):
                 'port_sfp_speeds': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['replication', 'file', 'iSCSI']},
+                'services': ['replication', 'data']},
                 
                 {'loc': (990, 308),
                  'name': 'ct0.eth3',
@@ -930,7 +930,7 @@ def update_static_model_port_loc(config):
                 'port_sfp_speed': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['replication', 'file', 'iSCSI']},
+                'services': ['replication', 'data']},
 
                 {'loc': (1945, 220),
                 'name': 'ct0.eth4',
@@ -946,6 +946,7 @@ def update_static_model_port_loc(config):
                 ]
         else:
         # These are all the ct0 ports
+        # rev < 4
             ct0ports = [
             {   'loc': (671, 316),
                 'name': 'ct0.eth0',
@@ -976,8 +977,6 @@ def update_static_model_port_loc(config):
                 'loc': (1880, 221),
                 'port_type': 'eth',
                 'name': 'ct0.eth2',
-
-                'port_type': 'eth',
                 'port_connector': 'sfp',
                 'port_speeds': ['10g', '25g'],
 
@@ -985,14 +984,13 @@ def update_static_model_port_loc(config):
                 'port_sfp_speed': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['replication', 'file', 'iSCSI']
+                'services': ['replication', 'data']
 
             },
             {
                 'loc': (1880, 293),
                 'port_type': 'eth',
                 'name': 'ct0.eth3',
-                'port_type': 'eth',
                 'port_connector': 'sfp',
                 'port_speeds': ['10g', '25g'],
 
@@ -1000,7 +998,7 @@ def update_static_model_port_loc(config):
                 'port_sfp_speed': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['replication', 'file', 'iSCSI']
+                'services': ['replication', 'data']
                 
             },
             {
@@ -1008,7 +1006,6 @@ def update_static_model_port_loc(config):
                 'port_type': 'eth',
                 'name': 'ct0.eth4',
                 
-                'port_type': 'eth',
                 'port_connector': 'sfp',
                 'port_speeds': ['10g', '25g'],
 
@@ -1016,12 +1013,11 @@ def update_static_model_port_loc(config):
                 'port_sfp_speed': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['file', 'iSCSI']},
+                'services': ['data', 'replication']},
             {
                 'loc': (1965, 293),
                 'port_type': 'eth',
                 'name': 'ct0.eth5',
-                'port_type': 'eth',
 
                 'port_connector': 'sfp',
                 'port_speeds': ['10g', '25g'],
@@ -1030,7 +1026,7 @@ def update_static_model_port_loc(config):
                 'port_sfp_speed': ['10g'] ,
                 'port_sfp_connector': 'LC',
 
-                'services': ['file', 'iSCSI']}]
+                'services': ['data', 'replication']}]
 
         ct1ports = []
         for p in ct0ports:

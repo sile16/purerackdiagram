@@ -638,7 +638,6 @@ png/pure_fa_2eth100_fh.png:
     services: &id003
     - data
     - replication
-    - file
   - loc: &id005 !!python/tuple
     - 410
     - 40
@@ -683,7 +682,6 @@ png/pure_fa_2eth100roce_fh.png:
     services: &id006
     - data
     - replication
-    - file
     - shelf
   - loc: *id005
     port_connector: qsfp
@@ -728,7 +726,6 @@ png/pure_fa_2eth25roce_fh.png:
     services: &id011
     - data
     - replication
-    - file
   - loc: &id013 !!python/tuple
     - 256
     - 40
@@ -809,7 +806,6 @@ png/pure_fa_2eth_fh.png:
     services: &id017
     - data
     - replication
-    - file
   - loc: *id013
     port_connector: sfp
     port_sfp_connector: lc
@@ -852,7 +848,6 @@ png/pure_fa_2ethbaset_fh.png:
     services: &id020
     - data
     - replication
-    - file
   - loc: &id022 !!python/tuple
     - 265
     - 40
@@ -1152,8 +1147,7 @@ png/pure_fa_c_r1_back.png:
     port_type: eth
     services: &id042
     - replication
-    - file
-    - iSCSI
+    - data
   - &id218
     loc: &id061 !!python/tuple
     - 1880
@@ -1170,8 +1164,7 @@ png/pure_fa_c_r1_back.png:
     port_type: eth
     services: &id045
     - replication
-    - file
-    - iSCSI
+    - data
   - &id219
     loc: &id062 !!python/tuple
     - 1965
@@ -1187,8 +1180,8 @@ png/pure_fa_c_r1_back.png:
     - 25g
     port_type: eth
     services: &id048
-    - file
-    - iSCSI
+    - data
+    - replication
   - &id220
     loc: &id063 !!python/tuple
     - 1965
@@ -1204,8 +1197,8 @@ png/pure_fa_c_r1_back.png:
     - 25g
     port_type: eth
     services: &id051
-    - file
-    - iSCSI
+    - data
+    - replication
   - &id221
     loc: !!python/tuple
     - 671
@@ -1434,8 +1427,7 @@ png/pure_fa_c_r2_back.png:
     port_type: eth
     services: &id072
     - replication
-    - file
-    - iSCSI
+    - data
   - &id230
     loc: *id061
     name: ct0.eth3
@@ -1450,8 +1442,7 @@ png/pure_fa_c_r2_back.png:
     port_type: eth
     services: &id075
     - replication
-    - file
-    - iSCSI
+    - data
   - &id231
     loc: *id062
     name: ct0.eth4
@@ -1465,8 +1456,8 @@ png/pure_fa_c_r2_back.png:
     - 25g
     port_type: eth
     services: &id078
-    - file
-    - iSCSI
+    - data
+    - replication
   - &id232
     loc: *id063
     name: ct0.eth5
@@ -1480,8 +1471,8 @@ png/pure_fa_c_r2_back.png:
     - 25g
     port_type: eth
     services: &id081
-    - file
-    - iSCSI
+    - data
+    - replication
   - &id233
     loc: !!python/tuple
     - 671
@@ -1648,8 +1639,7 @@ png/pure_fa_c_r3_back.png:
     port_type: eth
     services: &id121
     - replication
-    - file
-    - iSCSI
+    - data
   - &id242
     loc: *id061
     name: ct0.eth3
@@ -1664,8 +1654,7 @@ png/pure_fa_c_r3_back.png:
     port_type: eth
     services: &id124
     - replication
-    - file
-    - iSCSI
+    - data
   - &id243
     loc: *id062
     name: ct0.eth4
@@ -1679,8 +1668,8 @@ png/pure_fa_c_r3_back.png:
     - 25g
     port_type: eth
     services: &id127
-    - file
-    - iSCSI
+    - data
+    - replication
   - &id244
     loc: *id063
     name: ct0.eth5
@@ -1694,8 +1683,8 @@ png/pure_fa_c_r3_back.png:
     - 25g
     port_type: eth
     services: &id130
-    - file
-    - iSCSI
+    - data
+    - replication
   - &id245
     loc: !!python/tuple
     - 671
@@ -1884,8 +1873,7 @@ png/pure_fa_c_r4_back.png:
     port_type: eth
     services: &id139
     - replication
-    - file
-    - iSCSI
+    - data
   - &id154
     loc: !!python/tuple
     - 990
@@ -1902,8 +1890,7 @@ png/pure_fa_c_r4_back.png:
     port_type: eth
     services: &id142
     - replication
-    - file
-    - iSCSI
+    - data
   - &id155
     loc: !!python/tuple
     - 1945
