@@ -21,6 +21,21 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+      {
+        "queryStringParameters": {
+            "model": "fa-x90r4",
+            "datapacks": "3/0.02/45",
+            "face": "back",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+            "jsononly": True,
+            'json': True,
+            'addoncards': '2eth100',
+            'pci3': '2eth40',
+            'pci0': '2eth100'
+        }
+    },
     {
         "queryStringParameters": {
             "model": "fa-x90r4",

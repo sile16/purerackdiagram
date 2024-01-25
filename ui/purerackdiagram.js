@@ -187,7 +187,7 @@ $(function () {
 
   var fa_option_protocol = build_select('#fa_option_protocol', FA_OPTIONS.protocol);
   var fa_option_face = build_select('#fa_option_face', FA_OPTIONS.face);
-  var fa_option_datapacks = build_input('#fa_option_datapacks', "63");
+  var fa_option_datapacks = build_input('#fa_option_datapacks', "366");
   var fa_option_csize = build_select('#fa_option_csize', FA_OPTIONS.csizes);
   var fa_option_bezel = build_select('#fa_option_bezel', FA_OPTIONS.bezel);
   var fa_option_direction = build_select('#fa_option_direction', FA_OPTIONS.direction);
@@ -331,7 +331,50 @@ $(function () {
     return url;
   };
 
+  function createTooltipContent(port) {
+    const descriptions = {
+      name: "Name",
+      pci_card: "PCI Card",
+      pci_slot: "PCI Slot",
+      pci_slot_height: "PCI Slot Height",
+      default_card: "Default Card",
+      port_type: "Port Type",
+      services: "Services",
+      port_connector: "Port Connector",
+      port_speeds: "Port Speeds",
+      port_sfp_present: "Port SFP Present",
+      port_sfp_connector: "Port SFP Connector",
+      port_sfp_speed: "Port SFP Speed",
+      
+      //controller: "Controller",
+      symbol_name: "Symbol Name",
+      //symbol_shape: "Symbol Shape",
+      //symbol_color: "Symbol Color"
+      // Add any additional fields as needed
+    };
   
+    let content = "";
+  
+    for (const key in descriptions) {
+      if (port.hasOwnProperty(key) && port[key] != null) {
+        let value = port[key];
+  
+        // Format array values
+        if (Array.isArray(value)) {
+          value = value.join(", ");
+        }
+  
+        // Format boolean values
+        if (typeof value === "boolean") {
+          value = value ? "Yes" : "No";
+        }
+  
+        content += `${descriptions[key]}: ${value}\n`;
+      }
+    }
+  
+    return content;
+  }
 
   async function get_url() {
     var active_tab_idx = $('#option-tabs').tabs( "option", "active" );
@@ -346,12 +389,6 @@ $(function () {
     else if (active_tab_idx == 2){
       url = fbs_url();
     };
-
-
-
-    //console.log(url);
-    //$('#rack_digram').attr('src', url);
-
     
     //set the global variable vssx_url
     vssx_url = url + "&vssx=True";
@@ -364,30 +401,110 @@ $(function () {
     var diagram = await response.json();
 
     if ( diagram.error ) {
-      $('#rack_digram').attr('src', "");
+      $('#rack_diagram').attr('src', "").hide();
       $('#error_msg').text(diagram.error);
       $("#error-div").show();
-      $('#rack_diagram').hide();
+
     } else {
       $('#error_msg').text("");
       $("#error-div").hide();
+
+      var image_src_url = null;
+
       if ( diagram.image_type == "png" ) {
         const img_base64encoded = await fetch(`data:image/png;base64,${diagram.image}`);
         const blob = await img_base64encoded.blob();
-        var objectURL = await URL.createObjectURL(blob);
+        image_src_url = await URL.createObjectURL(blob);
+
         delete diagram.image;
-        $('#rack_digram').attr('src', objectURL);
+      } else if (diagram.image_type == "link") {
+        image_src_url = diagram.image;
+      } else {
+        console.log("Unknown image type");
+        //exit the function
+        return;
       }
-      else if (diagram.image_type == "link" ) {
-        $('#rack_digram').attr('src', diagram.image);
-      }
+      
+      
+      // Set the src and wait for the image to load
+      $('#rack_diagram').off('load').on('load', function() {
+        var parentElement = $('#rack_diagram_wrapper');
 
-      $('#rack_diagram').show();
+        // Get the natural and displayed size of the image
+        var naturalWidth = this.naturalWidth;
+        var naturalHeight = this.naturalHeight;
+        var displayedWidth = $(this).width();
+        var displayedHeight = $(this).height();
+
+        // Calculate the scale factors
+        var widthScaleFactor = displayedWidth / naturalWidth;
+        var heightScaleFactor = displayedHeight / naturalHeight;
+
+        diagram.ports.forEach(port => {
+          var scaledLeft = port.loc[0] * widthScaleFactor;
+          var scaledTop = port.loc[1] * heightScaleFactor;
+          var portSize = 20; // Example size, adjust as needed
+
+          // Adjust for centering
+          scaledLeft -= portSize / 2;
+          scaledTop -= portSize / 2;
+
+          var portElement = $('<div>').css({
+            'position': 'absolute',
+            'left': scaledLeft + 'px',
+            'top': scaledTop + 'px',
+            'width': portSize + 'px',
+            'height': portSize + 'px',
+            //'background-color': 'red',
+            'cursor': 'pointer',
+            'z-index': 10
+          });
+
+          // Tooltip div
+          var tooltipContent = createTooltipContent(port);
+          var tooltip = $('<div>').css({
+            'position': 'absolute',
+            'display': 'none', // Hidden by default
+            'background-color': 'white',
+            'border': '1px solid black',
+            'padding': '5px',
+            'z-index': 20,
+            'pointer-events': 'none', // Ignore mouse events
+            'white-space': 'pre-wrap'
+          }).text(tooltipContent);
+
+          $('body').append(tooltip); // Append tooltip to body to ensure it's not clipped
+
+          // Show tooltip on hover
+          // Show tooltip on hover
+          portElement.on('mouseenter', function(e) {
+            tooltip.css({
+              'top': (e.pageY + 10) + 'px', // Position below cursor
+              'left': (e.pageX + 10) + 'px',
+              'display': 'block'
+            });
+          }).on('mouseleave', function() {
+            tooltip.hide();
+          });
+
+          parentElement.append(portElement);
+        });
+      });
+
+      $('#rack_diagram').attr('src', image_src_url).show();
+      console.log("Image src set to:", $('#rack_diagram').attr('src'));
+
+      // Manually trigger load if the image is already loaded
+      /*if ($('#rack_diagram')[0].complete) {
+        $('#rack_diagram').trigger('load');
+      }*/
+      
+      $('#img_info').text(JSON.stringify(diagram, null, 3));
     }
-
-    $('#img_info').text(JSON.stringify(diagram, null, 3));
-
   }
+  
+
+  
 
   $("#display").click(function () {
     get_url();

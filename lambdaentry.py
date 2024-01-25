@@ -163,127 +163,138 @@ def handler(event, context):
 
         # save original image dimensions needed for port pixel->in calculation
         img_original_size = img.size
-
+        draw_ports = False
         if 'ports' in params and (
-            
             params['ports'] == True or
             params['ports'].upper() == "TRUE"
             or params['ports'].upper() == "YES"):
+            draw_ports = True
+        
 
-            logger.debug("adding ports to image")
-            # Draw
-            draw = ImageDraw.Draw(img)
-            
-
-            for p in diagram.ports:
-                services = p.get('services', [])
-                size = 16
-                symbol_name = ""
-                symbol_shape = ""
-                symbol_color = ""
-                    
-
-                if 'management' in services and len(services) == 1:
-                    #dedicated management port
-                    #on FlashBlade some ports have management & data servcies so we skip those with the len==1
-                    #color = '#D90368'
-                    #draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
-                    #          p['loc'][0] + size, p['loc'][1] + size),
-                    #         fill=color, outline=color)
-                    color = '#00B2A9'
-                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
-
-
-                    p['symbol_name'] = "Management"
-                    p['symbol_shape'] = "triangle_up"
-                    p['symbol_color'] = color
-
-            
-
-                elif services and services[0] == 'replication':
-                    color = '#934DD6'
-                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
-
-                    p['symbol_name'] = "Replication"
-                    p['symbol_shape'] = "triangle_up"
-                    p['symbol_color'] = color
-
-                elif services and services[0] == 'shelf' :
-                    color = '#FCDC4D'
-                    draw_triangle_down(draw, p['loc'][0], p['loc'][1], size, color)
-
-                    p['symbol_name'] = "Shelf"
-                    p['symbol_shape'] = "triangle_down"
-                    p['symbol_color'] = color
-                
-                    
-                elif 'port_type' not in p:
-                    # we need port type to check any further info.
-                    continue
-                
-                elif p['port_type'] == 'fc':
-                    # pick the color :
-                    # use Pillow to define a color with rgb values: 235, 149, 52
-                    # then convert to hex
-                    # https://stackoverflow.com/questions/3380726/converting-a-rgb-color-tuple-to-a-six-digit-code-in-python
-                    # color #FE5000
-                    color = '#FE5000'
-                    
-                    #draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
-                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size,
-                              p['loc'][0] + size, p['loc'][1] + size),
-                             fill=color, outline=color)
-                    
-                    p['symbol_name'] = "Fibre Channel"
-                    p['symbol_shape'] = "square"
-                    p['symbol_color'] = color
-
-                elif p['port_type'] == 'sas':
-                    color = 'blue'
-                    #draw a rectangle
-                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size/2,
-                              p['loc'][0] + size, p['loc'][1] + size/2),
-                             fill=color, outline=color)
-                    
-                    p['symbol_name'] = "SAS"
-                    p['symbol_shape'] = "rectangle"
-                    p['symbol_color'] = color
 
         
-                    continue
-                    
+
+        logger.debug("adding ports to image")
+        # Draw
+        draw = ImageDraw.Draw(img)
+        
+
+        for p in diagram.ports:
+            services = p.get('services', [])
+            size = 16
+            symbol_name = ""
+            symbol_shape = ""
+            symbol_color = ""
                 
-                
-                elif p['port_type'] == 'eth_roce':
-                    color = "#FD9627"
-                    #draw triangle up
+
+            if 'management' in services and len(services) == 1:
+                #dedicated management port
+                #on FlashBlade some ports have management & data servcies so we skip those with the len==1
+                #color = '#D90368'
+                #draw.ellipse((p['loc'][0] - size, p['loc'][1] - size,
+                #          p['loc'][0] + size, p['loc'][1] + size),
+                #         fill=color, outline=color)
+                color = '#00B2A9'
+                if draw_ports:
                     draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
 
-                    p['symbol_name'] = "Ethernet / RoCE"
-                    p['symbol_shape'] = "triangle_up"
-                    p['symbol_color'] = color
 
-                elif p['port_type'] == 'eth':
-                    color = '#D90368'
-                    #draw triangle down
+                p['symbol_name'] = "Management"
+                p['symbol_shape'] = "triangle_up"
+                p['symbol_color'] = color
+
+        
+
+            elif services and services[0] == 'replication':
+                color = '#934DD6'
+                if draw_ports:
                     draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
 
-                    p['symbol_name'] = "Ethernet"
-                    p['symbol_shape'] = "triangle_up"
-                    p['symbol_color'] = color
-                    
-                else:
-                    logger.warning(f"Unknown port type: {p['port_type']}")
+                p['symbol_name'] = "Replication"
+                p['symbol_shape'] = "triangle_up"
+                p['symbol_color'] = color
 
-                    # draw a diamond with color of green
-                    # color = 'green'
-                    
-                    # draw.polygon([(p['loc'][0], p['loc'][1] - size),
-                    #              (p['loc'][0] + size, p['loc'][1]),
-                    #              (p['loc'][0], p['loc'][1] + size),
-                    #              (p['loc'][0] - size, p['loc'][1])],
-                    #             fill=color, outline=color)
-                    
+            elif services and services[0] == 'shelf' :
+                color = '#FCDC4D'
+                if draw_ports:
+                    draw_triangle_down(draw, p['loc'][0], p['loc'][1], size, color)
+
+                p['symbol_name'] = "Shelf"
+                p['symbol_shape'] = "triangle_down"
+                p['symbol_color'] = color
+            
+                
+            elif 'port_type' not in p:
+                # we need port type to check any further info.
+                continue
+            
+            elif p['port_type'] == 'fc':
+                # pick the color :
+                # use Pillow to define a color with rgb values: 235, 149, 52
+                # then convert to hex
+                # https://stackoverflow.com/questions/3380726/converting-a-rgb-color-tuple-to-a-six-digit-code-in-python
+                # color #FE5000
+                color = '#FE5000'
+                
+                #draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
+                if draw_ports:
+                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size,
+                            p['loc'][0] + size, p['loc'][1] + size),
+                            fill=color, outline=color)
+                
+                p['symbol_name'] = "Fibre Channel"
+                p['symbol_shape'] = "square"
+                p['symbol_color'] = color
+
+            elif p['port_type'] == 'sas':
+                color = 'blue'
+                #draw a rectangle
+                if draw_ports:
+                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size/2,
+                            p['loc'][0] + size, p['loc'][1] + size/2),
+                            fill=color, outline=color)
+                
+                p['symbol_name'] = "SAS"
+                p['symbol_shape'] = "rectangle"
+                p['symbol_color'] = color
+
+    
+                continue
+                
+            
+            
+            elif p['port_type'] == 'eth_roce':
+                color = "#FD9627"
+                #draw triangle up
+                if draw_ports:
+                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
+
+                p['symbol_name'] = "Ethernet / RoCE"
+                p['symbol_shape'] = "triangle_up"
+                p['symbol_color'] = color
+
+            elif p['port_type'] == 'eth':
+                color = '#D90368'
+                #draw triangle down
+                if draw_ports:
+                    draw_triangle_up(draw, p['loc'][0], p['loc'][1], size, color)
+
+                p['symbol_name'] = "Ethernet"
+                p['symbol_shape'] = "triangle_up"
+                p['symbol_color'] = color
+                
+            else:
+                logger.warning(f"Unknown port type: {p['port_type']}")
+
+                # draw a diamond with color of green
+                # color = 'green'
+                
+                # draw.polygon([(p['loc'][0], p['loc'][1] - size),
+                #              (p['loc'][0] + size, p['loc'][1]),
+                #              (p['loc'][0], p['loc'][1] + size),
+                #              (p['loc'][0] - size, p['loc'][1])],
+                #             fill=color, outline=color)
+        ## end of ports for loop     
                     
 
         # resize if too large:

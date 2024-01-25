@@ -46,6 +46,35 @@ def main():
 def static_global_config():
     return {
 
+
+        'port_naming_xcr2':{
+            'mezz': { 'eth':6, 'sas': 0},
+            0: { 'eth': 10, 'fc': 0, 'sas': 4},
+            1: { 'eth': 14, 'fc': 4, 'sas': 4},
+            2: { 'eth': 18, 'fc': 8, 'sas': 4},
+            3: { 'eth': 22, 'fc': 12, 'sas': 4},
+        },
+        
+        'port_naming_xcr4':{
+            0: { 'eth': 5, 'fc': 0, 'sas': 0},
+            1: { 'eth': 10, 'fc': 4, 'sas': 4},
+            2: { 'eth': 14, 'fc': 8, 'sas': 0},
+            3: { 'eth': 18, 'fc': 12, 'sas': 0},
+            4: { 'eth': 22, 'fc': 16, 'sas':0},
+        },
+
+        'port_naming_xl':{
+            0: { 'eth': 2, 'fc': 0, 'sas': 0},
+            1: { 'eth': 6, 'fc': 4, 'sas': 4},
+            2: { 'eth': 10, 'fc': 8, 'sas': 0},
+            3: { 'eth': 14, 'fc': 12, 'sas': 0},
+            4: { 'eth': 18, 'fc': 16, 'sas':0},
+            5: { 'eth': 12, 'fc': 20, 'sas':0},
+            6: { 'eth': 26, 'fc': 24, 'sas':0},
+            7: { 'eth': 30, 'fc': 28, 'sas':0},
+            8: { 'eth': 34, 'fc': 32, 'sas':0},
+        },
+
         "pci_valid_cards": ["2eth", "2eth25roce", "2eth40", "2eth100", "2eth100roce",
                             "4eth25", "2ethbaset", "mgmt2ethbaset",
                             "2fc", "4fc",
@@ -1360,7 +1389,8 @@ def update_static_mezz_port_loc(config):
     all_ports = []
     for p in ports:
         all_ports.append({
-            'loc': p, 
+            'loc': p,
+            'mezz': True, 
 
             'port_type': 'eth_roce',
             'port_connector': 'qsfp28',
@@ -1377,7 +1407,10 @@ def update_static_mezz_port_loc(config):
     port_type = 'sas'
     all_ports = []
     for p in ports:
-        all_ports.append({'loc': p, 'port_type': port_type})
+        all_ports.append({'loc': p, 
+                          'port_type': port_type,
+                          'mezz': True,
+                          'services': ['shelf']})
     config[key] = {'ports': all_ports}
 
 

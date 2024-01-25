@@ -178,10 +178,7 @@ class FAChassis():
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
         self.ports = []
-        self.port_counters = {'ct0.eth': 0, 'ct0.fc': 0, 
-            'ct1.eth': 0, 'ct1.fc': 0,
-            'ct0.sas': 0, 'ct1.sas': 0,
-            'ct0.ib': 0, 'ct1.ib': 0,}
+
 
     async def get_image(self):
         # build the image
@@ -215,7 +212,74 @@ class FAChassis():
 
         # run all the tasks concurrently
         await asyncio.gather(*tasks)
+
+        # add port names, has to be done in order so must
+        # be after all the tasks are done.
+        await self.add_port_names()
+
         return {'img': self.tmp_img, 'ports': self.ports}
+    
+    # Add port names to each port if it's missing i.e. ct0.eth7
+    async def add_port_names(self):
+        
+        # add port names
+        # find all on board ports first
+        # select all ports that don't have a pci_slot key
+        
+              
+        port_naming_key = None
+        if self.config['generation'] == 'xl':
+            port_naming_key = 'port_naming_xl'
+        elif self.config['generation'] == 'e':
+            port_naming_key = 'port_naming_xcr4'
+        elif self.config['generation'] in ['x', 'c'] :
+            if self.config['release'] == 4:
+                port_naming_key = 'port_naming_xcr4'
+            else:
+                port_naming_key = 'port_naming_xcr2'
+        
+        if port_naming_key:
+            port_naming = utils.global_config[port_naming_key]
+        else:
+            return
+        
+        prev_ctslotmezz = None
+        p_i = 0
+            
+        for port in self.ports:
+            if 'name' in port:
+                continue
+
+            if 'port_type' in port and 'controller' in port:
+                port_type = port['port_type']
+                if port_type == 'eth_roce':
+                    port_type = 'eth'
+                
+                # because we don't have an indication on when we switch to the next card we need to 
+                # use this slightly messy approach.
+                    
+                if 'pci_slot' in port:
+                    if prev_ctslotmezz != (port['controller'] + str(port['pci_slot'])):
+                        p_i = port_naming[port['pci_slot']][port_type]
+                        prev_ctslotmezz = port['controller'] + str(port['pci_slot'])
+                elif 'mezz' in port:
+                    if prev_ctslotmezz != (port['controller'] + 'mezz'):
+                        p_i = port_naming['mezz'][port_type]
+                        prev_ctslotmezz = port['controller'] + 'mezz'
+                else:
+                    continue
+
+
+                # special case the management port on the xcr4
+                if port_naming_key == 'port_naming_xcr4' and port['pci_slot'] == 0:
+                    if port['pci_card'] != 'mgmt2ethbaset' and p_i == 5:
+                        port_naming[0]['eth'] += 1
+
+                # Add the name to the port
+                port['name'] = f"{port['controller']}.{port_type}{p_i}"
+                # Increment the counter
+                p_i += 1
+
 
     async def get_base_img(self, key):
         self.tmp_img = await RackImage(key).get_image()
@@ -304,13 +368,12 @@ class FAChassis():
         # ct0
         cord = self.img_info['ct0_pci_loc'][slot]
         self.tmp_img.paste(card_img, cord)
-
-        add_ports_at_offset(key, cord, self.ports, additional_keys.copy(),self.port_counters)
+        add_ports_at_offset(key, cord, self.ports, additional_keys.copy())
 
         # ct1
         cord = self.img_info['ct1_pci_loc'][slot]
         additional_keys['controller'] = "ct1"
-        add_ports_at_offset(key, cord, self.ports, additional_keys.copy(),self.port_counters)
+        add_ports_at_offset(key, cord, self.ports, additional_keys.copy())
         self.tmp_img.paste(card_img, cord)
 
     async def add_mezz(self):
