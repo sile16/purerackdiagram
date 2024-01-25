@@ -1140,23 +1140,14 @@ def update_static_model_port_loc(config):
         'port_sfp_speed': [] ,
         'port_sfp_connector': None,
         'services': ['shelf'], 
-        'port_connector': 'qsfp28'},
-        {'loc': (2009, 318),
-         'port_type': 'eth',
-         'name': 'ct0.eth4',
-         'port_speeds': ['50g', '100g'],
-        'port_sfp_present': False,
-        'port_sfp_speed': [] ,
-        'port_sfp_connector': None,
-        'services': ['shelf'], 
-        'port_connector': 'qsfp28'
-        }]
+        'port_connector': 'qsfp28'}]
 
     ct1ports = []
     for p in ct0ports:
-        loc = (p['loc'][0], p['loc'][1] + 380)
-        name = p['name'].replace('ct0', 'ct1')
-        ct1ports.append({'loc': loc, 'name': name, 'port_type': 'eth'})
+        new_port = p.copy()
+        new_port['loc'] = (p['loc'][0], p['loc'][1] + 380)
+        new_port['name'] = p['name'].replace('ct0', 'ct1')
+        ct1ports.append(new_port)
 
     key = 'png/pure_fa_nvme_shelf_back.png'
     if key not in config:

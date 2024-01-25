@@ -865,10 +865,17 @@ class FADiagram():
 
             # Mezz
             # the m70 base image already has the backend SAS ports
-            default_mezz = None
+            # this probably should be in the config.yaml
+            default_mezz = 'emezz'
             valid_mezz = [None, 'emezz', 'smezz']
-            if config['generation'] == 'x' and config["model_num"] >= 20:
-                default_mezz = 'emezz'
+            if config['generation'] in ['xl', 'e']:
+                default_mezz = None
+            elif config['generation'] in ['x','c'] and config["release"] == 4:
+                default_mezz = None
+            elif config['generation'] == 'm':
+                default_mezz = 'smezz'
+            elif config['generation'] == 'x' and config["model_num"] == 10:
+                default_mezz = 'None'
             elif config['generation'] == 'c':
                 if config['release'] == 3 and config['model_num'] == 40:
                     default_mezz = None
