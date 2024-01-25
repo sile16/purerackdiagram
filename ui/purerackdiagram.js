@@ -430,6 +430,11 @@ $(function () {
       $('#rack_diagram').off('load').on('load', function() {
         var parentElement = $('#rack_diagram_wrapper');
 
+          // Remove existing tooltips
+        $('.port-tooltip').remove();
+
+
+
         // Get the natural and displayed size of the image
         var naturalWidth = this.naturalWidth;
         var naturalHeight = this.naturalHeight;
@@ -462,7 +467,7 @@ $(function () {
 
           // Tooltip div
           var tooltipContent = createTooltipContent(port);
-          var tooltip = $('<div>').css({
+          var tooltip = $('<div>').addClass('port-tooltip').css({
             'position': 'absolute',
             'display': 'none', // Hidden by default
             'background-color': 'white',
