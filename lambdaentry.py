@@ -213,6 +213,24 @@ def handler(event, context):
                 p['symbol_name'] = "Replication"
                 p['symbol_shape'] = "triangle_up"
                 p['symbol_color'] = color
+            
+                
+            elif 'port_type' not in p:
+                # we need port type to check any further info.
+                continue
+
+
+            elif p['port_type'] == 'sas':
+                color = 'blue'
+                #draw a rectangle
+                if draw_ports:
+                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size/2,
+                            p['loc'][0] + size, p['loc'][1] + size/2),
+                            fill=color, outline=color)
+                
+                p['symbol_name'] = "SAS"
+                p['symbol_shape'] = "rectangle"
+                p['symbol_color'] = color
 
             elif services and services[0] == 'shelf' :
                 color = '#FCDC4D'
@@ -222,11 +240,7 @@ def handler(event, context):
                 p['symbol_name'] = "Shelf"
                 p['symbol_shape'] = "triangle_down"
                 p['symbol_color'] = color
-            
-                
-            elif 'port_type' not in p:
-                # we need port type to check any further info.
-                continue
+
             
             elif p['port_type'] == 'fc':
                 # pick the color :
@@ -246,22 +260,7 @@ def handler(event, context):
                 p['symbol_shape'] = "square"
                 p['symbol_color'] = color
 
-            elif p['port_type'] == 'sas':
-                color = 'blue'
-                #draw a rectangle
-                if draw_ports:
-                    draw.rectangle((p['loc'][0] - size, p['loc'][1] - size/2,
-                            p['loc'][0] + size, p['loc'][1] + size/2),
-                            fill=color, outline=color)
-                
-                p['symbol_name'] = "SAS"
-                p['symbol_shape'] = "rectangle"
-                p['symbol_color'] = color
-
     
-                continue
-                
-            
             
             elif p['port_type'] == 'eth_roce':
                 color = "#FD9627"
