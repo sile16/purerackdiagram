@@ -525,17 +525,17 @@ def test_lambda(params, outputfile):
         results['statusCode'] = 200  # Update status code to OK
         
         # Save the response content to the appropriate file
-        if content_type == 'image/png':
-            ext = '.png'
-        elif content_type == 'application/vnd.ms-visio.stencil':
-            ext = '.vssx'
-        elif content_type == 'application/json':
-            ext = '.json'
-        else:
-            ext = ''
+        #if content_type == 'image/png':
+        #    ext = '.png'
+        #elif content_type == 'application/vnd.ms-visio.stencil':
+        #    ext = '.vssx'
+        #elif content_type == 'application/json':
+        #    ext = '.json'
+        #else:
+        #    ext = ''
         
-        with open(outputfile + ext, 'wb') as outfile:
-            outfile.write(response.content)
+        #with open(outputfile + ext, 'wb') as outfile:
+        #    outfile.write(response.content)
 
     
     if results['headers'].get("Content-Type") == 'image/png':
@@ -556,10 +556,14 @@ def test_lambda(params, outputfile):
             # replace this '"execution_duration": 0.8748149871826172', with '"execution_duration": 1',
             # match for any value
 
-            json_out = re.sub(r'"execution_duration": \d+\.\d+,', '"execution_duration": 1,', results['body'])
+            obj = json.loads(results['body'])
+            obj['execution_duration'] = 1
+            del obj['image']
+            #results['body'] = json.dumps(obj, indent=4, ensure_ascii=False)
+            results['body'] = obj
 
             with open(outputfile + '.json', 'w',  encoding='utf-8') as outfile:
-                outfile.write(json_out)
+                json.dump(obj, outfile, indent=4, ensure_ascii=False)
             #del results['body']
 
     return results
@@ -589,14 +593,17 @@ def create_test_image(item, count, total):
         content_type = results['headers'].get("Content-Type")
 
         # For JSON content, serialize before hashing
+        print(f"{count} of {total}   {file_name}")
         if content_type == 'application/json':
-            h.update(json.dumps(results['body']).encode('utf-8'))
+            #h.update(json.dumps(results['body']).encode('utf-8'))
+            return({file_name: results['body']})
         else:
             # For other content types, use the body directly
             h.update(results['body'].encode('utf-8'))
+            return({file_name: h.hexdigest()})
         
-        print(f"{count} of {total}   {file_name}")
-        return({file_name: h.hexdigest()})
+        
+        
 
     except Exception as ex_unknown:
         print(f"Caught exception in image: {file_name}")
@@ -623,8 +630,12 @@ def get_all_tests():
     count = 0
 
     for test in more_tests:
+        #if not test['queryStringParameters'].get('json'):
+        #    continue
         yield test['queryStringParameters']
         count += 1
+
+    
     
     # Test all Models with a front data pack and shelf.
     for model in models:
@@ -767,7 +778,7 @@ def test_all(args):
         results.update(result)
 
     with open("test_results.json", "w") as f:
-        json.dump(results, f)
+        json.dump(results, f, indent=4, ensure_ascii=False)
 
     with open("test_validation.json") as f:
         validation = json.load(f)
@@ -778,6 +789,24 @@ def test_all(args):
         if key not in validation:
             warnings += 1
             print("WARNING missing key:{}".format(key))
+        elif 'json' in key:
+            # use jsondiff to compare the two
+            # load the two strings into json objects, results
+            # compare json
+
+            import jsondiff
+            diff = True
+            try:
+                res_json = results[key]
+                val_json = validation[key]
+                diff = jsondiff.diff(val_json, res_json)
+            except Exception as ex:
+                pass
+
+            if diff:
+                errors += 1
+                print("Error JSON Changed!!:{}".format(key))
+                print(diff)
         elif results[key] != validation[key]:
             errors += 1
             print("Error Image Changed!!:{}".format(key))

@@ -178,6 +178,9 @@ class FAChassis():
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
         self.ports = []
+        self.lock = asyncio.Lock()
+
+
 
 
     async def get_image(self):
@@ -215,7 +218,11 @@ class FAChassis():
 
         # add port names, has to be done in order so must
         # be after all the tasks are done.
-        await self.add_port_names()
+
+        # add a thread lock here:
+
+        async with self.lock:
+            await self.add_port_names()
 
         return {'img': self.tmp_img, 'ports': self.ports}
     
@@ -225,6 +232,11 @@ class FAChassis():
         # add port names
         # find all on board ports first
         # select all ports that don't have a pci_slot key
+
+        # add a thread safety lock
+      
+
+
         
               
         port_naming_key = None

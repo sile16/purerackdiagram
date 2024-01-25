@@ -178,6 +178,36 @@ def handler(event, context):
         # Draw
         draw = ImageDraw.Draw(img)
         
+        # Sort the ports port ct0 and then port number
+        # port name is "ct0.eth1" or ct0.fc22 or ct1.sas1
+        # C by the controller first, the protocol next (eth, fc, sas) and then by the port number
+        # I want to sort the ports so that the json comes out the same everytime and the ports are in the same order
+        # This is so that we can validate there are no regressions.
+        
+        def sort_ports(ports):
+            def port_key(port):
+                # Split the port name into parts
+                name = port.get('name', 'ct0.eth0')
+                parts = name.split('.')
+                controller = parts[0]
+                
+                if len(parts) > 1:
+                    protocol_and_number = parts[1]
+                else:
+                    protocol_and_number = "eth0"
+
+                # Extract the protocol and number
+                protocol = ''.join([char for char in protocol_and_number if not char.isdigit()])
+                number = ''.join([char for char in protocol_and_number if char.isdigit()])
+
+                # Return a tuple that represents the sort order
+                return (controller, protocol, int(number))
+
+            # Sort the ports using the custom sorting key
+            return sorted(ports, key=port_key)
+        
+        if diagram.ports:
+            diagram.ports = sort_ports(diagram.ports)
 
         for p in diagram.ports:
             services = p.get('services', [])
