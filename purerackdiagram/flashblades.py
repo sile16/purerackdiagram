@@ -40,7 +40,7 @@ class FBSDiagram():
         if config['blades'] < 0 or config['blades'] > 100 :
             raise Exception('please provide blades count 0-100.')
 
-        valid_dfms = [24, 24.0, 48, 48.2]
+        valid_dfms = [24, 24.0, 48, 48.2, 75]
         if config['dfm_size'] not in valid_dfms:
             raise Exception('Valide drive sizes: {}'.format(valid_dfms))
 
