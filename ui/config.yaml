@@ -3839,7 +3839,9 @@ png/pure_fb_xfm_back.png:
     - 100g
     port_type: eth
     services: &id272
-    - chassis uplink
+    - data
+    - replication
+    - management
   - loc: !!python/tuple
     - 1679
     - 201

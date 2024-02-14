@@ -1309,7 +1309,7 @@ def update_static_model_port_loc(config):
     curr_loc = start
     for p in range(0, 32, 4):
         services = ['chassis uplink']
-        if p > 20:
+        if p > 19:
             services = ['data', 'replication', 'management']
         if p == 28:
             services = ['reserved']
