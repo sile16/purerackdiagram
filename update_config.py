@@ -100,7 +100,7 @@ def static_global_config():
             "fa-c70r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
             "fa-c90r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
 
-            "fa-c50r4-eth": ["mgmt2ethbaset", "2eth", None, None, None],
+            "fa-c50r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", None],
             "fa-c70r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
             "fa-c90r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
 
@@ -205,11 +205,9 @@ def static_global_config():
             "585": ["36.6TB", "nvme", 16, "585"],
             "658": ["36.6TB", "nvme", 18, "658"],
 
+            # this is a duplicate of the 10x 36.6 pack
+            # so you will have to do 183/183
 
-            #"219": ["18.3TB", "nvme", 12, "219"],
-            #"256": ["18.3TB", "nvme", 14, "256"],
-            #"292": ["18.3TB", "nvme", 16, "292"],
-            #"329": ["18.3TB", "nvme", 18, "329"],
             #"366": ["18.3TB", "nvme", 20, "366"],
 
             # SAS PACKS
@@ -225,10 +223,10 @@ def static_global_config():
 
         "qlc_chassis_dp_size_lookup": {
 
-            # this is legacy //C when we used tlc actually
+            # this is legacy //C 
             "366": ["18.3TB", "nvme-qlc", 20, "366"],
 
-            # // 18.6 TB PACKS, add 1/23/2024
+            # // 18.6 TB PACKS, added 1/23/2024
             "186": ["18.6TB", "nvme-qlc", 10, "186"],
             "223": ["18.6TB", "nvme-qlc", 12, "223"],
             "260": ["18.6TB", "nvme-qlc", 14, "260"],

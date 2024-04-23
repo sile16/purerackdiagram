@@ -312,7 +312,7 @@ pci_config_lookup:
   - mgmt2ethbaset
   - 2eth
   - null
-  - null
+  - 2eth
   - null
   fa-c50r4-fc:
   - mgmt2ethbaset
