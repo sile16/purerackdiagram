@@ -302,10 +302,16 @@ class FAChassis():
 
         if self.config['generation'] == 'c':
             # always add second nvram on 'c' array
+            if self.config["model_num"] < 60:
+                # Don't add second nvram on c40 or c50
+                return
+            # C60 & c70 do have 4 nvrams
             pass
         elif  self.config['generation'] == 'e':
-            #e probably has only 1 nvram, but i'm not sure.
-            #todo: check nvrams on e
+            # e uses distrubted NVRAM, so todo:
+            # Need to change the base image in order to remove
+            # and then re-add NVRams.... or add a blank to cover
+            # the base image.
             return
         elif self.config['generation'] == 'xl':
             return
