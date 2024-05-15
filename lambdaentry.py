@@ -365,10 +365,14 @@ def handler(event, context):
             # generate a name for this config
             items = []
             name = ""
-            if params['model'] == 'fb':
+            if params['model'] == 'fb' :
                 name += "fb"
                 stencil_name = "Pure FlashBlade"
-                items = ['chassis', 'face', 'direction', 'efm']
+                items = ['chassis', 'face', 'direction', ]
+            elif params['model'] == 'fb-s' or params['model'] == 'fb-e':
+                name += params['model']
+                items = [ 'face','dfm_count', 'dfm_size', 'blades']
+                stencil_name = "Pure FlashBlade"
             else:
                 # this is FlashArray
                 stencil_name = "Pure FlashArray"

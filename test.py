@@ -23,6 +23,30 @@ save_dir = 'test_results/'
 more_tests = [
       {
         "queryStringParameters": {
+            "model": "fb-e",
+            "no_of_blades": 15,
+            "face": "front",
+            "no_of_drives_per_blade": 4,
+            "drive_size": 75,
+            "ports": "TRUE",
+            "vssx": True
+        }
+    },
+        {
+        "queryStringParameters": {
+            "model": "fb-e",
+            "chassis": 2,
+            "addoncards": "2eth100",
+            "face": "back",
+            "fm_label": True,
+            "dp_label": True,
+            "mezz": "smezz",
+            "local_delay": 0,
+            "ports": True
+        }
+    },
+      {
+        "queryStringParameters": {
             "model": "fa-x90r4",
             "datapacks": "3/0.02/45",
             "face": "back",
@@ -98,19 +122,7 @@ more_tests = [
             'json': 'True'
         }
     },
-    {
-        "queryStringParameters": {
-            "model": "fb-e",
-            "chassis": 2,
-            "addoncards": "2eth100",
-            "face": "back",
-            "fm_label": True,
-            "dp_label": True,
-            "mezz": "smezz",
-            "local_delay": 0,
-            "ports": True
-        }
-    },
+
     {  ## keep this as an error message on purpose.
         "queryStringParameters": {
             "model": "fa-x20r4",
