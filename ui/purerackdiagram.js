@@ -2,6 +2,18 @@
 //global variable to store the vssx_url
 var vssx_url = "";
 
+// Function to update API endpoint based on radio button selection
+function updateApiEndpoint() {
+  const selectedEnvironment = document.querySelector('input[name="api-environment"]:checked').value;
+  if (selectedEnvironment === 'prod') {
+    API_ENDPOINT = API_ENDPOINT_PROD;
+  } else if (selectedEnvironment === 'staging') {
+    API_ENDPOINT = API_ENDPOINT_STAGING;
+  }
+}
+
+
+
 
 const pythonTupleType = new jsyaml.Type('tag:yaml.org,2002:python/tuple', {
   kind: 'sequence',
@@ -15,6 +27,10 @@ const customSchema = jsyaml.DEFAULT_SCHEMA.extend([pythonTupleType]);
 
 $(function () {
   console.log("ready!");
+    // Event listener for radio button change
+  document.querySelectorAll('input[name="api-environment"]').forEach(radio => {
+    radio.addEventListener('change', updateApiEndpoint);
+  });
 
   fetch("config.yaml")
   .then((response) => response.text())
@@ -282,6 +298,8 @@ $(function () {
 
     return url;
   };
+
+
 
 
   var fb_url = function() {
