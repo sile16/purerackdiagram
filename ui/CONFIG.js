@@ -1,7 +1,7 @@
 
 API_ENDPOINT = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/default/rackdiagram?";
 API_ENDPOINT_PROD = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/default/rackdiagram?";
-API_ENDPOINT_STAGING = "https://d5hiwpyl66.execute-api.us-east-1.amazonaws.com/default/rackdiagram-staging?";
+API_ENDPOINT_STAGING = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/staging/rackdiagram-staging?";
 
 // the options values for FlashArray configurations
 //
