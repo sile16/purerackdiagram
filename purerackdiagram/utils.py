@@ -162,7 +162,13 @@ def apply_text(img, text, x_loc, y_loc, font_size=15, rotate_degrees=0):
 
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(ttf_path, size=font_size)
-    w, _ = draw.textsize(text, font=font)
+    #w, _ = draw.textsize(text, font=font)
+
+    _, _, w, _ = draw.textbbox((0,0), text=text, font=font)
+    #if w != w_new:
+    #    Exception("Wrong new w")
+
+
     x_loc = x_loc - w // 2
     
     draw.text((x_loc, y_loc), text, fill=(199, 89, 40), font=font)

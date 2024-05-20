@@ -616,7 +616,14 @@ def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided):
     box_center = ((box_loc[0] + end_loc[0]) // 2,
                   (box_loc[1] + end_loc[1]) // 2)
     font = ImageFont.truetype(ttf_path, size=85)
-    w, h = draw.textsize(dp_size, font=font)
+    #w, h = draw.textsize(dp_size, font=font)
+    _,_,w,h = draw.textbbox((0,0), text=dp_size, font=font)
+
+    #if w!=w_new or h !=h_new :
+    #    Exception("new bbox wrong values")
+
+    
+
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
     draw.text(text_loc, dp_size , fill=(255, 255, 255, 220), font=font)
     logger.debug("converting image to RGBA")
@@ -655,7 +662,12 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
     box_center = ((box_loc[0] + box_loc2[0]) // 2,
                   (box_loc[1] + box_loc2[1]) // 2)
     font = ImageFont.truetype(ttf_path, size=85)
-    w, h = draw.textsize(dp_size + "TB", font=font)
+    #w, h = draw.textsize(dp_size + "TB", font=font)
+    _,_,w,h = draw.textbbox((0,0), text=dp_size + "TB", font=font)
+    #if w!=w_new or h !=h_new :
+    #    Exception("new bbox wrong values")
+
+
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
     draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220), font=font)
     logger.debug("converting image to RGBA")

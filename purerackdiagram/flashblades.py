@@ -100,7 +100,14 @@ class FBSDiagram():
         font_size = 25
 
         font = ImageFont.truetype(ttf_path, size=font_size)
-        txt_size = font.getsize(blade_model_text)
+        #x0, y0, w, h = font.getbbox(text=blade_model_text)
+        # old deprecated Pillow 9.5.0 version
+        #txt_size = font.getsize(blade_model_text)
+
+        _, _, w, h = font.getbbox(blade_model_text)
+        txt_size = (w, h)
+        #if txt_size != txt_size_new:
+        #    Exception("new Txt size doesn't match")
         
         ##make backgroun grey
         txtimg = Image.new("RGBA", txt_size, (38, 38, 38))

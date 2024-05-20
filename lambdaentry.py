@@ -83,9 +83,20 @@ def text_to_image(text):
     y = 20  # y margin
     # we use h and g becasue they are the tallest and lowest letters
     line_height = font.getsize('hg')[1]
+    _,_,_,line_height_new = font.getbbox('hg')
+    if line_height != line_height_new:
+        Exception("New line height wrong")
+
     #  all lines plus top and bottom margin.
     total_height = line_height * len(lines) + y * 2
+
     total_width = max([font.getsize(line)[0] for line in lines]) + 2 * x
+
+    total_width_new = max([font.getbbox(line)[2] for line in lines]) + 2 * x
+    if total_height != total_width_new:
+        Exception("Total width not equal new total widht")
+
+
 
     img = Image.new('RGBA', (total_width, total_height), background_color)
     draw = ImageDraw.Draw(img)
@@ -333,7 +344,7 @@ def handler(event, context):
             logger.debug("resizing image")
             wpercent = (max_height / float(img.size[1]))
             hsize = int((float(img.size[0]) * float(wpercent)))
-            img = img.resize((hsize, max_height), Image.ANTIALIAS)
+            img = img.resize((hsize, max_height), Image.Resampling.LANCZOS)
 
             #Also need to resize all the port locations in the json
             #Since we are resizing the image
