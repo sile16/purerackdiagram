@@ -23,7 +23,7 @@ save_dir = 'test_results/'
 more_tests = [
       {
         "queryStringParameters": {
-            "model": "fb-e",
+            "model": "fb-s200",
             "no_of_blades": 15,
             "face": "front",
             "no_of_drives_per_blade": 4,

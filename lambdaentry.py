@@ -380,16 +380,19 @@ def handler(event, context):
                 name += "fb"
                 stencil_name = "Pure FlashBlade"
                 items = ['chassis', 'face', 'direction', ]
-            elif params['model'] == 'fb-s' or params['model'] == 'fb-e':
+            elif 'fb-s' in params['model'] or 'fb-e' in params['model']:
                 name += params['model']
                 items = [ 'face','dfm_count', 'dfm_size', 'blades']
                 stencil_name = "Pure FlashBlade"
-            else:
+            elif 'fa' in params['model']:
                 # this is FlashArray
                 stencil_name = "Pure FlashArray"
                 name += params['model']
                 name += "_" + params['datapacks'].replace("/", '-')
                 items = ['face', 'direction']
+            else:
+                stencil_name = "Pure Unknown Model " + params['model']
+                name = "pure_visio"
 
             for n in items:
                 name += "_" + str(diagram.config[n])
