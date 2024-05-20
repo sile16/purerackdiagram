@@ -82,19 +82,19 @@ def text_to_image(text):
     x = 10  # x Margin
     y = 20  # y margin
     # we use h and g becasue they are the tallest and lowest letters
-    line_height = font.getsize('hg')[1]
-    _,_,_,line_height_new = font.getbbox('hg')
-    if line_height != line_height_new:
-        Exception("New line height wrong")
+    #line_height = font.getsize('hg')[1]
+    _,_,_,line_height = font.getbbox('hg')
+    #if line_height != line_height_new:
+    #    Exception("New line height wrong")
 
     #  all lines plus top and bottom margin.
     total_height = line_height * len(lines) + y * 2
 
-    total_width = max([font.getsize(line)[0] for line in lines]) + 2 * x
+    #total_width = max([font.getsize(line)[0] for line in lines]) + 2 * x
 
-    total_width_new = max([font.getbbox(line)[2] for line in lines]) + 2 * x
-    if total_height != total_width_new:
-        Exception("Total width not equal new total widht")
+    total_width = max([font.getbbox(line)[2] for line in lines]) + 2 * x
+    #if total_height != total_width_new:
+    #    Exception("Total width not equal new total widht")
 
 
 
