@@ -324,7 +324,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth
+  - 4eth25
   - null
   fa-c50r4b-fc:
   - null
@@ -368,7 +368,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth
+  - 4eth25
   - dca
   fa-c70r4b-fc:
   - null
@@ -392,7 +392,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth
+  - 4eth25
   - dca
   fa-c90r4b-fc:
   - null
@@ -552,7 +552,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth
+  - 4eth25
   - null
   fa-x50r4b-fc:
   - null
@@ -606,7 +606,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth
+  - 4eth25
   - dca
   fa-x70r4b-fc:
   - null
@@ -650,7 +650,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth
+  - 4eth25
   - dca
   fa-x90r4b-fc:
   - null

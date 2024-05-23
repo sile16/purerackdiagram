@@ -97,9 +97,9 @@ def static_global_config():
             "fa-x90r4b-fc": [None, "4fc", None, "2fc", "dca"],
             
             "fa-x20r4b-eth": [None, None, None, "2eth", None],
-            "fa-x50r4b-eth": [None, None, None, "4eth", None],
-            "fa-x70r4b-eth": [None, None, None, "4eth", "dca"],
-            "fa-x90r4b-eth": [None, None, None, "4eth", "dca"],
+            "fa-x50r4b-eth": [None, None, None, "4eth25", None],
+            "fa-x70r4b-eth": [None, None, None, "4eth25", "dca"],
+            "fa-x90r4b-eth": [None, None, None, "4eth25", "dca"],
 
                          # New C R4b
             
@@ -107,9 +107,9 @@ def static_global_config():
             "fa-c70r4b-fc": [None, "4fc", None, "2fc", "dca"],
             "fa-c90r4b-fc": [None, "4fc", None, "2fc", "dca"],
             
-            "fa-c50r4b-eth": [None, None, None, "4eth", None],
-            "fa-c70r4b-eth": [None, None, None, "4eth", "dca"],
-            "fa-c90r4b-eth": [None, None, None, "4eth", "dca"],
+            "fa-c50r4b-eth": [None, None, None, "4eth25", None],
+            "fa-c70r4b-eth": [None, None, None, "4eth25", "dca"],
+            "fa-c90r4b-eth": [None, None, None, "4eth25", "dca"],
 
             # New x R4
             "fa-x20r4-fc": ["mgmt2ethbaset", None, None, "2fc", None],
