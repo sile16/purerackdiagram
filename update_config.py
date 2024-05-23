@@ -16,19 +16,21 @@ def main():
     # but it's okay, we won't ever use them, or when an XL-130r2 comes out
     # we can go in a add it to the config special cased if necessary.
     
-    for rev in [1, 2, 3, 4]:
+    for rel in [1, 2, 3, 4]:
+        
         for gen in ['m', 'x', 'c', 'e']:
-            update_static_pci_loc(config, gen, rev)
-            update_static_mezz_loc(config, gen, rev)
-            update_static_model_loc(config, gen, rev)
-            update_static_nvram_loc(config, gen, rev)
+            rev_list = ['']
+            if (gen != 'm' and gen != 'xl') and (rel == 4 or rel == 1):
+                rev_list = ['', 'b']
+            for rev in rev_list:
+                update_static_pci_loc(config, gen, rel, rev)
+                update_static_mezz_loc(config, gen, rel, rev)
+                update_static_model_loc(config, gen, rel, rev)
+                update_static_nvram_loc(config, gen, rel, rev)
 
         for gen in ['xl']:
-            update_static_pci_loc(config, gen, rev)
-            update_static_model_loc(config, gen, rev)
-
-
-    
+            update_static_pci_loc(config, gen, rel, '')
+            update_static_model_loc(config, gen, rel, '')
 
 
     update_static_card_port_loc(config)
@@ -81,8 +83,33 @@ def static_global_config():
                             "sas", "dca", "blank"],   
 
         "pci_config_lookup": {
+
+            # New E R1
+             "fa-er1b-fc": [ None, None, None, None, None],
+
             # New E R1
              "fa-er1-fc": ["mgmt2ethbaset", None, None, None, None],
+
+             # New x R4b
+            "fa-x20r4b-fc": [None, None, None, "2fc", None],
+            "fa-x50r4b-fc": [None, "4fc", None, None, None],
+            "fa-x70r4b-fc": [None, "4fc", None, "2fc", "dca"],
+            "fa-x90r4b-fc": [None, "4fc", None, "2fc", "dca"],
+            
+            "fa-x20r4b-eth": [None, None, None, "2eth", None],
+            "fa-x50r4b-eth": [None, None, None, "4eth", None],
+            "fa-x70r4b-eth": [None, None, None, "4eth", "dca"],
+            "fa-x90r4b-eth": [None, None, None, "4eth", "dca"],
+
+                         # New C R4b
+            
+            "fa-c50r4b-fc": [None, "4fc", None, None, None],
+            "fa-c70r4b-fc": [None, "4fc", None, "2fc", "dca"],
+            "fa-c90r4b-fc": [None, "4fc", None, "2fc", "dca"],
+            
+            "fa-c50r4b-eth": [None, None, None, "4eth", None],
+            "fa-c70r4b-eth": [None, None, None, "4eth", "dca"],
+            "fa-c90r4b-eth": [None, None, None, "4eth", "dca"],
 
             # New x R4
             "fa-x20r4-fc": ["mgmt2ethbaset", None, None, "2fc", None],
@@ -536,24 +563,25 @@ def update_static_fm_loc(config):
             ch0_fm_loc[x] = tuple(loc)
 
     # add chassis
-    for rev in range(1, 5):
-        key = f'png/pure_fa_x_r{rev}_front.png'
-        if key not in config:
-            config[key] = {}
-        config[key]['fm_loc'] = ch0_fm_loc.copy()
-
-        # C is the same:
-        key = f'png/pure_fa_c_r{rev}_front.png'
-        if key not in config:
-            config[key] = {}
-        config[key]['fm_loc'] = ch0_fm_loc.copy()
-
-        # E is the same:
-        if rev == 1:
-            key = f'png/pure_fa_e_r{rev}_front.png'
+    for rel in range(1, 5):
+        for rev in ['', 'b']:
+            key = f'png/pure_fa_x_r{rel}{rev}_front.png'
             if key not in config:
                 config[key] = {}
             config[key]['fm_loc'] = ch0_fm_loc.copy()
+
+            # C is the same:
+            key = f'png/pure_fa_c_r{rel}{rev}_front.png'
+            if key not in config:
+                config[key] = {}
+            config[key]['fm_loc'] = ch0_fm_loc.copy()
+
+            # E is the same:
+            if rel == 1:
+                key = f'png/pure_fa_e_r{rel}{rev}_front.png'
+                if key not in config:
+                    config[key] = {}
+                config[key]['fm_loc'] = ch0_fm_loc.copy()
 
     # nvme shelves are the same:
     key = 'png/pure_fa_nvme_shelf_front.png'
@@ -565,8 +593,8 @@ def update_static_fm_loc(config):
     for x in range(len(ch0_fm_loc)):
         ch0_fm_loc[x] = (ch0_fm_loc[x][0] - 9, ch0_fm_loc[x][1] - 7)
 
-    for rev in range(1, 3):
-        key = f'png/pure_fa_m_r{rev}_front.png'
+    for rel in range(1, 3):
+        key = f'png/pure_fa_m_r{rel}_front.png'
         if key not in config:
             config[key] = {}
         config[key]['fm_loc'] = ch0_fm_loc.copy()
@@ -599,14 +627,14 @@ def update_static_fm_loc(config):
 
 
 
-def update_static_pci_loc(config, generation, revision):
+def update_static_pci_loc(config, generation, release, rev):
     pci_loc = None
-    if (generation == 'x' or generation == 'c') and revision < 4:
+    if (generation == 'x' or generation == 'c') and release < 4:
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
         ct1_y_offset = 380
 
     # R4
-    elif (generation == 'x' or generation == 'c') and revision == 4:
+    elif (generation == 'x' or generation == 'c') and release == 4:
         pci_loc = [(679, 83), (1225, 83), (1225, 203), (2075, 83), (2075, 203)]
         ct1_y_offset = 378
 
@@ -627,8 +655,7 @@ def update_static_pci_loc(config, generation, revision):
                    (2150, 365), (2150, 480), (2150, 603)]
         ct1_y_offset = 480
 
-
-    key = f'png/pure_fa_{generation}_r{revision}_back.png'
+    key = f'png/pure_fa_{generation}_r{release}{rev}_back.png'
     if key not in config:
         config[key] = {}
 
@@ -648,8 +675,8 @@ def update_static_pci_loc(config, generation, revision):
     
 
 
-def update_static_nvram_loc(config, generation, revision):
-    key = f'png/pure_fa_{generation}_r{revision}_front.png'
+def update_static_nvram_loc(config, generation, release, rev):
+    key = f'png/pure_fa_{generation}_r{release}{rev}_front.png'
     if key not in config:
         config[key] = {}
 
@@ -666,8 +693,8 @@ def update_static_nvram_loc(config, generation, revision):
     return config
 
 
-def update_static_mezz_loc(config, generation, revision):
-    key = f'png/pure_fa_{generation}_r{revision}_back.png'
+def update_static_mezz_loc(config, generation, release, rev):
+    key = f'png/pure_fa_{generation}_r{release}{rev}_back.png'
     if key not in config:
         config[key] = {}
 
@@ -681,8 +708,8 @@ def update_static_mezz_loc(config, generation, revision):
     
 
 
-def update_static_model_loc(config, generation, revision):
-    key = f'png/pure_fa_{generation}_r{revision}_front.png'
+def update_static_model_loc(config, generation, release, rev):
+    key = f'png/pure_fa_{generation}_r{release}{rev}_front.png'
     if key not in config:
         config[key] = {}
 
@@ -882,9 +909,9 @@ def update_static_model_port_loc(config):
     ## FA Chassis Flash Modules for M / X / C
     ######################
 
-    for rev in [1, 2, 3, 4]:
+    for release in [1, 2, 3, 4]:
         ct0ports = None
-        if rev == 4: 
+        if release == 4: 
             ct0ports = [ {'loc': (671, 308),
                 'name': 'ct0.eth0',
                 'port_type': 'eth_roce',
@@ -1025,31 +1052,54 @@ def update_static_model_port_loc(config):
                 'port_sfp_connector': 'LC',
 
                 'services': ['data', 'replication']}]
-
-        ct1ports = []
-        for p in ct0ports:
-            p_copy = p.copy()
-            p_copy['loc'] = (p['loc'][0], p['loc'][1] + 380)
-            p_copy['name'] = p_copy['name'].replace('ct0', 'ct1')
-            ct1ports.append(p_copy)
-
-        key = f'png/pure_fa_x_r{rev}_back.png'
-        if key not in config:
-            config[key] = {}
-        config[key]['ports'] = ct0ports + ct1ports
-
-        key = f'png/pure_fa_c_r{rev}_back.png'
-        if key not in config:
-            config[key] = {}
-        config[key]['ports'] = ct0ports + ct1ports
-
         
-        # E is the same as Xr4, 
-        if rev == 4:
-            key = f'png/pure_fa_e_r1_back.png'
+        rev_list = ['']
+        if release == 4:
+            #release 4 is the first time we had a revision
+            # we set the loopoing params for these:
+            rev_list = ['','b']
+
+        for rev in rev_list:
+            if release == 4 and rev == 'b':
+                ct0ports.append({'loc': (1945, 293),
+                'name': 'ct0.eth5',
+                'port_type': 'eth',
+                'port_connector': 'rj45',
+                'port_speeds': ['1g'],
+                
+                'port_sfp_present': False,
+                'port_sfp_speed': [],
+                'port_sfp_connector': None,
+
+                'services': ['management']})
+
+
+
+
+            ct1ports = []
+            for p in ct0ports:
+                p_copy = p.copy()
+                p_copy['loc'] = (p['loc'][0], p['loc'][1] + 380)
+                p_copy['name'] = p_copy['name'].replace('ct0', 'ct1')
+                ct1ports.append(p_copy)
+
+            key = f'png/pure_fa_x_r{release}{rev}_back.png'
             if key not in config:
                 config[key] = {}
             config[key]['ports'] = ct0ports + ct1ports
+
+            key = f'png/pure_fa_c_r{release}{rev}_back.png'
+            if key not in config:
+                config[key] = {}
+            config[key]['ports'] = ct0ports + ct1ports
+
+            # E is the same as Xr4, 
+            if release == 4:
+                key = f'png/pure_fa_e_r1{rev}_back.png'
+                if key not in config:
+                    config[key] = {}
+                config[key]['ports'] = ct0ports + ct1ports
+
 
         #################################
         ## FA Chassis Rear Ports for XL

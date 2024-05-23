@@ -1,6 +1,6 @@
 # PureRackDiagram
 
-This is an unofficial tool to build Pure Storage rack diagrams.  It outputs PNG images, or Visio Stencil files, it also outputs JSON information about the image and the configuration.  It can be used via the WebUI or via the API directly.  Use the WebUI to understand how the API works.
+This is a semi-official tool to build Pure Storage rack diagrams and get visio templates.  It outputs PNG images, or Visio Stencil files, it also outputs JSON information about the image and the configuration and the ports.  It can be used via the WebUI or via the API directly.  Use the WebUI to understand how the API works.  These images feed into the Pure Sizer and Pure Advisor tools. 
 
 ## Try it out:
 

@@ -21,6 +21,38 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fa-er1b",
+            "datapacks": "186",
+            "face": "front",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+            "bezel": True
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-er1b",
+            "datapacks": "186",
+            "face": "front",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x90r4b",
+            "datapacks": "3/0.02/45",
+            "face": "back",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    
       {
         "queryStringParameters": {
             "model": "fb-s200",
@@ -32,7 +64,7 @@ more_tests = [
             "vssx": True
         }
     },
-        {
+    {
         "queryStringParameters": {
             "model": "fb-e",
             "chassis": 2,

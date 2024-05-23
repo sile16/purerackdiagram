@@ -186,7 +186,7 @@ class FAChassis():
     async def get_image(self):
         # build the image
         c = self.config
-        key = "png/pure_fa_{}_r{}".format(c["generation"], c['release'])
+        key = f"png/pure_fa_{c['generation']}_r{c['release']}{c['rev']}"
 
         if c["face"] == "front" and c["bezel"]:
             key += "_bezel.png"
@@ -687,12 +687,8 @@ class FADiagram():
         pci_config_lookup = utils.global_config['pci_config_lookup']
 
         pci_config = [None, None, None, None]
-        pci_lookup_str = "fa-{}{}r{}-{}".format(
-            config["generation"],
-            config["model_num"],
-            config["release"],
-            config["protocol"],
-        )
+        c = config
+        pci_lookup_str = f'fa-{c["generation"]}{c["model_num"]}r{c["release"]}{c["rev"]}-{config["protocol"]}'
         
         
         pci_config = pci_config_lookup[pci_lookup_str].copy()
@@ -841,29 +837,43 @@ class FADiagram():
     def __init__(self, params):
         # front or back
         config = {}
+        c=config
         self.ports = []
 
         config["model_str"] = params["model"].lower()
-        if config['model_str'] == 'fa-er1-f':
 
-            pass
 
         # mode-str of type  "fa-m70r2" or "fa-x70" or "fa-xl130" or fa-xl170r2
         # Split string on the - and transition to numbers
-        results = re.split('(\d+)|-|r', config["model_str"])
+        #5/22/2024 we have a format change to fa-x70r4b the b is a revision to the release.
+
+        #splits on instance of change from decimal to letter and - and r
+        results = re.split(r'(\d+)|-|r', config["model_str"])
         config["generation"] = results[2]
+        config["rev"] = ""
         if config['generation'] == 'e':
             config['model_num'] = ""
+            config['release'] = 1
         else:
             config['model_num'] = int(results[3])
+            if len(results) > 5:
+                config['rev'] = results[5]
+
 
         if "r" in config["model_str"]:
             if config['generation'] == 'e':
                 config["release"] = int(results[5])
+                if len(results) > 6:
+                    config["rev"] = results[6]
             else:
                 config["release"] = int(results[7])
+                if len(results) > 8:
+                    config["rev"] = results[8]
+            
+
         else:
             config["release"] = 1
+
         
         config["direction"] = params.get("direction", "up").lower()
 
@@ -921,8 +931,7 @@ class FADiagram():
 
             if config['mezz'] not in valid_mezz:
                 raise Exception(
-                    "Please use a valid mezzainine: {}".format(
-                        pformat(valid_mezz)))
+                    f"Please use a valid mezzainine: {pformat(valid_mezz)}")
 
             self._init_pci_cards(config, params)
 
@@ -948,7 +957,6 @@ class FADiagram():
                 elif csize in csize_lookup:
                     # we have a lookup translation, lets use it
                     params['datapacks'] = csize_lookup[csize]
-        
                 else:
                     raise Exception(
                         "Please use a valid csize: {}".format(
