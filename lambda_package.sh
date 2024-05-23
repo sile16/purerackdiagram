@@ -26,8 +26,8 @@ pip install --upgrade pip
 pip install -r requirements.txt --upgrade
 deactivate
 cd $VENV/lib/$PYTHON_VERSION/site-packages
-zip -r ../../../../lambda.zip yaml --exclude '*.pyc' --exclude '*__pycache__*'
+zip -r -y ../../../../lambda.zip yaml --exclude '*.pyc' --exclude '*__pycache__*'
 cd ../../../../
-zip -r lambda.zip lambdaentry.py purerackdiagram vssx -i '*.png' '*.py' '*.ttf' '*.yaml' '*.xml' '*.zip'
+zip -r -y lambda.zip lambdaentry.py purerackdiagram vssx -i '*.png' '*.py' '*.ttf' '*.yaml' '*.xml' '*.zip'
 
 
