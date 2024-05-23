@@ -664,7 +664,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - null
+  - dca
   - null
   - null
   - null
@@ -674,7 +674,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - null
+  - dca
   - null
   - null
   - 2fc
@@ -684,7 +684,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - null
+  - dca
   - null
   - null
   - null
@@ -694,7 +694,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - null
+  - dca
   - null
   - null
   - 2fc
