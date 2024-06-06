@@ -17,15 +17,25 @@ class FBDiagram():
         config["xfm_face"] = params.get("xfm_face", "").lower()
         config['direction'] = params.get("direction", "up").lower()
         config['efm'] = params.get('efm', 'efm310').lower()
+        config['xfm_model'] = params.get('xfm_model', '3200e').lower()
+
+
+        
         if not config['efm']:
             config['efm'] = "efm310"
 
         if config['xfm_face'] == "":
             config['xfm_face'] = config['face']
+        elif config['xfm_face'] not in ['front', 'back', 'bezel']:
+            raise Exception (f"Invalid XFM Face, {config['xfm_face']}")
 
         valid_efm = ['efm110', 'efm310']
         if config['efm'] not in valid_efm:
             raise Exception('please provide a valid efm: {}'.format(valid_efm))
+        
+        valid_xfm_model =['3200e', '8400']
+        if config['xfm_model'] not in valid_xfm_model:
+            raise Exception('please provide a valid xfm_model: {}'.format(valid_xfm_model))
 
         blades = params.get('blades', "17:0-6").lower()
 
@@ -67,7 +77,7 @@ class FBDiagram():
         if config['xfm'] == "":
             config['xfm'] = default_xfm
 
-        for item in ["xfm" ]:
+        for item in ["xfm"]:
             if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:
                 config[item] = False
 
@@ -118,10 +128,11 @@ class FBDiagram():
             tasks.append(self.build_chassis(i))
 
         if self.config['xfm']:
-            tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_face']}.png"))
-            tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_face']}.png"))
+            xfm_face = self.config['xfm_face']
+            for x in range(2):
+                tasks.append(
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_model']}_{xfm_face}.png"))
+            
 
         all_images = await asyncio.gather(*tasks)
         if self.config["direction"] == "up":

@@ -23,6 +23,17 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fb-s200",
+            "no_of_blades": 18,
+            "face": "front",
+            "no_of_drives_per_blade": 4,
+            "drive_size": 75,
+            "ports": "TRUE",
+            'bezel': True
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-er1b",
             "datapacks": "186",
             "face": "front",

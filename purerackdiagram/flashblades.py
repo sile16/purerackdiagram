@@ -29,8 +29,15 @@ class FBSDiagram():
         config['dfm_count'] = int(params.get("no_of_drives_per_blade", 1))
         config['blades'] = int(params.get("no_of_blades", 7))
 
+        config['xfm_model'] = params.get('xfm_model', '8400').lower()
+        valid_xfm_model =['3200e', '8400']
+        if config['xfm_model'] not in valid_xfm_model:
+            raise Exception('please provide a valid xfm_model: {}'.format(valid_xfm_model))
+
         if config['xfm_face'] == "":
             config['xfm_face'] = config['face']
+        elif config['xfm_face'] not in ['front', 'back', 'bezel']:
+            raise Exception (f"Invalid XFM Face, {config['xfm_face']}")
 
 
         valid_models = ['fb-s200', 'fb-s500', 'fb-e']
@@ -185,11 +192,11 @@ class FBSDiagram():
 
 
         if self.config['xfm']:
-
-            tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{c['xfm_face']}.png"))
-            tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{c['xfm_face']}.png"))
+            xfm_face = self.config['xfm_face']
+            for x in range(2):
+                tasks.append(
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_model']}_{xfm_face}.png"))
+            
 
         all_images = await asyncio.gather(*tasks)
         if self.config["direction"] == "up":

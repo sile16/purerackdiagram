@@ -278,6 +278,14 @@ def static_global_config():
             "444": ["24.7TB", "nvme-qlc", 18, "444"],
             "494": ["24.7TB", "nvme-qlc", 20, "494"],
 
+            # //C 37.5 TB Packs 6/6/2024
+            "375": ["37.5TB", "nvme-qlc", 10, "375"],
+            "450": ["37.5TB", "nvme-qlc", 12, "450"],
+            "525": ["37.5TB", "nvme-qlc", 14, "525"],
+            "600": ["37.5TB", "nvme-qlc", 16, "600"],
+            "675": ["37.5TB", "nvme-qlc", 18, "675"],
+            # "750": ["37.5TB", "nvme-qlc", 20, "760"],  # conflict with 10x 75 TB
+
             # //C 48.2 TB PACKS, added 11/16/2022, new drive size
             "482": ["48.2TB", "nvme-qlc", 10, "482"],
             "578": ["48.2TB", "nvme-qlc", 12, "578"],
@@ -434,6 +442,14 @@ def static_global_config():
             "592": ["24.7TB", "nvme-qlc", 24, "592"],
             "642": ["24.7TB", "nvme-qlc", 26, "642"],
             "691": ["24.7TB", "nvme-qlc", 28, "691"],
+
+            # //C 37.5 TB Packs 6/6/2024
+            "375": ["37.5TB", "nvme-qlc", 10, "375"],
+            "450": ["37.5TB", "nvme-qlc", 12, "450"],
+            "525": ["37.5TB", "nvme-qlc", 14, "525"],
+            "600": ["37.5TB", "nvme-qlc", 16, "600"],
+            "675": ["37.5TB", "nvme-qlc", 18, "675"],
+            # "750": ["37.5TB", "nvme-qlc", 20, "760"],  # conflict with 10x 75 TB
 
             # //C 48.2 TB PACKS added 11/16/2022, new drive size
             "482": ["48.2TB", "nvme-qlc", 10, "480"],
@@ -1348,73 +1364,82 @@ def update_static_model_port_loc(config):
 
     # Pure FB BAck XFM
 
-    start = (344, 99)
-    y_offset = 102
-    x1_offset = 120
-    x2_offset = 267
+    start = (261, 95)
+    y_offset = 90
+    x1_offset = 111
+    x2_offset = 253
 
-    ports = []
-    curr_loc = start
-    for p in range(0, 32, 4):
-        services = ['chassis uplink']
-        if p > 19:
-            services = ['data', 'replication', 'management']
-        if p == 28:
-            services = ['reserved']
     
-        ports.append({'loc': curr_loc,
-                      'port_type': 'eth',
-                      'name': f'eth{p}',
-                      'port_connector': 'qsfp28',
-                      'port_speeds': ['10g', '25g', '40g', '100g'],
-                      'port_sfp_present': False,
-                      'port_sfp_speed': [] ,
-                      'port_sfp_connector': None,
-                      'services': services})
-        ports.append({'loc': (curr_loc[0], curr_loc[1] + y_offset),
-                      'port_type': 'eth',
-                      'name': f'eth{p + 1}',
-                      'port_connector': 'qsfp28',
-                      'port_speeds': ['10g', '25g', '40g', '100g'],
-                      'port_sfp_present': False,
-                      'port_sfp_speed': [] ,
-                      'port_sfp_connector': None,
-                      'services': services})
-        if p == 28:
-            services = ['Cross Connect']
-        ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] ),
-                      'port_type': 'eth',
-                      'name': f'eth{p + 2}',
-                      'port_connector': 'qsfp28',
-                      'port_speeds': ['10g', '25g', '40g', '100g'],
-                      'port_sfp_present': False,
-                      'port_sfp_speed': [] ,
-                      'port_sfp_connector': None,
-                      'services': services})
-        ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] + y_offset),
-                      'port_type': 'eth',
-                      'name': f'eth{p + 3}',
-                      'port_connector': 'qsfp28',
-                      'port_speeds': ['10g', '25g', '40g', '100g'],
-                      'port_sfp_present': False,
-                      'port_sfp_speed': [] ,
-                      'port_sfp_connector': None,
-                      'services': services})
-        curr_loc = (curr_loc[0] + x2_offset, curr_loc[1])
-    ports.append({'loc': (2455, 103),
-                  'port_type': 'eth',
-                  'name': 'mgmt',
-                  'port_connector': 'rj45',
-                  'port_speeds': ['1g'],
-                  'port_sfp_present': False,
-                  'port_sfp_speed': [] ,
-                  'port_sfp_connector': None,
-                  'services': ['management']})
+    for xfm_model in ['3200e', '8400']:
+        ports = []
+        curr_loc = start
+        for p in range(0, 32, 4):
+            services = ['chassis uplink']
+            if p > 19:
+                services = ['data', 'replication', 'management']
+            if p == 28:
+                services = ['reserved']
+            port_speeds = ['10g', '25g', '40g', '100g']
+            if xfm_model == "8400":
+                port_speeds.append('200g')
+                port_speeds.append('400g')
+        
+            ports.append({'loc': curr_loc,
+                        'port_type': 'eth',
+                        'name': f'eth{p}',
+                        'port_connector': 'qsfp28',
+                        'port_speeds': port_speeds,
+                        'port_sfp_present': False,
+                        'port_sfp_speed': [] ,
+                        'port_sfp_connector': None,
+                        'services': services})
+            ports.append({'loc': (curr_loc[0], curr_loc[1] + y_offset),
+                        'port_type': 'eth',
+                        'name': f'eth{p + 1}',
+                        'port_connector': 'qsfp28',
+                        'port_speeds': port_speeds,
+                        'port_sfp_present': False,
+                        'port_sfp_speed': [] ,
+                        'port_sfp_connector': None,
+                        'services': services})
+            if p == 28:
+                services = ['Cross Connect']
+            ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] ),
+                        'port_type': 'eth',
+                        'name': f'eth{p + 2}',
+                        'port_connector': 'qsfp28',
+                        'port_speeds': port_speeds,
+                        'port_sfp_present': False,
+                        'port_sfp_speed': [] ,
+                        'port_sfp_connector': None,
+                        'services': services})
+            ports.append({'loc': (curr_loc[0] + x1_offset, curr_loc[1] + y_offset),
+                        'port_type': 'eth',
+                        'name': f'eth{p + 3}',
+                        'port_connector': 'qsfp28',
+                        'port_speeds': port_speeds,
+                        'port_sfp_present': False,
+                        'port_sfp_speed': [] ,
+                        'port_sfp_connector': None,
+                        'services': services})
+            curr_loc = (curr_loc[0] + x2_offset, curr_loc[1])
+        mgmt_loc = (2423, 205)
+        if xfm_model == '3200e':
+            mgmt_loc = (2282, 178)
+        ports.append({'loc': mgmt_loc,
+                    'port_type': 'eth',
+                    'name': 'mgmt',
+                    'port_connector': 'rj45',
+                    'port_speeds': ['1g'],
+                    'port_sfp_present': False,
+                    'port_sfp_speed': [] ,
+                    'port_sfp_connector': None,
+                    'services': ['management']})
 
-    key = 'png/pure_fb_xfm_back.png'
-    if key not in config:
-        config[key] = {}
-    config[key]['ports'] = ports
+        key = f'png/pure_fb_xfm_{xfm_model}_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ports
 
 
 def update_static_mezz_port_loc(config):

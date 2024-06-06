@@ -50,7 +50,8 @@ var FB_OPTIONS = {
     blades: '17:0-14,52:15-129',
     efm: ['', 'efm110', 'efm310'],
     ports: ['FALSE', 'TRUE'],
-    xfm_face: ['', 'front', 'back']
+    xfm_face: ['', 'front', 'back','bezel'],
+    xfm_model: ['', '3200e', '8400']
 };
 
 var FBS_OPTIONS = {
@@ -62,6 +63,7 @@ var FBS_OPTIONS = {
     ports: ['FALSE', 'TRUE'],
     dfm_size: ['24', '48', '75'],
     dfm_count: ['1', '2', '3', '4'],
-    xfm_face: ['', 'front', 'back'],
-    bezel: ['FALSE', 'TRUE']
+    xfm_face: ['', 'front', 'back', 'bezel'],
+    bezel: ['FALSE', 'TRUE'],
+    xfm_model: ['', '3200e', '8400']
 };

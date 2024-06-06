@@ -248,6 +248,7 @@ $(function () {
   var fb_option_efm = build_select('#fb_option_efm', FB_OPTIONS.efm);
   var fb_option_ports = build_select('#fb_option_ports', FB_OPTIONS.ports);
   var fb_option_xfm_face = build_select('#fb_option_xfm_face', FB_OPTIONS.xfm_face);
+  var fb_option_xfm_model = build_select('#fb_option_xfm_model', FB_OPTIONS.xfm_model);
   
 
   var fbs_option_model = build_select('#fbs_option_model', FBS_OPTIONS.model);
@@ -259,6 +260,7 @@ $(function () {
   var fbs_option_blades = build_input('#fbs_option_blades', FBS_OPTIONS.blades);
   var fbs_option_ports = build_select('#fbs_option_ports', FBS_OPTIONS.ports);
   var fbs_option_xfm_face = build_select('#fbs_option_xfm_face', FBS_OPTIONS.xfm_face);
+  var fbs_option_xfm_model = build_select('#fbs_option_xfm_model', FBS_OPTIONS.xfm_model);
   var fbs_option_bezel = build_select('#fbs_option_bezel', FBS_OPTIONS.bezel);
 
 
@@ -271,11 +273,23 @@ $(function () {
     url += "&protocol="  + fa_option_protocol.val();
     url += "&face="  + fa_option_face.val();
     url += "&datapacks="  + fa_option_datapacks.val();
-    url += "&bezel="  + fa_option_bezel.val();
-    url += "&direction="  + fa_option_direction.val();
-    url += "&fm_label="  + fa_option_fm_label.val();
-    url += "&dp_label="  + fa_option_dp_label.val();
-    url += "&addoncards="  + fa_option_addoncards.val();
+    if(fa_option_bezel.val()){
+      url += "&bezel="  + fa_option_bezel.val();
+    }
+    if(fa_option_direction.val()){
+      url += "&direction="  + fa_option_direction.val();
+    }
+    if(fa_option_fm_label.val()){
+      url += "&fm_label="  + fa_option_fm_label.val();
+    }
+    if(fa_option_dp_label.val()){
+      url += "&dp_label="  + fa_option_dp_label.val();
+    }
+
+
+    if(fa_option_addoncards.val()){
+      url += "&addoncards="  + fa_option_addoncards.val();
+    }
     if (fa_option_csize.val() !== "Current Sizes:") {
       url += "&csize=" + fa_option_csize.val();
     }
@@ -309,16 +323,28 @@ $(function () {
     url += "model=fb"; // it is fixed value, but reserved for future expension
     url += "&chassis="  + fb_option_chassis.val();
     url += "&face="  + fb_option_face.val();
-    url += "&direction="  + fb_option_direction.val();
-    url += "&xfm=" + fb_option_xfm.val();
     url += "&blades=" + fb_option_blades.val();
-    url += "&efm=" + fb_option_efm.val();
-    url += "&xfm_face=" + fb_option_xfm_face.val();
+    
+    if(fb_option_direction.val()){
+      url += "&direction="  + fb_option_direction.val();
+    }
+    if(fb_option_xfm.val()){
+      url += "&xfm=" + fb_option_xfm.val();
+    }
 
+    if(fb_option_efm.val()){
+      url += "&efm=" + fb_option_efm.val();
+    }
+    if(fb_option_xfm_face.val()) {
+      url += "&xfm_face=" + fb_option_xfm_face.val();
+    }
 
-    var ports_val = fb_option_ports.val();
-    if (ports_val){
-      url += "&ports=" + ports_val;
+    if (fb_option_ports.val()){
+      url += "&ports=" + fb_option_ports.val();
+    }
+
+    if (fb_option_xfm_model.val()){
+      url += "&xfm_model=" + fb_option_xfm_model.val();
     }
 
     return url;
@@ -330,20 +356,32 @@ $(function () {
     var url = API_ENDPOINT;
     url += "model="  + fbs_option_model.val();
     url += "&face="  + fbs_option_face.val();
-    url += "&direction="  + fbs_option_direction.val();
-    url += "&xfm=" + fbs_option_xfm.val();
+    
     url += "&no_of_blades=" + fbs_option_blades.val();
     url += "&no_of_drives_per_blade=" + fbs_option_dfm_count.val();
     url += "&drive_size=" + fbs_option_dfm_size.val();
-    url += "&xfm_face=" + fbs_option_xfm_face.val();
-    url += "&bezel=" + fbs_option_bezel.val();
- 
     
-    //fbs_option_dfm_size
+    if(fbs_option_direction.val()){
+      url += "&direction="  + fbs_option_direction.val();
+    }
+    if(fbs_option_xfm.val()){
+      url += "&xfm=" + fbs_option_xfm.val();
+    }
+    if(fbs_option_xfm_face.val()){
+      url += "&xfm_face=" + fbs_option_xfm_face.val();
+    }
+
+    if(fbs_option_bezel.val()){
+      url += "&bezel=" + fbs_option_bezel.val();
+    }
 
     var ports_val = fbs_option_ports.val();
     if (ports_val){
       url += "&ports=" + ports_val;
+    }
+
+    if (fbs_option_xfm_model.val()){
+      url += "&xfm_model=" + fbs_option_xfm_model.val();
     }
 
     return url;

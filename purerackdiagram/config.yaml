@@ -4162,78 +4162,17 @@ png/pure_fb_back_efm310.png:
     - 460
     name: mgmt
     port_type: eth
-png/pure_fb_xfm_back.png:
+png/pure_fb_xfm_3200e_back.png:
   ports:
-  - loc: !!python/tuple
-    - 344
-    - 99
+  - loc: &id294 !!python/tuple
+    - 261
+    - 95
     name: eth0
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: &id277
-    - chassis uplink
-  - loc: !!python/tuple
-    - 344
-    - 201
-    name: eth1
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id277
-  - loc: !!python/tuple
-    - 464
-    - 99
-    name: eth2
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id277
-  - loc: !!python/tuple
-    - 464
-    - 201
-    name: eth3
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id277
-  - loc: !!python/tuple
-    - 611
-    - 99
-    name: eth4
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
+    port_speeds: &id277
     - 10g
     - 25g
     - 40g
@@ -4242,120 +4181,47 @@ png/pure_fb_xfm_back.png:
     services: &id278
     - chassis uplink
   - loc: !!python/tuple
-    - 611
-    - 201
-    name: eth5
+    - 261
+    - 185
+    name: eth1
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id277
     port_type: eth
     services: *id278
   - loc: !!python/tuple
-    - 731
-    - 99
-    name: eth6
+    - 372
+    - 95
+    name: eth2
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id277
     port_type: eth
     services: *id278
   - loc: !!python/tuple
-    - 731
-    - 201
-    name: eth7
+    - 372
+    - 185
+    name: eth3
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id277
     port_type: eth
     services: *id278
   - loc: !!python/tuple
-    - 878
-    - 99
-    name: eth8
+    - 514
+    - 95
+    name: eth4
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: &id279
-    - chassis uplink
-  - loc: !!python/tuple
-    - 878
-    - 201
-    name: eth9
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id279
-  - loc: !!python/tuple
-    - 998
-    - 99
-    name: eth10
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id279
-  - loc: !!python/tuple
-    - 998
-    - 201
-    name: eth11
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id279
-  - loc: !!python/tuple
-    - 1145
-    - 99
-    name: eth12
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
+    port_speeds: &id279
     - 10g
     - 25g
     - 40g
@@ -4364,302 +4230,766 @@ png/pure_fb_xfm_back.png:
     services: &id280
     - chassis uplink
   - loc: !!python/tuple
-    - 1145
-    - 201
-    name: eth13
+    - 514
+    - 185
+    name: eth5
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id279
     port_type: eth
     services: *id280
   - loc: !!python/tuple
-    - 1265
-    - 99
-    name: eth14
+    - 625
+    - 95
+    name: eth6
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id279
     port_type: eth
     services: *id280
   - loc: !!python/tuple
-    - 1265
-    - 201
-    name: eth15
+    - 625
+    - 185
+    name: eth7
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id279
     port_type: eth
     services: *id280
   - loc: !!python/tuple
-    - 1412
-    - 99
-    name: eth16
+    - 767
+    - 95
+    name: eth8
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: &id281
-    - chassis uplink
-  - loc: !!python/tuple
-    - 1412
-    - 201
-    name: eth17
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id281
-  - loc: !!python/tuple
-    - 1532
-    - 99
-    name: eth18
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id281
-  - loc: !!python/tuple
-    - 1532
-    - 201
-    name: eth19
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id281
-  - loc: !!python/tuple
-    - 1679
-    - 99
-    name: eth20
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
+    port_speeds: &id281
     - 10g
     - 25g
     - 40g
     - 100g
     port_type: eth
     services: &id282
-    - data
-    - replication
-    - management
+    - chassis uplink
   - loc: !!python/tuple
-    - 1679
-    - 201
-    name: eth21
+    - 767
+    - 185
+    name: eth9
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id281
     port_type: eth
     services: *id282
   - loc: !!python/tuple
-    - 1799
-    - 99
-    name: eth22
+    - 878
+    - 95
+    name: eth10
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id281
     port_type: eth
     services: *id282
   - loc: !!python/tuple
-    - 1799
-    - 201
-    name: eth23
+    - 878
+    - 185
+    name: eth11
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id281
     port_type: eth
     services: *id282
   - loc: !!python/tuple
-    - 1946
-    - 99
-    name: eth24
+    - 1020
+    - 95
+    name: eth12
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: &id283
-    - data
-    - replication
-    - management
-  - loc: !!python/tuple
-    - 1946
-    - 201
-    name: eth25
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id283
-  - loc: !!python/tuple
-    - 2066
-    - 99
-    name: eth26
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id283
-  - loc: !!python/tuple
-    - 2066
-    - 201
-    name: eth27
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
-    port_type: eth
-    services: *id283
-  - loc: !!python/tuple
-    - 2213
-    - 99
-    name: eth28
-    port_connector: qsfp28
-    port_sfp_connector: null
-    port_sfp_present: false
-    port_sfp_speed: []
-    port_speeds:
+    port_speeds: &id283
     - 10g
     - 25g
     - 40g
     - 100g
     port_type: eth
     services: &id284
+    - chassis uplink
+  - loc: !!python/tuple
+    - 1020
+    - 185
+    name: eth13
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id283
+    port_type: eth
+    services: *id284
+  - loc: !!python/tuple
+    - 1131
+    - 95
+    name: eth14
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id283
+    port_type: eth
+    services: *id284
+  - loc: !!python/tuple
+    - 1131
+    - 185
+    name: eth15
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id283
+    port_type: eth
+    services: *id284
+  - loc: !!python/tuple
+    - 1273
+    - 95
+    name: eth16
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id285
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    port_type: eth
+    services: &id286
+    - chassis uplink
+  - loc: !!python/tuple
+    - 1273
+    - 185
+    name: eth17
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id285
+    port_type: eth
+    services: *id286
+  - loc: !!python/tuple
+    - 1384
+    - 95
+    name: eth18
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id285
+    port_type: eth
+    services: *id286
+  - loc: !!python/tuple
+    - 1384
+    - 185
+    name: eth19
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id285
+    port_type: eth
+    services: *id286
+  - loc: !!python/tuple
+    - 1526
+    - 95
+    name: eth20
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id287
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    port_type: eth
+    services: &id288
+    - data
+    - replication
+    - management
+  - loc: !!python/tuple
+    - 1526
+    - 185
+    name: eth21
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id287
+    port_type: eth
+    services: *id288
+  - loc: !!python/tuple
+    - 1637
+    - 95
+    name: eth22
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id287
+    port_type: eth
+    services: *id288
+  - loc: !!python/tuple
+    - 1637
+    - 185
+    name: eth23
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id287
+    port_type: eth
+    services: *id288
+  - loc: !!python/tuple
+    - 1779
+    - 95
+    name: eth24
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id289
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    port_type: eth
+    services: &id290
+    - data
+    - replication
+    - management
+  - loc: !!python/tuple
+    - 1779
+    - 185
+    name: eth25
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id289
+    port_type: eth
+    services: *id290
+  - loc: !!python/tuple
+    - 1890
+    - 95
+    name: eth26
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id289
+    port_type: eth
+    services: *id290
+  - loc: !!python/tuple
+    - 1890
+    - 185
+    name: eth27
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id289
+    port_type: eth
+    services: *id290
+  - loc: !!python/tuple
+    - 2032
+    - 95
+    name: eth28
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id291
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    port_type: eth
+    services: &id292
     - reserved
   - loc: !!python/tuple
-    - 2213
-    - 201
+    - 2032
+    - 185
     name: eth29
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id291
     port_type: eth
-    services: *id284
+    services: *id292
   - loc: !!python/tuple
-    - 2333
-    - 99
+    - 2143
+    - 95
     name: eth30
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
-    port_speeds:
-    - 10g
-    - 25g
-    - 40g
-    - 100g
+    port_speeds: *id291
     port_type: eth
-    services: &id285
+    services: &id293
     - Cross Connect
   - loc: !!python/tuple
-    - 2333
-    - 201
+    - 2143
+    - 185
     name: eth31
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: []
+    port_speeds: *id291
+    port_type: eth
+    services: *id293
+  - loc: !!python/tuple
+    - 2282
+    - 178
+    name: mgmt
+    port_connector: rj45
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
     port_speeds:
+    - 1g
+    port_type: eth
+    services:
+    - management
+png/pure_fb_xfm_8400_back.png:
+  ports:
+  - loc: *id294
+    name: eth0
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id295
     - 10g
     - 25g
     - 40g
     - 100g
+    - 200g
+    - 400g
     port_type: eth
-    services: *id285
+    services: &id296
+    - chassis uplink
   - loc: !!python/tuple
-    - 2455
-    - 103
+    - 261
+    - 185
+    name: eth1
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id295
+    port_type: eth
+    services: *id296
+  - loc: !!python/tuple
+    - 372
+    - 95
+    name: eth2
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id295
+    port_type: eth
+    services: *id296
+  - loc: !!python/tuple
+    - 372
+    - 185
+    name: eth3
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id295
+    port_type: eth
+    services: *id296
+  - loc: !!python/tuple
+    - 514
+    - 95
+    name: eth4
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id297
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    - 200g
+    - 400g
+    port_type: eth
+    services: &id298
+    - chassis uplink
+  - loc: !!python/tuple
+    - 514
+    - 185
+    name: eth5
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id297
+    port_type: eth
+    services: *id298
+  - loc: !!python/tuple
+    - 625
+    - 95
+    name: eth6
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id297
+    port_type: eth
+    services: *id298
+  - loc: !!python/tuple
+    - 625
+    - 185
+    name: eth7
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id297
+    port_type: eth
+    services: *id298
+  - loc: !!python/tuple
+    - 767
+    - 95
+    name: eth8
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id299
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    - 200g
+    - 400g
+    port_type: eth
+    services: &id300
+    - chassis uplink
+  - loc: !!python/tuple
+    - 767
+    - 185
+    name: eth9
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id299
+    port_type: eth
+    services: *id300
+  - loc: !!python/tuple
+    - 878
+    - 95
+    name: eth10
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id299
+    port_type: eth
+    services: *id300
+  - loc: !!python/tuple
+    - 878
+    - 185
+    name: eth11
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id299
+    port_type: eth
+    services: *id300
+  - loc: !!python/tuple
+    - 1020
+    - 95
+    name: eth12
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id301
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    - 200g
+    - 400g
+    port_type: eth
+    services: &id302
+    - chassis uplink
+  - loc: !!python/tuple
+    - 1020
+    - 185
+    name: eth13
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id301
+    port_type: eth
+    services: *id302
+  - loc: !!python/tuple
+    - 1131
+    - 95
+    name: eth14
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id301
+    port_type: eth
+    services: *id302
+  - loc: !!python/tuple
+    - 1131
+    - 185
+    name: eth15
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id301
+    port_type: eth
+    services: *id302
+  - loc: !!python/tuple
+    - 1273
+    - 95
+    name: eth16
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id303
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    - 200g
+    - 400g
+    port_type: eth
+    services: &id304
+    - chassis uplink
+  - loc: !!python/tuple
+    - 1273
+    - 185
+    name: eth17
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id303
+    port_type: eth
+    services: *id304
+  - loc: !!python/tuple
+    - 1384
+    - 95
+    name: eth18
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id303
+    port_type: eth
+    services: *id304
+  - loc: !!python/tuple
+    - 1384
+    - 185
+    name: eth19
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id303
+    port_type: eth
+    services: *id304
+  - loc: !!python/tuple
+    - 1526
+    - 95
+    name: eth20
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id305
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    - 200g
+    - 400g
+    port_type: eth
+    services: &id306
+    - data
+    - replication
+    - management
+  - loc: !!python/tuple
+    - 1526
+    - 185
+    name: eth21
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id305
+    port_type: eth
+    services: *id306
+  - loc: !!python/tuple
+    - 1637
+    - 95
+    name: eth22
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id305
+    port_type: eth
+    services: *id306
+  - loc: !!python/tuple
+    - 1637
+    - 185
+    name: eth23
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id305
+    port_type: eth
+    services: *id306
+  - loc: !!python/tuple
+    - 1779
+    - 95
+    name: eth24
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id307
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    - 200g
+    - 400g
+    port_type: eth
+    services: &id308
+    - data
+    - replication
+    - management
+  - loc: !!python/tuple
+    - 1779
+    - 185
+    name: eth25
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id307
+    port_type: eth
+    services: *id308
+  - loc: !!python/tuple
+    - 1890
+    - 95
+    name: eth26
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id307
+    port_type: eth
+    services: *id308
+  - loc: !!python/tuple
+    - 1890
+    - 185
+    name: eth27
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id307
+    port_type: eth
+    services: *id308
+  - loc: !!python/tuple
+    - 2032
+    - 95
+    name: eth28
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: &id309
+    - 10g
+    - 25g
+    - 40g
+    - 100g
+    - 200g
+    - 400g
+    port_type: eth
+    services: &id310
+    - reserved
+  - loc: !!python/tuple
+    - 2032
+    - 185
+    name: eth29
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id309
+    port_type: eth
+    services: *id310
+  - loc: !!python/tuple
+    - 2143
+    - 95
+    name: eth30
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id309
+    port_type: eth
+    services: &id311
+    - Cross Connect
+  - loc: !!python/tuple
+    - 2143
+    - 185
+    name: eth31
+    port_connector: qsfp28
+    port_sfp_connector: null
+    port_sfp_present: false
+    port_sfp_speed: []
+    port_speeds: *id309
+    port_type: eth
+    services: *id311
+  - loc: !!python/tuple
+    - 2423
+    - 205
     name: mgmt
     port_connector: rj45
     port_sfp_connector: null
@@ -4672,7 +5002,7 @@ png/pure_fb_xfm_back.png:
     - management
 png/pure_fbe_back.png:
   ports:
-  - &id301
+  - &id327
     loc: !!python/tuple
     - 350
     - 420
@@ -4680,18 +5010,18 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: &id286 []
-    port_speeds: &id287
+    port_sfp_speed: &id312 []
+    port_speeds: &id313
     - 10g
     - 25g
     - 40g
     - 100g
     port_type: eth
-    services: &id288
+    services: &id314
     - data
     - replication
     - management
-  - &id302
+  - &id328
     loc: !!python/tuple
     - 463
     - 420
@@ -4699,18 +5029,18 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: &id289 []
-    port_speeds: &id290
+    port_sfp_speed: &id315 []
+    port_speeds: &id316
     - 10g
     - 25g
     - 40g
     - 100g
     port_type: eth
-    services: &id291
+    services: &id317
     - data
     - replication
     - management
-  - &id303
+  - &id329
     loc: !!python/tuple
     - 572
     - 420
@@ -4718,18 +5048,18 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: &id292 []
-    port_speeds: &id293
+    port_sfp_speed: &id318 []
+    port_speeds: &id319
     - 10g
     - 25g
     - 40g
     - 100g
     port_type: eth
-    services: &id294
+    services: &id320
     - data
     - replication
     - management
-  - &id304
+  - &id330
     loc: !!python/tuple
     - 687
     - 420
@@ -4737,18 +5067,18 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: &id295 []
-    port_speeds: &id296
+    port_sfp_speed: &id321 []
+    port_speeds: &id322
     - 10g
     - 25g
     - 40g
     - 100g
     port_type: eth
-    services: &id297
+    services: &id323
     - data
     - replication
     - management
-  - &id305
+  - &id331
     loc: !!python/tuple
     - 1149
     - 363
@@ -4756,13 +5086,13 @@ png/pure_fbe_back.png:
     port_connector: rj45
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: &id298 []
-    port_speeds: &id299
+    port_sfp_speed: &id324 []
+    port_speeds: &id325
     - 1g
     port_type: eth
-    services: &id300
+    services: &id326
     - management
-  - &id306
+  - &id332
     loc: !!python/tuple
     - 350
     - 910
@@ -4770,11 +5100,11 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id286
-    port_speeds: *id287
+    port_sfp_speed: *id312
+    port_speeds: *id313
     port_type: eth
-    services: *id288
-  - &id307
+    services: *id314
+  - &id333
     loc: !!python/tuple
     - 463
     - 910
@@ -4782,11 +5112,11 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id289
-    port_speeds: *id290
+    port_sfp_speed: *id315
+    port_speeds: *id316
     port_type: eth
-    services: *id291
-  - &id308
+    services: *id317
+  - &id334
     loc: !!python/tuple
     - 572
     - 910
@@ -4794,11 +5124,11 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id292
-    port_speeds: *id293
+    port_sfp_speed: *id318
+    port_speeds: *id319
     port_type: eth
-    services: *id294
-  - &id309
+    services: *id320
+  - &id335
     loc: !!python/tuple
     - 687
     - 910
@@ -4806,11 +5136,11 @@ png/pure_fbe_back.png:
     port_connector: qsfp28
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id295
-    port_speeds: *id296
+    port_sfp_speed: *id321
+    port_speeds: *id322
     port_type: eth
-    services: *id297
-  - &id310
+    services: *id323
+  - &id336
     loc: !!python/tuple
     - 1149
     - 853
@@ -4818,13 +5148,13 @@ png/pure_fbe_back.png:
     port_connector: rj45
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id298
-    port_speeds: *id299
+    port_sfp_speed: *id324
+    port_speeds: *id325
     port_type: eth
-    services: *id300
+    services: *id326
 png/pure_fbe_front.png:
   blade_loc:
-  - &id311 !!python/tuple
+  - &id337 !!python/tuple
     - 163
     - 34
   - !!python/tuple
@@ -4856,16 +5186,16 @@ png/pure_fbe_front.png:
     - 34
 png/pure_fbs_back.png:
   ports:
-  - *id301
-  - *id302
-  - *id303
-  - *id304
-  - *id305
-  - *id306
-  - *id307
-  - *id308
-  - *id309
-  - *id310
+  - *id327
+  - *id328
+  - *id329
+  - *id330
+  - *id331
+  - *id332
+  - *id333
+  - *id334
+  - *id335
+  - *id336
 png/pure_fbs_blade.png:
   fm_loc:
   - !!python/tuple
@@ -4885,7 +5215,7 @@ png/pure_fbs_blade.png:
   - 549
 png/pure_fbs_front.png:
   blade_loc:
-  - *id311
+  - *id337
   - !!python/tuple
     - 418
     - 34
@@ -5072,6 +5402,11 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 20
   - '366'
+  '375':
+  - 37.5TB
+  - nvme-qlc
+  - 10
+  - '375'
   '384':
   - 24.0TB
   - nvme-qlc
@@ -5092,6 +5427,11 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 18
   - '444'
+  '450':
+  - 37.5TB
+  - nvme-qlc
+  - 12
+  - '450'
   '480':
   - 24.0TB
   - nvme-qlc
@@ -5112,6 +5452,11 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 20
   - '494'
+  '525':
+  - 37.5TB
+  - nvme-qlc
+  - 14
+  - '525'
   '578':
   - 48.2TB
   - nvme-qlc
@@ -5122,11 +5467,21 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 12
   - '590'
+  '600':
+  - 37.5TB
+  - nvme-qlc
+  - 16
+  - '600'
   '674':
   - 48.2TB
   - nvme-qlc
   - 14
   - '674'
+  '675':
+  - 37.5TB
+  - nvme-qlc
+  - 18
+  - '675'
   '688':
   - 49.2TB
   - nvme-qlc
@@ -5308,6 +5663,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 14
   - '345'
+  '375':
+  - 37.5TB
+  - nvme-qlc
+  - 10
+  - '375'
   '384':
   - 24.0TB
   - nvme-qlc
@@ -5328,6 +5688,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 18
   - '444'
+  '450':
+  - 37.5TB
+  - nvme-qlc
+  - 12
+  - '450'
   '480':
   - 24.0TB
   - nvme-qlc
@@ -5353,6 +5718,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 28
   - '512'
+  '525':
+  - 37.5TB
+  - nvme-qlc
+  - 14
+  - '525'
   '528':
   - 24.0TB
   - nvme-qlc
@@ -5383,6 +5753,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 24
   - '592'
+  '600':
+  - 37.5TB
+  - nvme-qlc
+  - 16
+  - '600'
   '624':
   - 24.0TB
   - nvme-qlc
@@ -5403,6 +5778,11 @@ qlc_shelf_dp_size_lookup:
   - nvme-qlc
   - 14
   - '674'
+  '675':
+  - 37.5TB
+  - nvme-qlc
+  - 18
+  - '675'
   '688':
   - 49.2TB
   - nvme-qlc
