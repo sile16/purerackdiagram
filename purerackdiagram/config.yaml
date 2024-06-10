@@ -289,7 +289,7 @@ csize_lookup:
 fb_blade_reg_pattern: ^([0-9]+:[0-9]+(-[0-9]+)?,?)+$
 pci_config_lookup:
   fa-c40r1-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -310,9 +310,9 @@ pci_config_lookup:
   - null
   fa-c50r4-eth:
   - mgmt2ethbaset
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-c50r4-fc:
   - mgmt2ethbaset
@@ -333,7 +333,7 @@ pci_config_lookup:
   - null
   - null
   fa-c60r1-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -343,7 +343,7 @@ pci_config_lookup:
   - null
   - null
   fa-c60r3-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -354,9 +354,9 @@ pci_config_lookup:
   - null
   fa-c70r4-eth:
   - mgmt2ethbaset
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - dca
   fa-c70r4-fc:
   - mgmt2ethbaset
@@ -378,9 +378,9 @@ pci_config_lookup:
   - dca
   fa-c90r4-eth:
   - mgmt2ethbaset
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - dca
   fa-c90r4-fc:
   - mgmt2ethbaset
@@ -404,25 +404,25 @@ pci_config_lookup:
   - mgmt2ethbaset
   - null
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-er1-fc:
   - mgmt2ethbaset
   - null
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-er1b-eth:
   - null
   - null
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-er1b-fc:
   - null
   - null
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-m10r2-eth:
   - null
@@ -437,7 +437,7 @@ pci_config_lookup:
   fa-m20r2-eth:
   - null
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-m20r2-fc:
   - null
@@ -445,9 +445,9 @@ pci_config_lookup:
   - 2fc
   - null
   fa-m50r2-eth:
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-m50r2-fc:
   - 2fc
@@ -455,9 +455,9 @@ pci_config_lookup:
   - 2fc
   - null
   fa-m70r2-eth:
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-m70r2-fc:
   - 4fc
@@ -508,7 +508,7 @@ pci_config_lookup:
   - mgmt2ethbaset
   - null
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-x20r4-fc:
   - mgmt2ethbaset
@@ -520,7 +520,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-x20r4b-fc:
   - null
@@ -529,7 +529,7 @@ pci_config_lookup:
   - 2fc
   - null
   fa-x50r2-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -539,7 +539,7 @@ pci_config_lookup:
   - null
   - null
   fa-x50r3-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -550,9 +550,9 @@ pci_config_lookup:
   - null
   fa-x50r4-eth:
   - mgmt2ethbaset
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-x50r4-fc:
   - mgmt2ethbaset
@@ -573,9 +573,9 @@ pci_config_lookup:
   - null
   - null
   fa-x70r1-eth:
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - null
   fa-x70r1-fc:
   - 4fc
@@ -583,7 +583,7 @@ pci_config_lookup:
   - 2fc
   - null
   fa-x70r2-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -593,7 +593,7 @@ pci_config_lookup:
   - 2fc
   - null
   fa-x70r3-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -604,9 +604,9 @@ pci_config_lookup:
   - null
   fa-x70r4-eth:
   - mgmt2ethbaset
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - dca
   fa-x70r4-fc:
   - mgmt2ethbaset
@@ -627,7 +627,7 @@ pci_config_lookup:
   - 2fc
   - dca
   fa-x90r2-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -637,7 +637,7 @@ pci_config_lookup:
   - 2fc
   - null
   fa-x90r3-eth:
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -648,9 +648,9 @@ pci_config_lookup:
   - null
   fa-x90r4-eth:
   - mgmt2ethbaset
-  - 2eth
+  - 2eth25
   - null
-  - 2eth
+  - 2eth25
   - dca
   fa-x90r4-fc:
   - mgmt2ethbaset
@@ -672,7 +672,7 @@ pci_config_lookup:
   - dca
   fa-xl130r1-eth:
   - null
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -692,7 +692,7 @@ pci_config_lookup:
   - 2fc
   fa-xl170r1-eth:
   - null
-  - 2eth
+  - 2eth25
   - null
   - null
   - null
@@ -712,6 +712,7 @@ pci_config_lookup:
   - 2fc
 pci_valid_cards:
 - 2eth
+- 2eth25
 - 2eth25roce
 - 2eth40
 - 2eth100
@@ -812,7 +813,7 @@ png/pure_fa_2eth100roce_hh.png:
     port_speeds: *id002
     port_type: eth_roce
     services: *id006
-png/pure_fa_2eth25roce_fh.png:
+png/pure_fa_2eth25_fh.png:
   ports:
   - loc: &id012 !!python/tuple
     - 158
@@ -825,7 +826,7 @@ png/pure_fa_2eth25roce_fh.png:
     port_speeds: &id010
     - 10g
     - 25g
-    port_type: eth_roce
+    port_type: eth
     services: &id011
     - data
     - replication
@@ -837,9 +838,9 @@ png/pure_fa_2eth25roce_fh.png:
     port_sfp_present: true
     port_sfp_speed: *id009
     port_speeds: *id010
-    port_type: eth_roce
+    port_type: eth
     services: *id011
-png/pure_fa_2eth25roce_hh.png:
+png/pure_fa_2eth25_hh.png:
   ports:
   - loc: *id012
     port_connector: sfp
@@ -847,7 +848,7 @@ png/pure_fa_2eth25roce_hh.png:
     port_sfp_present: true
     port_sfp_speed: *id009
     port_speeds: *id010
-    port_type: eth_roce
+    port_type: eth
     services: *id011
   - loc: *id013
     port_connector: sfp
@@ -855,8 +856,49 @@ png/pure_fa_2eth25roce_hh.png:
     port_sfp_present: true
     port_sfp_speed: *id009
     port_speeds: *id010
-    port_type: eth_roce
+    port_type: eth
     services: *id011
+png/pure_fa_2eth25roce_fh.png:
+  ports:
+  - loc: *id012
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: &id014
+    - 10g
+    port_speeds: &id015
+    - 10g
+    - 25g
+    port_type: eth_roce
+    services: &id016
+    - data
+    - replication
+  - loc: *id013
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id014
+    port_speeds: *id015
+    port_type: eth_roce
+    services: *id016
+png/pure_fa_2eth25roce_hh.png:
+  ports:
+  - loc: *id012
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id014
+    port_speeds: *id015
+    port_type: eth_roce
+    services: *id016
+  - loc: *id013
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id014
+    port_speeds: *id015
+    port_type: eth_roce
+    services: *id016
 png/pure_fa_2eth40_fh.png:
   ports:
   - loc: *id004
@@ -864,7 +906,7 @@ png/pure_fa_2eth40_fh.png:
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: *id001
-    port_speeds: &id014
+    port_speeds: &id017
     - 40g
     port_type: eth
     services: *id003
@@ -873,7 +915,7 @@ png/pure_fa_2eth40_fh.png:
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: *id001
-    port_speeds: *id014
+    port_speeds: *id017
     port_type: eth
     services: *id003
 png/pure_fa_2eth40_hh.png:
@@ -883,7 +925,7 @@ png/pure_fa_2eth40_hh.png:
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: *id001
-    port_speeds: *id014
+    port_speeds: *id017
     port_type: eth
     services: *id003
   - loc: *id008
@@ -891,7 +933,7 @@ png/pure_fa_2eth40_hh.png:
     port_sfp_connector: null
     port_sfp_present: false
     port_sfp_speed: *id001
-    port_speeds: *id014
+    port_speeds: *id017
     port_type: eth
     services: *id003
 png/pure_fa_2eth_fh.png:
@@ -900,41 +942,36 @@ png/pure_fa_2eth_fh.png:
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: &id015
-    - 10g
-    port_speeds: &id016
-    - 10g
-    - 25g
+    port_sfp_speed: *id009
+    port_speeds: *id010
     port_type: eth
-    services: &id017
-    - data
-    - replication
+    services: *id011
   - loc: *id013
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id015
-    port_speeds: *id016
+    port_sfp_speed: *id009
+    port_speeds: *id010
     port_type: eth
-    services: *id017
+    services: *id011
 png/pure_fa_2eth_hh.png:
   ports:
   - loc: *id012
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id015
-    port_speeds: *id016
+    port_sfp_speed: *id009
+    port_speeds: *id010
     port_type: eth
-    services: *id017
+    services: *id011
   - loc: *id013
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id015
-    port_speeds: *id016
+    port_sfp_speed: *id009
+    port_speeds: *id010
     port_type: eth
-    services: *id017
+    services: *id011
 png/pure_fa_2ethbaset_fh.png:
   ports:
   - loc: &id021 !!python/tuple
@@ -1028,40 +1065,40 @@ png/pure_fa_4eth25_fh.png:
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
   - loc: &id027 !!python/tuple
     - 343
     - 40
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
   - loc: &id028 !!python/tuple
     - 432
     - 40
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
   - loc: &id029 !!python/tuple
     - 524
     - 40
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
 png/pure_fa_4eth25_hh.png:
   ports:
   - loc: &id030 !!python/tuple
@@ -1070,108 +1107,108 @@ png/pure_fa_4eth25_hh.png:
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
   - loc: &id031 !!python/tuple
     - 138
     - 40
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
   - loc: &id032 !!python/tuple
     - 230
     - 40
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
   - loc: &id033 !!python/tuple
     - 322
     - 40
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth
-    services: *id011
+    services: *id016
 png/pure_fa_4eth25roce_fh.png:
   ports:
   - loc: *id026
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
   - loc: *id027
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
   - loc: *id028
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
   - loc: *id029
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
 png/pure_fa_4eth25roce_hh.png:
   ports:
   - loc: *id030
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
   - loc: *id031
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
   - loc: *id032
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
   - loc: *id033
     port_connector: sfp
     port_sfp_connector: lc
     port_sfp_present: true
-    port_sfp_speed: *id009
-    port_speeds: *id010
+    port_sfp_speed: *id014
+    port_speeds: *id015
     port_type: eth_roce
-    services: *id011
+    services: *id016
 png/pure_fa_4fc_fh.png:
   ports:
   - loc: *id026

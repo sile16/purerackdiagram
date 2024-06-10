@@ -77,7 +77,7 @@ def static_global_config():
             8: { 'eth': 34, 'fc': 32, 'sas':0},
         },
 
-        "pci_valid_cards": ["2eth", "2eth25roce", "2eth40", "2eth100", "2eth100roce",
+        "pci_valid_cards": ["2eth", "2eth25", "2eth25roce", "2eth40", "2eth100", "2eth100roce",
                             "4eth25", "4eth25roce", "2ethbaset", "mgmt2ethbaset",
                             "2fc", "4fc",
                             "sas", "dca", "blank"],   
@@ -87,16 +87,16 @@ def static_global_config():
             #fixed missing 2 port ETH card
 
             # New E R1
-             "fa-er1b-fc": [ None, None, None, "2eth", None],
+             "fa-er1b-fc": [ None, None, None, "2eth25", None],
 
             # New E R1
-             "fa-er1-fc": ["mgmt2ethbaset", None, None, "2eth", None],
+             "fa-er1-fc": ["mgmt2ethbaset", None, None, "2eth25", None],
 
              # New E R1
-             "fa-er1b-eth": [ None, None, None, "2eth", None],
+             "fa-er1b-eth": [ None, None, None, "2eth25", None],
 
             # New E R1
-             "fa-er1-eth": ["mgmt2ethbaset", None, None, "2eth", None],
+             "fa-er1-eth": ["mgmt2ethbaset", None, None, "2eth25", None],
 
              # New x R4b 6/10 updated 4 port cards to be roce neabled.
             "fa-x20r4b-fc": [None, None, None, "2fc", None],
@@ -104,7 +104,7 @@ def static_global_config():
             "fa-x70r4b-fc": [None, "4fc", None, "2fc", "dca"],
             "fa-x90r4b-fc": [None, "4fc", None, "2fc", "dca"],
             
-            "fa-x20r4b-eth": [None, None, None, "2eth", None],
+            "fa-x20r4b-eth": [None, None, None, "2eth25", None],
             "fa-x50r4b-eth": [None, None, None, "4eth25roce", None],
             "fa-x70r4b-eth": [None, None, None, "4eth25roce", "dca"],
             "fa-x90r4b-eth": [None, None, None, "4eth25roce", "dca"],
@@ -124,19 +124,19 @@ def static_global_config():
             "fa-x70r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
             "fa-x90r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
             
-            "fa-x20r4-eth": ["mgmt2ethbaset", None, None, "2eth", None],
-            "fa-x50r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", None],
-            "fa-x70r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
-            "fa-x90r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-x20r4-eth": ["mgmt2ethbaset", None, None, "2eth25", None],
+            "fa-x50r4-eth": ["mgmt2ethbaset", "2eth25", None, "2eth25", None],
+            "fa-x70r4-eth": ["mgmt2ethbaset", "2eth25", None, "2eth25", "dca"],
+            "fa-x90r4-eth": ["mgmt2ethbaset", "2eth25", None, "2eth25", "dca"],
 
             # New C R4
             "fa-c50r4-fc": ["mgmt2ethbaset", "4fc", None, None, None],
             "fa-c70r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
             "fa-c90r4-fc": ["mgmt2ethbaset", "4fc", None, "2fc", "dca"],
 
-            "fa-c50r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", None],
-            "fa-c70r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
-            "fa-c90r4-eth": ["mgmt2ethbaset", "2eth", None, "2eth", "dca"],
+            "fa-c50r4-eth": ["mgmt2ethbaset", "2eth25", None, "2eth25", None],
+            "fa-c70r4-eth": ["mgmt2ethbaset", "2eth25", None, "2eth25", "dca"],
+            "fa-c90r4-eth": ["mgmt2ethbaset", "2eth25", None, "2eth25", "dca"],
 
 
             "fa-x10r3-fc": [None, None, "2fc", None],
@@ -146,9 +146,9 @@ def static_global_config():
             "fa-x90r3-fc": ["4fc", None, "2fc", None],
             "fa-x10r3-eth": [None, None, None, None],
             "fa-x20r3-eth": [None, None, None, None],
-            "fa-x50r3-eth": ["2eth", None, None, None],
-            "fa-x70r3-eth": ["2eth", None, None, None],
-            "fa-x90r3-eth": ["2eth", None, None, None],
+            "fa-x50r3-eth": ["2eth25", None, None, None],
+            "fa-x70r3-eth": ["2eth25", None, None, None],
+            "fa-x90r3-eth": ["2eth25", None, None, None],
             "fa-x10r2-fc": [None, None, "2fc", None],
             "fa-x20r2-fc": [None, None, "2fc", None],
             "fa-x50r2-fc": ["4fc", None, None, None],
@@ -156,30 +156,30 @@ def static_global_config():
             "fa-x90r2-fc": ["4fc", None, "2fc", None],
             "fa-x10r2-eth": [None, None, None, None],
             "fa-x20r2-eth": [None, None, None, None],
-            "fa-x50r2-eth": ["2eth", None, None, None],
-            "fa-x70r2-eth": ["2eth", None, None, None],
-            "fa-x90r2-eth": ["2eth", None, None, None],
+            "fa-x50r2-eth": ["2eth25", None, None, None],
+            "fa-x70r2-eth": ["2eth25", None, None, None],
+            "fa-x90r2-eth": ["2eth25", None, None, None],
             "fa-m10r2-fc": [None, None, "2fc", None],
             "fa-m20r2-fc": [None, None, "2fc", None],
             "fa-m50r2-fc": ["2fc", None, "2fc", None],
             "fa-m70r2-fc": ["4fc", None, "2fc", None],
             "fa-m10r2-eth": [None, None, None, None],
-            "fa-m20r2-eth": [None, None, "2eth", None],
-            "fa-m50r2-eth": ["2eth", None, "2eth", None],
-            "fa-m70r2-eth": ["2eth", None, "2eth", None],
-            "fa-x70r1-eth": ["2eth", None, "2eth", None],
+            "fa-m20r2-eth": [None, None, "2eth25", None],
+            "fa-m50r2-eth": ["2eth25", None, "2eth25", None],
+            "fa-m70r2-eth": ["2eth25", None, "2eth25", None],
+            "fa-x70r1-eth": ["2eth25", None, "2eth25", None],
             "fa-x70r1-fc": ["4fc", None, "2fc", None],
-            "fa-c40r1-eth": ["2eth", None, None, None],
+            "fa-c40r1-eth": ["2eth25", None, None, None],
             "fa-c40r1-fc": ["4fc", None, None, None],
-            "fa-c60r1-eth": ["2eth", None, None, None],
+            "fa-c60r1-eth": ["2eth25", None, None, None],
             "fa-c60r1-fc": ["4fc", None, None, None],
             "fa-c40r3-eth": [None, None, None, None],
             "fa-c40r3-fc": ["2fc", None, None, None],
-            "fa-c60r3-eth": ["2eth", None, None, None],
+            "fa-c60r3-eth": ["2eth25", None, None, None],
             "fa-c60r3-fc": ["4fc", None, None, None],
-            "fa-xl130r1-eth": [None, "2eth", None, None, None, "dca", None, None, None],
+            "fa-xl130r1-eth": [None, "2eth25", None, None, None, "dca", None, None, None],
             "fa-xl130r1-fc": [None, "4fc", None, None, None, "dca", None, None, "2fc"],
-            "fa-xl170r1-eth": [None, "2eth", None, None, None, "dca", None, None, None],
+            "fa-xl170r1-eth": [None, "2eth25", None, None, None, "dca", None, None, None],
             "fa-xl170r1-fc": [None, "4fc", None, None, None, "dca", None, None, "2fc"]
 
         },
@@ -797,8 +797,12 @@ def update_static_card_port_loc(config):
     k = 'png/pure_fa_2eth_hh.png'
     ports_loc = [(158, 40), (256, 40)]
     add_ports_to_key(ports_loc, k, port_info, config)
+    k = 'png/pure_fa_2eth25_hh.png'
+    add_ports_to_key(ports_loc, k, port_info, config)
 
     k = 'png/pure_fa_2eth_fh.png'
+    add_ports_to_key(ports_loc, k, port_info, config)
+    k = 'png/pure_fa_2eth25_fh.png'
     add_ports_to_key(ports_loc, k, port_info, config)
 
 
