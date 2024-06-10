@@ -404,26 +404,26 @@ pci_config_lookup:
   - mgmt2ethbaset
   - null
   - null
-  - null
   - 2eth
+  - null
   fa-er1-fc:
   - mgmt2ethbaset
   - null
   - null
-  - null
   - 2eth
+  - null
   fa-er1b-eth:
   - null
   - null
   - null
-  - null
   - 2eth
+  - null
   fa-er1b-fc:
   - null
   - null
   - null
-  - null
   - 2eth
+  - null
   fa-m10r2-eth:
   - null
   - null
@@ -717,6 +717,7 @@ pci_valid_cards:
 - 2eth100
 - 2eth100roce
 - 4eth25
+- 4eth25roce
 - 2ethbaset
 - mgmt2ethbaset
 - 2fc

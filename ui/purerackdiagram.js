@@ -576,49 +576,16 @@ $(function () {
     location.href = vssx_url;
   })
 
-  $("#fa_option_model > select").change(function () {
-     if (fa_option_model.val().includes('fa-c')) {
-       $('#csize').show();
-       //$('#datapacks').hide();
-       $('#mezz').hide();
-       $("#ports").hide();
-     }
-     else {
+  function show_hide_fields() {
+
+    if (fa_option_model.val().includes('fa-c')) {
+      $('#csize').show();
+      $('#mezz').hide();
+    }
+    else {
       $('#csize').hide();
-      //$('#datapacks').show();
-      if ( fa_option_face.val() == 'back'){
-        $("#mezz").show();
-        $("#ports").show();
-      }
-     }
-
-    if (fa_option_model.val().includes('fa-xl')) {
-      //show pci 4-8
-      $('#pci_select_4').show();
-      $('#pci_select_5').show();
-      $('#pci_select_6').show();
-      $('#pci_select_7').show();
-      $('#pci_select_8').show();
-      
-    }
-    else if (fa_option_model.val().includes('r4') || fa_option_model.val().includes('e'))  {
-        $('#pci_select_4').show();
-        $('#pci_select_5').hide();
-        $('#pci_select_6').hide();
-        $('#pci_select_7').hide();
-        $('#pci_select_8').hide();
-    
-    } else {
-      $('#pci_select_4').hide();
-      $('#pci_select_5').hide();
-      $('#pci_select_6').hide();
-      $('#pci_select_7').hide();
-      $('#pci_select_8').hide();
     }
 
-  });
-
-  $("#fa_option_face > select").change(function () {
     if (fa_option_face.val() == 'front') {
       $('#fa_fm_label').show();
       $('#fa_dp_label').show();
@@ -639,12 +606,40 @@ $(function () {
       $('#protocol').show();
       $('#addoncards').show();
       $('#pci_dropdowns').show();
-      if (fa_option_model.val() != 'fa-c60'){
-        $("#mezz").show();
-        $("#ports").show();
+      $("#mezz").show();
+      $("#ports").show();
+      
+    
+      if (fa_option_model.val().includes('fa-xl')) {
+        //show pci 4-8
+        $("#mezz").hide();
+        $('#pci_select_4').show();
+        $('#pci_select_5').show();
+        $('#pci_select_6').show();
+        $('#pci_select_7').show();
+        $('#pci_select_8').show();
+        
       }
-
+      else if (fa_option_model.val().includes('r4') || fa_option_model.val().includes('e'))  {
+          $("#mezz").hide();
+          $('#pci_select_4').show();
+          $('#pci_select_5').hide();
+          $('#pci_select_6').hide();
+          $('#pci_select_7').hide();
+          $('#pci_select_8').hide();
+      
+      } else {
+        $('#pci_select_4').hide();
+        $('#pci_select_5').hide();
+        $('#pci_select_6').hide();
+        $('#pci_select_7').hide();
+        $('#pci_select_8').hide();
+      }
     }
-  });
+
+  }
+  
+  $("#fa_option_model > select").change(show_hide_fields);
+  $("#fa_option_face > select").change(show_hide_fields);
 });
 
