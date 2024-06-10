@@ -324,7 +324,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth25
+  - 4eth25roce
   - null
   fa-c50r4b-fc:
   - null
@@ -368,7 +368,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth25
+  - 4eth25roce
   - dca
   fa-c70r4b-fc:
   - null
@@ -392,7 +392,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth25
+  - 4eth25roce
   - dca
   fa-c90r4b-fc:
   - null
@@ -400,18 +400,30 @@ pci_config_lookup:
   - null
   - 2fc
   - dca
+  fa-er1-eth:
+  - mgmt2ethbaset
+  - null
+  - null
+  - null
+  - 2eth
   fa-er1-fc:
   - mgmt2ethbaset
   - null
   - null
   - null
+  - 2eth
+  fa-er1b-eth:
   - null
+  - null
+  - null
+  - null
+  - 2eth
   fa-er1b-fc:
   - null
   - null
   - null
   - null
-  - null
+  - 2eth
   fa-m10r2-eth:
   - null
   - null
@@ -552,7 +564,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth25
+  - 4eth25roce
   - null
   fa-x50r4b-fc:
   - null
@@ -606,7 +618,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth25
+  - 4eth25roce
   - dca
   fa-x70r4b-fc:
   - null
@@ -650,7 +662,7 @@ pci_config_lookup:
   - null
   - null
   - null
-  - 4eth25
+  - 4eth25roce
   - dca
   fa-x90r4b-fc:
   - null
@@ -1090,6 +1102,74 @@ png/pure_fa_4eth25_hh.png:
     port_sfp_speed: *id009
     port_speeds: *id010
     port_type: eth
+    services: *id011
+png/pure_fa_4eth25roce_fh.png:
+  ports:
+  - loc: *id026
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
+    services: *id011
+  - loc: *id027
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
+    services: *id011
+  - loc: *id028
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
+    services: *id011
+  - loc: *id029
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
+    services: *id011
+png/pure_fa_4eth25roce_hh.png:
+  ports:
+  - loc: *id030
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
+    services: *id011
+  - loc: *id031
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
+    services: *id011
+  - loc: *id032
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
+    services: *id011
+  - loc: *id033
+    port_connector: sfp
+    port_sfp_connector: lc
+    port_sfp_present: true
+    port_sfp_speed: *id009
+    port_speeds: *id010
+    port_type: eth_roce
     services: *id011
 png/pure_fa_4fc_fh.png:
   ports:

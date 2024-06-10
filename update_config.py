@@ -78,38 +78,45 @@ def static_global_config():
         },
 
         "pci_valid_cards": ["2eth", "2eth25roce", "2eth40", "2eth100", "2eth100roce",
-                            "4eth25", "2ethbaset", "mgmt2ethbaset",
+                            "4eth25", "4eth25roce", "2ethbaset", "mgmt2ethbaset",
                             "2fc", "4fc",
                             "sas", "dca", "blank"],   
 
         "pci_config_lookup": {
 
-            # New E R1
-             "fa-er1b-fc": [ None, None, None, None, None],
+            #fixed missing 2 port ETH card
 
             # New E R1
-             "fa-er1-fc": ["mgmt2ethbaset", None, None, None, None],
+             "fa-er1b-fc": [ None, None, None, "2eth", None],
 
-             # New x R4b
+            # New E R1
+             "fa-er1-fc": ["mgmt2ethbaset", None, None, "2eth", None],
+
+             # New E R1
+             "fa-er1b-eth": [ None, None, None, "2eth", None],
+
+            # New E R1
+             "fa-er1-eth": ["mgmt2ethbaset", None, None, "2eth", None],
+
+             # New x R4b 6/10 updated 4 port cards to be roce neabled.
             "fa-x20r4b-fc": [None, None, None, "2fc", None],
             "fa-x50r4b-fc": [None, "4fc", None, None, None],
             "fa-x70r4b-fc": [None, "4fc", None, "2fc", "dca"],
             "fa-x90r4b-fc": [None, "4fc", None, "2fc", "dca"],
             
             "fa-x20r4b-eth": [None, None, None, "2eth", None],
-            "fa-x50r4b-eth": [None, None, None, "4eth25", None],
-            "fa-x70r4b-eth": [None, None, None, "4eth25", "dca"],
-            "fa-x90r4b-eth": [None, None, None, "4eth25", "dca"],
+            "fa-x50r4b-eth": [None, None, None, "4eth25roce", None],
+            "fa-x70r4b-eth": [None, None, None, "4eth25roce", "dca"],
+            "fa-x90r4b-eth": [None, None, None, "4eth25roce", "dca"],
 
-                         # New C R4b
-            
+            # New C R4b # 6/10 Updated 4port cards to be the roce enabled x7
             "fa-c50r4b-fc": [None, "4fc", None, None, None],
             "fa-c70r4b-fc": [None, "4fc", None, "2fc", "dca"],
             "fa-c90r4b-fc": [None, "4fc", None, "2fc", "dca"],
             
-            "fa-c50r4b-eth": [None, None, None, "4eth25", None],
-            "fa-c70r4b-eth": [None, None, None, "4eth25", "dca"],
-            "fa-c90r4b-eth": [None, None, None, "4eth25", "dca"],
+            "fa-c50r4b-eth": [None, None, None, "4eth25roce", None],
+            "fa-c70r4b-eth": [None, None, None, "4eth25roce", "dca"],
+            "fa-c90r4b-eth": [None, None, None, "4eth25roce", "dca"],
 
             # New x R4
             "fa-x20r4-fc": ["mgmt2ethbaset", None, None, "2fc", None],
@@ -686,10 +693,6 @@ def update_static_pci_loc(config, generation, release, rev):
     
     config[key]['ct1_pci_loc'] = pci_loc.copy()
 
-    
-
-    
-
 
 def update_static_nvram_loc(config, generation, release, rev):
     key = f'png/pure_fa_{generation}_r{release}{rev}_front.png'
@@ -818,6 +821,11 @@ def update_static_card_port_loc(config):
     
 
     #4 Eth 10/25Gb Optical - FA-25G-ETH/TCP 4-Port
+    ports_loc = [(252, 40), (343, 40), (432, 40), (524, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_4eth25roce_fh.png',  port_info, config)
+
+    ports_loc = [(48, 40), (138, 40), (230, 40), (322, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_4eth25roce_hh.png', port_info, config)
 
     # same port info for 4 port cards, but differnt locations on fh and hh
 
@@ -828,7 +836,7 @@ def update_static_card_port_loc(config):
     ports_loc = [(48, 40), (138, 40), (230, 40), (322, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_4eth25_hh.png', port_info, config)
 
-
+    #4 Eth 10/25Gb Optical - FA-XRC-25G-iSCSI/RoCE 4-Port
 
     # 2 Eth 10/25Gb 10GBaseT - FA-CNTRL-10GBaseT 2-Port 
     ports_loc = [(155, 40), (265, 40)]
