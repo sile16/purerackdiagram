@@ -716,6 +716,13 @@ class FADiagram():
                 elif config["generation"] == 'e':
                     fh_order = [0, 1, 2, 3, 4]
                     hh_order = [0, 1, 2, 3, 4]
+                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4 and config['rev'] == 'b':
+                    if card == "2eth100roce":
+                        fh_order = [0, 1, 2, 3, 4]
+                        hh_order = [0, 1, 2, 3, 4]
+                    else:
+                        fh_order = [1, 2, 3, 4, 0]
+                        hh_order = [1, 2, 3, 4, 0]
                 elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4:
                     fh_order = [0, 1, 2, 3, 4]
                     hh_order = [0, 1, 2, 3, 4]
@@ -727,6 +734,7 @@ class FADiagram():
                 if card == "2fc" or card == "2eth" or card == "2ethbaset":
                     # card population order for a half or full card slot
                     order = hh_order
+                
 
                 # populate add on cards by the order
                 for slot in order:
