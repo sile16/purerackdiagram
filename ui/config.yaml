@@ -6037,6 +6037,11 @@ qlc_chassis_dp_size_lookup:
   - nvme-qlc
   - 18
   - '1350'
+  '148':
+  - 18.6TB
+  - nvme-qlc
+  - 8
+  - '148'
   '1500':
   - 75TB
   - nvme-qlc

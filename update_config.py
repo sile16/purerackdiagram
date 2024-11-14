@@ -264,6 +264,9 @@ def static_global_config():
             # this is legacy //C 
             "366": ["18.3TB", "nvme-qlc", 20, "366"],
 
+            # added 11/14/2024
+            "148": ["18.6TB", "nvme-qlc", 8, "148"],
+
             # // 18.6 TB PACKS, added 1/23/2024
             "186": ["18.6TB", "nvme-qlc", 10, "186"],
             "223": ["18.6TB", "nvme-qlc", 12, "223"],
