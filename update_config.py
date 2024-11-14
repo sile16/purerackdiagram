@@ -21,7 +21,7 @@ def main():
         for gen in ['m', 'x', 'c', 'e']:
             rev_list = ['']
             if (gen != 'm' and gen != 'xl') and (rel == 4 or rel == 1):
-                rev_list = ['', 'b']
+                rev_list = ['', 'b', 'c']
             for rev in rev_list:
                 update_static_pci_loc(config, gen, rel, rev)
                 update_static_mezz_loc(config, gen, rel, rev)
@@ -108,6 +108,10 @@ def static_global_config():
             "fa-x50r4b-eth": [None, None, None, "4eth25roce", None],
             "fa-x70r4b-eth": [None, None, None, "4eth25roce", "dca"],
             "fa-x90r4b-eth": [None, None, None, "4eth25roce", "dca"],
+
+            # New C R4b 20 11/12 
+            "fa-c20r4c-fc": [None, None, None, "2eth25", None],  # no FC model base model, but making this show up for better experience
+            "fa-c20r4c-eth": [None, None, None, "2eth25", None],
 
             # New C R4b # 6/10 Updated 4port cards to be the roce enabled x7
             "fa-c50r4b-fc": [None, "4fc", None, None, None],
@@ -587,7 +591,7 @@ def update_static_fm_loc(config):
 
     # add chassis
     for rel in range(1, 5):
-        for rev in ['', 'b']:
+        for rev in ['', 'b', 'c']:
             key = f'png/pure_fa_x_r{rel}{rev}_front.png'
             if key not in config:
                 config[key] = {}
@@ -1085,10 +1089,10 @@ def update_static_model_port_loc(config):
         if release == 4:
             #release 4 is the first time we had a revision
             # we set the loopoing params for these:
-            rev_list = ['','b']
+            rev_list = ['','b','c']
 
         for rev in rev_list:
-            if release == 4 and rev == 'b':
+            if release == 4 and rev != '':
                 ct0ports.append({'loc': (1945, 293),
                 'name': 'ct0.eth5',
                 'port_type': 'eth',

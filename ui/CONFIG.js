@@ -12,7 +12,7 @@ var FA_OPTIONS = {
                          'fa-x10r2', 'fa-x20r2', 'fa-x50r2', 'fa-x70r2', 'fa-x90r2',
                          'fa-x70r1',
             'XL Arrays:', 'fa-xl130r1', 'fa-xl170r1',
-            'C Arrays:', 'fa-c50r4b', 'fa-c70r4b', 'fa-c90r4b',
+            'C Arrays:', 'fa-c20', 'fa-c50r4b', 'fa-c70r4b', 'fa-c90r4b',
                          'fa-c50r4', 'fa-c70r4', 'fa-c90r4',
                          'fa-c40r3', 'fa-c60r3',
                          'fa-c40r1', 'fa-c60r1',

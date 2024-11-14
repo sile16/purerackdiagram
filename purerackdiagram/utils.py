@@ -6,6 +6,7 @@ import logging
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+from PIL import ImageTransform
 # from io import BytesIO
 import os
 import purerackdiagram
@@ -177,3 +178,50 @@ def apply_text(img, text, x_loc, y_loc, font_size=15, rotate_degrees=0):
 def apply_text_centered(img, text, y_loc, font_size=15):
     x_loc = img.size[0] // 2
     apply_text(img, text, x_loc, y_loc, font_size)
+
+
+def draw_skewed_text(image, location, text, font, skew_angle=15, fill="red"):
+    """
+    Draws skewed text onto an existing image without affecting the original image content.
+
+    :param image: PIL.Image - The base image to draw text on.
+    :param location: tuple - (x, y) coordinates where the text should start.
+    :param text: str - The text to draw.
+    :param font_path: str - Path to the TTF font file.
+    :param font_size: int - Size of the font.
+    :param skew_angle: float - Angle to skew the text in degrees.
+    :param fill: str or tuple - Color of the text.
+    """
+    
+
+ # Calculate the text bounding box size using getbbox
+    text_bbox = font.getbbox(text)
+    text_width = text_bbox[2] - text_bbox[0]
+    text_height = text_bbox[3] - text_bbox[1]
+
+    # Create a larger temporary image for the text, allowing extra space for skewing
+    extra_width = int(abs(skew_angle) * 0.5 * text_height)
+    temp_image_width = text_width + extra_width * 2  # Adding extra space on both sides
+    temp_image_height = text_height + extra_width
+    text_image = Image.new("RGBA", (temp_image_width, temp_image_height), (255, 255, 255, 0))
+    
+    # Draw the text onto the temporary image centered
+    text_draw = ImageDraw.Draw(text_image)
+    text_draw.text((extra_width, 0), text, font=font, fill=fill)
+    
+    # Calculate the skew transformation matrix
+    skew_factor = skew_angle * 0.1
+    skew_matrix = (1, skew_factor, 0, 0, 1, 0)
+
+    # Apply the skew to the text image
+    skewed_text_image = text_image.transform(
+        (temp_image_width, temp_image_height),
+        ImageTransform.AffineTransform(skew_matrix),
+        resample=Image.Resampling.BICUBIC
+    )
+
+    # Paste the skewed text image onto the original image at the specified location
+    image = image.convert("RGBA")  # Ensure the base image supports alpha
+    image.alpha_composite(skewed_text_image, (location[0], location[1]))
+
+    return image

@@ -23,6 +23,16 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-c20",
+            "datapacks": "186/260",
+            "face": "front",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fb-s200",
             "no_of_blades": 18,
             "face": "front",

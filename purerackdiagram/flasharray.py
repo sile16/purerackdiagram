@@ -426,6 +426,8 @@ class FAChassis():
         await self.start_img_event.wait()
 
         total_fm_count = 20
+        if self.config['generation'] == 'c' and self.config['model_num'] == 20 and self.config['release'] == 4:
+            total_fm_count = 28
         current_index = 0
         dp_count = len(self.config["chassis_datapacks"])
         fm_loc = self.img_info['fm_loc']
@@ -437,7 +439,7 @@ class FAChassis():
             if dp_i > 0 and dp_i + 1 == dp_count:
                 # If it's m or X need to populated the 
                 # last datapack from the right side
-                if self.config['generation'] != 'xl':
+                if self.config['generation'] != 'xl' and self.config['generation'] != 'c':
                     right = True
 
             fm_str = dp[0]
@@ -459,7 +461,8 @@ class FAChassis():
                 current_index += num_modules
             else:
                 # this is hard coded 20, probably fine
-                the_range = list(range(20-num_modules, 20))
+                # todo fix this on next generation X chassis
+                the_range = list(range(total_fm_count-num_modules, total_fm_count))
 
            
 
@@ -486,6 +489,7 @@ class FAChassis():
                 #    # for short DMM modules, fill the rest with blanks
                 #    self.tmp_img.paste(blank_img, fm_loc[x])
                 #else:
+                fm_rotated = fm_img.rotate(-90, expand=True)
 
                 if x in slots and slots[x] != "blank":
                     if fm_type == "blank":
@@ -497,8 +501,14 @@ class FAChassis():
                     # check to make sure index is not out of range:
                     if x >= len(fm_loc):
                         raise Exception(
-                            "Too many fm modules, check data pack sizes dont exceed chassis size of:"+str(len(fm_loc))) 
-                    self.tmp_img.paste(fm_img, fm_loc[x])
+                            "Too many fm modules, check data pack sizes dont exceed chassis size of:"+str(len(fm_loc)))
+                    if self.config['generation'] == 'c' and self.config['model_num'] == 20 and self.config['release'] == 4:
+                        if x > 19:
+                            self.tmp_img.paste(fm_rotated, fm_loc[x])
+                        else:
+                            self.tmp_img.paste(fm_img, fm_loc[x])
+                    else:
+                        self.tmp_img.paste(fm_img, fm_loc[x])
                     # keep track of modules, to detect overlaps
                     slots[x] = fm_type
         
@@ -509,7 +519,11 @@ class FAChassis():
     
             for x in range(total_fm_count):
                 if x not in slots:
-                    self.tmp_img.paste(blank_img, fm_loc[x])
+                    if x < 20:
+                        self.tmp_img.paste(blank_img, fm_loc[x])
+                    else:
+                        self.tmp_img.paste(blank_img.rotate(-90, expand=True), fm_loc[x])
+                
         
 
         
@@ -521,12 +535,14 @@ class FAChassis():
                 num_modules = dp[2]
                 dp_size = dp[3]
 
+                # just checks the dp info has the start_loc and end_loc
                 if len(dp) > 4:
                     start_loc = dp[4]
                     end_loc = dp[5]
                     # use the new apply_dp_label
                     self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size + "TB", start_loc, end_loc)
                     
+                    # if 2 additional start ends are provided then we have a continued DP
                     if len(dp) > 6:
                         
                         start_loc = dp[6]
@@ -564,6 +580,8 @@ class FAChassis():
         draw = ImageDraw.Draw(self.tmp_img)
 
         font = ImageFont.truetype(ttf_path, size=24)
+
+
         if c['generation'] == 'xl' :
             text = "{}r{}".format(c['model_num'],
                                     c['release'])
@@ -573,6 +591,14 @@ class FAChassis():
             else:
                 text = "{}r{}".format(c['generation'].upper(),
                                     c['model_num'])
+                
+        elif c['generation'] == 'c' and c['model_num'] == 20:
+            text = "{}{}".format(c['generation'].upper(),
+                                    c['model_num'])
+            
+            draw.text((2785,160), " C ", (255, 255, 255, 220), font=font)
+            
+
         else:
             text = "{}{}r{}".format(c['generation'].upper(),
                                     c['model_num'],
@@ -716,7 +742,7 @@ class FADiagram():
                 elif config["generation"] == 'e':
                     fh_order = [0, 1, 2, 3, 4]
                     hh_order = [0, 1, 2, 3, 4]
-                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4 and config['rev'] == 'b':
+                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4 and (config['rev'] == 'b' or config['rev'] == 'c'):
                     if card == "2eth100roce":
                         fh_order = [0, 1, 2, 3, 4]
                         hh_order = [0, 1, 2, 3, 4]
@@ -859,6 +885,7 @@ class FADiagram():
         results = re.split(r'(\d+)|-|r', config["model_str"])
         config["generation"] = results[2]
         config["rev"] = ""
+
         if config['generation'] == 'e':
             config['model_num'] = ""
             config['release'] = 1
@@ -866,7 +893,6 @@ class FADiagram():
             config['model_num'] = int(results[3])
             if len(results) > 5:
                 config['rev'] = results[5]
-
 
         if "r" in config["model_str"]:
             if config['generation'] == 'e':
@@ -878,6 +904,9 @@ class FADiagram():
                 if len(results) > 8:
                     config["rev"] = results[8]
             
+        elif config['generation'] == 'c' and config['model_num'] == 20:
+            config["release"] = 4
+            config["rev"] = 'c'
 
         else:
             config["release"] = 1
