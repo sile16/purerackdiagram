@@ -299,6 +299,9 @@ class FAChassis():
         self.start_img_event.set()
 
     async def add_power(self):
+        if self.config['generation'] == 'xl':
+            return
+
         if self.config['dc_power']:
             key = "png/pure_fa_dc1.png"
             dc_power_img = await RackImage(key).get_image()

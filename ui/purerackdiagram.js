@@ -598,6 +598,7 @@ $(function () {
 
       $('#mezz').hide();
       $('#ports').hide();
+      $('#fa_dc_power').hide();
 
       $('#protocol').hide();
       $('#addoncards').hide();
@@ -608,6 +609,7 @@ $(function () {
       $('#fa_dp_label').hide();
       $('#fa_bezel').hide();
       
+      $('#fa_dc_power').show();
       $('#protocol').show();
       $('#addoncards').show();
       $('#pci_dropdowns').show();
