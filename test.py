@@ -25,6 +25,17 @@ more_tests = [
         "queryStringParameters": {
             "model": "fa-c20",
             "datapacks": "186/260",
+            "face": "back",
+            "dc_power": True,
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-c20",
+            "datapacks": "186/260",
             "face": "front",
             "dp_label": True,
             "fm_label": True,

@@ -4,7 +4,7 @@
     "fa-er1b_face-front_bezel-True_fm_label-True_dp_label-True_ports-True_186": "f4d542065fc226d4d683e1c443368bad3836f3ae101c27ebfee9905ca10f6762",
     "fa-er1b_face-front_fm_label-True_dp_label-True_ports-True_186": "bedf87ebccc3bdd28364e1a9268b799aca2cfe655423b246af731fdfbbac062d",
     "fa-x90r4b_face-back_fm_label-True_dp_label-True_ports-True_3-0.02-45": "4854ceda8a70ffd83871afb008b2be3869f44923fcfd281fd7d26923861ff06e",
-    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "21dc68120729701e0c9651b50613603398c8e69c8fc1a46f6d32bc991dadab5b",
+    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "6a15614dbab5270a9c16cb3fda3e885f425d9826122397496edc2d6d838ddcb4",
     "fb-e_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True": "1e0db61f2924e80a69938b35d0ceadd5404f2a7e176056af4149432d91276c8d",
     "fa-x90r4_face-back_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_3-0.02-45_json-True": {
         "image_type": "png",
@@ -2325,7 +2325,7 @@
         }
     },
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0": "a68c9696ea2fa79c3473e15b00f13c1b13a0534c386d5a707c95d3ca72b55371",
-    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "cdeffc1c81fffbb047cea21888a8db5afc45cb13a72a50d844a84ffa1765fce4",
+    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "cc428a4fb4d47ef004ddd80adea2f9d817c98a58eaac0c316709ee9c5ec407f8",
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_json-True": {
         "image_type": "png",
         "config": {
@@ -2932,7 +2932,7 @@
     "fa-x70r1_face-front_fm_label-True_dp_label-FALSE_addoncards-_127-0_direction-up": "3aafbc0dd0b8140b2efdf3fc98d7decdf3c797569a82822f2ce72345e73aa46a",
     "fa-x70r1_face-front_fm_label-True_dp_label-True_addoncards-_3-127_direction-up": "bee53b273cdae643765f1c5b0b49ba22be7f098e56f96220e33dddd7e85db61c",
     "fa-c20r4c_fm_label-True_dp_label-True_csize-984": "37ff6e16b97fc36a3b2c01925cd700b5abf0ec7736724ed8f5fe5286b4168041",
-    "fa-c20r4c_bezel-True_fm_label-True_dp_label-True_366": "5cec5f05ed109c82e595dd94a51dbd350779ef98dc043d81bdd621bda92eac0d",
+    "fa-c20r4c_bezel-True_fm_label-True_dp_label-True_366": "f53f9daa82dc9ac1561ad06ff3953fb2e8f6fd13c34efa43cb8d6ee305b4283b",
     "fa-c40r1_fm_label-True_dp_label-True_csize-984": "3f1d489ea7e79cec2e72e1132704ef3d8593b3092077a646dba53cd6594b0193",
     "fa-c40r1_bezel-True_fm_label-True_dp_label-True_366": "6c48ecd0a10db758297c26bfa7f177a7e752f24c279e9559c1366d3f7db5781a",
     "fa-c40r3_fm_label-True_dp_label-True_csize-984": "3eef432f711306ac1faae99f9816fc3a6151236498aaed2283b1685e1427aaa0",

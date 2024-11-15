@@ -212,6 +212,7 @@ class FAChassis():
         else:
             tasks.append(self.add_cards())
             tasks.append(self.add_mezz())
+            tasks.append(self.add_power())
 
         # run all the tasks concurrently
         await asyncio.gather(*tasks)
@@ -296,6 +297,14 @@ class FAChassis():
     async def get_base_img(self, key):
         self.tmp_img = await RackImage(key).get_image()
         self.start_img_event.set()
+
+    async def add_power(self):
+        if self.config['dc_power']:
+            key = "png/pure_fa_dc1.png"
+            dc_power_img = await RackImage(key).get_image()
+            await self.start_img_event.wait()
+            self.tmp_img.paste(dc_power_img, (0,0))
+        
 
     async def add_nvram(self):
         #base image already has 1 NVRAM populated, so this is only for the second one.
@@ -885,6 +894,7 @@ class FADiagram():
         results = re.split(r'(\d+)|-|r', config["model_str"])
         config["generation"] = results[2]
         config["rev"] = ""
+        
 
         if config['generation'] == 'e':
             config['model_num'] = ""
@@ -927,6 +937,14 @@ class FADiagram():
 
         if face == "back":
             config['bezel'] = False
+            
+            config["dc_power"] = params.get("dc_power", False)
+            # check for string versions of no/false
+            for item in ["dc_power"]:
+                if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:
+                    config[item] = False
+
+
 
             valid_protocols = ['fc', 'eth']
             config["protocol"] = params.get("protocol", "fc").lower()

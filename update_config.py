@@ -261,6 +261,18 @@ def static_global_config():
 
         "qlc_chassis_dp_size_lookup": {
 
+            "0": ["Blank", "blank", 10, "0"],
+            "0.02": ["Blank", "blank", 2, "0"],
+            "0.04": ["Blank", "blank", 4, "0"],
+            "0.06": ["Blank", "blank", 6, "0"],
+            "0.08": ["Blank", "blank", 8, "0"],
+            "0.10": ["Blank", "blank", 10, "0"],
+            "0.12": ["Blank", "blank", 12, "0"],
+            "0.14": ["Blank", "blank", 14, "0"],
+            "0.16": ["Blank", "blank", 16, "0"],
+            "0.18": ["Blank", "blank", 18, "0"],
+            "0.20": ["Blank", "blank", 20, "0"],
+
             # this is legacy //C 
             "366": ["18.3TB", "nvme-qlc", 20, "366"],
 
@@ -421,6 +433,17 @@ def static_global_config():
 
 
         "qlc_shelf_dp_size_lookup": {
+
+            "0": ["Blank", "blank", 14, "0"],
+            "0.02": ["Blank", "blank", 2, "0"],
+            "0.04": ["Blank", "blank", 4, "0"],
+            "0.06": ["Blank", "blank", 6, "0"],
+            "0.08": ["Blank", "blank", 8, "0"],
+            "0.10": ["Blank", "blank", 10, "0"],
+            "0.12": ["Blank", "blank", 12, "0"],
+            "0.14": ["Blank", "blank", 14, "0"],
+            "0.16": ["Blank", "blank", 16, "0"],
+            "0.18": ["Blank", "blank", 18, "0"],
 
              # this is legacy //C when we used tlc actually
             "512": ["18.3TB", "nvme-qlc", 28, "512"],

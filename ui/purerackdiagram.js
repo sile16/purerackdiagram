@@ -212,6 +212,7 @@ $(function () {
   var fa_option_addoncards = build_input('#fa_option_addoncards', "");
   var fa_option_ports = build_select('#fa_option_ports', FA_OPTIONS.ports);
   var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
+  var fa_option_dc_power = build_select('#fa_option_dc_power', FA_OPTIONS.dc_power);
   
   var fa_option_pci = [];
 
@@ -284,6 +285,10 @@ $(function () {
     }
     if(fa_option_dp_label.val()){
       url += "&dp_label="  + fa_option_dp_label.val();
+    }
+
+    if(fa_option_dc_power.val()){
+      url += "&dc_power="  + fa_option_dc_power.val();
     }
 
 

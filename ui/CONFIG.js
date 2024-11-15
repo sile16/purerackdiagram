@@ -31,14 +31,15 @@ var FA_OPTIONS = {
              '879', '885', '984', '1182',
              '1185', '1329', '1390', '1476', '1531', '1574', 
              '1672', '1771', '1869', '1877'],
-    bezel: ['FALSE', 'TRUE'],
-    direction: ['up', 'down'],
-    fm_label: ['TRUE', 'FALSE'],
-    dp_label: ['FALSE', 'TRUE'],
+    bezel: ['', 'FALSE', 'TRUE'],
+    direction: ['', 'up', 'down'],
+    fm_label: ['', 'TRUE', 'FALSE'],
+    dp_label: ['', 'FALSE', 'TRUE'],
+    dc_power: ['', "FALSE", "TRUE"],
     addoncards: [ '2fc', '4fc', '2ethbaset', '2eth', '2eth25roce', '4eth25', '2eth40', '2eth100', '2eth100roce', 
                   'sas', 'dca', 'mgmt2ethbaset', 'blank'],
     mezz: ['', 'smezz', 'emezz'],
-    ports: ['FALSE', 'TRUE']
+    ports: ['', 'FALSE', 'TRUE']
 };
 
 
@@ -49,7 +50,7 @@ var FB_OPTIONS = {
     direction: ['up', 'down'],
     blades: '17:0-14,52:15-129',
     efm: ['', 'efm110', 'efm310'],
-    ports: ['FALSE', 'TRUE'],
+    ports: ['', 'FALSE', 'TRUE'],
     xfm_face: ['', 'front', 'back','bezel'],
     xfm_model: ['', '3200e', '8400']
 };
@@ -58,9 +59,9 @@ var FBS_OPTIONS = {
     model: ['fb-s200', 'fb-s500', 'fb-e'],
     face: ['front', 'back'],
     xfm: ['', 'FALSE', 'TRUE'],
-    direction: ['up', 'down'],
+    direction: ['', 'up', 'down'],
     blades: '18',
-    ports: ['FALSE', 'TRUE'],
+    ports: ['', 'FALSE', 'TRUE'],
     dfm_size: ['24', '48', '75'],
     dfm_count: ['1', '2', '3', '4'],
     xfm_face: ['', 'front', 'back', 'bezel'],
