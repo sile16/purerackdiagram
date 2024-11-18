@@ -40,7 +40,7 @@ class FBSDiagram():
             raise Exception (f"Invalid XFM Face, {config['xfm_face']}")
 
 
-        valid_models = ['fb-s200', 'fb-s500', 'fb-e']
+        valid_models = ['fb-s200', 'fb-s500', 'fb-e', 'fb-s100']
         if config['model'] not in valid_models:
             raise Exception('please provide a valid model: {}'.format(valid_models))
 

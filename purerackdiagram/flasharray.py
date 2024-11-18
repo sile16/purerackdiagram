@@ -31,6 +31,8 @@ class FAShelf():
                 tasks.append(self.add_nvme_fms())
             else:
                 tasks.append(self.add_sas_fms())
+        else:
+            tasks.append(self.add_power())
 
         # load the base image and FMs simultaniously.
         await asyncio.gather(*tasks)
@@ -52,6 +54,17 @@ class FAShelf():
             self.ports = self.img_info['ports']
 
         self.start_img_event.set()
+
+    async def add_power(self):
+
+        if self.config.get('dc_power', False):
+
+            key = "png/pure_fa_dc_1300.png"
+
+            dc_power_img = await RackImage(key).get_image()
+            await self.start_img_event.wait()
+            self.tmp_img.paste(dc_power_img, self.img_info['psu_loc'][0])
+            self.tmp_img.paste(dc_power_img, self.img_info['psu_loc'][1])
 
     async def add_nvme_fms(self):
         cur_module = 0
@@ -302,11 +315,22 @@ class FAChassis():
         if self.config['generation'] == 'xl':
             return
 
-        if self.config['dc_power']:
-            key = "png/pure_fa_dc1.png"
+        if self.config.get('dc_power', False):
+            if self.config['dc_power'] == True:
+                if self.config['generation'] == 'e':
+                    key = "png/pure_fa_dc_1300.png"
+                elif self.config['model_num'] == 20:
+                    key = "png/pure_fa_dc_1300.png"
+                else:
+                    key = "png/pure_fa_dc_2000.png"
+            else:
+                key = f"png/pure_fa_dc_{self.config['dc_power']}.png"
+
             dc_power_img = await RackImage(key).get_image()
             await self.start_img_event.wait()
-            self.tmp_img.paste(dc_power_img, (0,0))
+            if 'psu_loc' in self.img_info:
+                self.tmp_img.paste(dc_power_img, self.img_info['psu_loc'][0])
+                self.tmp_img.paste(dc_power_img, self.img_info['psu_loc'][1])
         
 
     async def add_nvram(self):
@@ -871,7 +895,7 @@ class FADiagram():
                         }
                     )
                 else:
-                    shelves.append({'shelf_type': shelf_type, "face": 'back'})
+                    shelves.append({'shelf_type': shelf_type, "face": 'back', 'dc_power': config['dc_power']})
 
                 if shelf_type == 'nvme':
                     config['ru'] += 3
@@ -944,9 +968,13 @@ class FADiagram():
             config["dc_power"] = params.get("dc_power", False)
             # check for string versions of no/false
             for item in ["dc_power"]:
-                if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:
+                if config[item] in ['False', 'false', 'FALSE', 'no', '0', ""]:
                     config[item] = False
+                if config[item] in ['True', "TRUE", 'true', 'yes' ]:
+                    config[item] = True
 
+            if config["dc_power"] not in [True, False, "1300", "2000"]:
+                raise Exception("Please use a valid dc_power: 1300, 2000")
 
 
             valid_protocols = ['fc', 'eth']

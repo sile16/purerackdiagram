@@ -35,6 +35,8 @@ def main():
 
     update_static_card_port_loc(config)
     update_static_mezz_port_loc(config)
+    update_static_psu_loc(config)
+
 
     update_static_fbs_blade_loc(config)
 
@@ -677,6 +679,30 @@ def update_static_fm_loc(config):
     config[key]['fm_loc']= ch0_fm_loc.copy()
 
 
+def update_static_psu_loc(config):
+   #########################################################
+    ### PSU Locations ## for x c e r4, rev '', 'b', and 'c'
+
+    # x,y coordinates for all chassis fms.
+    # Chassis FM locations
+    psu_loc = [(33, 96), (33, 491)]
+
+    for rel in [1, 4]:  #1 will cover the //E and 4 will cover all modern models
+        for gen in ['x', 'c', 'e']:
+            for rev in ['', 'b', 'c']:
+                key = f'png/pure_fa_{gen}_r{rel}{rev}_back.png'
+                if key not in config:
+                    config[key] = {}
+                config[key]['psu_loc'] = psu_loc.copy()
+        
+
+
+    ## NVMe Shelf
+    psu_loc = [(43, 106), (43, 499)]
+    key = 'png/pure_fa_nvme_shelf_back.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['psu_loc'] = psu_loc.copy()
 
 
 

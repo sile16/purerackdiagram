@@ -23,8 +23,96 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-e",
+            "datapacks": "1050-1050",
+            "face": "back",
+            "dc_power": "True",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r4b",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r4b",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "2000",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x20r4",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "1300",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x20r4",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "1300",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x20r4",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "2000",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x20r4",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": True,
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r4",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": True,
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-c20",
-            "datapacks": "186/260",
+            "datapacks": "186/260-1050",
             "face": "back",
             "dc_power": True,
             "dp_label": True,
