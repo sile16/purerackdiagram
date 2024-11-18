@@ -35,7 +35,7 @@ var FA_OPTIONS = {
     direction: ['', 'up', 'down'],
     fm_label: ['', 'TRUE', 'FALSE'],
     dp_label: ['', 'FALSE', 'TRUE'],
-    dc_power: ['', "TRUE", "1300W", "2000W"],
+    dc_power: ['', "TRUE", "1300", "2000"],
     addoncards: [ '2fc', '4fc', '2ethbaset', '2eth', '2eth25roce', '4eth25', '2eth40', '2eth100', '2eth100roce', 
                   'sas', 'dca', 'mgmt2ethbaset', 'blank'],
     mezz: ['', 'smezz', 'emezz'],
