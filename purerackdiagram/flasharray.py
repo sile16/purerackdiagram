@@ -274,7 +274,7 @@ class FAChassis():
             
         for port in self.ports:
             if 'name' in port:
-                continue
+                continue # it already has a name so skip
 
             if 'port_type' in port and 'controller' in port:
                 port_type = port['port_type']
@@ -297,12 +297,19 @@ class FAChassis():
 
 
                 # special case the management port on the xcr4
-                if port_naming_key == 'port_naming_xcr4' and port['pci_slot'] == 0:
-                    if port['pci_card'] != 'mgmt2ethbaset' and p_i == 5:
-                        port_naming[0]['eth'] += 1
+                # if port_naming_key == 'port_naming_xcr4' and port['pci_slot'] == 0:
+                #    if port['pci_card'] == 'mgmt2ethbaset' and p_i == 6:
+                #        p_i = 5
+                #    elif port['pci_card'] == 'mgmt2ethbaset' and p_i == 5:
+                #        p_i = 7
 
                 # Add the name to the port
-                port['name'] = f"{port['controller']}.{port_type}{p_i}"
+                # special case the management port in slot 0
+                if port_naming_key == 'port_naming_xcr4' and port['pci_slot'] == 0 \
+                          and port['pci_card'] == 'mgmt2ethbaset' and p_i == 6:
+                    port['name'] = f"{port['controller']}.{port_type}5"
+                else:
+                    port['name'] = f"{port['controller']}.{port_type}{p_i}"
                 # Increment the counter
                 p_i += 1
 

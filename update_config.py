@@ -60,7 +60,7 @@ def static_global_config():
         },
         
         'port_naming_xcr4':{
-            0: { 'eth': 5, 'fc': 0, 'sas': 0},
+            0: { 'eth': 6, 'fc': 0, 'sas': 0},
             1: { 'eth': 10, 'fc': 4, 'sas': 4},
             2: { 'eth': 14, 'fc': 8, 'sas': 0},
             3: { 'eth': 18, 'fc': 12, 'sas': 0},
@@ -1137,14 +1137,17 @@ def update_static_model_port_loc(config):
 
                 'services': ['data', 'replication']}]
         
+        
         rev_list = ['']
         if release == 4:
             #release 4 is the first time we had a revision
             # we set the loopoing params for these:
             rev_list = ['','b','c']
 
+
         for rev in rev_list:
-            if release == 4 and rev != '':
+            # this will add in eth5 for rev b and also rev c
+            if release == 4 and rev == 'b':
                 ct0ports.append({'loc': (1945, 293),
                 'name': 'ct0.eth5',
                 'port_type': 'eth',
@@ -1156,8 +1159,6 @@ def update_static_model_port_loc(config):
                 'port_sfp_connector': None,
 
                 'services': ['management']})
-
-
 
 
             ct1ports = []
