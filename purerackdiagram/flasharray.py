@@ -1079,6 +1079,8 @@ class FADiagram():
         if self.config["direction"] == "up":
             all_image_ports.reverse()
 
-        final_img, all_ports = combine_images_vertically(all_image_ports)
-        self.ports = all_ports
-        return final_img
+        return all_image_ports
+    
+        #final_img, all_ports = combine_images_vertically(all_image_ports)
+        #self.ports = all_ports
+        #return final_img

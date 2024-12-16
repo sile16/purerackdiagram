@@ -21,7 +21,32 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
-        {
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r4b",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+            "individual": "True",
+            "vssx": "True"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r4b",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "",
+            "dp_label": True,
+            "fm_label": True,
+            "ports": True,
+            "individual": "True"
+        }
+    },
+    {
         "queryStringParameters": {
             "model": "fa-x50r4b",
             "datapacks": "183-183",
@@ -708,13 +733,19 @@ def test_lambda(params, outputfile):
             img_str = base64.b64decode(results['body'].encode('utf-8'))
             with open(outputfile + '.png', 'wb') as outfile:
                 outfile.write(img_str)
-            #del results['body']
+
     elif results['headers'].get("Content-Type") == 'application/vnd.ms-visio.stencil':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
             with open(outputfile + '.vssx', 'wb') as outfile:
                 outfile.write(img_str)
-            #del results['body']
+
+    elif results['headers'].get("Content-Type") == 'application/zip':
+        if 'body' in results:
+            img_str = base64.b64decode(results['body'].encode('utf-8'))
+            with open(outputfile + '.zip', 'wb') as outfile:
+                outfile.write(img_str)
+
     elif results['headers'].get("Content-Type") == 'application/json':
         if 'body' in results:
             #img_str = json.dumps(results['body'], indent=4, ensure_ascii=False)

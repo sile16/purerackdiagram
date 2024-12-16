@@ -39,7 +39,8 @@ var FA_OPTIONS = {
     addoncards: [ '2fc', '4fc', '2ethbaset', '2eth', '2eth25roce', '4eth25', '2eth40', '2eth100', '2eth100roce', 
                   'sas', 'dca', 'mgmt2ethbaset', 'blank'],
     mezz: ['', 'smezz', 'emezz'],
-    ports: ['', 'FALSE', 'TRUE']
+    ports: ['', 'FALSE', 'TRUE'],
+    individual: ['', 'TRUE']
 };
 
 
@@ -52,7 +53,8 @@ var FB_OPTIONS = {
     efm: ['', 'efm110', 'efm310'],
     ports: ['', 'FALSE', 'TRUE'],
     xfm_face: ['', 'front', 'back','bezel'],
-    xfm_model: ['', '3200e', '8400']
+    xfm_model: ['', '3200e', '8400'],
+    individual: ['', 'TRUE']
 };
 
 var FBS_OPTIONS = {
@@ -66,5 +68,6 @@ var FBS_OPTIONS = {
     dfm_count: ['1', '2', '3', '4'],
     xfm_face: ['', 'front', 'back', 'bezel'],
     bezel: ['FALSE', 'TRUE'],
-    xfm_model: ['', '3200e', '8400']
+    xfm_model: ['', '3200e', '8400'],
+    individual: ['', 'TRUE']
 };

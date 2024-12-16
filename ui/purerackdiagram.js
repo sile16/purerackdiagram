@@ -213,6 +213,7 @@ $(function () {
   var fa_option_ports = build_select('#fa_option_ports', FA_OPTIONS.ports);
   var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
   var fa_option_dc_power = build_select('#fa_option_dc_power', FA_OPTIONS.dc_power);
+  var fa_option_individual = build_select('#fa_option_individual', FA_OPTIONS.individual);
   
   var fa_option_pci = [];
 
@@ -250,6 +251,7 @@ $(function () {
   var fb_option_ports = build_select('#fb_option_ports', FB_OPTIONS.ports);
   var fb_option_xfm_face = build_select('#fb_option_xfm_face', FB_OPTIONS.xfm_face);
   var fb_option_xfm_model = build_select('#fb_option_xfm_model', FB_OPTIONS.xfm_model);
+  var fb_option_individual = build_select('#fb_option_individual', FB_OPTIONS.individual);
   
 
   var fbs_option_model = build_select('#fbs_option_model', FBS_OPTIONS.model);
@@ -263,6 +265,9 @@ $(function () {
   var fbs_option_xfm_face = build_select('#fbs_option_xfm_face', FBS_OPTIONS.xfm_face);
   var fbs_option_xfm_model = build_select('#fbs_option_xfm_model', FBS_OPTIONS.xfm_model);
   var fbs_option_bezel = build_select('#fbs_option_bezel', FBS_OPTIONS.bezel);
+  var fbs_option_individual = build_select('#fbs_option_individual', FBS_OPTIONS.individual);
+  
+
 
 
 
@@ -315,6 +320,10 @@ $(function () {
         url += "&mezz=" + fa_option_mezz.val();
     }
 
+    if (fa_option_individual.val() != ''){
+      url += "&individual";
+    }
+
     return url;
   };
 
@@ -352,6 +361,10 @@ $(function () {
       url += "&xfm_model=" + fb_option_xfm_model.val();
     }
 
+    if (fb_option_individual.val() != ''){
+      url += "&individual";
+    }
+
     return url;
   };
 
@@ -387,6 +400,10 @@ $(function () {
 
     if (fbs_option_xfm_model.val()){
       url += "&xfm_model=" + fbs_option_xfm_model.val();
+    }
+
+    if (fbs_option_individual.val() != ''){
+      url += "&individual";
     }
 
     return url;
@@ -458,7 +475,8 @@ $(function () {
     $('#img_url').html('<a target="_blank" href="' + url + '">' + url + '</a>');
     $('#visio_url').html('<a target="_blank" href="' + visio_url + '">' + visio_url + '</a>');
 
-    const response = await fetch(url+"&json=True");
+    url_wo_individual = url.replace("&individual","") + "&json=True";
+    const response = await fetch(url_wo_individual);
     var diagram = await response.json();
 
     if ( diagram.error ) {

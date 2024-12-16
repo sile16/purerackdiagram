@@ -138,6 +138,8 @@ class FBDiagram():
         if self.config["direction"] == "up":
             all_images.reverse()
 
-        final_img, all_ports = combine_images_vertically(all_images)
-        self.ports = all_ports
-        return final_img
+        return all_images
+    
+        # final_img, all_ports = combine_images_vertically(all_images)
+        # self.ports = all_ports
+        # return final_img
