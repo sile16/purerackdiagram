@@ -401,7 +401,7 @@ def handler(event, context):
         else:
             data = {"image_type": "png",
                     "config": diagram.config,
-                    "ports": diagram.ports,
+                    "ports": all_ports,
                     "execution_duration": time.time() - program_time_s,
                     "error": None,
                     "image_size": final_img.size,
@@ -458,7 +458,7 @@ def handler(event, context):
             data = {}
             if diagram:
                 data["config"] = diagram.config
-                data["ports"] = diagram.ports
+                data["ports"] = all_ports
             data["error"] = error_msg
             data["execution_duration"] = time.time() - program_time_s
             data["params"] = params
