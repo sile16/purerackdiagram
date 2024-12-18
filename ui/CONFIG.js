@@ -64,7 +64,7 @@ var FBS_OPTIONS = {
     direction: ['', 'up', 'down'],
     blades: '18',
     ports: ['', 'FALSE', 'TRUE'],
-    dfm_size: ['24', '48', '75'],
+    dfm_size: ['24', '37.5', '48', '75', '150'],
     dfm_count: ['1', '2', '3', '4'],
     xfm_face: ['', 'front', 'back', 'bezel'],
     bezel: ['FALSE', 'TRUE'],
