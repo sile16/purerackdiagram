@@ -20,17 +20,23 @@ def main():
         
         for gen in ['m', 'x', 'c', 'e']:
             rev_list = ['']
+            chassis_gen = ['']
             if (gen != 'm' and gen != 'xl') and (rel == 4 or rel == 1):
                 rev_list = ['', 'b', 'c']
+                chassis_gen = ['', '_cg2']
             for rev in rev_list:
+                
                 update_static_pci_loc(config, gen, rel, rev)
                 update_static_mezz_loc(config, gen, rel, rev)
-                update_static_model_loc(config, gen, rel, rev)
                 update_static_nvram_loc(config, gen, rel, rev)
+                
+                for cg in chassis_gen:
+                    update_static_model_loc(config, gen, rel, rev, cg)
+                
 
         for gen in ['xl']:
             update_static_pci_loc(config, gen, rel, '')
-            update_static_model_loc(config, gen, rel, '')
+            update_static_model_loc(config, gen, rel, '', '')
 
 
     update_static_card_port_loc(config)
@@ -620,23 +626,24 @@ def update_static_fm_loc(config):
     # add chassis
     for rel in range(1, 5):
         for rev in ['', 'b', 'c']:
-            key = f'png/pure_fa_x_r{rel}{rev}_front.png'
-            if key not in config:
-                config[key] = {}
-            config[key]['fm_loc'] = ch0_fm_loc.copy()
-
-            # C is the same:
-            key = f'png/pure_fa_c_r{rel}{rev}_front.png'
-            if key not in config:
-                config[key] = {}
-            config[key]['fm_loc'] = ch0_fm_loc.copy()
-
-            # E is the same:
-            if rel == 1:
-                key = f'png/pure_fa_e_r{rel}{rev}_front.png'
+            for cg in ['', '_cg2']:
+                key = f'png/pure_fa_x_r{rel}{rev}_front{cg}.png'
                 if key not in config:
                     config[key] = {}
                 config[key]['fm_loc'] = ch0_fm_loc.copy()
+
+                # C is the same:
+                key = f'png/pure_fa_c_r{rel}{rev}_front{cg}.png'
+                if key not in config:
+                    config[key] = {}
+                config[key]['fm_loc'] = ch0_fm_loc.copy()
+
+                # E is the same:
+                if rel == 1:
+                    key = f'png/pure_fa_e_r{rel}{rev}_front{cg}.png'
+                    if key not in config:
+                        config[key] = {}
+                    config[key]['fm_loc'] = ch0_fm_loc.copy()
 
     # nvme shelves are the same:
     key = 'png/pure_fa_nvme_shelf_front.png'
@@ -752,6 +759,7 @@ def update_static_pci_loc(config, generation, release, rev):
 
 def update_static_nvram_loc(config, generation, release, rev):
     key = f'png/pure_fa_{generation}_r{release}{rev}_front.png'
+    
     if key not in config:
         config[key] = {}
 
@@ -783,8 +791,8 @@ def update_static_mezz_loc(config, generation, release, rev):
     
 
 
-def update_static_model_loc(config, generation, release, rev):
-    key = f'png/pure_fa_{generation}_r{release}{rev}_front.png'
+def update_static_model_loc(config, generation, release, rev, cg):
+    key = f'png/pure_fa_{generation}_r{release}{rev}_front{cg}.png'
     if key not in config:
         config[key] = {}
 

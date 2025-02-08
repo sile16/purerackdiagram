@@ -214,6 +214,7 @@ $(function () {
   var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
   var fa_option_dc_power = build_select('#fa_option_dc_power', FA_OPTIONS.dc_power);
   var fa_option_individual = build_select('#fa_option_individual', FA_OPTIONS.individual);
+  var fa_option_chassis_gen = build_select('#fa_option_chassis_gen', FA_OPTIONS.chassis_gen);
   
   var fa_option_pci = [];
 
@@ -252,6 +253,7 @@ $(function () {
   var fb_option_xfm_face = build_select('#fb_option_xfm_face', FB_OPTIONS.xfm_face);
   var fb_option_xfm_model = build_select('#fb_option_xfm_model', FB_OPTIONS.xfm_model);
   var fb_option_individual = build_select('#fb_option_individual', FB_OPTIONS.individual);
+
   
 
   var fbs_option_model = build_select('#fbs_option_model', FBS_OPTIONS.model);
@@ -322,6 +324,10 @@ $(function () {
 
     if (fa_option_individual.val() != ''){
       url += "&individual";
+    }
+
+    if (fa_option_chassis_gen.val() != ''){
+      url += "&chassis_gen=" + fa_option_chassis_gen.val();
     }
 
     return url;

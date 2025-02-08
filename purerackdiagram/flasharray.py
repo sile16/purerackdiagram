@@ -200,14 +200,25 @@ class FAChassis():
         # build the image
         c = self.config
         key = f"png/pure_fa_{c['generation']}_r{c['release']}{c['rev']}"
+        
 
-        if c["face"] == "front" and c["bezel"]:
-            key += "_bezel.png"
-            img =  await RackImage(key).get_image()
-            return {'img': img, 'ports': []}
+
+        chassis_gen = ""
+        if c["face"] == "front":
+            if  c["bezel"]:
+                key += "_bezel.png"
+                img =  await RackImage(key).get_image()
+                return {'img': img, 'ports': []}
+            
+            if c['release'] == 4 and c['generation'] in ['x', 'c', 'e']:
+                # check for the next generation chassis
+                if c['chassis_gen'] == '2':
+                    chassis_gen = "_cg2"
 
         # not doing bezel
-        key += "_{}.png".format(c["face"])
+        key += f"_{c["face"]}{chassis_gen}.png"
+
+        
 
         tasks = []
         tasks.append(self.get_base_img(key))
@@ -361,6 +372,9 @@ class FAChassis():
         elif self.config["model_num"] < 70:
             # Don't add second nvram on less  than 70
             return
+        elif self.config['chassis_gen'] == '2':
+            #gen 2 chassis don't use nvrams
+            return
 
         nvram_img = await RackImage("png/pure_fa_x_nvram.png").get_image()
 
@@ -471,6 +485,11 @@ class FAChassis():
         total_fm_count = 20
         if self.config['generation'] == 'c' and self.config['model_num'] == 20 and self.config['release'] == 4:
             total_fm_count = 28
+
+        if self.config['generation'] in ['c', 'x', 'e'] and self.config['release'] == 4 and self.config['chassis_gen'] == '2':
+            total_fm_count = 28
+        
+
         current_index = 0
         dp_count = len(self.config["chassis_datapacks"])
         fm_loc = self.img_info['fm_loc']
@@ -545,7 +564,7 @@ class FAChassis():
                     if x >= len(fm_loc):
                         raise Exception(
                             "Too many fm modules, check data pack sizes dont exceed chassis size of:"+str(len(fm_loc)))
-                    if self.config['generation'] == 'c' and self.config['model_num'] == 20 and self.config['release'] == 4:
+                    if total_fm_count > 20:
                         if x > 19:
                             self.tmp_img.paste(fm_rotated, fm_loc[x])
                         else:
@@ -958,6 +977,8 @@ class FADiagram():
         
         config["direction"] = params.get("direction", "up").lower()
 
+        
+
         if config["generation"] == 'xl':
             config["ru"] = 5  # this gets increased during shelf parsing
         else:
@@ -1033,6 +1054,17 @@ class FADiagram():
             config["fm_label"] = params.get("fm_label", False)
             config["dp_label"] = params.get("dp_label", False)
             config["bezel"] = params.get("bezel", False)
+
+            if "chassis_gen" not in params:
+                config['chassis_gen'] = '1'
+                if config['generation'] in ['x'] and config['model_num'] in [70, 90]:
+                    config['chassis_gen'] = '2'
+                
+            else:
+                config["chassis_gen"] = params.get("chassis_gen").lower() # For xcr4 chassis gen 2, will be the new default
+                if config["chassis_gen"] not in ['1', '2']:
+                    raise Exception("Please use a valid chassis_gen: 1, 2")
+
             # check for string versions of no/false
             for item in ["fm_label", 'dp_label', 'bezel']:
                 if config[item] in ['False', 'false', 'FALSE', 'no', '0', '']:

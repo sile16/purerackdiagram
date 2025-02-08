@@ -1290,23 +1290,23 @@ png/pure_fa_4fc_hh.png:
     port_type: fc
     services: *id025
 png/pure_fa_c_r1_back.png:
-  ct0_mezz_loc: &id052 !!python/tuple
+  ct0_mezz_loc: &id081 !!python/tuple
   - 585
   - 45
   ct0_pci_loc:
-  - &id053 !!python/tuple
+  - &id082 !!python/tuple
     - 1198
     - 87
-  - &id054 !!python/tuple
+  - &id083 !!python/tuple
     - 1198
     - 203
-  - &id055 !!python/tuple
+  - &id084 !!python/tuple
     - 2069
     - 87
-  - &id056 !!python/tuple
+  - &id085 !!python/tuple
     - 2069
     - 203
-  ct1_mezz_loc: &id057 !!python/tuple
+  ct1_mezz_loc: &id086 !!python/tuple
   - 585
   - 425
   ct1_pci_loc:
@@ -1492,99 +1492,99 @@ png/pure_fa_c_r1_back.png:
     port_type: eth
     services: *id051
   psu_loc:
-  - &id058 !!python/tuple
+  - &id087 !!python/tuple
     - 33
     - 96
-  - &id059 !!python/tuple
+  - &id088 !!python/tuple
     - 33
     - 491
 png/pure_fa_c_r1_front.png:
   fm_loc:
-  - &id060 !!python/tuple
+  - &id052 !!python/tuple
     - 165
     - 250
-  - &id061 !!python/tuple
+  - &id053 !!python/tuple
     - 270
     - 250
-  - &id062 !!python/tuple
+  - &id054 !!python/tuple
     - 375
     - 250
-  - &id063 !!python/tuple
+  - &id055 !!python/tuple
     - 480
     - 250
-  - &id064 !!python/tuple
+  - &id056 !!python/tuple
     - 714
     - 250
-  - &id065 !!python/tuple
+  - &id057 !!python/tuple
     - 819
     - 250
-  - &id066 !!python/tuple
+  - &id058 !!python/tuple
     - 924
     - 250
-  - &id067 !!python/tuple
+  - &id059 !!python/tuple
     - 1029
     - 250
-  - &id068 !!python/tuple
+  - &id060 !!python/tuple
     - 1265
     - 250
-  - &id069 !!python/tuple
+  - &id061 !!python/tuple
     - 1370
     - 250
-  - &id070 !!python/tuple
+  - &id062 !!python/tuple
     - 1475
     - 250
-  - &id071 !!python/tuple
+  - &id063 !!python/tuple
     - 1580
     - 250
-  - &id072 !!python/tuple
+  - &id064 !!python/tuple
     - 1817
     - 250
-  - &id073 !!python/tuple
+  - &id065 !!python/tuple
     - 1922
     - 250
-  - &id074 !!python/tuple
+  - &id066 !!python/tuple
     - 2027
     - 250
-  - &id075 !!python/tuple
+  - &id067 !!python/tuple
     - 2132
     - 250
-  - &id076 !!python/tuple
+  - &id068 !!python/tuple
     - 2237
     - 250
-  - &id077 !!python/tuple
+  - &id069 !!python/tuple
     - 2342
     - 250
-  - &id078 !!python/tuple
+  - &id070 !!python/tuple
     - 2447
     - 250
-  - &id079 !!python/tuple
+  - &id071 !!python/tuple
     - 2552
     - 250
-  - &id080 !!python/tuple
+  - &id072 !!python/tuple
     - 164
     - 27
-  - &id081 !!python/tuple
+  - &id073 !!python/tuple
     - 164
     - 132
-  - &id082 !!python/tuple
+  - &id074 !!python/tuple
     - 714
     - 27
-  - &id083 !!python/tuple
+  - &id075 !!python/tuple
     - 714
     - 132
-  - &id084 !!python/tuple
+  - &id076 !!python/tuple
     - 1264
     - 27
-  - &id085 !!python/tuple
+  - &id077 !!python/tuple
     - 1264
     - 132
-  - &id086 !!python/tuple
+  - &id078 !!python/tuple
     - 1814
     - 27
-  - &id087 !!python/tuple
+  - &id079 !!python/tuple
     - 1814
     - 132
-  model_text_loc: &id088 !!python/tuple
+  model_text_loc: &id080 !!python/tuple
   - 2759
   - 83
   nvram_loc:
@@ -1594,14 +1594,45 @@ png/pure_fa_c_r1_front.png:
   - &id090 !!python/tuple
     - 1813
     - 28
-png/pure_fa_c_r1b_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+png/pure_fa_c_r1_front_cg2.png:
+  fm_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+png/pure_fa_c_r1b_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -1616,10 +1647,18 @@ png/pure_fa_c_r1b_back.png:
     - 2069
     - 583
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_c_r1b_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -1640,26 +1679,49 @@ png/pure_fa_c_r1b_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
-png/pure_fa_c_r1c_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+png/pure_fa_c_r1b_front_cg2.png:
+  fm_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+png/pure_fa_c_r1c_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -1674,10 +1736,18 @@ png/pure_fa_c_r1c_back.png:
     - 2069
     - 583
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_c_r1c_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -1698,26 +1768,49 @@ png/pure_fa_c_r1c_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
-png/pure_fa_c_r2_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+png/pure_fa_c_r1c_front_cg2.png:
+  fm_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+png/pure_fa_c_r2_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -1890,106 +1983,196 @@ png/pure_fa_c_r2_back.png:
     services: *id114
 png/pure_fa_c_r2_front.png:
   fm_loc:
-  - *id060
-  - *id061
-  - *id062
-  - *id063
-  - *id064
-  - *id065
-  - *id066
-  - *id067
-  - *id068
-  - *id069
-  - *id070
-  - *id071
-  - *id072
-  - *id073
-  - *id074
-  - *id075
-  - *id076
-  - *id077
-  - *id078
-  - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
-  nvram_loc:
-  - *id089
-  - *id090
-png/pure_fa_c_r2b_front.png:
-  fm_loc:
-  - *id060
-  - *id061
-  - *id062
-  - *id063
-  - *id064
-  - *id065
-  - *id066
-  - *id067
-  - *id068
-  - *id069
-  - *id070
-  - *id071
-  - *id072
-  - *id073
-  - *id074
-  - *id075
-  - *id076
-  - *id077
-  - *id078
-  - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-png/pure_fa_c_r2c_front.png:
-  fm_loc:
-  - *id060
-  - *id061
-  - *id062
-  - *id063
-  - *id064
-  - *id065
-  - *id066
-  - *id067
-  - *id068
-  - *id069
-  - *id070
-  - *id071
-  - *id072
-  - *id073
-  - *id074
-  - *id075
-  - *id076
-  - *id077
-  - *id078
-  - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-png/pure_fa_c_r3_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+  nvram_loc:
+  - *id089
+  - *id090
+png/pure_fa_c_r2_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_c_r2b_front.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_c_r2b_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_c_r2c_front.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_c_r2c_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_c_r3_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -2162,6 +2345,14 @@ png/pure_fa_c_r3_back.png:
     services: *id132
 png/pure_fa_c_r3_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2182,20 +2373,50 @@ png/pure_fa_c_r3_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_c_r3_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
 png/pure_fa_c_r3b_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2216,16 +2437,46 @@ png/pure_fa_c_r3b_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
+png/pure_fa_c_r3b_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
 png/pure_fa_c_r3c_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2246,16 +2497,38 @@ png/pure_fa_c_r3c_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
+png/pure_fa_c_r3c_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
 png/pure_fa_c_r4_back.png:
-  ct0_mezz_loc: *id052
+  ct0_mezz_loc: *id081
   ct0_pci_loc:
   - &id148 !!python/tuple
     - 679
@@ -2272,7 +2545,7 @@ png/pure_fa_c_r4_back.png:
   - &id152 !!python/tuple
     - 2075
     - 203
-  ct1_mezz_loc: *id057
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -2429,10 +2702,18 @@ png/pure_fa_c_r4_back.png:
     port_type: eth
     services: *id147
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_c_r4_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2453,27 +2734,50 @@ png/pure_fa_c_r4_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_c_r4_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
 png/pure_fa_c_r4b_back.png:
-  ct0_mezz_loc: *id052
+  ct0_mezz_loc: *id081
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id057
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -2510,7 +2814,7 @@ png/pure_fa_c_r4b_back.png:
     port_type: eth
     services: &id160
     - management
-  - &id169
+  - &id170
     loc: !!python/tuple
     - 671
     - 688
@@ -2522,7 +2826,7 @@ png/pure_fa_c_r4b_back.png:
     port_speeds: *id134
     port_type: eth_roce
     services: *id135
-  - &id170
+  - &id171
     loc: !!python/tuple
     - 786
     - 688
@@ -2534,7 +2838,7 @@ png/pure_fa_c_r4b_back.png:
     port_speeds: *id137
     port_type: eth_roce
     services: *id138
-  - &id171
+  - &id172
     loc: !!python/tuple
     - 902
     - 688
@@ -2546,7 +2850,7 @@ png/pure_fa_c_r4b_back.png:
     port_speeds: *id140
     port_type: eth
     services: *id141
-  - &id172
+  - &id173
     loc: !!python/tuple
     - 990
     - 688
@@ -2558,7 +2862,7 @@ png/pure_fa_c_r4b_back.png:
     port_speeds: *id143
     port_type: eth
     services: *id144
-  - &id173
+  - &id174
     loc: !!python/tuple
     - 1945
     - 600
@@ -2570,7 +2874,7 @@ png/pure_fa_c_r4b_back.png:
     port_speeds: *id146
     port_type: eth
     services: *id147
-  - &id174
+  - &id175
     loc: !!python/tuple
     - 1945
     - 673
@@ -2583,10 +2887,18 @@ png/pure_fa_c_r4b_back.png:
     port_type: eth
     services: *id160
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_c_r4b_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2607,27 +2919,50 @@ png/pure_fa_c_r4b_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_c_r4b_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
 png/pure_fa_c_r4c_back.png:
-  ct0_mezz_loc: *id052
+  ct0_mezz_loc: *id081
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id057
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -2724,10 +3059,18 @@ png/pure_fa_c_r4c_back.png:
     port_type: eth
     services: *id160
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_c_r4c_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2748,20 +3091,43 @@ png/pure_fa_c_r4c_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_c_r4c_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
 png/pure_fa_e_r1_back.png:
-  ct0_mezz_loc: &id167 !!python/tuple
+  ct0_mezz_loc: &id168 !!python/tuple
   - 709
   - 44
   ct0_pci_loc:
@@ -2770,7 +3136,7 @@ png/pure_fa_e_r1_back.png:
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: &id168 !!python/tuple
+  ct1_mezz_loc: &id169 !!python/tuple
   - 709
   - 421
   ct1_pci_loc:
@@ -2801,10 +3167,18 @@ png/pure_fa_e_r1_back.png:
   - *id165
   - *id166
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_e_r1_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2825,29 +3199,52 @@ png/pure_fa_e_r1_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: &id175 !!python/tuple
+  model_text_loc: &id167 !!python/tuple
   - 2770
   - 222
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_e_r1_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id167
 png/pure_fa_e_r1b_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -2871,17 +3268,25 @@ png/pure_fa_e_r1b_back.png:
   - *id156
   - *id157
   - *id161
-  - *id169
   - *id170
   - *id171
   - *id172
   - *id173
   - *id174
+  - *id175
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_e_r1b_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2902,27 +3307,50 @@ png/pure_fa_e_r1b_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id175
+  model_text_loc: *id167
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_e_r1b_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id167
 png/pure_fa_e_r1c_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -2953,10 +3381,18 @@ png/pure_fa_e_r1c_back.png:
   - *id180
   - *id181
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_e_r1c_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -2977,27 +3413,50 @@ png/pure_fa_e_r1c_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id175
+  model_text_loc: *id167
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_e_r1c_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id167
 png/pure_fa_e_r2_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -3015,19 +3474,19 @@ png/pure_fa_e_r2_back.png:
     - 2075
     - 581
 png/pure_fa_e_r2_front.png:
-  model_text_loc: *id175
+  model_text_loc: *id167
   nvram_loc:
   - *id089
   - *id090
 png/pure_fa_e_r3_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -3045,19 +3504,19 @@ png/pure_fa_e_r3_back.png:
     - 2075
     - 581
 png/pure_fa_e_r3_front.png:
-  model_text_loc: *id175
+  model_text_loc: *id167
   nvram_loc:
   - *id089
   - *id090
 png/pure_fa_e_r4_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -3075,22 +3534,24 @@ png/pure_fa_e_r4_back.png:
     - 2075
     - 581
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_e_r4_front.png:
-  model_text_loc: *id175
+  model_text_loc: *id167
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_e_r4_front_cg2.png:
+  model_text_loc: *id167
 png/pure_fa_e_r4b_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -3108,22 +3569,24 @@ png/pure_fa_e_r4b_back.png:
     - 2075
     - 581
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_e_r4b_front.png:
-  model_text_loc: *id175
+  model_text_loc: *id167
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_e_r4b_front_cg2.png:
+  model_text_loc: *id167
 png/pure_fa_e_r4c_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -3141,15 +3604,17 @@ png/pure_fa_e_r4c_back.png:
     - 2075
     - 581
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_e_r4c_front.png:
-  model_text_loc: *id175
+  model_text_loc: *id167
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_e_r4c_front_cg2.png:
+  model_text_loc: *id167
 png/pure_fa_m_r1_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - &id182 !!python/tuple
     - 1317
@@ -3163,7 +3628,7 @@ png/pure_fa_m_r1_back.png:
   - &id185 !!python/tuple
     - 2182
     - 201
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 1317
@@ -3274,13 +3739,13 @@ png/pure_fa_m_r1_front.png:
     - 1805
     - 20
 png/pure_fa_m_r2_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id182
   - *id183
   - *id184
   - *id185
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 1317
@@ -3329,13 +3794,13 @@ png/pure_fa_m_r2_front.png:
   - *id215
   - *id216
 png/pure_fa_m_r3_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id182
   - *id183
   - *id184
   - *id185
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 1317
@@ -3355,13 +3820,13 @@ png/pure_fa_m_r3_front.png:
   - *id215
   - *id216
 png/pure_fa_m_r4_back.png:
-  ct0_mezz_loc: *id167
+  ct0_mezz_loc: *id168
   ct0_pci_loc:
   - *id182
   - *id183
   - *id184
   - *id185
-  ct1_mezz_loc: *id168
+  ct1_mezz_loc: *id169
   ct1_pci_loc:
   - !!python/tuple
     - 1317
@@ -3512,6 +3977,14 @@ png/pure_fa_nvme_shelf_back.png:
     - 499
 png/pure_fa_nvme_shelf_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -3532,14 +4005,6 @@ png/pure_fa_nvme_shelf_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
 png/pure_fa_sas_fh.png:
   ports:
   - loc: !!python/tuple
@@ -3756,13 +4221,13 @@ png/pure_fa_x_emezz.png:
     services:
     - shelf
 png/pure_fa_x_r1_back.png:
-  ct0_mezz_loc: *id052
+  ct0_mezz_loc: *id081
   ct0_pci_loc:
-  - *id053
-  - *id054
-  - *id055
-  - *id056
-  ct1_mezz_loc: *id057
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -3790,10 +4255,18 @@ png/pure_fa_x_r1_back.png:
   - *id243
   - *id244
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_x_r1_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -3814,26 +4287,49 @@ png/pure_fa_x_r1_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
-png/pure_fa_x_r1b_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+png/pure_fa_x_r1_front_cg2.png:
+  fm_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+png/pure_fa_x_r1b_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -3848,10 +4344,18 @@ png/pure_fa_x_r1b_back.png:
     - 2069
     - 583
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_x_r1b_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -3872,26 +4376,49 @@ png/pure_fa_x_r1b_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
-png/pure_fa_x_r1c_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+png/pure_fa_x_r1b_front_cg2.png:
+  fm_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+png/pure_fa_x_r1c_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -3906,10 +4433,18 @@ png/pure_fa_x_r1c_back.png:
     - 2069
     - 583
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_x_r1c_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -3930,26 +4465,49 @@ png/pure_fa_x_r1c_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
-png/pure_fa_x_r2_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+png/pure_fa_x_r1c_front_cg2.png:
+  fm_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+png/pure_fa_x_r2_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -3978,106 +4536,196 @@ png/pure_fa_x_r2_back.png:
   - *id256
 png/pure_fa_x_r2_front.png:
   fm_loc:
-  - *id060
-  - *id061
-  - *id062
-  - *id063
-  - *id064
-  - *id065
-  - *id066
-  - *id067
-  - *id068
-  - *id069
-  - *id070
-  - *id071
-  - *id072
-  - *id073
-  - *id074
-  - *id075
-  - *id076
-  - *id077
-  - *id078
-  - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
-  nvram_loc:
-  - *id089
-  - *id090
-png/pure_fa_x_r2b_front.png:
-  fm_loc:
-  - *id060
-  - *id061
-  - *id062
-  - *id063
-  - *id064
-  - *id065
-  - *id066
-  - *id067
-  - *id068
-  - *id069
-  - *id070
-  - *id071
-  - *id072
-  - *id073
-  - *id074
-  - *id075
-  - *id076
-  - *id077
-  - *id078
-  - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-png/pure_fa_x_r2c_front.png:
-  fm_loc:
-  - *id060
-  - *id061
-  - *id062
-  - *id063
-  - *id064
-  - *id065
-  - *id066
-  - *id067
-  - *id068
-  - *id069
-  - *id070
-  - *id071
-  - *id072
-  - *id073
-  - *id074
-  - *id075
-  - *id076
-  - *id077
-  - *id078
-  - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-png/pure_fa_x_r3_back.png:
-  ct0_mezz_loc: *id052
-  ct0_pci_loc:
+  - *id052
   - *id053
   - *id054
   - *id055
   - *id056
-  ct1_mezz_loc: *id057
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+  nvram_loc:
+  - *id089
+  - *id090
+png/pure_fa_x_r2_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_x_r2b_front.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_x_r2b_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_x_r2c_front.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_x_r2c_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_x_r3_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 1198
@@ -4106,6 +4754,14 @@ png/pure_fa_x_r3_back.png:
   - *id268
 png/pure_fa_x_r3_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -4126,20 +4782,50 @@ png/pure_fa_x_r3_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_x_r3_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
 png/pure_fa_x_r3b_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -4160,16 +4846,46 @@ png/pure_fa_x_r3b_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
+png/pure_fa_x_r3b_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
 png/pure_fa_x_r3c_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -4190,23 +4906,45 @@ png/pure_fa_x_r3c_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
+png/pure_fa_x_r3c_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
 png/pure_fa_x_r4_back.png:
-  ct0_mezz_loc: *id052
+  ct0_mezz_loc: *id081
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id057
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -4235,10 +4973,18 @@ png/pure_fa_x_r4_back.png:
   - *id165
   - *id166
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_x_r4_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -4259,27 +5005,50 @@ png/pure_fa_x_r4_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_x_r4_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
 png/pure_fa_x_r4b_back.png:
-  ct0_mezz_loc: *id052
+  ct0_mezz_loc: *id081
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id057
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -4303,17 +5072,25 @@ png/pure_fa_x_r4b_back.png:
   - *id156
   - *id157
   - *id161
-  - *id169
   - *id170
   - *id171
   - *id172
   - *id173
   - *id174
+  - *id175
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_x_r4b_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -4334,27 +5111,50 @@ png/pure_fa_x_r4b_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_x_r4b_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
 png/pure_fa_x_r4c_back.png:
-  ct0_mezz_loc: *id052
+  ct0_mezz_loc: *id081
   ct0_pci_loc:
   - *id148
   - *id149
   - *id150
   - *id151
   - *id152
-  ct1_mezz_loc: *id057
+  ct1_mezz_loc: *id086
   ct1_pci_loc:
   - !!python/tuple
     - 679
@@ -4385,10 +5185,18 @@ png/pure_fa_x_r4c_back.png:
   - *id180
   - *id181
   psu_loc:
-  - *id058
-  - *id059
+  - *id087
+  - *id088
 png/pure_fa_x_r4c_front.png:
   fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
   - *id060
   - *id061
   - *id062
@@ -4409,18 +5217,41 @@ png/pure_fa_x_r4c_front.png:
   - *id077
   - *id078
   - *id079
-  - *id080
-  - *id081
-  - *id082
-  - *id083
-  - *id084
-  - *id085
-  - *id086
-  - *id087
-  model_text_loc: *id088
+  model_text_loc: *id080
   nvram_loc:
   - *id089
   - *id090
+png/pure_fa_x_r4c_front_cg2.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
 png/pure_fa_x_smezz.png:
   ports:
   - loc: !!python/tuple
