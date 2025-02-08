@@ -1,6 +1,6 @@
 {
-    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183": "436e96d8ce17193bb32a62f72431c6eab8975e1038a41efb40b5c25ba39207ab",
     "fa-e_face-back_fm_label-True_dp_label-True_ports-True_1050-1050": "498b02a9b9224160a52400aad61465cb86cb804d9976e9e5cff724b498072a91",
+    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183": "436e96d8ce17193bb32a62f72431c6eab8975e1038a41efb40b5c25ba39207ab",
     "fa-x20r4_face-back_fm_label-True_dp_label-True_ports-True_183-183": "abf7b94f83d1bdbef29046defbb7e74d02a33ad0453eff734e524910badf6c29",
     "fa-x50r4_face-back_fm_label-True_dp_label-True_ports-True_183-183": "13d94404bf68a58d83722bcf852a5b123121adac90872a4a4791e8a68d3beffe",
     "fa-c20_face-back_fm_label-True_dp_label-True_ports-True_186-260-1050": "e12df636978972a7c06900badacb69e74db689126a39d19b761aab63b85decc8",
@@ -9,7 +9,7 @@
     "fa-er1b_face-front_bezel-True_fm_label-True_dp_label-True_ports-True_186": "f4d542065fc226d4d683e1c443368bad3836f3ae101c27ebfee9905ca10f6762",
     "fa-er1b_face-front_fm_label-True_dp_label-True_ports-True_186": "bedf87ebccc3bdd28364e1a9268b799aca2cfe655423b246af731fdfbbac062d",
     "fa-x90r4b_face-back_fm_label-True_dp_label-True_ports-True_3-0.02-45": "a0f7079cbbe7207ae136df6b8fba3540a45b244b64691d3c704efebd910127a9",
-    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "dee5c4464f56e5b6bbb4c6298abd22b853a74ce342a5c187fa8707cb2af06e20",
+    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "faadc248ef74d220ad5ff2e29cdd5728badcb9d043d2e27202c943e855f157ab",
     "fb-e_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True": "1e0db61f2924e80a69938b35d0ceadd5404f2a7e176056af4149432d91276c8d",
     "fa-x90r4_face-back_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_3-0.02-45_json-True": {
         "image_type": "png",
@@ -62,7 +62,752 @@
             ],
             "shelves": []
         },
-        "ports": [],
+        "ports": [
+            {
+                "loc": [
+                    671,
+                    308
+                ],
+                "name": "ct0.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    308
+                ],
+                "name": "ct0.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    308
+                ],
+                "name": "ct0.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    990,
+                    308
+                ],
+                "name": "ct0.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    220
+                ],
+                "name": "ct0.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    834,
+                    123
+                ],
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g",
+                    "10g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "pci_slot": 0,
+                "pci_slot_height": "Half Height",
+                "pci_card": "mgmt2ethbaset",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.eth5",
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1435,
+                    243
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth14",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1635,
+                    243
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth15",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    2145,
+                    123
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 3,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2eth40",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth18",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    2320,
+                    123
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 3,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2eth40",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth19",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1477,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    671,
+                    688
+                ],
+                "name": "ct1.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    688
+                ],
+                "name": "ct1.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    688
+                ],
+                "name": "ct1.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    990,
+                    688
+                ],
+                "name": "ct1.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    600
+                ],
+                "name": "ct1.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    834,
+                    501
+                ],
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g",
+                    "10g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "pci_slot": 0,
+                "pci_slot_height": "Half Height",
+                "pci_card": "mgmt2ethbaset",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.eth5",
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1435,
+                    621
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth14",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1635,
+                    621
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth15",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    2145,
+                    501
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 3,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2eth40",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth18",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    2320,
+                    501
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 3,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2eth40",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth19",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1477,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            }
+        ],
         "execution_duration": 1,
         "error": null,
         "image_size": [
@@ -151,7 +896,564 @@
             ],
             "shelves": []
         },
-        "ports": [],
+        "ports": [
+            {
+                "loc": [
+                    837,
+                    685
+                ],
+                "name": "ct0.eth0",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    955,
+                    685
+                ],
+                "name": "ct0.eth1",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1095,
+                    405
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth10",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1295,
+                    405
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth11",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    378,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    468,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    560,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    652,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2308,
+                    643
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc32",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2406,
+                    643
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc33",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    837,
+                    1163
+                ],
+                "name": "ct1.eth0",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    955,
+                    1163
+                ],
+                "name": "ct1.eth1",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1095,
+                    885
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth10",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1295,
+                    885
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth11",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    378,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    468,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    560,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    652,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2308,
+                    1123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc32",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2406,
+                    1123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc33",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            }
+        ],
         "execution_duration": 1,
         "error": null,
         "image_size": [
@@ -451,7 +1753,564 @@
             ],
             "shelves": []
         },
-        "ports": [],
+        "ports": [
+            {
+                "loc": [
+                    837,
+                    685
+                ],
+                "name": "ct0.eth0",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    955,
+                    685
+                ],
+                "name": "ct0.eth1",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1095,
+                    405
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth10",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1295,
+                    405
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct0",
+                "name": "ct0.eth11",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    378,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    468,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    560,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    652,
+                    520
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2308,
+                    643
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc32",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2406,
+                    643
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc33",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    837,
+                    1163
+                ],
+                "name": "ct1.eth0",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    955,
+                    1163
+                ],
+                "name": "ct1.eth1",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speeds": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1095,
+                    885
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth10",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    1295,
+                    885
+                ],
+                "port_connector": "qsfp",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "40g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 2,
+                "pci_slot_height": "Full Height",
+                "pci_card": "2eth100",
+                "default_card": false,
+                "controller": "ct1",
+                "name": "ct1.eth11",
+                "symbol_name": "Ethernet",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#D90368"
+            },
+            {
+                "loc": [
+                    378,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    468,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    560,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    652,
+                    1000
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Half Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2308,
+                    1123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc32",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    2406,
+                    1123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 8,
+                "pci_slot_height": "Half Height",
+                "pci_card": "2fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc33",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            }
+        ],
         "execution_duration": 1,
         "error": null,
         "image_size": [
@@ -474,7 +2333,7 @@
         }
     },
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0": "6eb56ea3649bbc286e6cdd03f5c7c0f62604b78974629133c7f49fd1dfa174fd",
-    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "105a061489eb8eda4dce41279b2eb1bf5e5603e3126dc1fe9c0a91f7dcf6d500",
+    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "7c3ef847341d2d88620c497f3f2d0fa27052fb49b0b850b967156b18768040f3",
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_json-True": {
         "image_type": "png",
         "config": {
@@ -520,7 +2379,532 @@
             ],
             "shelves": []
         },
-        "ports": [],
+        "ports": [
+            {
+                "loc": [
+                    671,
+                    308
+                ],
+                "name": "ct0.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    308
+                ],
+                "name": "ct0.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    308
+                ],
+                "name": "ct0.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    990,
+                    308
+                ],
+                "name": "ct0.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    220
+                ],
+                "name": "ct0.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    834,
+                    123
+                ],
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g",
+                    "10g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "pci_slot": 0,
+                "pci_slot_height": "Half Height",
+                "pci_card": "mgmt2ethbaset",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.eth5",
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1477,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    671,
+                    688
+                ],
+                "name": "ct1.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    688
+                ],
+                "name": "ct1.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    688
+                ],
+                "name": "ct1.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    990,
+                    688
+                ],
+                "name": "ct1.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    600
+                ],
+                "name": "ct1.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    834,
+                    501
+                ],
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g",
+                    "10g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "pci_slot": 0,
+                "pci_slot_height": "Half Height",
+                "pci_card": "mgmt2ethbaset",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.eth5",
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1477,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            }
+        ],
         "execution_duration": 1,
         "error": null,
         "image_size": [

@@ -23,7 +23,7 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
-            "model": "fa-x50r4",
+            "model": "fa-x90r4",
             "datapacks": "183/40",
             "face": "front",
             "dc_power": "",
