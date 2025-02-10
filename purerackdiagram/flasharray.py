@@ -210,13 +210,15 @@ class FAChassis():
                 img =  await RackImage(key).get_image()
                 return {'img': img, 'ports': []}
             
-            if c['release'] in [1, 4] and c['generation'] in ['x', 'c', 'e']:
+            if c['release'] in [1] and c['generation'] in ['c'] or (
+                c['release'] in [4] and c['generation'] in ['x', 'c', 'e']
+            ):
                 # check for the next generation chassis
                 if c['chassis_gen'] == '2':
                     chassis_gen = "_cg2"
 
         # not doing bezel
-        key += f"_{c["face"]}{chassis_gen}.png"
+        key += f"_{c['face']}{chassis_gen}.png"
 
         
 
@@ -353,6 +355,9 @@ class FAChassis():
 
     async def add_nvram(self):
         #base image already has 1 NVRAM populated, so this is only for the second one.
+        if self.config['chassis_gen'] == '2':
+            #gen 2 chassis don't use nvrams
+            return
 
         if self.config['generation'] == 'c':
             # always add second nvram on 'c' array
@@ -372,9 +377,7 @@ class FAChassis():
         elif self.config["model_num"] < 70:
             # Don't add second nvram on less  than 70
             return
-        elif self.config['chassis_gen'] == '2':
-            #gen 2 chassis don't use nvrams
-            return
+        
 
         nvram_img = await RackImage("png/pure_fa_x_nvram.png").get_image()
 
@@ -649,22 +652,22 @@ class FAChassis():
                                     c['release'])
         elif c['generation'] == 'e':
             if c['release'] == 1:
-                text = "E"
-            else:
-                text = "{}r{}".format(c['generation'].upper(),
-                                    c['model_num'])
+                text = "" #change to 
                 
         elif c['generation'] == 'c' and c['model_num'] == 20:
             text = "{}{}".format(c['generation'].upper(),
                                     c['model_num'])
-            
-            draw.text((2785,160), " C ", (255, 255, 255, 220), font=font)
-            
 
         else:
             text = "{}{}r{}".format(c['generation'].upper(),
                                     c['model_num'],
                                     c['release'])
+            
+
+        if c['chassis_gen'] == '2':
+            #Draw the Generation Letter on the 2nd gen chassis
+            draw.text((2785,160), f" {c['generation'].upper()} ", (255, 255, 255, 220), font=font)
+        
         draw.text(loc, text, (255, 255, 255, 220), font=font)
 
 
@@ -970,6 +973,7 @@ class FADiagram():
         elif config['generation'] == 'c' and config['model_num'] == 20:
             config["release"] = 4
             config["rev"] = 'c'
+            config["chassis_gen"] = '2'
 
         else:
             config["release"] = 1
@@ -1057,7 +1061,11 @@ class FADiagram():
 
             if "chassis_gen" not in params:
                 config['chassis_gen'] = '1'
-                if config['generation'] in ['x'] and config['model_num'] in [70, 90]:
+                
+                if config['generation'] in ['x', 'c'] and config['model_num'] in [70, 90] and config['release'] == 4:
+                    config['chassis_gen'] = '2'
+
+                if config['generation'] == 'c' and config['model_num'] == 20 and config['release'] == 1:
                     config['chassis_gen'] = '2'
                 
             else:

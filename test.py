@@ -21,24 +21,14 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+    
     {
         "queryStringParameters": {
-            "model": "fa-er1b",
+            "model": "fa-c20r4b",
             "protocol": "fc",
             "face": "front",
             "datapacks": "240",
-            "chassis_gen": "2",
-            
-        }
-    },
-    {
-        "queryStringParameters": {
-            "model": "fa-x20r4b",
-            "protocol": "fc",
-            "face": "front",
-            "datapacks": "63/11",
-            "chassis_gen": "1",
-            "json": "True"
+            "chassis_gen": "2"
             
         }
     },
@@ -1059,6 +1049,8 @@ def test_all(args):
                 errors += 1
                 print("Error JSON Changed!!:{}".format(key))
                 print(diff)
+        elif 'vssx' in key:
+            pass # always different because unique key
         elif results[key] != validation[key]:
             errors += 1
             print("Error Image Changed!!:{}".format(key))
