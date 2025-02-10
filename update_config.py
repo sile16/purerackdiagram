@@ -800,7 +800,7 @@ def update_static_model_loc(config, generation, release, rev, cg):
             generation == 'c' :
         loc = (2759, 83)
     elif generation == 'e':
-        loc = (2770, 222)
+        loc = (2792, 160)
     elif generation == 'xl':
         loc = (22, 245)
     else:

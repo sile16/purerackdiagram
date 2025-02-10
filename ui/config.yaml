@@ -3200,8 +3200,8 @@ png/pure_fa_e_r1_front.png:
   - *id078
   - *id079
   model_text_loc: &id167 !!python/tuple
-  - 2770
-  - 222
+  - 2792
+  - 160
   nvram_loc:
   - *id089
   - *id090

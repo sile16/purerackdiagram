@@ -210,7 +210,7 @@ class FAChassis():
                 img =  await RackImage(key).get_image()
                 return {'img': img, 'ports': []}
             
-            if c['release'] == 4 and c['generation'] in ['x', 'c', 'e']:
+            if c['release'] in [1, 4] and c['generation'] in ['x', 'c', 'e']:
                 # check for the next generation chassis
                 if c['chassis_gen'] == '2':
                     chassis_gen = "_cg2"
@@ -558,12 +558,12 @@ class FAChassis():
                         pass
                     else:
                         raise Exception(
-                            "Overlapping datapacks, check data pack sizes dont exceed chassis size of 20.")
+                            f"Overlapping datapacks, check data pack sizes dont exceed chassis size of {total_fm_count}")
                 else:
                     # check to make sure index is not out of range:
                     if x >= len(fm_loc):
                         raise Exception(
-                            "Too many fm modules, check data pack sizes dont exceed chassis size of:"+str(len(fm_loc)))
+                            f"Too many fm modules, check data pack sizes dont exceed chassis size of {total_fm_count}" )
                     if total_fm_count > 20:
                         if x > 19:
                             self.tmp_img.paste(fm_rotated, fm_loc[x])
@@ -649,7 +649,7 @@ class FAChassis():
                                     c['release'])
         elif c['generation'] == 'e':
             if c['release'] == 1:
-                text = ""
+                text = "E"
             else:
                 text = "{}r{}".format(c['generation'].upper(),
                                     c['model_num'])

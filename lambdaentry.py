@@ -457,8 +457,11 @@ def handler(event, context):
         if 'json' in params and params['json']:
             data = {}
             if diagram:
-                data["config"] = diagram.config
-                data["ports"] = all_ports
+                try:
+                    data["config"] = diagram.config
+                    data["ports"] = all_ports
+                except Exception as e:
+                    pass
             data["error"] = error_msg
             data["execution_duration"] = time.time() - program_time_s
             data["params"] = params
