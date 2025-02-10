@@ -646,7 +646,7 @@ class FAChassis():
 
         font = ImageFont.truetype(ttf_path, size=24)
 
-
+        text = ""
         if c['generation'] == 'xl' :
             text = "{}r{}".format(c['model_num'],
                                     c['release'])
