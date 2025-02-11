@@ -469,7 +469,7 @@ def handler(event, context):
             data["image"] = None
 
             return {
-                    "statusCode": 200,
+                    "statusCode": 400,
                     "body": json.dumps(data, indent=4),
                     "headers": {"Content-Type": "application/json",
                                 'Access-Control-Allow-Origin': '*',
@@ -482,7 +482,7 @@ def handler(event, context):
             img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
             return {
-                "statusCode": 200,
+                "statusCode": 400,
                 "body": img_str,
                 "headers": {"Content-Type": "image/png",
                             'Access-Control-Allow-Origin': '*',

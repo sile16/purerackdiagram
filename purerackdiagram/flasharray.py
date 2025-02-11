@@ -210,8 +210,8 @@ class FAChassis():
                 img =  await RackImage(key).get_image()
                 return {'img': img, 'ports': []}
             
-            if c['release'] in [1] and c['generation'] in ['c'] or (
-                c['release'] in [4] and c['generation'] in ['x', 'c', 'e']
+            if c['release'] in [1] and c['generation'] in ['c', 'e'] or (
+                c['release'] in [4] and c['generation'] in ['x', 'c']
             ):
                 # check for the next generation chassis
                 if c['chassis_gen'] == '2':
@@ -1066,6 +1066,9 @@ class FADiagram():
                     config['chassis_gen'] = '2'
 
                 if config['generation'] == 'c' and config['model_num'] == 20 and config['release'] == 1:
+                    config['chassis_gen'] = '2'
+
+                if config['generation'] == 'e':
                     config['chassis_gen'] = '2'
                 
             else:

@@ -21,7 +21,35 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
-    
+    {
+        "queryStringParameters": {
+            "model": "fa-er1b",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "0",
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-er1b",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "0",
+            "chassis_gen": "2"
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-e",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "0",
+            "chassis_gen": "2"
+            
+        }
+    },
     {
         "queryStringParameters": {
             "model": "fa-c20r4b",
@@ -816,7 +844,7 @@ def create_test_image(item, count, total):
     folder = "test_results"
     file_name = f"{item['model']}"
     for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
-    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json' ]:
+    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 'chassis_gen' ]:
         if n in item:
             if n == 'datapacks':
                 file_name += f"_{str(item[n]).replace('/', '-')}"
@@ -877,6 +905,16 @@ def get_all_tests():
         yield test['queryStringParameters']
         count += 1
 
+    for cg in ['1', '2']:
+        for model in ['x50r4', 'c50r4', 'c20', 'c50r4b', 'x50r4b', 'er1', 'er1b']:
+                params = {"model": f"fa-{model}",
+                            "datapacks": "0",
+                            "face": "front",
+                            'chassi_gen': cg,
+                            "fm_label": True,
+                            "dp_label": True,
+                            }
+                yield params
     
     
     # Test all Models with a front data pack and shelf.
@@ -993,6 +1031,10 @@ def get_all_tests():
                               "ports": "TRUE"}
                     count += 1
                     yield params
+
+    
+
+
 
 def test_all(args):
 
