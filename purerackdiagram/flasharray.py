@@ -486,10 +486,13 @@ class FAChassis():
         await self.start_img_event.wait()
 
         total_fm_count = 20
-        if self.config['generation'] == 'c' and self.config['model_num'] == 20 and self.config['release'] == 4:
-            total_fm_count = 28
+        #if self.config['generation'] == 'c' and self.config['model_num'] == 20 and self.config['release'] == 4:
+        #    total_fm_count = 28
 
-        if self.config['generation'] in ['c', 'x', 'e'] and self.config['release'] == 4 and self.config['chassis_gen'] == '2':
+        #if self.config['generation'] in ['c', 'x', 'e'] and self.config['release'] == 4 and self.config['chassis_gen'] == '2':
+        #    total_fm_count = 28
+        
+        if self.config['chassis_gen'] == '2':
             total_fm_count = 28
         
 
@@ -1059,15 +1062,19 @@ class FADiagram():
             config["dp_label"] = params.get("dp_label", False)
             config["bezel"] = params.get("bezel", False)
 
+            # we guarantted chassis gen will be in the config
             if "chassis_gen" not in params:
                 config['chassis_gen'] = '1'
                 
+                # default to gen2 chassis for 70 & 90 models for x, c R4
                 if config['generation'] in ['x', 'c'] and config['model_num'] in [70, 90] and config['release'] == 4:
                     config['chassis_gen'] = '2'
 
+                # c20 is gen 2 chassis
                 if config['generation'] == 'c' and config['model_num'] == 20 and config['release'] == 1:
                     config['chassis_gen'] = '2'
 
+                # all e is now default gen 2
                 if config['generation'] == 'e':
                     config['chassis_gen'] = '2'
                 

@@ -23,6 +23,31 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-x70r3",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "0",
+            "dp_label": True,
+            "fm_label": True,
+            
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-er1b",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "1050/1050",
+            "chassis_gen": "2",
+            "dp_label": True,
+            "fm_label": True,
+            
+            
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-er1b",
             "protocol": "fc",
             "face": "front",
