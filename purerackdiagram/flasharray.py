@@ -73,7 +73,9 @@ class FAShelf():
 
         fm_loc = self.img_info['fm_loc']
 
-       
+        total_fm_count = 28
+        rotate_after = 19 
+
         for dp in self.config["datapacks"]:
             
 
@@ -95,44 +97,56 @@ class FAShelf():
             
             
             first_fm = True
-            for x in range(cur_module, min(28, num_modules + cur_module)):
+            the_range = list(range(cur_module, min(28, num_modules + cur_module)))
+            for x in the_range:
                 if first_fm:
                     dp.append(fm_loc[x])
-                    dp.append("")
+                    dp.append(fm_loc[x])
+                    dp.append(x > rotate_after) # rotate after
                     first_fm = False
+                
+                if len(dp) == 7: #Length of 7 means we have a continious DP so far,
+                    if fm_loc[x][0] >= dp[5][0] :
+                        # The x is to the right, so just update the current DP range with new furthest FM loc
+                        dp[5] = fm_loc[x]
+                    else:
+                        # We are starting a new range because the x is to the left,
+                        # these will be in location dp[6] and dp[7]
+                        dp.append(fm_loc[x])
+                        dp.append(fm_loc[the_range[-1]])
+                        dp.append(x > rotate_after) # rotate after
 
-                if x < 20:
+                if x <= rotate_after:
                     self.tmp_img.paste(fm_img, fm_loc[x])
-                    dp[5] = fm_loc[x]
                 else:
                     self.tmp_img.paste(fm_rotated, fm_loc[x])
-                    ## raise the y value of sthe starting point.
-                    dp[4] = (dp[4][0],min(fm_loc[x][1], dp[4][1]))
+                
                     
             cur_module += num_modules
 
         # add datapack labels
-        right = False
         if self.config['dp_label']:
             for dp in self.config["datapacks"]:
-                num_modules = dp[2]
-                full = False
-                if num_modules == 28:
-                    full = True
                 dp_size = dp[3]
-                y_offset = 50
-                x_offset = 162
-                right = True
-
-                #self.tmp_img = apply_dp_label(self.tmp_img,
-                #                              dp_size,
-                #                              x_offset,
-                #                              y_offset,
-                #                              right,
-                #                              full)
-
-                self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size+"TB", dp[4], dp[5])
                 
+                if len(dp) > 4:
+                    start_loc = dp[4]
+                    end_loc = dp[5]
+                    rotate = dp[6]
+                    text = dp_size + "TB"
+                
+                    self.tmp_img = apply_dp_labelv2(self.tmp_img, text, start_loc, end_loc, rotate)
+
+                # if it's a continue DP then add the second section.
+                if len(dp) > 7:
+                    start_loc = dp[7]
+                    end_loc = dp[8]
+                    rotate = dp[9]
+                    text = "..Continued"
+
+                    # use the new apply_dp_label
+                    self.tmp_img = apply_dp_labelv2(self.tmp_img, text , start_loc, end_loc, rotate)
+
 
     async def add_sas_fms(self):
         cur_module = 0
@@ -485,15 +499,17 @@ class FAChassis():
         # of chassis slots
         await self.start_img_event.wait()
 
+        # todo add these details into the config.yaml
         total_fm_count = 20
-        #if self.config['generation'] == 'c' and self.config['model_num'] == 20 and self.config['release'] == 4:
-        #    total_fm_count = 28
+        rotate_after = 1000 # i.e. no rotation
 
-        #if self.config['generation'] in ['c', 'x', 'e'] and self.config['release'] == 4 and self.config['chassis_gen'] == '2':
-        #    total_fm_count = 28
+        if self.config['generation'] == 'xl':
+            total_fm_count = 40
+            rotate_after = 40 #i.e. no rotation
         
-        if self.config['chassis_gen'] == '2':
+        elif self.config['chassis_gen'] == '2':
             total_fm_count = 28
+            rotate_after = 19
         
 
         current_index = 0
@@ -528,30 +544,34 @@ class FAChassis():
                 the_range = list(range(current_index, current_index + num_modules))
                 current_index += num_modules
             else:
-                # this is hard coded 20, probably fine
-                # todo fix this on next generation X chassis
                 the_range = list(range(total_fm_count-num_modules, total_fm_count))
 
            
 
             first_fm = True # used store the first fm location
             for x in the_range:
+                if x >= total_fm_count:
+                    raise Exception(
+                        f"Too many fm modules, check data pack sizes dont exceed chassis size of {total_fm_count}" )
                 if first_fm:
-                    dp.append(fm_loc[x])
-                    dp.append(fm_loc[x])
+                    dp.append(fm_loc[x]) # dp[4] is the start location of the DP
+                    dp.append(fm_loc[x]) # dp[5] is the end, but we just put this as initial, it will be updated later
+                    dp.append(x > rotate_after) # rotate after
+                    
+                        
                     first_fm = False
                 
-                if len(dp) == 6:
+                if len(dp) == 7: #Length of 7 means we have a continious DP so far, 
                     if fm_loc[x][0] >= dp[5][0] :
+                        # The x is to the right, so just update the current DP range with new furthest FM loc
                         dp[5] = fm_loc[x]
                     else:
+                        # We are starting a new range because the x is to the left,
+                        # these will be in location dp[6] and dp[7]
                         dp.append(fm_loc[x])
                         dp.append(fm_loc[the_range[-1]])
+                        dp.append(x > rotate_after) # rotate after
 
-                
-                
-                    
-                
                 # self.tmp_img.save("tmp.png")
                 #if not right and x >= num_modules and self.config["generation"] != 'xl':
                 #    # for short DMM modules, fill the rest with blanks
@@ -570,11 +590,9 @@ class FAChassis():
                     if x >= len(fm_loc):
                         raise Exception(
                             f"Too many fm modules, check data pack sizes dont exceed chassis size of {total_fm_count}" )
-                    if total_fm_count > 20:
-                        if x > 19:
-                            self.tmp_img.paste(fm_rotated, fm_loc[x])
-                        else:
-                            self.tmp_img.paste(fm_img, fm_loc[x])
+                    
+                    if x > rotate_after:
+                        self.tmp_img.paste(fm_rotated, fm_loc[x])
                     else:
                         self.tmp_img.paste(fm_img, fm_loc[x])
                     # keep track of modules, to detect overlaps
@@ -587,10 +605,10 @@ class FAChassis():
     
             for x in range(total_fm_count):
                 if x not in slots:
-                    if x < 20:
-                        self.tmp_img.paste(blank_img, fm_loc[x])
-                    else:
+                    if x > rotate_after:
                         self.tmp_img.paste(blank_img.rotate(-90, expand=True), fm_loc[x])
+                    else:
+                        self.tmp_img.paste(blank_img, fm_loc[x])
                 
         
 
@@ -602,41 +620,28 @@ class FAChassis():
                 fm_type = dp[1]
                 num_modules = dp[2]
                 dp_size = dp[3]
+                
 
                 # just checks the dp info has the start_loc and end_loc
                 if len(dp) > 4:
                     start_loc = dp[4]
                     end_loc = dp[5]
+                    rotate = dp[6]
+                    text = dp_size + "TB"
+
+                    self.tmp_img = apply_dp_labelv2(self.tmp_img, text , start_loc, end_loc, rotate)
+
+                # if it's a continue DP then add the second section.
+                if len(dp) > 7:
+                    start_loc = dp[7]
+                    end_loc = dp[8]
+                    rotate = dp[9]
+                    text = "..Continued"
+
                     # use the new apply_dp_label
-                    self.tmp_img = apply_dp_labelv2(self.tmp_img, dp_size + "TB", start_loc, end_loc)
-                    
-                    # if 2 additional start ends are provided then we have a continued DP
-                    if len(dp) > 6:
-                        
-                        start_loc = dp[6]
-                        end_loc = dp[7]
-                        self.tmp_img = apply_dp_labelv2(self.tmp_img,"..Continued", start_loc, end_loc)
-        
+                    self.tmp_img = apply_dp_labelv2(self.tmp_img, text , start_loc, end_loc, rotate)
+    
                        
-
-
-                else:
-                   
-
-                    y_offset = 244
-                    x_offset = 130
-                    full = False
-                    if num_modules == 20:
-                        full = True
-
-                    self.tmp_img = apply_dp_label(self.tmp_img,
-                                                dp_size,
-                                                x_offset,
-                                                y_offset,
-                                                right,
-                                                full)
-                    # the next DP must be the right side.
-                    right = True
 
     async def add_model_text(self):
         global ttf_path
@@ -680,7 +685,7 @@ def apply_fm_label(fm_img, fm_str, fm_type):
     if fm_type != "blank":
         utils.apply_text_centered(fm_img, fm_type, 32)
 
-def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided):
+def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided, rotated=False):
     if dp_size == '0TB':
         return img
     
@@ -694,6 +699,12 @@ def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided):
     x_buffer = 50
     y_buffer = 75
     y_size = 420
+    x_size = 0
+
+    if rotated:
+        y_size = 75 # this is for the shelf and gen2 chassis
+        y_buffer = 20
+        x_size = 350
 
     start_loc = (min(start_loc_provided[0], end_loc_provided[0]),
                 min(start_loc_provided[1], end_loc_provided[1]))
@@ -703,7 +714,7 @@ def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided):
 
     box_loc = (start_loc[0] + x_buffer, start_loc[1] + y_buffer)
 
-    end_loc = (end_loc[0] + x_buffer,
+    end_loc = (end_loc[0] + x_buffer + x_size,
                 (end_loc[1] + y_size))
 
     draw.rectangle((box_loc, end_loc), fill=(199, 89, 40, 127))

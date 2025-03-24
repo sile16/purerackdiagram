@@ -23,10 +23,78 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
-            "model": "fa-x70r3",
+            "model": "fa-x70r4b",
             "protocol": "fc",
             "face": "front",
-            "datapacks": "0",
+            "datapacks": "11/13/0.06",
+            "dp_label": True,
+            "fm_label": True,
+        }
+    },
+    {
+
+        "queryStringParameters": {
+            "model": "fa-x70r4b",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "15/11/0.04",
+            "dp_label": True,
+            "fm_label": True,
+        }
+    },
+    {
+
+        "queryStringParameters": {
+            "model": "fa-x70r4b",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "18/11/0.02",
+            "dp_label": True,
+            "fm_label": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-xl170",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "18/13-63/63/63",
+            "dp_label": True,
+            "fm_label": True,
+            
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-er1b",
+            "protocol": "eth",
+            "face": "front",
+            "datapacks": "1050/1050",
+            "dp_label": True,
+            "fm_label": True,
+            
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-xl170",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "18/13/18",
+            "dp_label": True,
+            "fm_label": True,
+            
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-er1b",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "1050/1050",
             "dp_label": True,
             "fm_label": True,
             
@@ -1120,7 +1188,7 @@ def test_all(args):
             pass # always different because unique key
         elif results[key] != validation[key]:
             errors += 1
-            print("Error Image Changed!!:{}".format(key))
+            print(f"Error Image Changed!!: {key} (file://{os.path.abspath(os.path.join(save_dir, key))}.png)")
     print("Test Complete {} Errors Found {} Warning".format(errors, warnings))
 
 

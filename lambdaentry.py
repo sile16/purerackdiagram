@@ -4,13 +4,13 @@ import asyncio
 import base64
 import logging
 import os
-from PIL import Image, ImageDraw, ImageFont
 import uuid
-import boto3
-import math
 import zipfile
 import io
 import json
+
+import boto3
+from PIL import Image, ImageDraw, ImageFont
 
 from purerackdiagram.utils import combine_images_vertically
 import purerackdiagram
@@ -20,7 +20,7 @@ bucket_name = "images.purestorage"
 
 use_s3_size_limit = 4  # MiB limit for inline responses
 
-log_level = os.getenv('log_level', 'WARNING').upper()
+log_level = 'INFO'
 
 if len(logger.handlers) > 0:
     logger.setLevel(log_level)
@@ -162,7 +162,7 @@ def draw_ports_on_image(img, all_ports, draw_ports_flag, img_original_size):
             p['symbol_color'] = color
 
         else:
-            logger.warning(f"Unknown port type: {p['port_type']}")
+            print(f"Unknown port type: {p['port_type']}")
 
 
 def resize_image_and_ports(img, all_ports):
@@ -453,7 +453,7 @@ def handler(event, context):
 
     except Exception as except_e:
         error_msg = str(except_e)
-        logger.error("{}\nOriginal Params: {}".format(error_msg, params))
+        print("{}\nOriginal Params: {}".format(error_msg, params))
         if 'json' in params and params['json']:
             data = {}
             if diagram:
