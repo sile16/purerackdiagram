@@ -90,3 +90,19 @@ The PNG images I'm building from are small enough to be included in the code ZIP
 After including the PNG files directly into the package, it performs better. To improve execution time further, you can increase your Lambda RAM. While you might not need more RAM, it will increase the CPU cycles available, resulting in faster execution.
 
 Also, when converting to base64 to deliver a binary stream in Lambda Python, ensure you deliver a UTF-8 encoded stream, rather than a byte stream.
+
+### Lambda Environment Variables
+
+This tool uses CloudWatch metrics to track usage patterns and error types. To separate metrics between production and staging environments, set the following environment variable in your Lambda functions:
+
+| Lambda Function | Environment Variable | Value |
+|-----------------|----------------------|-------|
+| rackdiagram (Production) | ENVIRONMENT | Production |
+| rackdiagram-staging (Staging) | ENVIRONMENT | Staging |
+
+This separation ensures that:
+- Production metrics remain clean and accurate
+- Staging/testing doesn't impact production metrics
+- Each environment has its own CloudWatch metrics namespace (`PureRackDiagram-Production` or `PureRackDiagram-Staging`)
+
+The corresponding CloudWatch dashboards should be created with the same naming convention.

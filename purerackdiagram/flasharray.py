@@ -4,6 +4,24 @@ from PIL import ImageFont
 # from io import BytesIO
 import asyncio
 from . import utils
+# Import custom exceptions
+import sys
+try:
+    from . import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
+except ImportError:
+    # Handle circular import issue
+    # Providing fallback definitions of the exceptions
+    class RackDiagramException(Exception):
+        """Base exception class for all rack diagram errors"""
+        pass
+
+    class InvalidConfigurationException(RackDiagramException):
+        """Exception raised for invalid user configuration inputs"""
+        pass
+
+    class InvalidDatapackException(InvalidConfigurationException):
+        """Exception specifically for datapack validation errors"""
+        pass
 from .utils import RackImage, combine_images_vertically, add_ports_at_offset
 import logging
 import os
@@ -551,7 +569,7 @@ class FAChassis():
             first_fm = True # used store the first fm location
             for x in the_range:
                 if x >= total_fm_count:
-                    raise Exception(
+                    raise InvalidConfigurationException(
                         f"Too many fm modules, check data pack sizes dont exceed chassis size of {total_fm_count}" )
                 if first_fm:
                     dp.append(fm_loc[x]) # dp[4] is the start location of the DP
@@ -583,12 +601,12 @@ class FAChassis():
                     if fm_type == "blank":
                         pass
                     else:
-                        raise Exception(
+                        raise InvalidConfigurationException(
                             f"Overlapping datapacks, check data pack sizes dont exceed chassis size of {total_fm_count}")
                 else:
                     # check to make sure index is not out of range:
                     if x >= len(fm_loc):
-                        raise Exception(
+                        raise InvalidConfigurationException(
                             f"Too many fm modules, check data pack sizes dont exceed chassis size of {total_fm_count}" )
                     
                     if x > rotate_after:
@@ -808,7 +826,7 @@ class FADiagram():
                     continue
 
                 if card not in pci_valid_cards:
-                    raise Exception("invalid pci card: {}, valid cards:{}".format(
+                    raise InvalidConfigurationException("invalid pci card: {}, valid cards:{}".format(
                         card, pformat(pci_valid_cards)))
 
                 # card population order for a full height only card
@@ -858,7 +876,7 @@ class FADiagram():
             if not card:
                 continue
             if card not in pci_valid_cards:
-                raise Exception("invalid pci card: {}, valid cards:{}".format(
+                raise InvalidConfigurationException("invalid pci card: {}, valid cards:{}".format(
                     card, pformat(pci_valid_cards)))
             pci_config[x] = card
 
@@ -906,7 +924,7 @@ class FADiagram():
                     elif dp == '0':
                         pass
                     else:
-                        raise Exception("Unknown Chassis: DP: {}\nPick from One of the Following\n{}".
+                        raise InvalidDatapackException("Unknown Chassis: DP: {}\nPick from One of the Following\n{}".
                                         format(dp, pformat(chassis_dp_size_lookup)))
 
                 config["chassis_datapacks"] = datapacks
@@ -924,7 +942,7 @@ class FADiagram():
                             if 'nvme' in shelf_type:
                                 shelf_type = 'nvme'
                     else:
-                        raise Exception("Unknown Shelf: DP: {}\nPick from One of the Following\n{}".
+                        raise InvalidDatapackException("Unknown Shelf: DP: {}\nPick from One of the Following\n{}".
                                         format(dp, pformat(shelf_dp_size_lookup)))
 
                 if config['face'] == 'front':
@@ -1020,13 +1038,13 @@ class FADiagram():
                     config[item] = True
 
             if config["dc_power"] not in [True, False, "1300", "2000"]:
-                raise Exception("Please use a valid dc_power: 1300, 2000")
+                raise InvalidConfigurationException("Please use a valid dc_power: 1300, 2000")
 
 
             valid_protocols = ['fc', 'eth']
             config["protocol"] = params.get("protocol", "fc").lower()
             if config['protocol'] not in valid_protocols:
-                raise Exception("invalid protocol: {}, valid cards:{}".format(
+                raise InvalidConfigurationException("invalid protocol: {}, valid cards:{}".format(
                     config["protocol"],
                     pformat(valid_protocols)))
 
@@ -1062,7 +1080,7 @@ class FADiagram():
                 config['mezz'] = None
 
             if config['mezz'] not in valid_mezz:
-                raise Exception(
+                raise InvalidConfigurationException(
                     f"Please use a valid mezzainine: {pformat(valid_mezz)}")
 
             self._init_pci_cards(config, params)
@@ -1092,7 +1110,7 @@ class FADiagram():
             else:
                 config["chassis_gen"] = params.get("chassis_gen").lower() # For xcr4 chassis gen 2, will be the new default
                 if config["chassis_gen"] not in ['1', '2']:
-                    raise Exception("Please use a valid chassis_gen: 1, 2")
+                    raise InvalidConfigurationException("Please use a valid chassis_gen: 1, 2")
 
             # check for string versions of no/false
             for item in ["fm_label", 'dp_label', 'bezel']:
@@ -1112,7 +1130,7 @@ class FADiagram():
                     # we have a lookup translation, lets use it
                     params['datapacks'] = csize_lookup[csize]
                 else:
-                    raise Exception(
+                    raise InvalidDatapackException(
                         "Please use a valid csize: {}".format(
                             pformat(csize_lookup.keys())))
 
@@ -1120,7 +1138,7 @@ class FADiagram():
                 #they specified the datapacks use those.
                 pass
             else:
-                raise Exception("Please provide either csize or datapacks")
+                raise InvalidDatapackException("Please provide either csize or datapacks")
 
         # need for both as shelf type is encoded in DP sizes
         self._init_datapacks(config, params)

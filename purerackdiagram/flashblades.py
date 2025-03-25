@@ -4,6 +4,24 @@ from os.path import join
 from PIL import ImageDraw
 from PIL import Image
 from PIL import ImageFont
+# Import custom exceptions
+import sys
+try:
+    from . import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
+except ImportError:
+    # Handle circular import issue
+    # Providing fallback definitions of the exceptions
+    class RackDiagramException(Exception):
+        """Base exception class for all rack diagram errors"""
+        pass
+
+    class InvalidConfigurationException(RackDiagramException):
+        """Exception raised for invalid user configuration inputs"""
+        pass
+
+    class InvalidDatapackException(InvalidConfigurationException):
+        """Exception specifically for datapack validation errors"""
+        pass
 from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
 
 from .flasharray import apply_fm_label
@@ -32,28 +50,28 @@ class FBSDiagram():
         config['xfm_model'] = params.get('xfm_model', '8400').lower()
         valid_xfm_model =['3200e', '8400']
         if config['xfm_model'] not in valid_xfm_model:
-            raise Exception('please provide a valid xfm_model: {}'.format(valid_xfm_model))
+            raise InvalidConfigurationException('please provide a valid xfm_model: {}'.format(valid_xfm_model))
 
         if config['xfm_face'] == "":
             config['xfm_face'] = config['face']
         elif config['xfm_face'] not in ['front', 'back', 'bezel']:
-            raise Exception (f"Invalid XFM Face, {config['xfm_face']}")
+            raise InvalidConfigurationException(f"Invalid XFM Face, {config['xfm_face']}")
 
 
         valid_models = ['fb-s200', 'fb-s500', 'fb-e', 'fb-s100']
         if config['model'] not in valid_models:
-            raise Exception('please provide a valid model: {}'.format(valid_models))
+            raise InvalidConfigurationException('please provide a valid model: {}'.format(valid_models))
 
         if config['blades'] < 0 or config['blades'] > 100 :
-            raise Exception('please provide blades count 0-100.')
+            raise InvalidConfigurationException('please provide blades count 0-100.')
 
         valid_dfms = [24, 24.0, 37.5, 48, 48.2, 75, 150]
         if config['dfm_size'] not in valid_dfms:
-            raise Exception('Valide drive sizes: {}'.format(valid_dfms))
+            raise InvalidConfigurationException('Valid drive sizes: {}'.format(valid_dfms))
 
         valid_dfm_count = [1, 2, 3, 4]
         if config['dfm_count'] not in valid_dfm_count:
-            raise Exception('Valide drive counts: {}'.format(valid_dfm_count))
+            raise InvalidConfigurationException('Valid drive counts: {}'.format(valid_dfm_count))
 
 
         default_chassis = (config['blades'] - 1 )// 10 + 1

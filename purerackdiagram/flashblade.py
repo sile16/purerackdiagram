@@ -3,6 +3,24 @@ from os.path import join
 import re
 from PIL import ImageDraw
 from PIL import ImageFont
+# Import custom exceptions
+import sys
+try:
+    from . import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
+except ImportError:
+    # Handle circular import issue
+    # Providing fallback definitions of the exceptions
+    class RackDiagramException(Exception):
+        """Base exception class for all rack diagram errors"""
+        pass
+
+    class InvalidConfigurationException(RackDiagramException):
+        """Exception raised for invalid user configuration inputs"""
+        pass
+
+    class InvalidDatapackException(InvalidConfigurationException):
+        """Exception specifically for datapack validation errors"""
+        pass
 from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
 
 
@@ -27,15 +45,15 @@ class FBDiagram():
         if config['xfm_face'] == "":
             config['xfm_face'] = config['face']
         elif config['xfm_face'] not in ['front', 'back', 'bezel']:
-            raise Exception (f"Invalid XFM Face, {config['xfm_face']}")
+            raise InvalidConfigurationException(f"Invalid XFM Face, {config['xfm_face']}")
 
         valid_efm = ['efm110', 'efm310']
         if config['efm'] not in valid_efm:
-            raise Exception('please provide a valid efm: {}'.format(valid_efm))
+            raise InvalidConfigurationException('please provide a valid efm: {}'.format(valid_efm))
         
         valid_xfm_model =['3200e', '8400']
         if config['xfm_model'] not in valid_xfm_model:
-            raise Exception('please provide a valid xfm_model: {}'.format(valid_xfm_model))
+            raise InvalidConfigurationException('please provide a valid xfm_model: {}'.format(valid_xfm_model))
 
         blades = params.get('blades', "17:0-6").lower()
 
@@ -43,7 +61,7 @@ class FBDiagram():
         blade_pattern = global_config['fb_blade_reg_pattern']
 
         if not re.compile(blade_pattern).match(blades):
-            raise Exception(
+            raise InvalidConfigurationException(
                 "Invalid blade pattern, expecting \"17:0-8,52:23-48\" for 17TB blades in slots 0-8, and 52TB in  ")
 
         # convert from that format to an index of the label for each blade index

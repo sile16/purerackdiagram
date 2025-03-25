@@ -8,24 +8,88 @@ import uuid
 import zipfile
 import io
 import json
+import traceback
 
 import boto3
 from PIL import Image, ImageDraw, ImageFont
 
 from purerackdiagram.utils import combine_images_vertically
 import purerackdiagram
+from purerackdiagram import RackDiagramException, InvalidConfigurationException, InvalidDatapackException
 
+# Configure logging for Lambda
 logger = logging.getLogger()
 bucket_name = "images.purestorage"
 
 use_s3_size_limit = 4  # MiB limit for inline responses
 
-log_level = 'INFO'
+# Set to DEBUG to see more details in CloudWatch
+log_level = 'DEBUG'
 
 if len(logger.handlers) > 0:
     logger.setLevel(log_level)
 else:
     logging.basicConfig(level=log_level)
+
+# Get environment from Lambda environment variables
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'Production')
+METRIC_NAMESPACE = f"PureRackDiagram-{ENVIRONMENT}"
+
+logger.info(f"Using metric namespace: {METRIC_NAMESPACE}")
+
+# CloudWatch metrics client - only initialize if running in Lambda
+try:
+    # When running in AWS Lambda, this will work
+    cloudwatch = boto3.client('cloudwatch')
+except Exception as e:
+    # For local testing, create a mock object
+    logger.info(f"Running locally, CloudWatch metrics disabled: {str(e)}")
+    class MockCloudWatch:
+        def put_metric_data(self, **kwargs):
+            logger.debug(f"Mock CloudWatch metric: {kwargs}")
+            pass
+    cloudwatch = MockCloudWatch()
+
+def emit_exception_metric(exception_type):
+    """
+    Emit a CloudWatch metric for the exception type
+    This allows creating graphs based on exception types
+    """
+    try:
+        # Emit exception count by type
+        cloudwatch.put_metric_data(
+            Namespace=METRIC_NAMESPACE,
+            MetricData=[
+                {
+                    'MetricName': 'ExceptionCount',
+                    'Dimensions': [
+                        {
+                            'Name': 'ExceptionType',
+                            'Value': exception_type
+                        }
+                    ],
+                    'Value': 1,
+                    'Unit': 'Count'
+                }
+            ]
+        )
+        
+        # Also emit a total error count metric
+        cloudwatch.put_metric_data(
+            Namespace=METRIC_NAMESPACE,
+            MetricData=[
+                {
+                    'MetricName': 'TotalErrorCount',
+                    'Value': 1,
+                    'Unit': 'Count'
+                }
+            ]
+        )
+        
+        logger.info(f"Emitted CloudWatch metric for exception type: {exception_type}")
+    except Exception as e:
+        logger.error(f"Failed to emit CloudWatch metric: {str(e)}")
+        logger.error(traceback.format_exc())
 
 VERSION = 5
 program_time_s = time.time()
@@ -43,8 +107,10 @@ def upload_to_s3(buffered, extension, contenttype, disposition):
             ContentType=contenttype,
             ContentDisposition=disposition
         )
+        logger.info(f"Successfully uploaded to S3: {file_key}")
     except Exception as e:
-        print(f"Error uploading to S3: {e}")
+        logger.error(f"Error uploading to S3: {e}")
+        logger.error(traceback.format_exc())
         return None
     return f"https://s3.amazonaws.com/{bucket_name}/{file_key}"
 
@@ -162,7 +228,7 @@ def draw_ports_on_image(img, all_ports, draw_ports_flag, img_original_size):
             p['symbol_color'] = color
 
         else:
-            print(f"Unknown port type: {p['port_type']}")
+            logger.warning(f"Unknown port type: {p['port_type']}")
 
 
 def resize_image_and_ports(img, all_ports):
@@ -321,6 +387,132 @@ def handle_individual_processing(img_ports, diagram, params):
     }
 
 
+def emit_success_metric():
+    """Emit a success metric to CloudWatch"""
+    try:
+        cloudwatch.put_metric_data(
+            Namespace=METRIC_NAMESPACE,
+            MetricData=[
+                {
+                    'MetricName': 'SuccessCount',
+                    'Value': 1,
+                    'Unit': 'Count'
+                }
+            ]
+        )
+        logger.info("Emitted CloudWatch success metric")
+    except Exception as e:
+        logger.error(f"Failed to emit CloudWatch success metric: {str(e)}")
+        
+def emit_array_type_metric(params, diagram=None):
+    """
+    Emit metrics for array type (FlashArray vs FlashBlade) and FlashArray model
+    
+    Args:
+        params: The query parameters dictionary
+        diagram: Optional diagram object with configuration
+    """
+    try:
+        model = params.get('model', '').lower()
+        model_metrics = []
+        
+        # Determine if this is a FlashArray or FlashBlade
+        if model.startswith('fa'):
+            array_type = 'FlashArray'
+            
+            # Add model-specific metrics if available
+            if diagram and hasattr(diagram, 'config'):
+                generation = diagram.config.get('generation', '')
+                release = str(diagram.config.get('release', ''))
+                model_num = str(diagram.config.get('model_num', ''))
+                
+                if generation and model_num:
+                    model_type = f"{generation.upper()}{model_num}r{release}"
+                    model_metrics.append({
+                        'MetricName': 'ModelType',
+                        'Dimensions': [{'Name': 'Model', 'Value': model_type}],
+                        'Value': 1,
+                        'Unit': 'Count'
+                    })
+                    
+                    # Also track by generation for broader metrics
+                    model_metrics.append({
+                        'MetricName': 'Generation',
+                        'Dimensions': [{'Name': 'Type', 'Value': generation.upper()}],
+                        'Value': 1,
+                        'Unit': 'Count'
+                    })
+        elif model.startswith('fb'):
+            array_type = 'FlashBlade'
+        else:
+            array_type = 'Unknown'
+        
+        # Emit array type metric
+        metrics = [
+            {
+                'MetricName': 'ArrayType',
+                'Dimensions': [{'Name': 'Type', 'Value': array_type}],
+                'Value': 1,
+                'Unit': 'Count'
+            }
+        ]
+        
+        # Add the model metrics if we have any
+        metrics.extend(model_metrics)
+        
+        cloudwatch.put_metric_data(
+            Namespace=METRIC_NAMESPACE,
+            MetricData=metrics
+        )
+        
+        logger.info(f"Emitted CloudWatch metrics for array type: {array_type}")
+    except Exception as e:
+        logger.error(f"Failed to emit array type metrics: {str(e)}")
+        logger.error(traceback.format_exc())
+        
+def create_response(status_code, body, headers=None, is_base64_encoded=False, params=None, diagram=None):
+    """
+    Helper function to create a response dictionary with automatic success metrics
+    
+    Args:
+        status_code: HTTP status code
+        body: Response body
+        headers: Optional response headers
+        is_base64_encoded: Whether the body is base64 encoded
+        params: Query parameters for metrics
+        diagram: Diagram object for model metrics
+    """
+    if headers is None:
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET'
+        }
+    else:
+        # Ensure CORS headers are present
+        if 'Access-Control-Allow-Origin' not in headers:
+            headers['Access-Control-Allow-Origin'] = '*'
+        if 'Access-Control-Allow-Methods' not in headers:
+            headers['Access-Control-Allow-Methods'] = 'GET'
+    
+    response = {
+        "statusCode": status_code,
+        "body": body,
+        "headers": headers
+    }
+    
+    if is_base64_encoded:
+        response["isBase64Encoded"] = True
+    
+    # Emit success metric for 2xx status codes
+    if 200 <= status_code < 300:
+        emit_success_metric()
+        
+        # Also emit array type metrics if we have params
+        if params:
+            emit_array_type_metric(params, diagram)
+        
+    return response
+
 def handler(event, context):
     global program_time_s
     program_time_s = time.time()
@@ -328,22 +520,28 @@ def handler(event, context):
     diagram = None
 
     try:
+        request_id = context.aws_request_id if context and hasattr(context, 'aws_request_id') else 'unknown'
+        logger.info(f"Lambda invoked with request_id: {request_id}")
+        logger.debug(f"Full event: {json.dumps(event)}")
+        
         if ("queryStringParameters" not in event
                 or event["queryStringParameters"] is None):
-            return {
-                'statusCode': 200,
-                'headers': {
-                    "Content-Type": "text/plain",
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET'
-                },
-                'body': 'Hello from Lambda!' }
+            logger.info("No query parameters found, returning default response")
+            return create_response(
+                status_code=200,
+                body='Hello from Lambda!',
+                headers={"Content-Type": "text/plain"}
+                # No params or diagram to pass for metrics
+            )
 
         params = event["queryStringParameters"]
+        logger.info(f"Processing request with parameters: {json.dumps(params)}")
+        
         diagram = purerackdiagram.get_diagram(params)
-        logger.debug(f"diagram: {diagram}")
+        logger.info(f"Diagram created: {diagram}")
+        
         img_ports_list = asyncio.run(diagram.get_image())
-        logger.debug("Images created successfully")
+        logger.info("Images created successfully")
 
         # Check for "individual" param
         individual = False
@@ -389,15 +587,17 @@ def handler(event, context):
                 }
             zip_str = base64.b64encode(vssx_buffer.getvalue()).decode('utf-8')
             content_disposition = f'attachment; filename="{name}.vssx"'
-            return {
-                "statusCode": 200,
-                "body": zip_str,
-                "headers": {"Content-Type": "application/vnd.ms-visio.stencil",
-                            'content-disposition': content_disposition,
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Methods': 'GET'},
-                "isBase64Encoded": True
-            }
+            return create_response(
+                status_code=200,
+                body=zip_str,
+                headers={
+                    "Content-Type": "application/vnd.ms-visio.stencil",
+                    'content-disposition': content_disposition
+                },
+                is_base64_encoded=True,
+                params=params,
+                diagram=diagram
+            )
         else:
             data = {"image_type": "png",
                     "config": diagram.config,
@@ -410,12 +610,13 @@ def handler(event, context):
                     "image": None }
 
             if 'json_only' in params:
-                return {
-                    "statusCode": 200,
-                    "body": json.dumps(data, indent=4),
-                    "headers": {"Content-Type": "application/json",
-                                'Access-Control-Allow-Origin': '*',
-                                'Access-Control-Allow-Methods': 'GET'} }
+                return create_response(
+                    status_code=200,
+                    body=json.dumps(data, indent=4),
+                    headers={"Content-Type": "application/json"},
+                    params=params,
+                    diagram=diagram
+                )
 
             if size_of_buffered_in_mib > use_s3_size_limit:
                 link = upload_to_s3(buffered, "png", "image/png", 'inline')
@@ -426,13 +627,13 @@ def handler(event, context):
                 data['image_type'] = "png"
 
             if 'json' in params and params['json']:
-                return {
-                    "statusCode": 200,
-                    "body": json.dumps(data, indent=4),
-                    "headers": {"Content-Type": "application/json",
-                                'Access-Control-Allow-Origin': '*',
-                                'Access-Control-Allow-Methods': 'GET'}
-                }
+                return create_response(
+                    status_code=200,
+                    body=json.dumps(data, indent=4),
+                    headers={"Content-Type": "application/json"},
+                    params=params,
+                    diagram=diagram
+                )
 
             if size_of_buffered_in_mib > use_s3_size_limit:
                 return {
@@ -442,18 +643,95 @@ def handler(event, context):
                                 'Access-Control-Allow-Methods': 'GET'}
                 }
 
-            return {
-                "statusCode": 200,
-                "body": data['image'],
-                "headers": {"Content-Type": "image/png",
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Methods': 'GET'},
-                "isBase64Encoded": True
-            }
+            return create_response(
+                status_code=200,
+                body=data['image'],
+                headers={"Content-Type": "image/png"},
+                is_base64_encoded=True,
+                params=params,
+                diagram=diagram
+            )
 
-    except Exception as except_e:
-        error_msg = str(except_e)
-        print("{}\nOriginal Params: {}".format(error_msg, params))
+    # Catch all exceptions and then handle by type
+    except Exception as e:
+        error_msg = str(e)
+        stack_trace = traceback.format_exc()
+        error_type = e.__class__.__name__
+        
+        # Determine the status code based on error type
+        status_code = 500  # Default as server error
+        if error_type == 'InvalidDatapackException':
+            status_code = 400
+            logger.info(f"Invalid datapack: {error_msg}")
+            emit_exception_metric('InvalidDatapackException')
+            
+            # Format user-friendly message
+            if "Pick from One of the Following" in error_msg:
+                # The error message already has the list of valid options
+                user_friendly_error = error_msg
+            else:
+                # Add more context if needed
+                user_friendly_error = f"Datapack configuration invalid. {error_msg}"
+        
+        elif error_type == 'InvalidConfigurationException':
+            status_code = 400
+            logger.info(f"Invalid configuration: {error_msg}")
+            emit_exception_metric('InvalidConfigurationException')
+            
+            # Format user-friendly message
+            if "Pick from One of the Following" in error_msg or "please provide a valid" in error_msg.lower() or "valid" in error_msg.lower():
+                # The error message already has the list of valid options
+                user_friendly_error = error_msg
+            else:
+                # Add more context if needed
+                user_friendly_error = f"Configuration invalid. {error_msg}"
+                
+                # Check for specific model or value errors that might need more context
+                if "valid model" in error_msg.lower():
+                    user_friendly_error = f"Model configuration invalid. {error_msg}"
+                elif "valid cards" in error_msg.lower():
+                    user_friendly_error = f"Cards configuration invalid. {error_msg}"
+        
+        elif error_type == 'RackDiagramException':
+            status_code = 400
+            logger.info(f"Rack diagram error: {error_msg}")
+            emit_exception_metric('RackDiagramException')
+            
+            # Format user-friendly message
+            if "Pick from One of the Following" in error_msg or "please provide a valid" in error_msg.lower() or "valid" in error_msg.lower():
+                # The error message already has the list of valid options
+                user_friendly_error = error_msg
+            else:
+                # Add more context if needed
+                user_friendly_error = f"Rack diagram configuration invalid. {error_msg}"
+        
+        else:
+            # Handle other exceptions as server errors
+            status_code = 500
+            logger.error(f"Server error: {error_msg}")
+            logger.error(f"Stack trace: {stack_trace}")
+            emit_exception_metric('ServerError')
+            
+            # Format user-friendly message for server errors
+            if "Pick from One of the Following" in error_msg or "please provide a valid" in error_msg.lower() or "valid" in error_msg.lower():
+                # The error message already has the list of valid options
+                user_friendly_error = error_msg
+            else:
+                # Check for specific error types to provide more context
+                if "datapacks" in error_msg.lower() or "dp" in error_msg.lower():
+                    user_friendly_error = f"Datapack configuration invalid. {error_msg}"
+                elif "model" in error_msg.lower():
+                    user_friendly_error = f"Model configuration invalid. {error_msg}"
+                elif "card" in error_msg.lower() or "pci" in error_msg.lower():
+                    user_friendly_error = f"Cards configuration invalid. {error_msg}"
+                else:
+                    user_friendly_error = f"Configuration error: {error_msg}"
+        
+        # Log stack trace and request parameters
+        logger.debug(f"Stack trace: {stack_trace}")
+        logger.info(f"Request parameters: {json.dumps(params)}")
+        
+        # Return appropriate response based on request format
         if 'json' in params and params['json']:
             data = {}
             if diagram:
@@ -461,31 +739,34 @@ def handler(event, context):
                     data["config"] = diagram.config
                     data["ports"] = all_ports
                 except Exception as e:
-                    pass
-            data["error"] = error_msg
+                    logger.error(f"Error adding diagram details to error response: {str(e)}")
+            
+            data["error"] = user_friendly_error
+            data["error_type"] = error_type
             data["execution_duration"] = time.time() - program_time_s
             data["params"] = params
             data["image_type"] = None
             data["image"] = None
 
             return {
-                    "statusCode": 400,
+                    "statusCode": status_code,
                     "body": json.dumps(data, indent=4),
                     "headers": {"Content-Type": "application/json",
                                 'Access-Control-Allow-Origin': '*',
                                 'Access-Control-Allow-Methods': 'GET'} }
 
         else:
-            img = text_to_image(error_msg)
+            img = text_to_image(user_friendly_error)
             buffered = BytesIO()
             img.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
             return {
-                "statusCode": 400,
+                "statusCode": status_code,
                 "body": img_str,
                 "headers": {"Content-Type": "image/png",
                             'Access-Control-Allow-Origin': '*',
                             'Access-Control-Allow-Methods': 'GET'},
                 "isBase64Encoded": True
             }
+    

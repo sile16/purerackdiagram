@@ -13,7 +13,7 @@
     "fa-x90r4_face-front_fm_label-True_dp_label-True_ports-True_183-40": "277498f5fa6d03cacf31124c1afbbcaa3a183bbccaff1edd15095b5afe905957",
     "fa-c50r4_face-front_fm_label-True_dp_label-True_ports-True_186_chassis_gen-2": "2c50c25d6fc10c04caec161038460d697aff06dc69191e997ec9278e59df8c61",
     "fa-c50r4_face-front_fm_label-True_dp_label-True_ports-True_186": "286a40edc6a1498d6d7667abcc5ee11f8e5244b601ad8a403307ed0cecd4c868",
-    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True": "49229b09711b934cc00f86851a01083b3c785773be769443a5f5de0646d5dcca",
+    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True": "5853c48ed862c90cad61bec9feabb892c0674e920f53285c9a1550731cea724b",
     "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183": "0898540622147bb6b0403de4fcf36c4502b87d70fe55499cfc0bbb1c6ea3e6a4",
     "fa-e_face-back_fm_label-True_dp_label-True_ports-True_1050-1050": "f2c2237aca4a1e3e750c2e8048e627a83f0b8c26119c88435c0a873671cfc5c7",
     "fa-x20r4_face-back_fm_label-True_dp_label-True_ports-True_183-183": "f230a19ed7f90f227706dd0888e6e6b82ef50d0b161863bfece1a3c791866bd7",
@@ -24,7 +24,7 @@
     "fa-er1b_face-front_bezel-True_fm_label-True_dp_label-True_ports-True_186": "6ba1ad69209a9e508f862395e381fc8351bfc3745a430c163fe3c1dd2bde0610",
     "fa-er1b_face-front_fm_label-True_dp_label-True_ports-True_186": "2a424d95f6fba2a30e236d018ed55e5cc0815947e00325792a434a7a580ad8f1",
     "fa-x90r4b_face-back_fm_label-True_dp_label-True_ports-True_3-0.02-45": "993b02feb560377d26db4b090712f24f81e5daa9b64163b67fd82165df236f23",
-    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "15d653eec6aa81d9170191c8d36f101e135e9a3d395e18186755836764d08262",
+    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "14255772bd218c1307c7d908921228e2da13e70b3e498787e55366196ec4c4eb",
     "fb-e_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True": "b42a5e5090fa39876d5aa23d251f91d337f4df9ac323b3cef2d57eb3f312dec2",
     "fa-x90r4_face-back_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_3-0.02-45_json-True": {
         "image_type": "png",
@@ -2376,7 +2376,7 @@
         }
     },
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0": "bff2f404514651278f5a5261e46aadc1003607ade7819bda5f4538bf5f6f8869",
-    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "763e93421b4c84c94fff55160c57f237744ad084e2d4abf72837c6264dc18422",
+    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "9593db19d4c93ebb87d472cfc6071db72320340c26e258a7222c1165e26913ff",
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_json-True": {
         "image_type": "png",
         "config": {

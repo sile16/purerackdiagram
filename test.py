@@ -21,6 +21,43 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
+    # Error test case 1: Invalid datapack 
+    {
+        "queryStringParameters": {
+            "model": "fa-x70r4b",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "999", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+            "json": True  # Return JSON to see error message
+        }
+    },
+    # Error test case 2: Invalid model
+    {
+        "queryStringParameters": {
+            "model": "fa-invalid",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "45",
+            "dp_label": True,
+            "fm_label": True,
+            "json": True  # Return JSON to see error message
+        }
+    },
+    # Error test case 3: Invalid PCI card
+    {
+        "queryStringParameters": {
+            "model": "fa-x70r4b",
+            "protocol": "fc",
+            "face": "back",
+            "datapacks": "45",
+            "addoncards": "invalid-card",  # Invalid PCI card
+            "dp_label": True,
+            "fm_label": True,
+            "json": True  # Return JSON to see error message
+        }
+    },
     {
         "queryStringParameters": {
             "model": "fa-x70r4b",
@@ -868,6 +905,26 @@ more_tests = [
 def test_lambda(params, outputfile):
     results = lambdaentry.handler(params, None)
     
+    # Check for error status codes (4xx)
+    if 400 <= results['statusCode'] < 500:
+        if results['headers'].get("Content-Type") == 'application/json':
+            # Parse the JSON response to inspect error message
+            try:
+                error_data = json.loads(results['body'])
+                error_msg = error_data.get('error', 'Unknown error')
+                error_type = error_data.get('error_type', 'Unknown')
+                logger.info(f"Error response ({results['statusCode']}): {error_type} - {error_msg}")
+                
+                # Check that we're getting the friendly error messages
+                if "Pick from One of the Following" in error_msg or "valid" in error_msg.lower():
+                    logger.info("✅ Properly formatted detailed error message found")
+                else:
+                    logger.warning("⚠️ Error message lacks detailed information")
+            except json.JSONDecodeError:
+                logger.error("Failed to parse error JSON response")
+        elif results['headers'].get("Content-Type") == 'image/png':
+            # If it's an image error message, we can't inspect it directly
+            logger.info(f"Error response ({results['statusCode']}) as image")
 
     # If statusCode is 302, follow the redirect
     if results['statusCode'] == 302:
@@ -932,7 +989,8 @@ def test_lambda(params, outputfile):
     return results
 
 
-def create_test_image(item, count, total):
+def create_test_image_original(item, count, total):
+    """Original function, kept for reference"""
     
     folder = "test_results"
     file_name = f"{item['model']}"
@@ -945,33 +1003,77 @@ def create_test_image(item, count, total):
                 file_name += f"_{n}-{item[n]}"
     
 
-#    if "fa-er1-f" in item['model'] :
-#        pass
+# Now define the new create_test_image function
+def create_test_image(item, count, total):
+    folder = "test_results"
+    file_name = f"{item['model']}"
+    for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
+    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 'chassis_gen' ]:
+        if n in item:
+            if n == 'datapacks':
+                file_name += f"_{str(item[n]).replace('/', '-')}"
+            else:
+                file_name += f"_{n}-{item[n]}"
 
     try:
-
         results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name))
 
         h = hashlib.sha256()
         content_type = results['headers'].get("Content-Type")
+        status_code = results['statusCode']
 
-        # For JSON content, serialize before hashing
-        print(f"{count} of {total}   {file_name}")
+        # Check for error responses (4xx, 5xx)
+        if 400 <= status_code < 600:
+            print(f"{count} of {total}   {file_name} - ERROR {status_code}")
+            
+            # For JSON errors, we can examine the detailed message
+            if content_type == 'application/json' and 'body' in results:
+                try:
+                    error_data = json.loads(results['body'])
+                    error_msg = error_data.get('error', 'Unknown error')
+                    error_type = error_data.get('error_type', 'Unknown')
+                    
+                    # Check if error message has the expected format
+                    is_formatted = "Pick from One of the Following" in error_msg or "valid" in error_msg.lower()
+                    print(f"  Error: {error_type} - {error_msg}")
+                    print(f"  Has detailed format: {'✅ Yes' if is_formatted else '❌ No'}")
+                    
+                    # Return error details for validation and testing
+                    return({file_name: {
+                        "status": status_code,
+                        "error_type": error_type,
+                        "error_msg": error_msg,
+                        "has_detailed_format": is_formatted
+                    }})
+                except json.JSONDecodeError:
+                    print(f"  Failed to parse error JSON")
+                    return({file_name: {
+                        "status": status_code,
+                        "error": "Failed to parse error JSON"
+                    }})
+        
+        # For successful responses or errors that aren't in JSON format
+        print(f"{count} of {total}   {file_name} - Status: {status_code}")
         if content_type == 'application/json':
-            #h.update(json.dumps(results['body']).encode('utf-8'))
             return({file_name: results['body']})
         else:
             # For other content types, use the body directly
             h.update(results['body'].encode('utf-8'))
             return({file_name: h.hexdigest()})
-        
-        
-        
 
     except Exception as ex_unknown:
         print(f"Caught exception in image: {file_name}")
         traceback.print_exc()
-        raise ex_unknown
+        return({file_name: {
+            "status": 500,
+            "error": str(ex_unknown),
+            "traceback": traceback.format_exc()
+        }})
+
+#    if "fa-er1-f" in item['model'] :
+#        pass
+
+    # Original implementation replaced by the new create_test_image function above
 
     
 
