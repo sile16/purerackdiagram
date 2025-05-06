@@ -1,30 +1,17 @@
 import asyncio
-from os.path import join
 import re
+from os.path import join
 from PIL import ImageDraw
 from PIL import ImageFont
-# Import custom exceptions
-import sys
-try:
-    from . import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
-except ImportError:
-    # Handle circular import issue
-    # Providing fallback definitions of the exceptions
-    class RackDiagramException(Exception):
-        """Base exception class for all rack diagram errors"""
-        pass
 
-    class InvalidConfigurationException(RackDiagramException):
-        """Exception raised for invalid user configuration inputs"""
-        pass
-
-    class InvalidDatapackException(InvalidConfigurationException):
-        """Exception specifically for datapack validation errors"""
-        pass
-from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
+from .utils import RackImage, add_ports_at_offset, global_config, apply_text, InvalidConfigurationException
 
 
 class FBDiagram():
+    """
+    A class to generate FlashBlade rack diagrams based on configuration parameters.
+    """
+    
     def __init__(self, params):
         self.ports = []
 

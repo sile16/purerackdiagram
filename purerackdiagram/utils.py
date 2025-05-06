@@ -23,6 +23,20 @@ with open(os.path.join(root_path, 'config.yaml'), 'r') as f:
     global_config = yaml.full_load(f)
 global_config['ttf_path'] = ttf_path
 
+# Custom exceptions for better error handling
+class RackDiagramException(Exception):
+    """Base exception class for all rack diagram errors"""
+    pass
+
+class InvalidConfigurationException(RackDiagramException):
+    """Exception raised for invalid user configuration inputs"""
+    pass
+
+class InvalidDatapackException(InvalidConfigurationException):
+    """Exception specifically for datapack validation errors"""
+    pass
+
+
 
 class RackImage():
     """This loads a file from disk and caches it.  If it's already been

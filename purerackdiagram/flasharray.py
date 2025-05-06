@@ -1,32 +1,17 @@
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
-# from io import BytesIO
-import asyncio
-from . import utils
-# Import custom exceptions
-import sys
-try:
-    from . import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
-except ImportError:
-    # Handle circular import issue
-    # Providing fallback definitions of the exceptions
-    class RackDiagramException(Exception):
-        """Base exception class for all rack diagram errors"""
-        pass
-
-    class InvalidConfigurationException(RackDiagramException):
-        """Exception raised for invalid user configuration inputs"""
-        pass
-
-    class InvalidDatapackException(InvalidConfigurationException):
-        """Exception specifically for datapack validation errors"""
-        pass
-from .utils import RackImage, combine_images_vertically, add_ports_at_offset
 import logging
 import os
 from pprint import pformat
 import re
+import asyncio
+
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+# from io import BytesIO
+
+from . import utils
+from .utils import RackImage, add_ports_at_offset, InvalidConfigurationException, InvalidDatapackException
+
 
 root_path = os.path.dirname(utils.__file__)
 ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
@@ -495,6 +480,11 @@ class FAChassis():
     
         if self.config["generation"] == 'e':
             return
+        
+        if self.config["release"] == 3 and \
+            self.config["model_num"] == 20 and \
+            self.config["generation"] == 'rc':
+            return
 
         if self.config['mezz']:
             key = "png/pure_fa_x_{}.png".format(self.config["mezz"])
@@ -680,7 +670,7 @@ class FAChassis():
             if c['release'] == 1:
                 text = "" #change to 
                 
-        elif c['generation'] == 'c' and c['model_num'] == 20:
+        elif (c['generation'] == 'c' or c['generation'] == 'rc') and c['model_num'] == 20:
             text = "{}{}".format(c['generation'].upper(),
                                     c['model_num'])
 
@@ -979,36 +969,58 @@ class FADiagram():
         #5/22/2024 we have a format change to fa-x70r4b the b is a revision to the release.
 
         #splits on instance of change from decimal to letter and - and r
-        results = re.split(r'(\d+)|-|r', config["model_str"])
-        config["generation"] = results[2]
-        config["rev"] = ""
+        # 4/1/2025 we now have a new model format of rc20,  so we need to revise to not split on r but keep everything backward compatible.
+        # i think we could split on every transition from letter to number and -
         
 
-        if config['generation'] == 'e':
-            config['model_num'] = ""
-            config['release'] = 1
-        else:
-            config['model_num'] = int(results[3])
-            if len(results) > 5:
-                config['rev'] = results[5]
 
-        if "r" in config["model_str"]:
+        if "rc" in config["model_str"]:
+            results = re.split(r'(?<=[0-9])(?=[A-Za-z])'   # between digit and letter
+                            r'|(?<=[A-Za-z])(?=[0-9])'  # between letter and digit
+                            r'|-',
+                            config["model_str"])
+            config["generation"] = results[1]
+            config["model_num"] = int(results[2])
+            config["release"] = 3
+            config["rev"] = ""
+            if len(results) > 4:
+                config["release"] = int(results[4])
+        else:
+            results = re.split(r'(\d+)|-|r', config["model_str"])
+            config["generation"] = results[2]
+            config["rev"] = ""
+
             if config['generation'] == 'e':
-                config["release"] = int(results[5])
-                if len(results) > 6:
-                    config["rev"] = results[6]
-            else:
-                config["release"] = int(results[7])
-                if len(results) > 8:
-                    config["rev"] = results[8]
-            
-        elif config['generation'] == 'c' and config['model_num'] == 20:
-            config["release"] = 4
-            config["rev"] = 'c'
-            config["chassis_gen"] = '2'
+                config['model_num'] = ""
+                config['release'] = 1
 
-        else:
-            config["release"] = 1
+            else:
+                config['model_num'] = int(results[3])
+                if len(results) > 5:
+                    config['rev'] = results[5]
+
+            if "r" in config["model_str"]:
+                if config['generation'] == 'e':
+                    config["release"] = int(results[5])
+                    if len(results) > 6:
+                        config["rev"] = results[6]
+                elif config['generation'] == 'rc':
+                    if len(results) > 4:
+                        config["release"] = int(results[4])
+                    if len(results) > 6:
+                        config["rev"] = results[6]
+                else:
+                    config["release"] = int(results[7])
+                    if len(results) > 8:
+                        config["rev"] = results[8]
+                
+            elif config['generation'] == 'c' and config['model_num'] == 20:
+                config["release"] = 4
+                config["rev"] = 'c'                
+                config["chassis_gen"] = '2'
+
+            else:
+                config["release"] = 1
 
         
         config["direction"] = params.get("direction", "up").lower()

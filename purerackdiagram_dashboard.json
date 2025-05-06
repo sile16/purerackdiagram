@@ -1,0 +1,130 @@
+{
+    "widgets": [
+        {
+            "type": "text",
+            "x": 0,
+            "y": 0,
+            "width": 24,
+            "height": 2,
+            "properties": {
+                "markdown": "# PureRackDiagram Metrics - Production vs Staging\nThis dashboard shows a side-by-side comparison of key metrics between Production and Staging environments."
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 2,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "PureRackDiagram-Production", "SuccessCount", { "stat": "Sum", "period": 3600 } ],
+                    [ "PureRackDiagram-Production", "TotalErrorCount", { "stat": "Sum", "period": 3600 } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Production: Success vs Error Rate (Hourly)",
+                "period": 3600,
+                "stat": "Sum"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 2,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "PureRackDiagram-Staging", "SuccessCount", { "stat": "Sum", "period": 3600 } ],
+                    [ "PureRackDiagram-Staging", "TotalErrorCount", { "stat": "Sum", "period": 3600 } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Staging: Success vs Error Rate (Hourly)",
+                "period": 3600,
+                "stat": "Sum"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "PureRackDiagram-Production", "ExceptionCount", "ExceptionType", "InvalidDatapackException", { "stat": "Sum", "period": 3600 } ],
+                    [ "PureRackDiagram-Production", "ExceptionCount", "ExceptionType", "InvalidConfigurationException", { "stat": "Sum", "period": 3600 } ],
+                    [ "PureRackDiagram-Production", "ExceptionCount", "ExceptionType", "ServerError", { "stat": "Sum", "period": 3600 } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Production: Error Types (Hourly)",
+                "period": 3600,
+                "stat": "Sum"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 8,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "PureRackDiagram-Staging", "ExceptionCount", "ExceptionType", "InvalidDatapackException", { "stat": "Sum", "period": 3600 } ],
+                    [ "PureRackDiagram-Staging", "ExceptionCount", "ExceptionType", "InvalidConfigurationException", { "stat": "Sum", "period": 3600 } ],
+                    [ "PureRackDiagram-Staging", "ExceptionCount", "ExceptionType", "ServerError", { "stat": "Sum", "period": 3600 } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Staging: Error Types (Hourly)",
+                "period": 3600,
+                "stat": "Sum"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "PureRackDiagram-Production", "ArrayType", "Type", "FlashArray", { "stat": "Sum", "period": 86400 } ],
+                    [ "PureRackDiagram-Production", "ArrayType", "Type", "FlashBlade", { "stat": "Sum", "period": 86400 } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Production: Array Type Distribution (Daily)",
+                "period": 86400,
+                "stat": "Sum"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 14,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "PureRackDiagram-Staging", "ArrayType", "Type", "FlashArray", { "stat": "Sum", "period": 86400 } ],
+                    [ "PureRackDiagram-Staging", "ArrayType", "Type", "FlashBlade", { "stat": "Sum", "period": 86400 } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Staging: Array Type Distribution (Daily)",
+                "period": 86400,
+                "stat": "Sum"
+            }
+        }
+    ]
+}

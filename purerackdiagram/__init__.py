@@ -6,19 +6,9 @@ import asyncio
 
 default_array_model = 'fa-x20r2'
 
-# Custom exceptions for better error handling
-class RackDiagramException(Exception):
-    """Base exception class for all rack diagram errors"""
-    pass
-
-class InvalidConfigurationException(RackDiagramException):
-    """Exception raised for invalid user configuration inputs"""
-    pass
-
-class InvalidDatapackException(InvalidConfigurationException):
-    """Exception specifically for datapack validation errors"""
-    pass
-
+from purerackdiagram.utils import (
+    InvalidConfigurationException,
+)
 
 def get_diagram(params):
     model = params.get('model', default_array_model).lower()

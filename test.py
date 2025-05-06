@@ -3,15 +3,15 @@ import logging
 import base64
 from multiprocessing import Pool
 import hashlib
-
-import os
-import lambdaentry
-import re
-from purerackdiagram.utils import global_config
-
 import json
 import traceback
+import os
 import requests
+
+import lambdaentry
+from purerackdiagram.utils import global_config
+
+
 
 logger = logging.getLogger()
 ch = logging.StreamHandler()
@@ -21,7 +21,50 @@ logger.addHandler(ch)
 save_dir = 'test_results/'
 
 more_tests = [
-    # Error test case 1: Invalid datapack 
+    {
+        "queryStringParameters": {
+            "model": "fa-rc20",
+            "protocol": "eth",
+            "face": "front",
+            "bezel": True,
+            "datapacks": "148", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth100,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-rc20",
+            "protocol": "eth",
+            "face": "back",
+            "datapacks": "148", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth100,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-rc20",
+            "protocol": "eth",
+            "face": "front",
+            "datapacks": "148", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-rc20r3",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "148", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+        }
+    },
+    # Error test case 1: Invalid datapack
     {
         "queryStringParameters": {
             "model": "fa-x70r4b",

@@ -38,6 +38,12 @@ def main():
             update_static_pci_loc(config, gen, rel, '')
             update_static_model_loc(config, gen, rel, '', '')
 
+        if rel == 3:
+            for gen in ['rc']:
+                update_static_pci_loc(config, gen, rel, '')
+                update_static_model_loc(config, gen, rel, '', '')
+                update_static_mezz_loc(config, gen, rel, rev)
+
 
     update_static_card_port_loc(config)
     update_static_mezz_port_loc(config)
@@ -93,6 +99,10 @@ def static_global_config():
         "pci_config_lookup": {
 
             #fixed missing 2 port ETH card
+
+            # New RC 20
+            "fa-rc20r3-fc": [None, None, None, None, None],
+            "fa-rc20r3-eth": [None, None, None, None, None],
 
             # New E R1
              "fa-er1b-fc": [ None, None, None, "2eth25", None],
@@ -638,6 +648,13 @@ def update_static_fm_loc(config):
                     config[key] = {}
                 config[key]['fm_loc'] = ch0_fm_loc.copy()
 
+                # RC is the same:
+                if rel == 3:
+                    key = f'png/pure_fa_rc_r{rel}{rev}_front.png'
+                    if key not in config:
+                        config[key] = {}
+                    config[key]['fm_loc'] = ch0_fm_loc.copy()
+
                 # E is the same:
                 if rel == 1:
                     key = f'png/pure_fa_e_r{rel}{rev}_front{cg}.png'
@@ -715,7 +732,7 @@ def update_static_psu_loc(config):
 
 def update_static_pci_loc(config, generation, release, rev):
     pci_loc = None
-    if (generation == 'x' or generation == 'c') and release < 4:
+    if (generation == 'x' or generation == 'c'or generation == 'rc') and release < 4:
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
         ct1_y_offset = 380
 
@@ -764,7 +781,7 @@ def update_static_nvram_loc(config, generation, release, rev):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c' or generation == 'e':
+            generation == 'c' or generation == 'e' or generation == 'rc':
         nv1 = (1263, 28)
         nv2 = (1813, 28)
     elif generation != "xl":
@@ -782,7 +799,7 @@ def update_static_mezz_loc(config, generation, release, rev):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c':
+            generation == 'c' or generation == 'rc':
         config[key]['ct0_mezz_loc'] = (585, 45)
         config[key]['ct1_mezz_loc'] = (585, 425)
     else:
@@ -797,7 +814,7 @@ def update_static_model_loc(config, generation, release, rev, cg):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c' :
+            generation == 'c' or generation == 'rc':
         loc = (2759, 83)
     elif generation == 'e':
         loc = (2792, 160)
@@ -1180,6 +1197,12 @@ def update_static_model_port_loc(config):
             if key not in config:
                 config[key] = {}
             config[key]['ports'] = ct0ports + ct1ports
+            
+            if release == 3 and rev == '':
+                key = f'png/pure_fa_rc_r{release}{rev}_back.png'
+                if key not in config:
+                    config[key] = {}
+                config[key]['ports'] = ct0ports + ct1ports
 
             key = f'png/pure_fa_c_r{release}{rev}_back.png'
             if key not in config:

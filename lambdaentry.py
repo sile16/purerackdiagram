@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from purerackdiagram.utils import combine_images_vertically
 import purerackdiagram
-from purerackdiagram import RackDiagramException, InvalidConfigurationException, InvalidDatapackException
+from purerackdiagram.utils import RackDiagramException, InvalidConfigurationException, InvalidDatapackException
 
 # Configure logging for Lambda
 logger = logging.getLogger()
@@ -39,8 +39,13 @@ logger.info(f"Using metric namespace: {METRIC_NAMESPACE}")
 
 # CloudWatch metrics client - only initialize if running in Lambda
 try:
+    # Explicitly set the region to match the dashboard
+    region = os.environ.get('AWS_REGION', 'us-east-1')
+    logger.info(f"Initializing CloudWatch client in region: {region}")
+    
     # When running in AWS Lambda, this will work
-    cloudwatch = boto3.client('cloudwatch')
+    cloudwatch = boto3.client('cloudwatch', region_name=region)
+    logger.info("Successfully created CloudWatch client")
 except Exception as e:
     # For local testing, create a mock object
     logger.info(f"Running locally, CloudWatch metrics disabled: {str(e)}")
@@ -56,10 +61,13 @@ def emit_exception_metric(exception_type):
     This allows creating graphs based on exception types
     """
     try:
-        # Emit exception count by type
-        cloudwatch.put_metric_data(
-            Namespace=METRIC_NAMESPACE,
-            MetricData=[
+        # Add region to the client call for clarity
+        region = os.environ.get('AWS_REGION', 'us-east-1')
+        
+        # First metric: Exception count by type
+        exception_metric = {
+            'Namespace': METRIC_NAMESPACE,
+            'MetricData': [
                 {
                     'MetricName': 'ExceptionCount',
                     'Dimensions': [
@@ -72,21 +80,29 @@ def emit_exception_metric(exception_type):
                     'Unit': 'Count'
                 }
             ]
-        )
+        }
         
-        # Also emit a total error count metric
-        cloudwatch.put_metric_data(
-            Namespace=METRIC_NAMESPACE,
-            MetricData=[
+        # Log the exact metric data being sent
+        logger.info(f"Sending exception metric to CloudWatch in {region}: {json.dumps(exception_metric)}")
+        cloudwatch.put_metric_data(**exception_metric)
+        
+        # Second metric: Total error count
+        total_error_metric = {
+            'Namespace': METRIC_NAMESPACE,
+            'MetricData': [
                 {
                     'MetricName': 'TotalErrorCount',
                     'Value': 1,
                     'Unit': 'Count'
                 }
             ]
-        )
+        }
         
-        logger.info(f"Emitted CloudWatch metric for exception type: {exception_type}")
+        # Log the exact metric data being sent
+        logger.info(f"Sending total error metric to CloudWatch in {region}: {json.dumps(total_error_metric)}")
+        cloudwatch.put_metric_data(**total_error_metric)
+        
+        logger.info(f"Emitted CloudWatch metrics for exception type: {exception_type} to namespace {METRIC_NAMESPACE}")
     except Exception as e:
         logger.error(f"Failed to emit CloudWatch metric: {str(e)}")
         logger.error(traceback.format_exc())
@@ -390,19 +406,33 @@ def handle_individual_processing(img_ports, diagram, params):
 def emit_success_metric():
     """Emit a success metric to CloudWatch"""
     try:
-        cloudwatch.put_metric_data(
-            Namespace=METRIC_NAMESPACE,
-            MetricData=[
+        # Skip emitting metrics when running locally
+        if os.environ.get('AWS_EXECUTION_ENV') is None:
+            logger.info("Running locally, skipping success metric emission")
+            return
+        
+        # Add region to the client call for clarity
+        region = os.environ.get('AWS_REGION', 'us-east-1')
+        
+        metric_data = {
+            'Namespace': METRIC_NAMESPACE,
+            'MetricData': [
                 {
                     'MetricName': 'SuccessCount',
                     'Value': 1,
                     'Unit': 'Count'
                 }
             ]
-        )
-        logger.info("Emitted CloudWatch success metric")
+        }
+        
+        # Log the exact metric data being sent
+        logger.info(f"Sending success metric to CloudWatch in {region}: {json.dumps(metric_data)}")
+        
+        cloudwatch.put_metric_data(**metric_data)
+        logger.info(f"Emitted CloudWatch success metric to namespace {METRIC_NAMESPACE}")
     except Exception as e:
         logger.error(f"Failed to emit CloudWatch success metric: {str(e)}")
+        logger.error(traceback.format_exc())
         
 def emit_array_type_metric(params, diagram=None):
     """
@@ -460,11 +490,12 @@ def emit_array_type_metric(params, diagram=None):
         # Add the model metrics if we have any
         metrics.extend(model_metrics)
         
-        cloudwatch.put_metric_data(
+        # Check if running in AWS Lambda before emitting metrics
+        if os.environ.get('AWS_EXECUTION_ENV') is not None:
+            cloudwatch.put_metric_data(
             Namespace=METRIC_NAMESPACE,
             MetricData=metrics
-        )
-        
+            )
         logger.info(f"Emitted CloudWatch metrics for array type: {array_type}")
     except Exception as e:
         logger.error(f"Failed to emit array type metrics: {str(e)}")

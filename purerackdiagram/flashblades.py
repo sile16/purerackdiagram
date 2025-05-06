@@ -6,22 +6,7 @@ from PIL import Image
 from PIL import ImageFont
 # Import custom exceptions
 import sys
-try:
-    from . import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
-except ImportError:
-    # Handle circular import issue
-    # Providing fallback definitions of the exceptions
-    class RackDiagramException(Exception):
-        """Base exception class for all rack diagram errors"""
-        pass
-
-    class InvalidConfigurationException(RackDiagramException):
-        """Exception raised for invalid user configuration inputs"""
-        pass
-
-    class InvalidDatapackException(InvalidConfigurationException):
-        """Exception specifically for datapack validation errors"""
-        pass
+from .utils import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
 from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
 
 from .flasharray import apply_fm_label

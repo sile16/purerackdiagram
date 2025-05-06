@@ -476,6 +476,18 @@ pci_config_lookup:
   - null
   - 2fc
   - null
+  fa-rc20r3-eth:
+  - null
+  - null
+  - null
+  - null
+  - null
+  fa-rc20r3-fc:
+  - null
+  - null
+  - null
+  - null
+  - null
   fa-x10r2-eth:
   - null
   - null
@@ -1323,7 +1335,7 @@ png/pure_fa_c_r1_back.png:
     - 2069
     - 583
   ports:
-  - &id233
+  - &id245
     loc: &id091 !!python/tuple
     - 671
     - 316
@@ -1337,7 +1349,7 @@ png/pure_fa_c_r1_back.png:
     port_type: eth
     services: &id036
     - management
-  - &id234
+  - &id246
     loc: &id092 !!python/tuple
     - 788
     - 316
@@ -1351,7 +1363,7 @@ png/pure_fa_c_r1_back.png:
     port_type: eth
     services: &id039
     - management
-  - &id235
+  - &id247
     loc: &id093 !!python/tuple
     - 1880
     - 221
@@ -1368,7 +1380,7 @@ png/pure_fa_c_r1_back.png:
     services: &id042
     - replication
     - data
-  - &id236
+  - &id248
     loc: &id094 !!python/tuple
     - 1880
     - 293
@@ -1385,7 +1397,7 @@ png/pure_fa_c_r1_back.png:
     services: &id045
     - replication
     - data
-  - &id237
+  - &id249
     loc: &id095 !!python/tuple
     - 1965
     - 221
@@ -1402,7 +1414,7 @@ png/pure_fa_c_r1_back.png:
     services: &id048
     - data
     - replication
-  - &id238
+  - &id250
     loc: &id096 !!python/tuple
     - 1965
     - 293
@@ -1419,7 +1431,7 @@ png/pure_fa_c_r1_back.png:
     services: &id051
     - data
     - replication
-  - &id239
+  - &id251
     loc: !!python/tuple
     - 671
     - 696
@@ -1431,7 +1443,7 @@ png/pure_fa_c_r1_back.png:
     port_speeds: *id035
     port_type: eth
     services: *id036
-  - &id240
+  - &id252
     loc: !!python/tuple
     - 788
     - 696
@@ -1443,7 +1455,7 @@ png/pure_fa_c_r1_back.png:
     port_speeds: *id038
     port_type: eth
     services: *id039
-  - &id241
+  - &id253
     loc: !!python/tuple
     - 1880
     - 601
@@ -1455,7 +1467,7 @@ png/pure_fa_c_r1_back.png:
     port_speeds: *id041
     port_type: eth
     services: *id042
-  - &id242
+  - &id254
     loc: !!python/tuple
     - 1880
     - 673
@@ -1467,7 +1479,7 @@ png/pure_fa_c_r1_back.png:
     port_speeds: *id044
     port_type: eth
     services: *id045
-  - &id243
+  - &id255
     loc: !!python/tuple
     - 1965
     - 601
@@ -1479,7 +1491,7 @@ png/pure_fa_c_r1_back.png:
     port_speeds: *id047
     port_type: eth
     services: *id048
-  - &id244
+  - &id256
     loc: !!python/tuple
     - 1965
     - 673
@@ -1825,7 +1837,7 @@ png/pure_fa_c_r2_back.png:
     - 2069
     - 583
   ports:
-  - &id245
+  - &id257
     loc: *id091
     name: ct0.eth0
     port_connector: rj45
@@ -1837,7 +1849,7 @@ png/pure_fa_c_r2_back.png:
     port_type: eth
     services: &id099
     - management
-  - &id246
+  - &id258
     loc: *id092
     name: ct0.eth1
     port_connector: rj45
@@ -1849,7 +1861,7 @@ png/pure_fa_c_r2_back.png:
     port_type: eth
     services: &id102
     - management
-  - &id247
+  - &id259
     loc: *id093
     name: ct0.eth2
     port_connector: sfp
@@ -1864,7 +1876,7 @@ png/pure_fa_c_r2_back.png:
     services: &id105
     - replication
     - data
-  - &id248
+  - &id260
     loc: *id094
     name: ct0.eth3
     port_connector: sfp
@@ -1879,7 +1891,7 @@ png/pure_fa_c_r2_back.png:
     services: &id108
     - replication
     - data
-  - &id249
+  - &id261
     loc: *id095
     name: ct0.eth4
     port_connector: sfp
@@ -1894,7 +1906,7 @@ png/pure_fa_c_r2_back.png:
     services: &id111
     - data
     - replication
-  - &id250
+  - &id262
     loc: *id096
     name: ct0.eth5
     port_connector: sfp
@@ -1909,7 +1921,7 @@ png/pure_fa_c_r2_back.png:
     services: &id114
     - data
     - replication
-  - &id251
+  - &id263
     loc: !!python/tuple
     - 671
     - 696
@@ -1921,7 +1933,7 @@ png/pure_fa_c_r2_back.png:
     port_speeds: *id098
     port_type: eth
     services: *id099
-  - &id252
+  - &id264
     loc: !!python/tuple
     - 788
     - 696
@@ -1933,7 +1945,7 @@ png/pure_fa_c_r2_back.png:
     port_speeds: *id101
     port_type: eth
     services: *id102
-  - &id253
+  - &id265
     loc: !!python/tuple
     - 1880
     - 601
@@ -1945,7 +1957,7 @@ png/pure_fa_c_r2_back.png:
     port_speeds: *id104
     port_type: eth
     services: *id105
-  - &id254
+  - &id266
     loc: !!python/tuple
     - 1880
     - 673
@@ -1957,7 +1969,7 @@ png/pure_fa_c_r2_back.png:
     port_speeds: *id107
     port_type: eth
     services: *id108
-  - &id255
+  - &id267
     loc: !!python/tuple
     - 1965
     - 601
@@ -1969,7 +1981,7 @@ png/pure_fa_c_r2_back.png:
     port_speeds: *id110
     port_type: eth
     services: *id111
-  - &id256
+  - &id268
     loc: !!python/tuple
     - 1965
     - 673
@@ -2187,7 +2199,7 @@ png/pure_fa_c_r3_back.png:
     - 2069
     - 583
   ports:
-  - &id257
+  - &id230
     loc: *id091
     name: ct0.eth0
     port_connector: rj45
@@ -2199,7 +2211,7 @@ png/pure_fa_c_r3_back.png:
     port_type: eth
     services: &id117
     - management
-  - &id258
+  - &id231
     loc: *id092
     name: ct0.eth1
     port_connector: rj45
@@ -2211,7 +2223,7 @@ png/pure_fa_c_r3_back.png:
     port_type: eth
     services: &id120
     - management
-  - &id259
+  - &id232
     loc: *id093
     name: ct0.eth2
     port_connector: sfp
@@ -2226,7 +2238,7 @@ png/pure_fa_c_r3_back.png:
     services: &id123
     - replication
     - data
-  - &id260
+  - &id233
     loc: *id094
     name: ct0.eth3
     port_connector: sfp
@@ -2241,7 +2253,7 @@ png/pure_fa_c_r3_back.png:
     services: &id126
     - replication
     - data
-  - &id261
+  - &id234
     loc: *id095
     name: ct0.eth4
     port_connector: sfp
@@ -2256,7 +2268,7 @@ png/pure_fa_c_r3_back.png:
     services: &id129
     - data
     - replication
-  - &id262
+  - &id235
     loc: *id096
     name: ct0.eth5
     port_connector: sfp
@@ -2271,7 +2283,7 @@ png/pure_fa_c_r3_back.png:
     services: &id132
     - data
     - replication
-  - &id263
+  - &id236
     loc: !!python/tuple
     - 671
     - 696
@@ -2283,7 +2295,7 @@ png/pure_fa_c_r3_back.png:
     port_speeds: *id116
     port_type: eth
     services: *id117
-  - &id264
+  - &id237
     loc: !!python/tuple
     - 788
     - 696
@@ -2295,7 +2307,7 @@ png/pure_fa_c_r3_back.png:
     port_speeds: *id119
     port_type: eth
     services: *id120
-  - &id265
+  - &id238
     loc: !!python/tuple
     - 1880
     - 601
@@ -2307,7 +2319,7 @@ png/pure_fa_c_r3_back.png:
     port_speeds: *id122
     port_type: eth
     services: *id123
-  - &id266
+  - &id239
     loc: !!python/tuple
     - 1880
     - 673
@@ -2319,7 +2331,7 @@ png/pure_fa_c_r3_back.png:
     port_speeds: *id125
     port_type: eth
     services: *id126
-  - &id267
+  - &id240
     loc: !!python/tuple
     - 1965
     - 601
@@ -2331,7 +2343,7 @@ png/pure_fa_c_r3_back.png:
     port_speeds: *id128
     port_type: eth
     services: *id129
-  - &id268
+  - &id241
     loc: !!python/tuple
     - 1965
     - 673
@@ -4005,6 +4017,131 @@ png/pure_fa_nvme_shelf_front.png:
   - *id077
   - *id078
   - *id079
+png/pure_fa_rc_r3_back.png:
+  ct0_mezz_loc: *id081
+  ct0_pci_loc:
+  - *id082
+  - *id083
+  - *id084
+  - *id085
+  ct1_mezz_loc: *id086
+  ct1_pci_loc:
+  - !!python/tuple
+    - 1198
+    - 467
+  - !!python/tuple
+    - 1198
+    - 583
+  - !!python/tuple
+    - 2069
+    - 467
+  - !!python/tuple
+    - 2069
+    - 583
+  ports:
+  - *id230
+  - *id231
+  - *id232
+  - *id233
+  - *id234
+  - *id235
+  - *id236
+  - *id237
+  - *id238
+  - *id239
+  - *id240
+  - *id241
+png/pure_fa_rc_r3_front.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+  model_text_loc: *id080
+png/pure_fa_rc_r3b_front.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
+png/pure_fa_rc_r3c_front.png:
+  fm_loc:
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  - *id066
+  - *id067
+  - *id068
+  - *id069
+  - *id070
+  - *id071
+  - *id072
+  - *id073
+  - *id074
+  - *id075
+  - *id076
+  - *id077
+  - *id078
+  - *id079
 png/pure_fa_sas_fh.png:
   ports:
   - loc: !!python/tuple
@@ -4013,12 +4150,12 @@ png/pure_fa_sas_fh.png:
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: &id230 []
-    port_speeds: &id231
+    port_sfp_speed: &id242 []
+    port_speeds: &id243
     - 6g
     - 12g
     port_type: sas
-    services: &id232
+    services: &id244
     - shelf
   - loc: !!python/tuple
     - 263
@@ -4026,30 +4163,30 @@ png/pure_fa_sas_fh.png:
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id230
-    port_speeds: *id231
+    port_sfp_speed: *id242
+    port_speeds: *id243
     port_type: sas
-    services: *id232
+    services: *id244
   - loc: !!python/tuple
     - 340
     - 46
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id230
-    port_speeds: *id231
+    port_sfp_speed: *id242
+    port_speeds: *id243
     port_type: sas
-    services: *id232
+    services: *id244
   - loc: !!python/tuple
     - 412
     - 46
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id230
-    port_speeds: *id231
+    port_sfp_speed: *id242
+    port_speeds: *id243
     port_type: sas
-    services: *id232
+    services: *id244
 png/pure_fa_sas_hh.png:
   ports:
   - loc: !!python/tuple
@@ -4058,40 +4195,40 @@ png/pure_fa_sas_hh.png:
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id230
-    port_speeds: *id231
+    port_sfp_speed: *id242
+    port_speeds: *id243
     port_type: sas
-    services: *id232
+    services: *id244
   - loc: !!python/tuple
     - 148
     - 40
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id230
-    port_speeds: *id231
+    port_sfp_speed: *id242
+    port_speeds: *id243
     port_type: sas
-    services: *id232
+    services: *id244
   - loc: !!python/tuple
     - 225
     - 40
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id230
-    port_speeds: *id231
+    port_sfp_speed: *id242
+    port_speeds: *id243
     port_type: sas
-    services: *id232
+    services: *id244
   - loc: !!python/tuple
     - 303
     - 40
     port_connector: sas
     port_sfp_connector: null
     port_sfp_present: false
-    port_sfp_speed: *id230
-    port_speeds: *id231
+    port_sfp_speed: *id242
+    port_speeds: *id243
     port_type: sas
-    services: *id232
+    services: *id244
 png/pure_fa_sas_shelf_front.png:
   fm_loc:
   - !!python/tuple
@@ -4242,18 +4379,18 @@ png/pure_fa_x_r1_back.png:
     - 2069
     - 583
   ports:
-  - *id233
-  - *id234
-  - *id235
-  - *id236
-  - *id237
-  - *id238
-  - *id239
-  - *id240
-  - *id241
-  - *id242
-  - *id243
-  - *id244
+  - *id245
+  - *id246
+  - *id247
+  - *id248
+  - *id249
+  - *id250
+  - *id251
+  - *id252
+  - *id253
+  - *id254
+  - *id255
+  - *id256
   psu_loc:
   - *id087
   - *id088
@@ -4522,18 +4659,18 @@ png/pure_fa_x_r2_back.png:
     - 2069
     - 583
   ports:
-  - *id245
-  - *id246
-  - *id247
-  - *id248
-  - *id249
-  - *id250
-  - *id251
-  - *id252
-  - *id253
-  - *id254
-  - *id255
-  - *id256
+  - *id257
+  - *id258
+  - *id259
+  - *id260
+  - *id261
+  - *id262
+  - *id263
+  - *id264
+  - *id265
+  - *id266
+  - *id267
+  - *id268
 png/pure_fa_x_r2_front.png:
   fm_loc:
   - *id052
@@ -4740,18 +4877,18 @@ png/pure_fa_x_r3_back.png:
     - 2069
     - 583
   ports:
-  - *id257
-  - *id258
-  - *id259
-  - *id260
-  - *id261
-  - *id262
-  - *id263
-  - *id264
-  - *id265
-  - *id266
-  - *id267
-  - *id268
+  - *id230
+  - *id231
+  - *id232
+  - *id233
+  - *id234
+  - *id235
+  - *id236
+  - *id237
+  - *id238
+  - *id239
+  - *id240
+  - *id241
 png/pure_fa_x_r3_front.png:
   fm_loc:
   - *id052
