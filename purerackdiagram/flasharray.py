@@ -996,6 +996,8 @@ class FADiagram():
 
             else:
                 config['model_num'] = int(results[3])
+                if not results[3].isnumeric():
+                    pass
                 if len(results) > 5:
                     config['rev'] = results[5]
 
