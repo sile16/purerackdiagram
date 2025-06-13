@@ -12,6 +12,8 @@ from PIL import ImageFont
 from . import utils
 from .utils import RackImage, add_ports_at_offset, InvalidConfigurationException, InvalidDatapackException
 
+import jsonurl_py as jsonurl
+
 
 root_path = os.path.dirname(utils.__file__)
 ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
@@ -288,7 +290,7 @@ class FAChassis():
             port_naming_key = 'port_naming_xl'
         elif self.config['generation'] == 'e':
             port_naming_key = 'port_naming_xcr4'
-        elif self.config['generation'] in ['x', 'c'] :
+        elif self.config['generation'] in ['x', 'c', 'rc'] :
             if self.config['release'] == 4:
                 port_naming_key = 'port_naming_xcr4'
             else:
@@ -870,9 +872,66 @@ class FADiagram():
                     card, pformat(pci_valid_cards)))
             pci_config[x] = card
 
+    def _init_datapacks_v2(self, config, params):
+        #
+        try:
+            dpv2 = jsonurl.loads(params["datapacksv2"])
+        except jsonurl.JSONDecodeError as e:
+            raise InvalidDatapackException("Invalid JSON in datapacksv2: {}".format(e))
+
+        for key in dpv2:   
+            chassis = key.lower()
+            
+            #chassis should be of len 3
+            if len(chassis) != 3:
+                raise InvalidDatapackException("Invalid chassis format in datapacksv2: {}".format(chassis))
+            
+            chassis_index = int(chassis[2])
+
+            chassis = chassis[:2]  # remove the index for now
+            if chassis == "sh":
+                shelf = True
+            elif chassis == "ch":
+                shelf = False
+            else:
+                raise InvalidDatapackException("Invalid chassis type in datapacksv2: {}".format(chassis))
+            
+            for dp in dpv2[key]:
+                if not isinstance(dp, list) or len(dp) < 3:
+                    raise InvalidDatapackException("Invalid datapack format in datapacksv2: {}".format(dp))
+                
+                # dp should be of form [fm_str, fm_type, num_modules, size]
+                dp_label = dp['dp_label']
+                fm_str = dp['fm_size']
+                num_modules = dp['fm_count']
+                
+
+                fm_type = dp.get('fm_type', get_default_fm_type(dp['fm_size']) ) # todo
+                
+
+                if shelf:
+                    config["shelves"][chassis_index]["datapacks"].append(
+                        [fm_str, fm_type, num_modules, size])
+                else:
+                    config["chassis_datapacks"].append(
+                        [fm_str, fm_type, num_modules, size])
+            
+
+
+
+            
+
+
+
+       
+
     def _init_datapacks(self, config, params):
         ######################################
         #  Parse Data Packs & Shelf 
+
+        if "datapacksv2" in params:
+            _init_datapacks_v2(config, params)
+            return
 
         chassis_dp_size_lookup = None
         shelf_dp_size_lookup = None

@@ -1,2 +1,3 @@
 #Pillow==9.5.0  Removed because using Klayers
 pyyaml
+jsonurl-py

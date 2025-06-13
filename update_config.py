@@ -16,7 +16,7 @@ def main():
     # but it's okay, we won't ever use them, or when an XL-130r2 comes out
     # we can go in a add it to the config special cased if necessary.
     
-    for rel in [1, 2, 3, 4]:
+    for rel in [1, 2, 3, 4, 5]:
         
         for gen in ['m', 'x', 'c', 'e']:
             rev_list = ['']
@@ -35,8 +35,9 @@ def main():
                 
 
         for gen in ['xl']:
-            update_static_pci_loc(config, gen, rel, '')
-            update_static_model_loc(config, gen, rel, '', '')
+            if rel in [1, 5]:
+                update_static_pci_loc(config, gen, rel, '')
+                update_static_model_loc(config, gen, rel, '', '')
 
         if rel == 3:
             for gen in ['rc']:
@@ -91,7 +92,7 @@ def static_global_config():
             8: { 'eth': 34, 'fc': 32, 'sas':0},
         },
 
-        "pci_valid_cards": ["2eth", "2eth25", "2eth25roce", "2eth40", "2eth100", "2eth100roce",
+        "pci_valid_cards": ["2eth", "2eth25", "2eth25roce", "2eth40", "2eth100", "2eth100roce","2eth200roce",
                             "4eth25", "4eth25roce", "2ethbaset", "mgmt2ethbaset",
                             "2fc", "4fc",
                             "sas", "dca", "blank"],   
@@ -199,10 +200,14 @@ def static_global_config():
             "fa-c40r3-fc": ["2fc", None, None, None],
             "fa-c60r3-eth": ["2eth25", None, None, None],
             "fa-c60r3-fc": ["4fc", None, None, None],
-            "fa-xl130r1-eth": [None, "2eth25", None, None, None, "dca", None, None, None],
-            "fa-xl130r1-fc": [None, "4fc", None, None, None, "dca", None, None, "2fc"],
-            "fa-xl170r1-eth": [None, "2eth25", None, None, None, "dca", None, None, None],
-            "fa-xl170r1-fc": [None, "4fc", None, None, None, "dca", None, None, "2fc"]
+            "fa-xl130r1-eth": [None, "2eth25roce", None, None, None, "dca", None, None, "2eth25roce"],
+            "fa-xl170r1-eth": [None, "2eth25roce", None, None, None, "dca", None, None, "2eth25roce"],
+            "fa-xl130r1-fc":  [None, "4fc", None, None, None, "dca", None, None, "2fc"],
+            "fa-xl170r1-fc":  [None, "4fc", None, None, None, "dca", None, None, "2fc"],
+            "fa-xl130r5-eth": [None, None, None, "4eth25roce", None, "dca", None, None, None],
+            "fa-xl170r5-eth": [None, None, None, "4eth25roce", None, "dca", None, None, None],
+            "fa-xl130r5-fc":  [None, None, None, "2fc", "4fc", "dca", None, None, None],
+            "fa-xl170r5-fc":  [None, None, None, "2fc", "4fc", "dca", None, None, None]
 
         },
 
@@ -353,7 +358,14 @@ def static_global_config():
             "1050": ["75TB", "nvme-qlc", 14, "1050"],
             "1200": ["75TB", "nvme-qlc", 16, "1200"],
             "1350": ["75TB", "nvme-qlc", 18, "1350"],
-            "1500": ["75TB", "nvme-qlc", 20, "1500"],
+            #"1500": ["75TB", "nvme-qlc", 20, "1500"],
+
+            "1500": ["150TB", "nvme-qlc", 10, "1500"],
+            "1800": ["150TB", "nvme-qlc", 12, "1800"],
+            "2100": ["150TB", "nvme-qlc", 14, "2100"],
+            "2400": ["150TB", "nvme-qlc", 16, "2400"],
+            "2700": ["150TB", "nvme-qlc", 18, "2700"],
+            
         },
 
         "csize_lookup": {
@@ -537,11 +549,17 @@ def static_global_config():
             "1050": ["75TB", "nvme-qlc", 14, "1050"],
             "1200": ["75TB", "nvme-qlc", 16, "1200"],
             "1350": ["75TB", "nvme-qlc", 18, "1350"],
-            "1500": ["75TB", "nvme-qlc", 20, "1500"],
-            "1650": ["75TB", "nvme-qlc", 22, "1650"],
-            "1800": ["75TB", "nvme-qlc", 24, "1800"],
-            "1950": ["75TB", "nvme-qlc", 26, "1950"],
-            "2100": ["75TB", "nvme-qlc", 28, "2100"],
+            #"1500": ["75TB", "nvme-qlc", 20, "1500"],
+            #"1650": ["75TB", "nvme-qlc", 22, "1650"],
+            #"1800": ["75TB", "nvme-qlc", 24, "1800"],
+            #"1950": ["75TB", "nvme-qlc", 26, "1950"],
+            #"2100": ["75TB", "nvme-qlc", 28, "2100"],
+
+            "1500": ["150TB", "nvme-qlc", 10, "1500"],
+            "1800": ["150TB", "nvme-qlc", 12, "1800"],
+            "2100": ["150TB", "nvme-qlc", 14, "2100"],
+            "2400": ["150TB", "nvme-qlc", 16, "2400"],
+            "2700": ["150TB", "nvme-qlc", 18, "2700"],
 
             
         },
@@ -702,6 +720,11 @@ def update_static_fm_loc(config):
         config[key] = {}
     config[key]['fm_loc']= ch0_fm_loc.copy()
 
+    key = 'png/pure_fa_xl_r5_front.png'
+    if key not in config:
+        config[key] = {}
+    config[key]['fm_loc']= ch0_fm_loc.copy()
+
 
 def update_static_psu_loc(config):
    #########################################################
@@ -761,17 +784,17 @@ def update_static_pci_loc(config, generation, release, rev):
     key = f'png/pure_fa_{generation}_r{release}{rev}_back.png'
     if key not in config:
         config[key] = {}
+    else:
+        config[key]['ct0_pci_loc'] = pci_loc.copy()
 
-    config[key]['ct0_pci_loc'] = pci_loc.copy()
+        ## Now calculate all the pci slot locations for ct1
+        for i in range(len(pci_loc)):
+            # add a y_offset to calculate the ct0 coordinates
+            cord = pci_loc[i]
+            pci_loc[i] = (cord[0], cord[1] + ct1_y_offset)
 
-    ## Now calculate all the pci slot locations for ct1
-    for i in range(len(pci_loc)):
-        # add a y_offset to calculate the ct0 coordinates
-        cord = pci_loc[i]
-        pci_loc[i] = (cord[0], cord[1] + ct1_y_offset)
-
-    
-    config[key]['ct1_pci_loc'] = pci_loc.copy()
+        
+        config[key]['ct1_pci_loc'] = pci_loc.copy()
 
 
 def update_static_nvram_loc(config, generation, release, rev):
@@ -972,24 +995,40 @@ def update_static_card_port_loc(config):
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth40_hh.png', port_info, config)
 
     # 2 Eth 100Gb - FA-100G-ETH/TCP 2-Port
-    port_info['port_speeds'] = ['40g', '100g']
+    # update 6/13 this card actually only supports 100g 
+    port_info['port_speeds'] = ['100g']
 
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_fh.png', port_info, config)
-   
+
+    
     ports_loc = [(70, 40), (245, 40) ]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100_hh.png', port_info, config)
+
+    
 
     #2 Eth 100Gb RoCE - FA-XCR4-100G-iSCSI/ROCE 2-Port
 
 
     port_info['port_type'] = 'eth_roce'
+    port_info['port_speeds'] = ['40g', '100g']
     port_info['services'] = ['data', 'replication', 'shelf']
     ports_loc = [(210, 40), (410, 40)]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100roce_fh.png', port_info, config)
    
     ports_loc = [(70, 40), (245, 40) ]
     add_ports_to_key(ports_loc, 'png/pure_fa_2eth100roce_hh.png', port_info, config)
+
+
+    #add in 200Gb roce cards
+    port_info['port_type'] = 'eth_roce'
+    port_info['port_speeds'] = ['100g', '200g']
+    port_info['services'] = ['data', 'replication', 'shelf']
+    ports_loc = [(210, 40), (410, 40)]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth200roce_fh.png', port_info, config)
+   
+    ports_loc = [(70, 40), (245, 40) ]
+    add_ports_to_key(ports_loc, 'png/pure_fa_2eth200roce_hh.png', port_info, config)
 
     port_info = {'port_type': 'sas',
             'port_connector': 'sas',
@@ -1255,6 +1294,11 @@ def update_static_model_port_loc(config):
 
 
         key = 'png/pure_fa_xl_r1_back.png'
+        if key not in config:
+            config[key] = {}
+        config[key]['ports'] = ct0ports + ct1ports
+
+        key = 'png/pure_fa_xl_r5_back.png'
         if key not in config:
             config[key] = {}
         config[key]['ports'] = ct0ports + ct1ports

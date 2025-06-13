@@ -23,6 +23,41 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-xl130r5",
+            "protocol": "eth",
+            "face": "front",
+            "datapacks": "366", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-xl130r5",
+            "protocol": "eth",
+            "face": "front",
+            "bezel": True,
+            "datapacks": "366", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
+     {
+        "queryStringParameters": {
+            "model": "fa-xl130r5",
+            "protocol": "eth",
+            "face": "back",
+            "bezel": True,
+            "datapacks": "366", # invalid datapack that should trigger friendly error
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-rc20",
             "protocol": "eth",
             "face": "front",
