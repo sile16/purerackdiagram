@@ -1,3 +1,4 @@
 #Pillow==9.5.0  Removed because using Klayers
+# when adding new packages, please also add them to requirements_venv_local.txt and also lambda_package zip command.
 pyyaml
 jsonurl-py
