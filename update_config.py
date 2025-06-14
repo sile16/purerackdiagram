@@ -225,8 +225,8 @@ def static_global_config():
             "0.18": ["Blank", "blank", 18, "0"],
             "0.20": ["Blank", "blank", 20, "0"],
 
-            "3": ["750GB", "scm", 4, "DM Cache 3"],
-            "6": ["750GB", "scm", 8, "DM Cache 6"],
+            "3": ["750GB", "scm", 4, "DM Cache 3TB"],
+            "6": ["750GB", "scm", 8, "DM Cache 6TB"],
 
             "11": ["1.1TB", "nvme", 10, "11"],
             "13": ["1.1TB", "nvme", 12, "13"],

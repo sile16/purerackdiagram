@@ -12,6 +12,8 @@ from .utils import RackImage, add_ports_at_offset, combine_images_vertically, gl
 from .flasharray import apply_fm_label
 import logging
 
+import jsonurl_py as jsonurl
+
 logging = logging.getLogger(__name__)
 
 
@@ -30,7 +32,11 @@ class FBSDiagram():
         config['direction'] = params.get("direction", "up").lower()
         config['dfm_size'] = float(params.get("drive_size", 24))
         config['dfm_count'] = int(params.get("no_of_drives_per_blade", 1))
-        config['blades'] = int(params.get("no_of_blades", 7))
+        # Handle bladesv2 or fallback to legacy blades processing
+        if "bladesv2" in params:
+            config = self._init_blades_v2(params, config)
+        else:
+            config['blades'] = int(params.get("no_of_blades", 7))
 
         config['xfm_model'] = params.get('xfm_model', '8400').lower()
         valid_xfm_model =['3200e', '8400']
@@ -47,21 +53,18 @@ class FBSDiagram():
         if config['model'] not in valid_models:
             raise InvalidConfigurationException('please provide a valid model: {}'.format(valid_models))
 
-        if config['blades'] < 0 or config['blades'] > 100 :
-            raise InvalidConfigurationException('please provide blades count 0-100.')
+        # Only validate legacy blades if not using bladesv2
+        if "bladesv2" not in params:
+            if config['blades'] < 0 or config['blades'] > 100 :
+                raise InvalidConfigurationException('please provide blades count 0-100.')
 
-        valid_dfms = [24, 24.0, 37.5, 48, 48.2, 75, 150]
-        if config['dfm_size'] not in valid_dfms:
-            raise InvalidConfigurationException('Valid drive sizes: {}'.format(valid_dfms))
+            default_chassis = (config['blades'] - 1 )// 10 + 1
+            if config['chassis'] < default_chassis:
+                config['chassis'] = default_chassis
 
-        valid_dfm_count = [1, 2, 3, 4]
-        if config['dfm_count'] not in valid_dfm_count:
-            raise InvalidConfigurationException('Valid drive counts: {}'.format(valid_dfm_count))
-
-
-        default_chassis = (config['blades'] - 1 )// 10 + 1
-        if config['chassis'] < default_chassis:
-            config['chassis'] = default_chassis
+            valid_dfm_count = [1, 2, 3, 4]
+            if config['dfm_count'] not in valid_dfm_count:
+                raise InvalidConfigurationException('Valid drive counts: {}'.format(valid_dfm_count))
 
         default_xfm = False
         if config['chassis'] > 1:
@@ -84,10 +87,84 @@ class FBSDiagram():
 
         self.config = config
     
+    def _init_blades_v2(self, params, config):
+        """Initialize bladesv2 configuration from JSON-encoded parameter"""
+        try:
+            bladesv2_data = jsonurl.loads(params["bladesv2"])
+        except Exception as e:
+            raise InvalidDatapackException(f"Invalid bladesv2 JSON: {str(e)}")
+        
+        # Build final blade configuration data model
+        # Structure: chassis_blades[chassis_idx][blade_idx][bay_idx] = dfm_config
+        chassis_blades = []
+        
+        for chassis_idx, chassis in enumerate(bladesv2_data):
+            # Initialize 10 blade slots (1-10), each with 4 DFM bays (1-4)
+            # Using 0-based indexing internally: slot[0-9] = physical slots 1-10, bay[0-3] = physical bays 1-4
+            chassis_config = []
+            for blade_slot in range(10):  # Slots 1-10 (0-based: 0-9)
+                blade_bays = [None, None, None, None]  # Bays 1-4 (0-based: 0-3)
+                chassis_config.append(blade_bays)
+            
+            # Process each blade configuration group
+            for blade_group in chassis.get('blades', []):
+                bays = blade_group.get('bays', [])  # Physical bay numbers 1-4
+                dfm_size = blade_group.get('dfm_size', '24TB')
+                blade_count = blade_group.get('blade_count', 1)
+                first_slot = blade_group.get('first_slot', 1)  # Physical slot number 1-10
+                blade_model = blade_group.get('blade_model', config['model'])
+                
+                # Validate bays (should be 1-4)
+                if not isinstance(bays, list) or not bays:
+                    raise InvalidDatapackException(f"Invalid bays specification for chassis {chassis_idx}")
+                
+                # Create DFM configuration 
+                dfm_config = {
+                    'dfm_size': dfm_size,
+                    'blade_count': blade_count,
+                    'first_slot': first_slot,
+                    'blade_model': blade_model
+                }
+                
+                # blade_count determines how many consecutive blade slots to populate
+                # starting from first_slot (convert to 0-based indexing)
+                start_slot = first_slot - 1  # Convert to 0-based (slot 1 = index 0)
+                end_slot = min(start_slot + blade_count, 10)  # Max 10 slots per chassis
+                
+                # For each slot in the range, populate the specified bays
+                for slot_idx in range(start_slot, end_slot):
+                    for bay_num in bays:  # Physical bay numbers 1-4
+                        if 1 <= bay_num <= 4:  # Validate bay number
+                            bay_idx = bay_num - 1  # Convert to 0-based (bay 1 = index 0)
+                            chassis_config[slot_idx][bay_idx] = dfm_config
+            
+            chassis_blades.append(chassis_config)
+        
+        # Store final blade configuration
+        config['bladesv2_final'] = chassis_blades
+        config['chassis'] = len(chassis_blades)
+        
+        # Calculate total blades for compatibility
+        total_blades = 0
+        for chassis in chassis_blades:
+            for blade in chassis:
+                if any(bay is not None for bay in blade):
+                    total_blades += 1
+        config['blades'] = total_blades
+        
+        return config
 
-    async def add_blades(self, base_img, number_of_blades, blade_model_text):
+    async def add_blades(self, base_img, number_of_blades, blade_model_text, chassis_idx=0):
         logging.debug("Adding blades to the image")
         
+        # Check if using bladesv2
+        if 'bladesv2_final' in self.config:
+            await self._add_blades_v2(base_img, chassis_idx, blade_model_text)
+        else:
+            await self._add_blades_legacy(base_img, number_of_blades, blade_model_text)
+
+    async def _add_blades_legacy(self, base_img, number_of_blades, blade_model_text):
+        """Legacy blade addition logic"""
         key = 'png/pure_fbs_blade.png'
         blade_img = await RackImage(key).get_image()
         fm_loc = global_config[key]['fm_loc']
@@ -100,50 +177,91 @@ class FBSDiagram():
         for x in range(self.config['dfm_count']):
             blade_img.paste(fm_img, fm_loc[x])
 
-        ##########################################
-        # Add model label.
+        # Add model label
         label_loc = global_config[key]['model_text_loc']
-        
-        # todo: add this into utilities as a more generic function to apply 
-        # rotated tet.
         ttf_path = global_config['ttf_path']
         font_size = 25
 
         font = ImageFont.truetype(ttf_path, size=font_size)
-        #x0, y0, w, h = font.getbbox(text=blade_model_text)
-        # old deprecated Pillow 9.5.0 version
-        #txt_size = font.getsize(blade_model_text)
-
         _, _, w, h = font.getbbox(blade_model_text)
         txt_size = (w, h)
-        #if txt_size != txt_size_new:
-        #    Exception("new Txt size doesn't match")
         
-        ##make backgroun grey
         txtimg = Image.new("RGBA", txt_size, (38, 38, 38))
         txtimg_draw = ImageDraw.Draw(txtimg)
         txtimg_draw.text((0,0), blade_model_text, font=font, fill= (255, 255, 255))
 
-        #Crop the top a little to remove extra spacing along the top
         top_crop = 3
         txtimg = txtimg.crop((0, top_crop, txt_size[0], txt_size[1]))
-
-        #apply_text(txtimg, model_text, 0, 0, font_size=font_size)
         txtimg = txtimg.rotate(270, expand=1)
         blade_img.paste(txtimg, label_loc)
 
-
-        ############################
-        # Paste in the blades.
+        # Paste in the blades
         for x in range(number_of_blades):
             base_img.paste(blade_img, self.img_info['blade_loc'][x])
 
+    async def _add_blades_v2(self, base_img, chassis_idx, blade_model_text):
+        """Advanced blade addition logic for bladesv2 using final data model"""
+        if chassis_idx >= len(self.config['bladesv2_final']):
+            return
+            
+        chassis_blades = self.config['bladesv2_final'][chassis_idx]
+        key = 'png/pure_fbs_blade.png'
+        fm_loc = global_config[key]['fm_loc']
+        
+        # Process each blade (0-9) in this chassis
+        for blade_idx, blade_bays in enumerate(chassis_blades):
+            if blade_idx >= len(self.img_info['blade_loc']):
+                continue
+                
+            # Check if this blade has any DFMs configured
+            if not any(bay is not None for bay in blade_bays):
+                continue
+                
+            # Create blade image for this specific blade
+            blade_img = await RackImage(key).get_image()
+            
+            # Add DFMs to each bay in this blade based on configuration
+            for bay_idx, dfm_config in enumerate(blade_bays):
+                if dfm_config is None or bay_idx >= len(fm_loc):
+                    continue
+                    
+                # Create DFM with specific size
+                dfm_name = 'png/pure_fa_fm_nvme.png'
+                fm_img = await RackImage(dfm_name).get_image()
+                apply_fm_label(fm_img, str(dfm_config['dfm_size']), "qlc")
+                
+                # Paste this DFM into the specific bay location on the blade
+                blade_img.paste(fm_img, fm_loc[bay_idx])
 
-    async def build_chassis(self, number_of_blades, blade_model_text):
+            # Add model label to the blade
+            label_loc = global_config[key]['model_text_loc']
+            ttf_path = global_config['ttf_path']
+            font_size = 25
+
+            font = ImageFont.truetype(ttf_path, size=font_size)
+            _, _, w, h = font.getbbox(blade_model_text)
+            txt_size = (w, h)
+            
+            txtimg = Image.new("RGBA", txt_size, (38, 38, 38))
+            txtimg_draw = ImageDraw.Draw(txtimg)
+            txtimg_draw.text((0,0), blade_model_text, font=font, fill= (255, 255, 255))
+
+            top_crop = 3
+            txtimg = txtimg.crop((0, top_crop, txt_size[0], txt_size[1]))
+            txtimg = txtimg.rotate(270, expand=1)
+            blade_img.paste(txtimg, label_loc)
+
+            # Paste this completed blade into the chassis
+            base_img.paste(blade_img, self.img_info['blade_loc'][blade_idx])
+
+
+    async def build_chassis(self, number_of_blades, blade_model_text, chassis_idx=0):
         logging.debug("Building chassis with %s blades", number_of_blades)
-        number_of_blades = min(10, number_of_blades)
+        # For legacy mode, limit to 10 blades per chassis
+        if 'bladesv2_final' not in self.config:
+            number_of_blades = min(10, number_of_blades)
+        
         face = self.config["face"]
-
         model = blade_model_text[0].lower()
 
         if face == 'front':
@@ -163,7 +281,7 @@ class FBSDiagram():
         base_img = await RackImage(img_key).get_image()
 
         if "front" in img_key:
-            await self.add_blades(base_img, number_of_blades, blade_model_text)
+            await self.add_blades(base_img, number_of_blades, blade_model_text, chassis_idx)
 
         return {'img': base_img, 'ports': ports}
 
@@ -178,21 +296,31 @@ class FBSDiagram():
         logging.debug("Starting to get image for configuration: %s", str(self.config))
 
         c = self.config
-
         blade_model_text = self.config['model'].split("-")[1].upper()
 
         if blade_model_text == "E":
             blade_model_text = "EC"
 
-        blades_left = c['blades']
-        for i in range(self.config["chassis"]):
-            tasks.append(self.build_chassis( blades_left, blade_model_text))
-            blades_left -= 10
+        # Handle bladesv2 or legacy blade processing
+        if 'bladesv2_final' in self.config:
+            # Use bladesv2 configuration
+            for i in range(self.config["chassis"]):
+                # For bladesv2, we don't need to track blades_left since it's managed per chassis
+                tasks.append(self.build_chassis(0, blade_model_text, i))
+                
+                # expansions shelves we change the blade model to EX
+                if blade_model_text == "EC":
+                    blade_model_text = "EX"
+        else:
+            # Legacy blade processing
+            blades_left = c['blades']
+            for i in range(self.config["chassis"]):
+                tasks.append(self.build_chassis(blades_left, blade_model_text, i))
+                blades_left -= 10
 
-            # expansions shelves we change the blade model to EX
-            if blade_model_text == "EC":
-                blade_model_text = "EX"
-
+                # expansions shelves we change the blade model to EX
+                if blade_model_text == "EC":
+                    blade_model_text = "EX"
 
         if self.config['xfm']:
             xfm_face = self.config['xfm_face']

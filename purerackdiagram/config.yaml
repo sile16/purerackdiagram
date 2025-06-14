@@ -148,7 +148,7 @@ chassis_dp_size_lookup:
   - 750GB
   - scm
   - 4
-  - DM Cache 3
+  - DM Cache 3TB
   '31':
   - 2.2TB
   - nvme
@@ -218,7 +218,7 @@ chassis_dp_size_lookup:
   - 750GB
   - scm
   - 8
-  - DM Cache 6
+  - DM Cache 6TB
   '63':
   - 4.5TB
   - nvme
