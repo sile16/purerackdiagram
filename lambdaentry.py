@@ -702,73 +702,27 @@ def handler(event, context):
             status_code = 400
             logger.info(f"Invalid datapack: {error_msg}")
             emit_exception_metric('InvalidDatapackException')
-            
-            # Format user-friendly message
-            #if "Pick from One of the Following" in error_msg:
-            #    # The error message already has the list of valid options
-            #    user_friendly_error = error_msg
-            #else:
-            #    # Add more context if needed
-            #    user_friendly_error = f"Datapack configuration invalid. {error_msg}"
+        
         
         elif error_type == 'InvalidConfigurationException':
             status_code = 400
             logger.info(f"Invalid configuration: {error_msg}")
             emit_exception_metric('InvalidConfigurationException')
-            
-            # Format user-friendly message
-            if "Pick from One of the Following" in error_msg or "please provide a valid" in error_msg.lower() or "valid" in error_msg.lower():
-                # The error message already has the list of valid options
-                user_friendly_error = error_msg
-            else:
-                # Add more context if needed
-                user_friendly_error = f"Configuration invalid. {error_msg}"
-                
-                # Check for specific model or value errors that might need more context
-                if "valid model" in error_msg.lower():
-                    user_friendly_error = f"Model configuration invalid. {error_msg}"
-                elif "valid cards" in error_msg.lower():
-                    user_friendly_error = f"Cards configuration invalid. {error_msg}"
         
         elif error_type == 'RackDiagramException':
             status_code = 400
             logger.info(f"Rack diagram error: {error_msg}")
             emit_exception_metric('RackDiagramException')
-            
-            # Format user-friendly message
-            if "Pick from One of the Following" in error_msg or "please provide a valid" in error_msg.lower() or "valid" in error_msg.lower():
-                # The error message already has the list of valid options
-                user_friendly_error = error_msg
-            else:
-                # Add more context if needed
-                user_friendly_error = f"Rack diagram configuration invalid. {error_msg}"
         
         else:
             # Handle other exceptions as server errors
             status_code = 500
             logger.error(f"Server error: {error_msg}")
             logger.error(f"Stack trace: {stack_trace}")
-            emit_exception_metric('ServerError')
-            
-            # Format user-friendly message for server errors
-            if "Pick from One of the Following" in error_msg or "please provide a valid" in error_msg.lower() or "valid" in error_msg.lower():
-                # The error message already has the list of valid options
-                user_friendly_error = error_msg
-            else:
-                # Check for specific error types to provide more context
-                if "datapacks" in error_msg.lower() or "dp" in error_msg.lower():
-                    user_friendly_error = f"Datapack configuration invalid. {error_msg}"
-                elif "model" in error_msg.lower():
-                    user_friendly_error = f"Model configuration invalid. {error_msg}"
-                elif "card" in error_msg.lower() or "pci" in error_msg.lower():
-                    user_friendly_error = f"Cards configuration invalid. {error_msg}"
-                else:
-                    user_friendly_error = f"Configuration error: {error_msg}"
-        
-        # Log stack trace and request parameters
-
-            logger.error(f"Stack trace: {stack_trace}")
             logger.error(f"Request parameters: {json.dumps(params)}")
+            emit_exception_metric('ServerError')
+
+            
         
         # Return appropriate response based on request format
         if 'json' in params and params['json']:
@@ -780,7 +734,7 @@ def handler(event, context):
                 except Exception as e:
                     logger.error(f"Error adding diagram details to error response: {str(e)}")
             
-            data["error"] = user_friendly_error
+            data["error"] = error_msg
             data["error_type"] = error_type
             data["execution_duration"] = time.time() - program_time_s
             data["params"] = params
@@ -795,7 +749,7 @@ def handler(event, context):
                                 'Access-Control-Allow-Methods': 'GET'} }
 
         else:
-            img = text_to_image(user_friendly_error)
+            img = text_to_image(error_msg)
             buffered = BytesIO()
             img.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')

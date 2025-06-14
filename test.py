@@ -28,6 +28,47 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-xl130r5",
+            "protocol": "eth",
+            "face": "front",
+            "datapacksv2": jsonurl.dumps([
+                { #CH0
+                    'datapacks': [
+                        {
+                
+                            'fm_size': "6 PB",
+                            'fm_count': 33
+                        },
+                        {
+                            'dp_label': "small",
+                            'fm_size': "1 PB",
+                            'fm_count': 2,
+                            'first_slot': 37
+                        }
+                    ]
+                },
+                { #sh0
+                    'datapacks': [
+                        {
+                            "dp_label": "Shelf DP",
+                            'fm_size': "6 PB",
+                            'fm_count': 13
+                        },
+                        {
+                            'dp_label': "small",
+                            'fm_size': "1 PB",
+                            'fm_count': 2,
+                        }
+                    ]
+                }
+            ]),
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-x70r2",
             "protocol": "eth",
             "face": "front",
@@ -1198,17 +1239,11 @@ def create_test_image(item, count, total):
                     error_msg = error_data.get('error', 'Unknown error')
                     error_type = error_data.get('error_type', 'Unknown')
                     
-                    # Check if error message has the expected format
-                    is_formatted = "Pick from One of the Following" in error_msg or "valid" in error_msg.lower()
-                    print(f"  Error: {error_type} - {error_msg}")
-                    print(f"  Has detailed format: {'✅ Yes' if is_formatted else '❌ No'}")
-                    
                     # Return error details for validation and testing
                     return({file_name: {
                         "status": status_code,
                         "error_type": error_type,
-                        "error_msg": error_msg,
-                        "has_detailed_format": is_formatted
+                        "error_msg": error_msg
                     }})
                 except json.JSONDecodeError:
                     print(f"  Failed to parse error JSON")

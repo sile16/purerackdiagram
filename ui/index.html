@@ -16,6 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@jsonurl/jsonurl@1.1.8"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   
@@ -56,7 +57,7 @@ Select the options, then click the Display button at the bottom to load the imag
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-6">
       <h2>Option</h2>
 
       <div id="option-tabs">
@@ -88,6 +89,109 @@ Select the options, then click the Display button at the bottom to load the imag
           </div>
           <br/>
 
+
+
+          <div class="row">
+            <div class="col-xs-8">
+              <button id="toggle-datapacks-v2" class="btn btn-primary">Use Advanced Datapack Builder</button>
+            </div>
+            <div class="col-xs-4">
+              <label hidden="true">
+                <input type="checkbox" id="auto-update" checked> Auto-update image
+              </label>
+            </div>
+            <br/>
+            <br/>
+          </div>
+
+          <div id="datapacks-v2-section" style="display: none;">
+            <div class="row">
+              <div class="col-xs-12">
+                <h4>Advanced Datapack Configuration</h4>
+                
+              </div>
+            </div>
+
+            <div id="all-shelves-v2">
+              <div id="shelves-v2-container">
+                <!-- All shelves (including chassis) will be dynamically added here -->
+              </div>
+              
+              <div class="datapack-form" id="datapack-form">
+                <!-- Required Fields Box -->
+                <div style="border: 2px solid #337ab7; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                  <h6 style="margin-top: 0; color: #337ab7;"><strong>Required Fields</strong></h6>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <label for="fm-size">FM Size: <span style="color: red;">*</span></label>
+                      <input type="text" id="fm-size" class="form-control datalist-input" placeholder="e.g., 6 PB" list="fm-sizes">
+                      <datalist id="fm-sizes">
+                        <option value="750GB">
+                        <option value="1TB">
+                        <option value="1.1TB">
+                        <option value="2TB">
+                        <option value="2.2TB">
+                        <option value="9.1TB">
+                        <option value="18.3TB">
+                        <option value="37.5TB">
+                        <option value="75TB">
+                        <option value="150TB">
+                        <option value="1 PB">
+                        <option value="6 PB">
+                        <option value="Blank">
+                      </datalist>
+                    </div>
+                    <div class="col-xs-6">
+                      <label for="fm-count">FM Count: <span style="color: red;">*</span></label>
+                      <input type="number" id="fm-count" class="form-control" value="10" min="1">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Optional Fields Box -->
+                <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                  <h6 style="margin-top: 0; color: #666;"><strong>Optional Fields</strong></h6>
+                  <div class="row">
+                    <div class="col-xs-4">
+                      <label for="dp-label">DP Label:</label>
+                      <input type="text" id="dp-label" class="form-control" placeholder="Auto-generated if empty">
+                    </div>
+                    <div class="col-xs-4">
+                      <label for="fm-type">FM Type:</label>
+                      <select id="fm-type" class="form-control">
+                        <option value="">Auto-detect</option>
+                        <option value="nvme">nvme</option>
+                        <option value="nvme-qlc">nvme-qlc</option>
+                        <option value="scm">scm</option>
+                      </select>
+                    </div>
+                    <div class="col-xs-4">
+                      <label for="first-slot">First Slot:</label>
+                      <input type="number" id="first-slot" class="form-control" placeholder="Auto-assigned">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row">
+                  <div class="col-xs-4">
+                    <label for="target-shelf">Add to:</label>
+                    <select id="target-shelf" class="form-control">
+                      <option value="0">Chassis</option>
+                    </select>
+                  </div>
+                  <div class="col-xs-4">
+                    <button id="add-datapack" class="btn btn-success btn-block">Add Datapack</button>
+                  </div>
+                  <div class="col-xs-4">
+                    <button id="add-shelf" class="btn btn-info btn-block">Add New Shelf</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
           <div class="row" id="datapacks">
             <div class="col-xs-4 col-sm-4 option_label">datapacks:</div>
             <div class="col-xs-8 col-sm-8"><span data-tooltip="In the format <dp>/<dp>-<dp>/<dp>-<dp>
@@ -96,6 +200,7 @@ Select the options, then click the Display button at the bottom to load the imag
             <br/>
             <br/>
           </div>
+
           <button id="datapack-chart-button" onclick="$('#datapack-tabs').toggle('hidden');console.log('hello')">Show/Hide Datapack Chart</button>
           <br/>
           <div id="datapack-chart" >
@@ -492,7 +597,7 @@ Select the options, then click the Display button at the bottom to load the imag
       </div>
     </div>
 
-    <div class="col-md-7">
+    <div class="col-md-6">
       <h2>Rack Diagram</h2>
       <p> Configs are NOT validated as possible.  Invalid unsupported options can be displayed. Tip: Hover your mouse cursor over ports for port info. </p>
       <br>
@@ -506,7 +611,7 @@ Select the options, then click the Display button at the bottom to load the imag
       </div>
     </div>
 
-    <div class="col-md-7">
+    <div class="col-md-6">
       <h3>Image Info JSON:</h3>
       <p> Note: Card port info added to older models (xr3 and below) may be inaccurate.</p>
       <br/>

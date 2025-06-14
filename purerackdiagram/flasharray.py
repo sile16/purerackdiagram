@@ -158,7 +158,11 @@ class FAShelf():
                     start_loc = dp[4]
                     end_loc = dp[5]
                     rotate = dp[6]
-                    text = dp_size + "TB"
+                    try:
+                        float(dp_size)
+                        text = str(dp_size) + "TB"
+                    except (ValueError, TypeError):
+                        text = dp_size
                 
                     self.tmp_img = apply_dp_labelv2(self.tmp_img, text, start_loc, end_loc, rotate)
 
@@ -674,7 +678,11 @@ class FAChassis():
                     start_loc = dp[4]
                     end_loc = dp[5]
                     rotate = dp[6]
-                    text = dp_size + "TB"
+                    try:
+                        float(dp_size)
+                        text = str(dp_size) + "TB"
+                    except (ValueError, TypeError):
+                        text = dp_size
 
                     self.tmp_img = apply_dp_labelv2(self.tmp_img, text , start_loc, end_loc, rotate)
 
@@ -913,7 +921,7 @@ class FADiagram():
         #
         try:
             dpv2 = jsonurl.loads(params["datapacksv2"])
-        except jsonurl.JSONDecodeError as e:
+        except Exception as e:
             raise InvalidDatapackException("Invalid JSON in datapacksv2: {}".format(e))
 
         
@@ -931,6 +939,52 @@ class FADiagram():
             
             return "nvme"
         
+        def get_default_dp_label(fm_size, fm_count):
+            if fm_size == "Blank":
+                return "0TB"
+            
+            # Find storage units in fm_size (case insensitive)
+            size_str = fm_size.strip().lower()
+            unit = ""
+            size_value = None
+            
+            # Check for binary and decimal storage units (order matters - check longer units first)
+            units_to_check = ['pib', 'tib', 'gib', 'pb', 'tb', 'gb']
+            
+            for u in units_to_check:
+                if u in size_str:
+                    # Find the unit position in lowercase string
+                    unit_start = size_str.find(u)
+                    
+                    # Extract numeric part before the unit (with potential whitespace)
+                    numeric_part = size_str[:unit_start].strip()
+                    
+                    if numeric_part:
+                        try:
+                            size_value = float(numeric_part)
+                            # Find the unit in original case from the original string
+                            original_lower = fm_size.strip().lower()
+                            original_unit_start = original_lower.find(u)
+                            unit = fm_size.strip()[original_unit_start:original_unit_start + len(u)]
+                            break
+                        except ValueError:
+                            continue
+            
+            if size_value is not None and unit:
+                # Calculate total capacity: fm_size * fm_count
+                total_capacity = size_value * fm_count
+                # Format as integer if it's a whole number, otherwise as float
+                #round to 1 decimal place
+                total_capacity = round(total_capacity, 1)
+                if total_capacity == int(total_capacity):  # get rid of the .0 if it's a whole number
+                    return f"{int(total_capacity)} {unit}"
+                else:
+                    return f"{total_capacity} {unit}"
+            else:
+                # If no unit found or couldn't parse, return format: "count x size"
+                return f"{fm_count} x {fm_size}"
+
+        
         shelves = []
         
         config["chassis_datapacks"] = []
@@ -946,10 +1000,11 @@ class FADiagram():
             for dp in chassis['datapacks']:
                 
                 # dp should be of form [fm_str, fm_type, num_modules, dp_label, first_slot]
-                dp_label = dp['dp_label']
+                
                 num_modules = dp['fm_count']
                 fm_size = dp['fm_size']
-                fm_type = dp.get('fm_type', get_default_fm_type(dp['fm_size']) ) # todo
+                dp_label = dp.get('dp_label', get_default_dp_label(fm_size, num_modules))
+                fm_type = dp.get('fm_type', get_default_fm_type(fm_size) )
                 first_slot = dp.get('first_slot', next_chassis_index)
                 next_chassis_index = first_slot + num_modules
 

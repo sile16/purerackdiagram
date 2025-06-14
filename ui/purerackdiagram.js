@@ -27,6 +27,15 @@ const customSchema = jsyaml.DEFAULT_SCHEMA.extend([pythonTupleType]);
 
 $(function () {
   console.log("ready!");
+  
+  // Check if jsonurl library loaded
+  console.log("Document ready - checking for jsonurl library:");
+  console.log('jsonurl available:', typeof jsonurl !== 'undefined');
+  console.log('JSONURL available:', typeof JSONURL !== 'undefined');
+  console.log('JsonUrl available:', typeof JsonUrl !== 'undefined');
+  console.log('JsonURL available:', typeof JsonURL !== 'undefined');
+  console.log('All window keys:', Object.keys(window).filter(k => k.toLowerCase().includes('json')));
+  
     // Event listener for radio button change
   document.querySelectorAll('input[name="api-environment"]').forEach(radio => {
     radio.addEventListener('change', updateApiEndpoint);
@@ -209,6 +218,10 @@ $(function () {
   var fa_option_direction = build_select('#fa_option_direction', FA_OPTIONS.direction);
   var fa_option_fm_label = build_select('#fa_option_fm_label', FA_OPTIONS.fm_label);
   var fa_option_dp_label = build_select('#fa_option_dp_label', FA_OPTIONS.dp_label);
+  
+  // Set default values to TRUE for fm_label and dp_label
+  fa_option_fm_label.val('TRUE');
+  fa_option_dp_label.val('TRUE');
   var fa_option_addoncards = build_input('#fa_option_addoncards', "");
   var fa_option_ports = build_select('#fa_option_ports', FA_OPTIONS.ports);
   var fa_option_mezz = build_select('#fa_option_mezz', FA_OPTIONS.mezz);
@@ -280,7 +293,19 @@ $(function () {
     url += "model="  + fa_option_model.val();
     url += "&protocol="  + fa_option_protocol.val();
     url += "&face="  + fa_option_face.val();
-    url += "&datapacks="  + fa_option_datapacks.val();
+    
+    // Check if we're using datapacks v2
+    const datapacksV2Jsonurl = fa_option_datapacks.attr('data-datapacksv2');
+    console.log('fa_url: checking for datapacksv2 attr:', datapacksV2Jsonurl);
+    if (datapacksV2Jsonurl) {
+      // Use datapacksv2 parameter - jsonurl is already URL-safe, no need to encode again
+      url += "&datapacksv2=" + datapacksV2Jsonurl;
+      console.log('fa_url: added datapacksv2 parameter');
+    } else {
+      // Use regular datapacks parameter
+      url += "&datapacks="  + fa_option_datapacks.val();
+      console.log('fa_url: using regular datapacks parameter');
+    }
     if(fa_option_bezel.val()){
       url += "&bezel="  + fa_option_bezel.val();
     }
@@ -330,6 +355,7 @@ $(function () {
       url += "&chassis_gen=" + fa_option_chassis_gen.val();
     }
 
+    console.log('fa_url: final URL:', url);
     return url;
   };
 
@@ -604,6 +630,241 @@ $(function () {
     await get_url();
     location.href = vssx_url;
   })
+
+  // Datapacks v2 functionality
+  let datapacksV2Data = [
+    { datapacks: [] } // Start with just chassis (first shelf)
+  ];
+
+  // Toggle between original datapacks and datapacks v2
+  $("#toggle-datapacks-v2").click(function() {
+    const isV2Visible = $("#datapacks-v2-section").is(":visible");
+    
+    if (isV2Visible) {
+      // Switch back to original
+      $("#datapacks-v2-section").hide();
+      $("#datapacks").show();
+      $("#datapack-chart-button").show();
+      $("#datapack-chart").show();
+      $("#auto-update").parent().hide(); // Hide auto-update checkbox
+      $(this).text("Use Advanced Datapack Builder");
+      
+      // Clear the datapacksv2 parameter when switching back
+      fa_option_datapacks.removeAttr('data-datapacksv2');
+    } else {
+      // Switch to v2
+      $("#datapacks-v2-section").show();
+      $("#datapacks").hide();
+      $("#datapack-chart-button").hide();
+      $("#datapack-chart").hide();
+      $("#auto-update").parent().show(); // Show auto-update checkbox
+      $(this).text("Use Simple Datapack Input");
+      
+      // Initialize display and set initial parameter
+      updateDatapacksV2Display();
+      updateTargetShelfDropdown();
+      
+      // Initially clear the FM Size field to show full datalist options
+      $("#fm-size").val("");
+      
+      // Set placeholder to show what the default would be
+      const firstOption = $("#fm-sizes option:first").val();
+      $("#fm-size").attr("placeholder", `Default: ${firstOption}`);
+      
+      // Add focus event to clear field and show full datalist
+      $("#fm-size").on("focus", function() {
+        if ($(this).val() === firstOption) {
+          $(this).val("");
+        }
+      });
+      
+      // Add blur event to set default if field is empty
+      $("#fm-size").on("blur", function() {
+        if ($(this).val().trim() === "") {
+          $(this).val(firstOption);
+        }
+      });
+      
+      updateDatapacksV2Parameter(); // Set initial empty parameter
+    }
+  });
+
+  // Add datapack to selected shelf
+  $("#add-datapack").click(function() {
+    const dpLabel = $("#dp-label").val();
+    const fmSize = $("#fm-size").val();
+    const fmCount = parseInt($("#fm-count").val());
+    const fmType = $("#fm-type").val();
+    const firstSlot = $("#first-slot").val();
+    const targetShelf = parseInt($("#target-shelf").val());
+
+    if (!fmSize || !fmCount) {
+      alert("Please fill in FM Size and FM Count");
+      return;
+    }
+
+    const datapack = {
+      fm_size: fmSize,
+      fm_count: fmCount
+    };
+
+    // Only add dp_label if it's not empty (to allow default generation)
+    if (dpLabel && dpLabel.trim() !== '') {
+      datapack.dp_label = dpLabel;
+    }
+
+    // Only add fm_type if it's not blank (allow backend to auto-detect)
+    if (fmType && fmType.trim() !== '') {
+      datapack.fm_type = fmType;
+    }
+
+    if (firstSlot) {
+      datapack.first_slot = parseInt(firstSlot);
+    }
+
+    // Ensure target shelf exists
+    while (datapacksV2Data.length <= targetShelf) {
+      datapacksV2Data.push({ datapacks: [] });
+    }
+
+    datapacksV2Data[targetShelf].datapacks.push(datapack);
+    
+    // Clear form
+    $("#dp-label").val("");
+    $("#fm-size").val("");
+    $("#fm-count").val("10");
+    $("#first-slot").val("");
+    
+    updateDatapacksV2Display();
+    updateDatapacksV2Parameter();
+  });
+
+  // Add new shelf
+  $("#add-shelf").click(function() {
+    datapacksV2Data.push({ datapacks: [] });
+    updateTargetShelfDropdown();
+    // Set the dropdown to the newly added shelf (highest number)
+    $("#target-shelf").val(datapacksV2Data.length - 1);
+    updateDatapacksV2Display();
+  });
+
+  // Update target shelf dropdown
+  function updateTargetShelfDropdown() {
+    const dropdown = $("#target-shelf");
+    dropdown.empty();
+    
+    for (let i = 0; i < datapacksV2Data.length; i++) {
+      const label = i === 0 ? "Chassis" : `Shelf ${i - 1}`;
+      dropdown.append(`<option value="${i}">${label}</option>`);
+    }
+  }
+
+  // Update the display of current datapacks
+  function updateDatapacksV2Display() {
+    $("#shelves-v2-container").empty();
+    
+    for (let i = 0; i < datapacksV2Data.length; i++) {
+      const shelfName = i === 0 ? "Chassis" : `Shelf ${i - 1}`;
+      let shelfHtml = `<div class="shelf-section" style="margin-bottom: 20px; border: 1px solid #ddd; padding: 10px;">
+        <h5>${shelfName}
+          ${i > 0 ? `<button class="btn btn-sm btn-warning pull-right" onclick="removeShelf(${i})">Remove Shelf</button>` : ''}
+        </h5>`;
+      
+      if (datapacksV2Data[i].datapacks.length === 0) {
+        shelfHtml += `<p style="color: #999; font-style: italic;">No datapacks configured</p>`;
+      } else {
+        datapacksV2Data[i].datapacks.forEach((dp, index) => {
+          shelfHtml += createDatapackDisplay(dp, i, index);
+        });
+      }
+      
+      shelfHtml += `</div>`;
+      $("#shelves-v2-container").append(shelfHtml);
+    }
+  }
+
+  // Create HTML display for a datapack
+  function createDatapackDisplay(datapack, shelfIndex, datapackIndex) {
+    const fmType = datapack.fm_type ? `(${datapack.fm_type})` : '(auto-detect)';
+    const slotInfo = datapack.first_slot ? ` - Slot: ${datapack.first_slot}` : '';
+    const labelInfo = datapack.dp_label ? `${datapack.dp_label} - ` : '';
+    
+    return `
+      <div class="datapack-display" style="border: 1px solid #ccc; padding: 8px; margin: 5px 0; background-color: #f9f9f9;">
+        <strong>Datapack:</strong> 
+        ${labelInfo}${datapack.fm_count} x ${datapack.fm_size} ${fmType}${slotInfo}
+        <button class="btn btn-xs btn-danger pull-right" onclick="removeDatapack(${shelfIndex}, ${datapackIndex})">Remove</button>
+      </div>
+    `;
+  }
+
+  // Remove datapack function (global scope)
+  window.removeDatapack = function(shelfIndex, datapackIndex) {
+    datapacksV2Data[shelfIndex].datapacks.splice(datapackIndex, 1);
+    updateDatapacksV2Display();
+    updateDatapacksV2Parameter();
+  };
+
+  // Remove shelf function (global scope)
+  window.removeShelf = function(shelfIndex) {
+    if (shelfIndex > 0) { // Can't remove chassis (index 0)
+      datapacksV2Data.splice(shelfIndex, 1);
+      updateTargetShelfDropdown();
+      
+      // Set dropdown to the highest remaining shelf (last shelf after chassis)
+      const highestShelfIndex = datapacksV2Data.length - 1;
+      $("#target-shelf").val(highestShelfIndex);
+      
+      updateDatapacksV2Display();
+      updateDatapacksV2Parameter();
+    }
+  };
+
+  // Update the datapacksv2 parameter for the API call
+  function updateDatapacksV2Parameter() {
+    // Check all possible ways jsonurl might be exposed
+    console.log('Window object keys containing jsonurl:', Object.keys(window).filter(k => k.toLowerCase().includes('jsonurl')));
+    console.log('Available jsonurl:', typeof jsonurl !== 'undefined' ? jsonurl : 'undefined');
+    console.log('Available JSONURL:', typeof JSONURL !== 'undefined' ? JSONURL : 'undefined');
+    console.log('Available window.jsonurl:', typeof window.jsonurl !== 'undefined' ? window.jsonurl : 'undefined');
+    console.log('Available JsonUrl:', typeof JsonUrl !== 'undefined' ? JsonUrl : 'undefined');
+    console.log('Available JsonURL:', typeof JsonURL !== 'undefined' ? JsonURL : 'undefined');
+    console.log('Available window.JsonUrl:', typeof window.JsonUrl !== 'undefined' ? window.JsonUrl : 'undefined');
+    console.log('Available window.JsonURL:', typeof window.JsonURL !== 'undefined' ? window.JsonURL : 'undefined');
+    
+    let jsonurlLib = null;
+    if (typeof JsonURL !== 'undefined') {
+      jsonurlLib = JsonURL;
+    } else if (typeof window.JsonURL !== 'undefined') {
+      jsonurlLib = window.JsonURL;
+    } else if (typeof jsonurl !== 'undefined') {
+      jsonurlLib = jsonurl;
+    } else if (typeof JSONURL !== 'undefined') {
+      jsonurlLib = JSONURL;
+    } else if (typeof JsonUrl !== 'undefined') {
+      jsonurlLib = JsonUrl;
+    }
+    
+    if (!jsonurlLib) {
+      console.error('jsonurl library not loaded yet');
+      return;
+    }
+    
+    console.log('Using jsonurl library:', jsonurlLib);
+    
+    // Use jsonurl to encode the data for URL transmission
+    const jsonurlString = jsonurlLib.stringify(datapacksV2Data);
+    fa_option_datapacks.attr('data-datapacksv2', jsonurlString);
+    
+    console.log('Updated datapacksv2 parameter:', jsonurlString);
+    console.log('Auto-update enabled:', $("#auto-update").is(":checked"));
+    
+    // Automatically update the image if auto-update is enabled
+    if ($("#auto-update").is(":checked")) {
+      console.log('Triggering auto-update...');
+      get_url();
+    }
+  }
 
   function show_hide_fields() {
 
