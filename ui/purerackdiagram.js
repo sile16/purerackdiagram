@@ -407,7 +407,18 @@ $(function () {
     url += "model="  + fbs_option_model.val();
     url += "&face="  + fbs_option_face.val();
     
-    url += "&no_of_blades=" + fbs_option_blades.val();
+    // Check if we're using bladesv2
+    const bladesV2Jsonurl = fbs_option_blades.attr('data-bladesv2');
+    console.log('fbs_url: checking for bladesv2 attr:', bladesV2Jsonurl);
+    if (bladesV2Jsonurl) {
+      // Use bladesv2 parameter - jsonurl is already URL-safe, no need to encode again
+      url += "&bladesv2=" + bladesV2Jsonurl;
+      console.log('fbs_url: added bladesv2 parameter');
+    } else {
+      // Use regular blade parameters
+      url += "&no_of_blades=" + fbs_option_blades.val();
+      console.log('fbs_url: using regular blade parameters');
+    }
     url += "&no_of_drives_per_blade=" + fbs_option_dfm_count.val();
     url += "&drive_size=" + fbs_option_dfm_size.val();
     
@@ -865,6 +876,198 @@ $(function () {
       get_url();
     }
   }
+
+  // ============ BLADESV2 FUNCTIONALITY ============
+  
+  // Initialize bladesv2 data structure
+  let bladesV2Data = [
+    { gen: '1', blades: [] } // Chassis 0
+  ];
+
+  // Toggle between simple and advanced blade builder
+  $('#toggle-blades-v2').click(function() {
+    const isV2Visible = $('#blades-v2-section').is(':visible');
+    
+    if (isV2Visible) {
+      // Switch back to simple
+      $('#blades-v2-section').hide();
+      $('#blades').show();
+      $('#auto-update-blades').parent().hide();
+      $(this).text('Use Advanced Blade Builder');
+      
+      // Show the legacy dfm fields
+      $('#fbs_option_dfm_size').closest('.row').show();
+      $('#fbs_option_dfm_count').closest('.row').show();
+      
+      // Clear the bladesv2 parameter when switching back
+      fbs_option_blades.removeAttr('data-bladesv2');
+    } else {
+      // Switch to advanced
+      $('#blades-v2-section').show();
+      $('#blades').hide();
+      $('#auto-update-blades').parent().show();
+      $(this).text('Use Simple Blade Input');
+      
+      // Hide the legacy dfm fields since they're part of the old way
+      $('#fbs_option_dfm_size').closest('.row').hide();
+      $('#fbs_option_dfm_count').closest('.row').hide();
+      
+      // Initialize with default data
+      updateBladesV2Display();
+      updateBladesV2Parameter();
+    }
+  });
+
+  // Add blade configuration
+  $('#add-blade-config').click(function() {
+    const dfmSize = $('#dfm-size').val().trim();
+    const bladeCount = parseInt($('#blade-count').val());
+    const firstSlot = parseInt($('#first-slot-blade').val());
+    const targetChassis = parseInt($('#target-chassis').val());
+    
+    // Get selected bays
+    const selectedBays = [];
+    $('#blade-form input[type="checkbox"]:checked').each(function() {
+      selectedBays.push(parseInt($(this).val()));
+    });
+    
+    // Validation
+    if (!dfmSize) {
+      alert('Please enter DFM Size');
+      return;
+    }
+    
+    if (selectedBays.length === 0) {
+      alert('Please select at least one bay');
+      return;
+    }
+    
+    if (isNaN(bladeCount) || bladeCount < 1) {
+      alert('Blade Count must be at least 1');
+      return;
+    }
+    
+    if (isNaN(firstSlot) || firstSlot < 1 || firstSlot > 10) {
+      alert('First Slot must be between 1 and 10');
+      return;
+    }
+    
+    // Create blade configuration object
+    const bladeConfig = {
+      bays: selectedBays,
+      dfm_size: dfmSize,
+      blade_count: bladeCount,
+      first_slot: firstSlot,
+      blade_model: 'fb-s200' // Default for now
+    };
+    
+    // Add to data structure
+    if (targetChassis >= bladesV2Data.length) {
+      // Add new chassis if needed
+      while (bladesV2Data.length <= targetChassis) {
+        bladesV2Data.push({ gen: '1', blades: [] });
+      }
+    }
+    
+    bladesV2Data[targetChassis].blades.push(bladeConfig);
+    
+    // Clear form
+    $('#dfm-size').val('');
+    $('#blade-count').val('1');
+    $('#first-slot-blade').val('1');
+    $('#blade-form input[type="checkbox"]').prop('checked', false);
+    
+    // Update display and parameter
+    updateBladesV2Display();
+    updateBladesV2Parameter();
+  });
+
+  // Add new chassis
+  $('#add-chassis').click(function() {
+    bladesV2Data.push({ gen: '1', blades: [] });
+    
+    // Update dropdown
+    const newChassisIndex = bladesV2Data.length - 1;
+    $('#target-chassis').append(`<option value="${newChassisIndex}">Chassis ${newChassisIndex}</option>`);
+    $('#target-chassis').val(newChassisIndex);
+    
+    updateBladesV2Display();
+    updateBladesV2Parameter();
+  });
+
+  function updateBladesV2Display() {
+    let html = '';
+    
+    bladesV2Data.forEach((chassis, chassisIndex) => {
+      if (chassis.blades.length > 0) {
+        const chassisTitle = chassisIndex === 0 ? "Chassis" : `Chassis ${chassisIndex}`;
+        html += `<div class="shelf-section">
+          <h5>${chassisTitle} 
+            ${chassisIndex > 0 ? `<button class="btn btn-xs btn-danger" onclick="removeChassis(${chassisIndex})">Remove</button>` : ''}
+          </h5>`;
+        
+        chassis.blades.forEach((blade, bladeIndex) => {
+          const baysText = blade.bays.join(', ');
+          html += `<div class="datapack-item">
+            <span><strong>Bays ${baysText}:</strong> ${blade.dfm_size} × ${blade.blade_count} blades (starting slot ${blade.first_slot})</span>
+            <button class="btn btn-xs btn-danger" onclick="removeBladeConfig(${chassisIndex}, ${bladeIndex})">Remove</button>
+          </div>`;
+        });
+        
+        html += '</div>';
+      }
+    });
+    
+    $('#chassis-v2-container').html(html);
+  }
+
+  function updateBladesV2Parameter() {
+    if (typeof JsonURL !== 'undefined') {
+      try {
+        const jsonurl = JsonURL.stringify(bladesV2Data);
+        fbs_option_blades.attr('data-bladesv2', jsonurl);
+        
+        console.log('BladesV2 parameter updated:', jsonurl);
+        console.log('Auto-update enabled:', $("#auto-update-blades").is(":checked"));
+        
+        // Automatically update the image if auto-update is enabled
+        if ($("#auto-update-blades").is(":checked")) {
+          console.log('Triggering auto-update...');
+          get_url();
+        }
+      } catch (error) {
+        console.error('Error encoding bladesv2 data:', error);
+      }
+    } else {
+      console.warn('JsonURL library not available');
+    }
+  }
+
+  // Global functions for remove buttons
+  window.removeBladeConfig = function(chassisIndex, bladeIndex) {
+    bladesV2Data[chassisIndex].blades.splice(bladeIndex, 1);
+    updateBladesV2Display();
+    updateBladesV2Parameter();
+  };
+
+  window.removeChassis = function(chassisIndex) {
+    if (chassisIndex > 0) { // Don't allow removing chassis 0
+      bladesV2Data.splice(chassisIndex, 1);
+      
+      // Update dropdown
+      $('#target-chassis').empty();
+      bladesV2Data.forEach((chassis, index) => {
+        $('#target-chassis').append(`<option value="${index}">Chassis ${index}</option>`);
+      });
+      
+      // Set to highest remaining chassis
+      const highestChassis = bladesV2Data.length - 1;
+      $('#target-chassis').val(highestChassis);
+      
+      updateBladesV2Display();
+      updateBladesV2Parameter();
+    }
+  };
 
   function show_hide_fields() {
 

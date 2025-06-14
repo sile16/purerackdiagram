@@ -38,6 +38,45 @@ more_tests = [
                         {
                             "bays": [1, 2],
                             "dfm_size": "24TB",
+                            "blade_count": 8,
+                            "blade_model": "fb-s200"
+                        },
+                        {
+                            "bays": [3, 4],
+                            "dfm_size": "48TB",
+                            "blade_count": 6,
+                            "first_slot": 3,
+                            "blade_model": "fb-s200"
+                        }
+                    ]
+                },
+                {  # Chassis 1  
+                    "gen": "2",
+                    "blades": [
+                        {
+                            "bays": [1, 2, 3, 4],
+                            "dfm_size": "75TB",
+                            "blade_count": 5,
+                            "first_slot": 1,
+                            "blade_model": "fb-s500"
+                        }
+                    ]
+                }
+            ])
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fb-s200",
+            "face": "front",
+            "dfm_label": True,
+            "bladesv2": jsonurl.dumps([
+                {  # Chassis 0
+                    "gen": "1",
+                    "blades": [
+                        {
+                            "bays": [1, 2],
+                            "dfm_size": "24TB",
                             "blade_count": 10,
                             "first_slot": 1,
                             "blade_model": "fb-s200"
@@ -45,8 +84,8 @@ more_tests = [
                         {
                             "bays": [3, 4],
                             "dfm_size": "48TB",
-                            "blade_count": 7,
-                            "first_slot": 2,
+                            "blade_count": 15,
+                            "first_slot": 8,
                             "blade_model": "fb-s200"
                         }
                     ]

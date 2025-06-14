@@ -81,3 +81,57 @@
   background-size: 16px 12px;
   padding-right: 32px;
 }
+
+/* Blade configuration display styling */
+.shelf-section {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.shelf-section h5 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #337ab7;
+}
+
+.datapack-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 5px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 3px;
+}
+
+.datapack-item:last-child {
+  margin-bottom: 0;
+}
+
+.datapack-item span {
+  flex-grow: 1;
+}
+
+.datapack-item .btn {
+  margin-left: 10px;
+}
+
+/* Pure Orange styling for advanced builder buttons */
+.btn-pure-orange {
+  color: #fff;
+  background-color: #ff6d00;
+  border-color: #ff6d00;
+}
+
+.btn-pure-orange:hover,
+.btn-pure-orange:focus,
+.btn-pure-orange:active,
+.btn-pure-orange.active {
+  color: #fff;
+  background-color: #e65100;
+  border-color: #e65100;
+}

@@ -93,7 +93,7 @@ Select the options, then click the Display button at the bottom to load the imag
 
           <div class="row">
             <div class="col-xs-8">
-              <button id="toggle-datapacks-v2" class="btn btn-primary">Use Advanced Datapack Builder</button>
+              <button id="toggle-datapacks-v2" class="btn btn-pure-orange">Use Advanced Datapack Builder</button>
             </div>
             <div class="col-xs-4">
               <label hidden="true">
@@ -193,6 +193,7 @@ Select the options, then click the Display button at the bottom to load the imag
 
 
           <div class="row" id="datapacks">
+            <p style="font-size: 10px;">DP sizes > 18 need to be broken into 10/10 or 10/14 etc, DP chart 👀 </p>
             <div class="col-xs-4 col-sm-4 option_label">datapacks:</div>
             <div class="col-xs-8 col-sm-8"><span data-tooltip="In the format <dp>/<dp>-<dp>/<dp>-<dp>
               Where the first two are the chassis and folloing shelves.  You can use 127 for wide DP, and 3 & 6
@@ -502,12 +503,108 @@ Select the options, then click the Display button at the bottom to load the imag
           
 
 
-          <div class="row">
+          <div class="row" id="blades">
             <div class="col-xs-4 col-sm-4 option_label">blades:</div>
             <div class="col-xs-8 col-sm-8">
               <span id="fbs_option_blades" data-tooltip="Number of blades from 0-100"></span></div>
             <br/>
             <br/>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-8">
+              <button id="toggle-blades-v2" class="btn btn-pure-orange">Use Advanced Blade Builder</button>
+            </div>
+            <div class="col-xs-4">
+              <label style="display: none;">
+                <input type="checkbox" id="auto-update-blades" checked> Auto-update image
+              </label>
+            </div>
+            <br/>
+            <br/>
+          </div>
+
+          <div id="blades-v2-section" style="display: none;">
+            <div class="row">
+              <div class="col-xs-12">
+                <h4>Advanced Blade Configuration</h4>
+                <p>Configure blades with detailed DFM specifications. Each chassis can have up to 10 blade slots.</p>
+              </div>
+            </div>
+
+            <div id="all-chassis-v2">
+              <div id="chassis-v2-container">
+                <!-- All chassis will be dynamically added here -->
+              </div>
+              
+              <div class="blade-form" id="blade-form">
+                <!-- Required Fields Box -->
+                <div style="border: 2px solid #337ab7; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                  <h6 style="margin-top: 0; color: #337ab7;"><strong>Required Fields</strong></h6>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <label for="dfm-size">DFM Size: <span style="color: red;">*</span></label>
+                      <input type="text" id="dfm-size" class="form-control datalist-input" placeholder="e.g., 24TB" list="dfm-sizes">
+                      <datalist id="dfm-sizes">
+                        <option value="24TB">
+                        <option value="37.5TB">
+                        <option value="48TB">
+                        <option value="75TB">
+                        <option value="150TB">
+                      </datalist>
+                    </div>
+                    <div class="col-xs-6">
+                      <label for="blade-count">Blade Count: <span style="color: red;">*</span></label>
+                      <input type="number" id="blade-count" class="form-control" value="1" min="1">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Optional Fields Box -->
+                <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+                  <h6 style="margin-top: 0; color: #666;"><strong>Bay Selection & Options</strong></h6>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <label>DFM Bays: <span style="color: red;">*</span></label>
+                      <div style="margin-top: 5px;">
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="bay-1" value="1"> Bay 1
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="bay-2" value="2"> Bay 2
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="bay-3" value="3"> Bay 3
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="bay-4" value="4"> Bay 4
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <label for="first-slot-blade">First Slot:</label>
+                      <input type="number" id="first-slot-blade" class="form-control" value="1" min="1" max="10">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row">
+                  <div class="col-xs-4">
+                    <label for="target-chassis">Add to:</label>
+                    <select id="target-chassis" class="form-control">
+                      <option value="0">Chassis 0</option>
+                    </select>
+                  </div>
+                  <div class="col-xs-4">
+                    <button id="add-blade-config" class="btn btn-success btn-block">Add Blade Config</button>
+                  </div>
+                  <div class="col-xs-4">
+                    <button id="add-chassis" class="btn btn-info btn-block">Add New Chassis</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="row">

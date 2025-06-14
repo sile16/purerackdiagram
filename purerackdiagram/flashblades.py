@@ -98,13 +98,13 @@ class FBSDiagram():
         # Structure: chassis_blades[chassis_idx][blade_idx][bay_idx] = dfm_config
         chassis_blades = []
         
+        # Process each chassis in the input data
         for chassis_idx, chassis in enumerate(bladesv2_data):
-            # Initialize 10 blade slots (1-10), each with 4 DFM bays (1-4)
-            # Using 0-based indexing internally: slot[0-9] = physical slots 1-10, bay[0-3] = physical bays 1-4
-            chassis_config = []
-            for blade_slot in range(10):  # Slots 1-10 (0-based: 0-9)
-                blade_bays = [None, None, None, None]  # Bays 1-4 (0-based: 0-3)
-                chassis_config.append(blade_bays)
+            # Ensure we have this chassis initialized
+            while chassis_idx >= len(chassis_blades):
+                chassis_blades.append([])
+                for blade_slot in range(10):  # 10 slots per chassis
+                    chassis_blades[-1].append([None, None, None, None])  # 4 bays per blade
             
             # Process each blade configuration group
             for blade_group in chassis.get('blades', []):
@@ -127,18 +127,35 @@ class FBSDiagram():
                 }
                 
                 # blade_count determines how many consecutive blade slots to populate
-                # starting from first_slot (convert to 0-based indexing)
+                # starting from first_slot, can span multiple chassis
                 start_slot = first_slot - 1  # Convert to 0-based (slot 1 = index 0)
-                end_slot = min(start_slot + blade_count, 10)  # Max 10 slots per chassis
+                current_chassis = chassis_idx
+                remaining_blades = blade_count
+                current_slot = start_slot
                 
-                # For each slot in the range, populate the specified bays
-                for slot_idx in range(start_slot, end_slot):
-                    for bay_num in bays:  # Physical bay numbers 1-4
-                        if 1 <= bay_num <= 4:  # Validate bay number
-                            bay_idx = bay_num - 1  # Convert to 0-based (bay 1 = index 0)
-                            chassis_config[slot_idx][bay_idx] = dfm_config
-            
-            chassis_blades.append(chassis_config)
+                while remaining_blades > 0:
+                    # Ensure we have enough chassis
+                    while current_chassis >= len(chassis_blades):
+                        chassis_blades.append([])
+                        for blade_slot in range(10):  # 10 slots per chassis
+                            chassis_blades[-1].append([None, None, None, None])  # 4 bays per blade
+                    
+                    # Calculate how many blades to put in current chassis
+                    slots_available_in_chassis = 10 - current_slot
+                    blades_for_this_chassis = min(remaining_blades, slots_available_in_chassis)
+                    
+                    # Populate slots in current chassis
+                    for slot_offset in range(blades_for_this_chassis):
+                        slot_idx = current_slot + slot_offset
+                        for bay_num in bays:  # Physical bay numbers 1-4
+                            if 1 <= bay_num <= 4:  # Validate bay number
+                                bay_idx = bay_num - 1  # Convert to 0-based (bay 1 = index 0)
+                                chassis_blades[current_chassis][slot_idx][bay_idx] = dfm_config
+                    
+                    # Update for next chassis
+                    remaining_blades -= blades_for_this_chassis
+                    current_chassis += 1
+                    current_slot = 0  # Start from slot 0 in next chassis
         
         # Store final blade configuration
         config['bladesv2_final'] = chassis_blades
