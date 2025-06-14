@@ -266,6 +266,7 @@ def static_global_config():
             "585": ["36.6TB", "nvme", 16, "585"],
             "658": ["36.6TB", "nvme", 18, "658"],
 
+
             # this is a duplicate of the 10x 36.6 pack
             # so you will have to do 183/183
 
@@ -560,8 +561,6 @@ def static_global_config():
             "2100": ["150TB", "nvme-qlc", 14, "2100"],
             "2400": ["150TB", "nvme-qlc", 16, "2400"],
             "2700": ["150TB", "nvme-qlc", 18, "2700"],
-
-            
         },
 
         "fb_blade_reg_pattern": "^([0-9]+:[0-9]+(-[0-9]+)?,?)+$"
@@ -760,7 +759,7 @@ def update_static_pci_loc(config, generation, release, rev):
         ct1_y_offset = 380
 
     # R4
-    elif (generation == 'x' or generation == 'c') and release == 4:
+    elif (generation == 'x' or generation == 'c') and release >= 4:
         pci_loc = [(679, 83), (1225, 83), (1225, 203), (2075, 83), (2075, 203)]
         ct1_y_offset = 378
 
@@ -784,17 +783,17 @@ def update_static_pci_loc(config, generation, release, rev):
     key = f'png/pure_fa_{generation}_r{release}{rev}_back.png'
     if key not in config:
         config[key] = {}
-    else:
-        config[key]['ct0_pci_loc'] = pci_loc.copy()
+    
+    config[key]['ct0_pci_loc'] = pci_loc.copy()
 
-        ## Now calculate all the pci slot locations for ct1
-        for i in range(len(pci_loc)):
-            # add a y_offset to calculate the ct0 coordinates
-            cord = pci_loc[i]
-            pci_loc[i] = (cord[0], cord[1] + ct1_y_offset)
+    ## Now calculate all the pci slot locations for ct1
+    for i in range(len(pci_loc)):
+        # add a y_offset to calculate the ct0 coordinates
+        cord = pci_loc[i]
+        pci_loc[i] = (cord[0], cord[1] + ct1_y_offset)
 
         
-        config[key]['ct1_pci_loc'] = pci_loc.copy()
+    config[key]['ct1_pci_loc'] = pci_loc.copy()
 
 
 def update_static_nvram_loc(config, generation, release, rev):

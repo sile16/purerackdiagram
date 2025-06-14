@@ -24,7 +24,7 @@ bucket_name = "images.purestorage"
 use_s3_size_limit = 4  # MiB limit for inline responses
 
 # Set to DEBUG to see more details in CloudWatch
-log_level = 'DEBUG'
+log_level = 'WARNING'
 
 if len(logger.handlers) > 0:
     logger.setLevel(log_level)
@@ -40,20 +40,25 @@ logger.info(f"Using metric namespace: {METRIC_NAMESPACE}")
 # CloudWatch metrics client - only initialize if running in Lambda
 try:
     # Explicitly set the region to match the dashboard
-    region = os.environ.get('AWS_REGION', 'us-east-1')
-    logger.info(f"Initializing CloudWatch client in region: {region}")
+    region = os.environ.get('AWS_REGION', None)
+    if region:
+        
+        logger.info(f"Initializing CloudWatch client in region: {region}")
     
-    # When running in AWS Lambda, this will work
-    cloudwatch = boto3.client('cloudwatch', region_name=region)
-    logger.info("Successfully created CloudWatch client")
+        # When running in AWS Lambda, this will work
+        cloudwatch = boto3.client('cloudwatch', region_name=region)
+        logger.info("Successfully created CloudWatch client")
+    else:
+        class MockCloudWatch:
+            def put_metric_data(self, **kwargs):
+                logger.debug(f"Mock CloudWatch metric: {kwargs}")
+                pass
+        logger.info("AWS_REGION not set, CloudWatch metrics will not be emitted")
+        cloudwatch = MockCloudWatch()
+
 except Exception as e:
     # For local testing, create a mock object
-    logger.info(f"Running locally, CloudWatch metrics disabled: {str(e)}")
-    class MockCloudWatch:
-        def put_metric_data(self, **kwargs):
-            logger.debug(f"Mock CloudWatch metric: {kwargs}")
-            pass
-    cloudwatch = MockCloudWatch()
+    logger.warning(f"Error setting up cloudwatch {str(e)}")
 
 def emit_exception_metric(exception_type):
     """
@@ -62,7 +67,9 @@ def emit_exception_metric(exception_type):
     """
     try:
         # Add region to the client call for clarity
-        region = os.environ.get('AWS_REGION', 'us-east-1')
+        region = os.environ.get('AWS_REGION', None)
+        if region is None:
+            return
         
         # First metric: Exception count by type
         exception_metric = {
@@ -697,12 +704,12 @@ def handler(event, context):
             emit_exception_metric('InvalidDatapackException')
             
             # Format user-friendly message
-            if "Pick from One of the Following" in error_msg:
-                # The error message already has the list of valid options
-                user_friendly_error = error_msg
-            else:
-                # Add more context if needed
-                user_friendly_error = f"Datapack configuration invalid. {error_msg}"
+            #if "Pick from One of the Following" in error_msg:
+            #    # The error message already has the list of valid options
+            #    user_friendly_error = error_msg
+            #else:
+            #    # Add more context if needed
+            #    user_friendly_error = f"Datapack configuration invalid. {error_msg}"
         
         elif error_type == 'InvalidConfigurationException':
             status_code = 400
@@ -759,8 +766,9 @@ def handler(event, context):
                     user_friendly_error = f"Configuration error: {error_msg}"
         
         # Log stack trace and request parameters
-        logger.debug(f"Stack trace: {stack_trace}")
-        logger.info(f"Request parameters: {json.dumps(params)}")
+
+            logger.error(f"Stack trace: {stack_trace}")
+            logger.error(f"Request parameters: {json.dumps(params)}")
         
         # Return appropriate response based on request format
         if 'json' in params and params['json']:

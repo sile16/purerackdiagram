@@ -19,6 +19,7 @@ root_path = os.path.dirname(utils.__file__)
 ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
 
 logger = logging.getLogger()
+logger.setLevel(logging.WARNING)
 
 class FAShelf():
     def __init__(self, params):
@@ -82,6 +83,16 @@ class FAShelf():
         rotate_after = 19 
 
         for dp in self.config["datapacks"]:
+            dpv2_start_index = -1
+
+            if len(dp) > 4:
+                # we are storing values in a list which should be a dictionary
+                # as each index corresponds to a different value.
+                # however, we are re-using it to pass fm loc, so we need to pull out this extra value
+                # and then remove it from the list so it doesn't break the rest of the code.
+                dpv2_start_index = dp[4]
+                del dp[4]
+
             
 
             fm_str = dp[0]
@@ -103,7 +114,17 @@ class FAShelf():
             
             first_fm = True
             the_range = list(range(cur_module, min(28, num_modules + cur_module)))
+            cur_module += num_modules
+            # curr_modules keeps track of next free location
+            # however with dpv2 they can pass in their own.
+            if dpv2_start_index != -1:
+                the_range = list(range(dpv2_start_index, dpv2_start_index + num_modules))
+                cur_module = dpv2_start_index + num_modules
             for x in the_range:
+                if x >= total_fm_count:
+                    raise InvalidConfigurationException(
+                        f"Too many fm modules, check data pack sizes dont exceed chassis size of {total_fm_count}" )
+                
                 if first_fm:
                     dp.append(fm_loc[x])
                     dp.append(fm_loc[x])
@@ -126,8 +147,7 @@ class FAShelf():
                 else:
                     self.tmp_img.paste(fm_rotated, fm_loc[x])
                 
-                    
-            cur_module += num_modules
+
 
         # add datapack labels
         if self.config['dp_label']:
@@ -463,7 +483,12 @@ class FAChassis():
                             'default_card': card_is_default,
                             'controller': "ct0" }
         # ct0
-        cord = self.img_info['ct0_pci_loc'][slot]
+        try:
+            cord = self.img_info['ct0_pci_loc'][slot]
+        except KeyError:
+            print("KeyError: ct0_pci_loc for slot {}".format(slot))
+            raise InvalidConfigurationException(
+                f"Invalid configuration for slot {slot}, check your config.yaml file.")
         self.tmp_img.paste(card_img, cord)
         add_ports_at_offset(key, cord, self.ports, additional_keys.copy())
 
@@ -528,6 +553,15 @@ class FAChassis():
 
         for dp_i in range(dp_count):
             dp = self.config["chassis_datapacks"][dp_i]
+            dpv2_start_index = -1
+
+            if len(dp) > 4:
+                # we are storing values in a list which should be a dictionary
+                # as each index corresponds to a different value.
+                # however, we are re-using it to pass fm loc, so we need to pull out this extra value
+                # and then remove it from the list so it doesn't break the rest of the code.
+                dpv2_start_index = dp[4]
+                del dp[4]
 
             # see if this is the last data pack or not
             if dp_i > 0 and dp_i + 1 == dp_count:
@@ -555,9 +589,12 @@ class FAChassis():
                 current_index += num_modules
             else:
                 the_range = list(range(total_fm_count-num_modules, total_fm_count))
-
-           
-
+            
+            #dp version2
+            if dpv2_start_index != -1:
+                the_range = list(range(dpv2_start_index, dpv2_start_index + num_modules))
+                current_index = the_range[-1] + 1
+            
             first_fm = True # used store the first fm location
             for x in the_range:
                 if x >= total_fm_count:
@@ -741,11 +778,11 @@ def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided, rotated
 
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
     draw.text(text_loc, dp_size , fill=(255, 255, 255, 220), font=font)
-    logger.debug("converting image to RGBA")
+    #logger.debug("converting image to RGBA")
     alpha_tmp = img.convert("RGBA")
-    logger.debug("converted image to RGBA, doing composite")
+    #logger.debug("converted image to RGBA, doing composite")
     composite_img = Image.alpha_composite(alpha_tmp, tmp)
-    logger.debug("done composite")
+    #logger.debug("done composite")
     return composite_img
 
 def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
@@ -785,11 +822,11 @@ def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
 
     text_loc = (box_center[0] - w/2, box_center[1] - h/2)
     draw.text(text_loc, dp_size + "TB", fill=(255, 255, 255, 220), font=font)
-    logger.debug("converting image to RGBA")
+    #logger.debug("converting image to RGBA")
     alpha_tmp = img.convert("RGBA")
-    logger.debug("converted image to RGBA, doing composite")
+    #logger.debug("converted image to RGBA, doing composite")
     composite_img = Image.alpha_composite(alpha_tmp, tmp)
-    logger.debug("done composite")
+    #logger.debug("done composite")
     return composite_img
 
 
@@ -879,58 +916,76 @@ class FADiagram():
         except jsonurl.JSONDecodeError as e:
             raise InvalidDatapackException("Invalid JSON in datapacksv2: {}".format(e))
 
-        for key in dpv2:   
-            chassis = key.lower()
-            
-            #chassis should be of len 3
-            if len(chassis) != 3:
-                raise InvalidDatapackException("Invalid chassis format in datapacksv2: {}".format(chassis))
-            
-            chassis_index = int(chassis[2])
+        
 
-            chassis = chassis[:2]  # remove the index for now
-            if chassis == "sh":
-                shelf = True
-            elif chassis == "ch":
-                shelf = False
-            else:
-                raise InvalidDatapackException("Invalid chassis type in datapacksv2: {}".format(chassis))
+        def get_default_fm_type(fm_size):
+            # default fm type is based on the size
+            if fm_size == "Blank":
+                return ""
             
-            for dp in dpv2[key]:
-                if not isinstance(dp, list) or len(dp) < 3:
-                    raise InvalidDatapackException("Invalid datapack format in datapacksv2: {}".format(dp))
+            if config['generation'] in ['c', 'e', 'rc']:
+                return "nvme-qlc"
+            
+            if fm_size == "750GB":
+                return "scm"
+            
+            return "nvme"
+        
+        shelves = []
+        
+        config["chassis_datapacks"] = []
+        config['ru'] = 0 # this allows for any order of keys
+        shelf = False
+        
+        for chassis in dpv2:   
+        
+            next_chassis_index = 0
+            datapacks = []
+            chassis_type = chassis.get('chassis_type', 'nvme')
+            
+            for dp in chassis['datapacks']:
                 
-                # dp should be of form [fm_str, fm_type, num_modules, size]
+                # dp should be of form [fm_str, fm_type, num_modules, dp_label, first_slot]
                 dp_label = dp['dp_label']
-                fm_str = dp['fm_size']
                 num_modules = dp['fm_count']
-                
-
+                fm_size = dp['fm_size']
                 fm_type = dp.get('fm_type', get_default_fm_type(dp['fm_size']) ) # todo
+                first_slot = dp.get('first_slot', next_chassis_index)
+                next_chassis_index = first_slot + num_modules
+
+                datapacks.append(
+                    [fm_size, fm_type, num_modules, dp_label, first_slot]
+                )
+
+            if shelf:
+                shelves.append(
+                    {
+                        "shelf_type": chassis_type,
+                        "datapacks": datapacks,
+                        "face": config["face"],
+                        "dp_label": config["dp_label"],
+                        "fm_label": config["fm_label"],
+                    }
+                )
+                config['ru'] += 3
+            else:
+                config["chassis_datapacks"] = datapacks
                 
-
-                if shelf:
-                    config["shelves"][chassis_index]["datapacks"].append(
-                        [fm_str, fm_type, num_modules, size])
+                if config['generation'] in ['xl']:
+                    config['ru'] = + 5
                 else:
-                    config["chassis_datapacks"].append(
-                        [fm_str, fm_type, num_modules, size])
-            
-
-
+                    config['ru'] = + 3
+            shelf = True # after first chassis, we are in shelf mode
+        config["shelves"] = shelves
 
             
-
-
-
-       
 
     def _init_datapacks(self, config, params):
         ######################################
         #  Parse Data Packs & Shelf 
 
         if "datapacksv2" in params:
-            _init_datapacks_v2(config, params)
+            self._init_datapacks_v2(config, params)
             return
 
         chassis_dp_size_lookup = None
@@ -1032,56 +1087,61 @@ class FADiagram():
         # i think we could split on every transition from letter to number and -
         
 
-
-        if "rc" in config["model_str"]:
-            results = re.split(r'(?<=[0-9])(?=[A-Za-z])'   # between digit and letter
-                            r'|(?<=[A-Za-z])(?=[0-9])'  # between letter and digit
-                            r'|-',
-                            config["model_str"])
-            config["generation"] = results[1]
-            config["model_num"] = int(results[2])
-            config["release"] = 3
-            config["rev"] = ""
-            if len(results) > 4:
-                config["release"] = int(results[4])
-        else:
-            results = re.split(r'(\d+)|-|r', config["model_str"])
-            config["generation"] = results[2]
-            config["rev"] = ""
-
-            if config['generation'] == 'e':
-                config['model_num'] = ""
-                config['release'] = 1
-
+        try: 
+            if "rc" in config["model_str"]:
+                results = re.split(r'(?<=[0-9])(?=[A-Za-z])'   # between digit and letter
+                                r'|(?<=[A-Za-z])(?=[0-9])'  # between letter and digit
+                                r'|-',
+                                config["model_str"])
+                config["generation"] = results[1]
+                config["model_num"] = int(results[2])
+                config["release"] = 3
+                config["rev"] = ""
+                if len(results) > 4:
+                    config["release"] = int(results[4])
             else:
-                config['model_num'] = int(results[3])
-                if not results[3].isnumeric():
-                    pass
-                if len(results) > 5:
-                    config['rev'] = results[5]
+                results = re.split(r'(\d+)|-|r', config["model_str"])
+                config["generation"] = results[2]
+                config["rev"] = ""
 
-            if "r" in config["model_str"]:
                 if config['generation'] == 'e':
-                    config["release"] = int(results[5])
-                    if len(results) > 6:
-                        config["rev"] = results[6]
-                elif config['generation'] == 'rc':
-                    if len(results) > 4:
-                        config["release"] = int(results[4])
-                    if len(results) > 6:
-                        config["rev"] = results[6]
-                else:
-                    config["release"] = int(results[7])
-                    if len(results) > 8:
-                        config["rev"] = results[8]
-                
-            elif config['generation'] == 'c' and config['model_num'] == 20:
-                config["release"] = 4
-                config["rev"] = 'c'                
-                config["chassis_gen"] = '2'
+                    config['model_num'] = ""
+                    config['release'] = 1
 
-            else:
-                config["release"] = 1
+                else:
+                    config['model_num'] = int(results[3])
+                    if not results[3].isnumeric():
+                        pass
+                    if len(results) > 5:
+                        config['rev'] = results[5]
+
+                if "r" in config["model_str"]:
+                    if config['generation'] == 'e':
+                        config["release"] = int(results[5])
+                        if len(results) > 6:
+                            config["rev"] = results[6]
+                    elif config['generation'] == 'rc':
+                        if len(results) > 4:
+                            config["release"] = int(results[4])
+                        if len(results) > 6:
+                            config["rev"] = results[6]
+                    else:
+                        config["release"] = int(results[7])
+                        if len(results) > 8:
+                            config["rev"] = results[8]
+                    
+                elif config['generation'] == 'c' and config['model_num'] == 20:
+                    config["release"] = 4
+                    config["rev"] = 'c'                
+                    config["chassis_gen"] = '2'
+
+                else:
+                    config["release"] = 1
+        except (IndexError, ValueError) as e:
+            raise InvalidConfigurationException(
+                "Invalid model string: {}, please use the format fa-x70r2, fa-m70r2, fa-xl130, fa-xl170r2".format(
+                    config["model_str"]))
+
 
         
         config["direction"] = params.get("direction", "up").lower()

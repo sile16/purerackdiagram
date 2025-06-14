@@ -11,22 +11,106 @@ import requests
 import lambdaentry
 from purerackdiagram.utils import global_config
 
+import jsonurl_py as jsonurl
+
 
 
 logger = logging.getLogger()
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(logging.WARN)
 logger.addHandler(ch)
+logger.setLevel(logging.WARN)
 
 save_dir = 'test_results/'
 
+
+
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fa-x70r2",
+            "protocol": "eth",
+            "face": "front",
+            "datapacks": "366", 
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
     {
         "queryStringParameters": {
             "model": "fa-xl130r5",
             "protocol": "eth",
             "face": "front",
-            "datapacks": "366", # invalid datapack that should trigger friendly error
+            "datapacksv2": jsonurl.dumps([
+                { #CH0
+                    'datapacks': [
+                        {
+                            "dp_label": "Fun Datapack",
+                            'fm_size': "6 PB",
+                            'fm_count': 33
+                        },
+                        {
+                            'dp_label': "small",
+                            'fm_size': "1 PB",
+                            'fm_count': 2,
+                            'first_slot': 37
+                        }
+                    ]
+                },
+                { #sh0
+                    'datapacks': [
+                        {
+                            "dp_label": "Shelf DP",
+                            'fm_size': "6 PB",
+                            'fm_count': 13
+                        },
+                        {
+                            'dp_label': "small",
+                            'fm_size': "1 PB",
+                            'fm_count': 2,
+                        }
+                    ]
+                }
+            ]),
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-xl130r5",
+            "protocol": "eth",
+            "face": "front",
+            "datapacksv2": jsonurl.dumps([
+                {
+                    'datapacks': [
+                        {
+                            "dp_label": "Fun Datapack",
+                            'fm_size': "6 PB",
+                            'fm_count': 33
+                        },
+                        {
+                            'dp_label': "small",
+                            'fm_size': "1 PB",
+                            'fm_count': 2,
+                            'first_slot': 37
+                        }
+                    ]
+                }
+            ]),
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-xl130r5",
+            "protocol": "eth",
+            "face": "front",
+            "datapacks": "366", 
             "dp_label": True,
             "fm_label": True,
             "addoncards": "2eth100,2eth200roce,2fc"
@@ -38,7 +122,7 @@ more_tests = [
             "protocol": "eth",
             "face": "front",
             "bezel": True,
-            "datapacks": "366", # invalid datapack that should trigger friendly error
+            "datapacks": "366",
             "dp_label": True,
             "fm_label": True,
             "addoncards": "2eth100,2eth200roce,2fc"
@@ -50,7 +134,7 @@ more_tests = [
             "protocol": "eth",
             "face": "back",
             "bezel": True,
-            "datapacks": "366", # invalid datapack that should trigger friendly error
+            "datapacks": "366", 
             "dp_label": True,
             "fm_label": True,
             "addoncards": "2eth100,2eth200roce,2fc"
@@ -988,16 +1072,15 @@ def test_lambda(params, outputfile):
         if results['headers'].get("Content-Type") == 'application/json':
             # Parse the JSON response to inspect error message
             try:
-                error_data = json.loads(results['body'])
+                if type(results['body']) is str:
+                    error_data = json.loads(results['body'])
+                else:
+                    error_data = results['body']
+
                 error_msg = error_data.get('error', 'Unknown error')
                 error_type = error_data.get('error_type', 'Unknown')
                 logger.info(f"Error response ({results['statusCode']}): {error_type} - {error_msg}")
                 
-                # Check that we're getting the friendly error messages
-                if "Pick from One of the Following" in error_msg or "valid" in error_msg.lower():
-                    logger.info("✅ Properly formatted detailed error message found")
-                else:
-                    logger.warning("⚠️ Error message lacks detailed information")
             except json.JSONDecodeError:
                 logger.error("Failed to parse error JSON response")
         elif results['headers'].get("Content-Type") == 'image/png':
@@ -1107,7 +1190,11 @@ def create_test_image(item, count, total):
             # For JSON errors, we can examine the detailed message
             if content_type == 'application/json' and 'body' in results:
                 try:
-                    error_data = json.loads(results['body'])
+                    if type(results['body']) is str:
+                        # If body is a string, decode it
+                        error_data = json.loads(results['body'])
+                    else:
+                        error_data = results['body']
                     error_msg = error_data.get('error', 'Unknown error')
                     error_type = error_data.get('error_type', 'Unknown')
                     
