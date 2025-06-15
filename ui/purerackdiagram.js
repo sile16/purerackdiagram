@@ -757,6 +757,7 @@ $(function () {
     // Set the dropdown to the newly added shelf (highest number)
     $("#target-shelf").val(datapacksV2Data.length - 1);
     updateDatapacksV2Display();
+    updateDatapacksV2Parameter();
   });
 
   // Update target shelf dropdown
