@@ -555,6 +555,7 @@ def handler(event, context):
     global program_time_s
     program_time_s = time.time()
     params = {}
+    original_params = {}
     diagram = None
 
     try:
@@ -573,6 +574,8 @@ def handler(event, context):
             )
 
         params = event["queryStringParameters"]
+        # Create a copy to preserve original params for response
+        original_params = dict(params)
         logger.info(f"Processing request with parameters: {json.dumps(params)}")
         
         diagram = purerackdiagram.get_diagram(params)
@@ -633,7 +636,7 @@ def handler(event, context):
                     'content-disposition': content_disposition
                 },
                 is_base64_encoded=True,
-                params=params,
+                params=original_params,
                 diagram=diagram
             )
         else:
@@ -644,7 +647,7 @@ def handler(event, context):
                     "error": None,
                     "image_size": final_img.size,
                     "image_mib": size_of_buffered_in_mib,
-                    "params": params,
+                    "params": original_params,
                     "image": None }
 
             if 'json_only' in params:
@@ -652,7 +655,7 @@ def handler(event, context):
                     status_code=200,
                     body=json.dumps(data, indent=4),
                     headers={"Content-Type": "application/json"},
-                    params=params,
+                    params=original_params,
                     diagram=diagram
                 )
 
@@ -669,7 +672,7 @@ def handler(event, context):
                     status_code=200,
                     body=json.dumps(data, indent=4),
                     headers={"Content-Type": "application/json"},
-                    params=params,
+                    params=original_params,
                     diagram=diagram
                 )
 
@@ -686,7 +689,7 @@ def handler(event, context):
                 body=data['image'],
                 headers={"Content-Type": "image/png"},
                 is_base64_encoded=True,
-                params=params,
+                params=original_params,
                 diagram=diagram
             )
 
@@ -719,7 +722,7 @@ def handler(event, context):
             status_code = 500
             logger.error(f"Server error: {error_msg}")
             logger.error(f"Stack trace: {stack_trace}")
-            logger.error(f"Request parameters: {json.dumps(params)}")
+            logger.error(f"Request parameters: {json.dumps(original_params)}")
             emit_exception_metric('ServerError')
 
             
@@ -737,7 +740,7 @@ def handler(event, context):
             data["error"] = error_msg
             data["error_type"] = error_type
             data["execution_duration"] = time.time() - program_time_s
-            data["params"] = params
+            data["params"] = original_params
             data["image_type"] = None
             data["image"] = None
 

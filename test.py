@@ -28,6 +28,85 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fa-xl130r5",
+            "protocol": "eth",
+            "face": "front",
+            "datapacksv2": jsonurl.dumps([
+                { #CH0
+                    'datapacks': [
+                        {
+                            "dp_label": "Fun Datapack",
+                            'fm_size': "6 PB",
+                            'fm_count': 33
+                        },
+                        {
+                            'dp_label': "small",
+                            'fm_size': "1 PB",
+                            'fm_count': 2,
+                            'first_slot': 37
+                        }
+                    ]
+                },
+                { #sh0
+                    'datapacks': [
+                        {
+                            'fm_size': "6 PB",
+                            'fm_count': 13
+                        },
+                        {
+                            'dp_label': "small",
+                            'fm_size': "1 PB",
+                            'fm_count': 2,
+                        }
+                    ]
+                }
+            ]),
+            "dp_label": True,
+            "fm_label": True,
+            "addoncards": "2eth100,2eth200roce,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fb-s200",
+            "face": "front",
+            "dfm_label": True,
+            "bladesv2": jsonurl.dumps([
+                {  # Chassis 0
+                    "gen": "1",
+                    "blades": [
+                        {
+                            "bays": [1, 2],
+                            "dfm_size": "24TB",
+                            "blade_count": 8,
+                            "blade_model": "fb-s200"
+                        },
+                        {
+                            "bays": [3, 4],
+                            "dfm_size": "48TB",
+                            "blade_count": 6,
+                            "first_slot": 3,
+                            "blade_model": "fb-s200"
+                        }
+                    ]
+                },
+                {  # Chassis 1  
+                    "gen": "2",
+                    "blades": [
+                        {
+                            "bays": [1, 2, 3, 4],
+                            "dfm_size": "6 TB",
+                            "blade_count": 5,
+                            "first_slot": 1,
+                            "blade_model": "fb-s500"
+                        }
+                    ]
+                }
+            ])
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fb-s200",
             "face": "front",
             "dfm_label": True,

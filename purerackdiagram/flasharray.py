@@ -943,46 +943,59 @@ class FADiagram():
             if fm_size == "Blank":
                 return "0TB"
             
-            # Find storage units in fm_size (case insensitive)
-            size_str = fm_size.strip().lower()
-            unit = ""
-            size_value = None
+            import re
+            
+            # More robust parsing using regex to handle flexible spacing and formatting
+            size_str = fm_size.strip()
             
             # Check for binary and decimal storage units (order matters - check longer units first)
-            units_to_check = ['pib', 'tib', 'gib', 'pb', 'tb', 'gb']
+            units_to_check = ['PiB', 'TiB', 'GiB', 'PB', 'TB', 'GB']
             
-            for u in units_to_check:
-                if u in size_str:
-                    # Find the unit position in lowercase string
-                    unit_start = size_str.find(u)
-                    
-                    # Extract numeric part before the unit (with potential whitespace)
-                    numeric_part = size_str[:unit_start].strip()
-                    
-                    if numeric_part:
-                        try:
-                            size_value = float(numeric_part)
-                            # Find the unit in original case from the original string
-                            original_lower = fm_size.strip().lower()
-                            original_unit_start = original_lower.find(u)
-                            unit = fm_size.strip()[original_unit_start:original_unit_start + len(u)]
-                            break
-                        except ValueError:
-                            continue
+            for unit_upper in units_to_check:
+                # Create regex pattern for flexible matching: number + optional whitespace + unit (case insensitive)
+                pattern = r'^(\d+(?:\.\d+)?)\s*(' + re.escape(unit_upper) + r')$'
+                match = re.match(pattern, size_str, re.IGNORECASE)
+                
+                if match:
+                    try:
+                        size_value = float(match.group(1))
+                        # Preserve the original unit with any spacing from the input
+                        # Find where the number ends and extract everything after (including spaces)
+                        number_end = match.end(1)
+                        unit = size_str[number_end:].strip()
+                        if not unit:  # Fallback if something goes wrong
+                            unit = match.group(2)
+                        
+                        # Calculate total capacity: fm_size * fm_count
+                        total_capacity = size_value * fm_count
+                        # Format as integer if it's a whole number, otherwise as float
+                        total_capacity = round(total_capacity, 1)
+                        if total_capacity == int(total_capacity):
+                            return f"{int(total_capacity)} {unit}"
+                        else:
+                            return f"{total_capacity} {unit}"
+                    except ValueError:
+                        continue
             
-            if size_value is not None and unit:
-                # Calculate total capacity: fm_size * fm_count
-                total_capacity = size_value * fm_count
-                # Format as integer if it's a whole number, otherwise as float
-                #round to 1 decimal place
-                total_capacity = round(total_capacity, 1)
-                if total_capacity == int(total_capacity):  # get rid of the .0 if it's a whole number
-                    return f"{int(total_capacity)} {unit}"
-                else:
-                    return f"{total_capacity} {unit}"
-            else:
-                # If no unit found or couldn't parse, return format: "count x size"
-                return f"{fm_count} x {fm_size}"
+            # If no standard unit found, try to extract any number + text pattern
+            fallback_pattern = r'^(\d+(?:\.\d+)?)\s*(.*)$'
+            fallback_match = re.match(fallback_pattern, size_str)
+            if fallback_match:
+                try:
+                    size_value = float(fallback_match.group(1))
+                    unit = fallback_match.group(2).strip()
+                    if unit:
+                        total_capacity = size_value * fm_count
+                        total_capacity = round(total_capacity, 1)
+                        if total_capacity == int(total_capacity):
+                            return f"{int(total_capacity)} {unit}"
+                        else:
+                            return f"{total_capacity} {unit}"
+                except ValueError:
+                    pass
+            
+            # If parsing fails, return format: "count x size"
+            return f"{fm_count} x {fm_size}"
 
         
         shelves = []

@@ -298,8 +298,8 @@ $(function () {
     const datapacksV2Jsonurl = fa_option_datapacks.attr('data-datapacksv2');
     console.log('fa_url: checking for datapacksv2 attr:', datapacksV2Jsonurl);
     if (datapacksV2Jsonurl) {
-      // Use datapacksv2 parameter - jsonurl is already URL-safe, no need to encode again
-      url += "&datapacksv2=" + datapacksV2Jsonurl;
+      // Use datapacksv2 parameter - URL encode the jsonurl string to handle special characters properly
+      url += "&datapacksv2=" + encodeURIComponent(datapacksV2Jsonurl);
       console.log('fa_url: added datapacksv2 parameter');
     } else {
       // Use regular datapacks parameter
@@ -411,8 +411,8 @@ $(function () {
     const bladesV2Jsonurl = fbs_option_blades.attr('data-bladesv2');
     console.log('fbs_url: checking for bladesv2 attr:', bladesV2Jsonurl);
     if (bladesV2Jsonurl) {
-      // Use bladesv2 parameter - jsonurl is already URL-safe, no need to encode again
-      url += "&bladesv2=" + bladesV2Jsonurl;
+      // Use bladesv2 parameter - URL encode the jsonurl string to handle special characters properly
+      url += "&bladesv2=" + encodeURIComponent(bladesV2Jsonurl);
       console.log('fbs_url: added bladesv2 parameter');
     } else {
       // Use regular blade parameters
@@ -862,8 +862,9 @@ $(function () {
     }
     
     console.log('Using jsonurl library:', jsonurlLib);
+    console.log('datapacksV2Data structure before encoding:', JSON.stringify(datapacksV2Data, null, 2));
     
-    // Use jsonurl to encode the data for URL transmission
+    // Use jsonurl to encode the data for URL transmission (including empty shelves)
     const jsonurlString = jsonurlLib.stringify(datapacksV2Data);
     fa_option_datapacks.attr('data-datapacksv2', jsonurlString);
     

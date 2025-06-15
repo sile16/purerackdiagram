@@ -1,6 +1,7 @@
 {
+    "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc": "96d6eca2652519756fe6167752a1387e7abe70c98e947f4fa63546562829d5a2",
+    "fb-s200_face-front": "d932b5c34aa5d4cb1a6e995a05ec51a96132f1465b21c79e18d3ab347d97ea5d",
     "fa-x70r2_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366": "882bd0fa8c0b734388fc168cd2a8dadfcd72bdfa7d7ba26157beab39536621b9",
-    "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc": "f47abd217f8dc3cfdbc78be6aaa5802ab23ee59ea1999ac43ea96070b16194f0",
     "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366": "83fc853bce327808276338420b52c3e24d533273b176ff08f6f2189c6be677ed",
     "fa-xl130r5_face-front_bezel-True_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366": "4773733bef32880a1e18331fd571c0cbe3401888b32330c45c62506d00be2a6e",
     "fa-xl130r5_face-back_bezel-True_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366": "1476f4d94f3f5470844fda8f97cf32ab361e85591660a243a10b85bda4f26e69",
@@ -11,7 +12,7 @@
     "fa-x70r4b_face-front_fm_label-True_dp_label-True_999_json-True": {
         "status": 400,
         "error_type": "InvalidDatapackException",
-        "error_msg": "Unknown Chassis: DP: 999\nPick from One of the Following\n{'0': ['Blank', 'blank', 10, '0'],\n '0.02': ['Blank', 'blank', 2, '0'],\n '0.04': ['Blank', 'blank', 4, '0'],\n '0.06': ['Blank', 'blank', 6, '0'],\n '0.08': ['Blank', 'blank', 8, '0'],\n '0.10': ['Blank', 'blank', 10, '0'],\n '0.12': ['Blank', 'blank', 12, '0'],\n '0.14': ['Blank', 'blank', 14, '0'],\n '0.16': ['Blank', 'blank', 16, '0'],\n '0.18': ['Blank', 'blank', 18, '0'],\n '0.20': ['Blank', 'blank', 20, '0'],\n '10.0': ['1TB', 'sas', 10, '10'],\n '109': ['9.1TB', 'nvme', 12, '109'],\n '11': ['1.1TB', 'nvme', 10, '11'],\n '127': ['9.1TB', 'nvme', 14, '127'],\n '13': ['1.1TB', 'nvme', 12, '13'],\n '145': ['9.1TB', 'nvme', 16, '145'],\n '15': ['1.1TB', 'nvme', 14, '15'],\n '164': ['9.1TB', 'nvme', 18, '164'],\n '18': ['1.1TB', 'nvme', 16, '18'],\n '183': ['18.3TB', 'nvme', 10, '183'],\n '19.2': ['1.9TB', 'sas', 10, '19.2'],\n '20': ['1.1TB', 'nvme', 18, '20'],\n '20.0': ['2TB', 'sas', 10, '20'],\n '219': ['18.3TB', 'nvme', 12, '219'],\n '22': ['2.2TB', 'nvme', 10, '22'],\n '256': ['18.3TB', 'nvme', 14, '256'],\n '27': ['2.2TB', 'nvme', 12, '27'],\n '292': ['18.3TB', 'nvme', 16, '292'],\n '3': ['750GB', 'scm', 4, 'DM Cache 3'],\n '31': ['2.2TB', 'nvme', 14, '31'],\n '329': ['18.3TB', 'nvme', 18, '329'],\n '36': ['2.2TB', 'nvme', 16, '36'],\n '366': ['36.6TB', 'nvme', 10, '366'],\n '38.0': ['3.8TB', 'sas', 10, '38'],\n '4.8': ['480GB', 'sas', 10, '4.8'],\n '40': ['2.2TB', 'nvme', 18, '40'],\n '439': ['36.6TB', 'nvme', 12, '439'],\n '44': ['2.2TB', 'nvme', 20, '44'],\n '45': ['4.5TB', 'nvme', 10, '45'],\n '5.0': ['500GB', 'sas', 10, '5'],\n '512': ['36.6TB', 'nvme', 14, '512'],\n '585': ['36.6TB', 'nvme', 16, '585'],\n '6': ['750GB', 'scm', 8, 'DM Cache 6'],\n '63': ['4.5TB', 'nvme', 14, '63'],\n '658': ['36.6TB', 'nvme', 18, '658'],\n '72': ['4.5TB', 'nvme', 16, '72'],\n '76.0': ['7.6TB', 'sas', 10, '76'],\n '81': ['4.5TB', 'nvme', 18, '81'],\n '9.6': ['960GB', 'sas', 10, '9.6'],\n '90': ['4.5TB', 'nvme', 20, '90'],\n '91': ['9.1TB', 'nvme', 10, '91']}"
+        "error_msg": "Unknown Chassis: DP: 999\nPick from One of the Following\n{'0': ['Blank', 'blank', 10, '0'],\n '0.02': ['Blank', 'blank', 2, '0'],\n '0.04': ['Blank', 'blank', 4, '0'],\n '0.06': ['Blank', 'blank', 6, '0'],\n '0.08': ['Blank', 'blank', 8, '0'],\n '0.10': ['Blank', 'blank', 10, '0'],\n '0.12': ['Blank', 'blank', 12, '0'],\n '0.14': ['Blank', 'blank', 14, '0'],\n '0.16': ['Blank', 'blank', 16, '0'],\n '0.18': ['Blank', 'blank', 18, '0'],\n '0.20': ['Blank', 'blank', 20, '0'],\n '10.0': ['1TB', 'sas', 10, '10'],\n '109': ['9.1TB', 'nvme', 12, '109'],\n '11': ['1.1TB', 'nvme', 10, '11'],\n '127': ['9.1TB', 'nvme', 14, '127'],\n '13': ['1.1TB', 'nvme', 12, '13'],\n '145': ['9.1TB', 'nvme', 16, '145'],\n '15': ['1.1TB', 'nvme', 14, '15'],\n '164': ['9.1TB', 'nvme', 18, '164'],\n '18': ['1.1TB', 'nvme', 16, '18'],\n '183': ['18.3TB', 'nvme', 10, '183'],\n '19.2': ['1.9TB', 'sas', 10, '19.2'],\n '20': ['1.1TB', 'nvme', 18, '20'],\n '20.0': ['2TB', 'sas', 10, '20'],\n '219': ['18.3TB', 'nvme', 12, '219'],\n '22': ['2.2TB', 'nvme', 10, '22'],\n '256': ['18.3TB', 'nvme', 14, '256'],\n '27': ['2.2TB', 'nvme', 12, '27'],\n '292': ['18.3TB', 'nvme', 16, '292'],\n '3': ['750GB', 'scm', 4, 'DM Cache 3TB'],\n '31': ['2.2TB', 'nvme', 14, '31'],\n '329': ['18.3TB', 'nvme', 18, '329'],\n '36': ['2.2TB', 'nvme', 16, '36'],\n '366': ['36.6TB', 'nvme', 10, '366'],\n '38.0': ['3.8TB', 'sas', 10, '38'],\n '4.8': ['480GB', 'sas', 10, '4.8'],\n '40': ['2.2TB', 'nvme', 18, '40'],\n '439': ['36.6TB', 'nvme', 12, '439'],\n '44': ['2.2TB', 'nvme', 20, '44'],\n '45': ['4.5TB', 'nvme', 10, '45'],\n '5.0': ['500GB', 'sas', 10, '5'],\n '512': ['36.6TB', 'nvme', 14, '512'],\n '585': ['36.6TB', 'nvme', 16, '585'],\n '6': ['750GB', 'scm', 8, 'DM Cache 6TB'],\n '63': ['4.5TB', 'nvme', 14, '63'],\n '658': ['36.6TB', 'nvme', 18, '658'],\n '72': ['4.5TB', 'nvme', 16, '72'],\n '76.0': ['7.6TB', 'sas', 10, '76'],\n '81': ['4.5TB', 'nvme', 18, '81'],\n '9.6': ['960GB', 'sas', 10, '9.6'],\n '90': ['4.5TB', 'nvme', 20, '90'],\n '91': ['9.1TB', 'nvme', 10, '91']}"
     },
     "fa-invalid_face-front_fm_label-True_dp_label-True_45_json-True": {
         "status": 400,
@@ -37,7 +38,7 @@
     "fa-x90r4_face-front_fm_label-True_dp_label-True_ports-True_183-40": "ec807b268a639db3b3071541687cb72fffdfa83465d56d6c198943cb4e4523d3",
     "fa-c50r4_face-front_fm_label-True_dp_label-True_ports-True_186_chassis_gen-2": "1107de44477c4775402a0b79978bb10392b1472a51947ba2f38ffb2a5f3cc75e",
     "fa-c50r4_face-front_fm_label-True_dp_label-True_ports-True_186": "bae199c8615436adf8d26ff2082e54d130e451bdcc98d6e112ba5ff77aec07c8",
-    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True": "8c4fbcb690f0563e784d0103476e759c53a735adc783ffdaf6474321c28c251b",
+    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True": "2681bc3dc40670dc88bc419baf59d223e3279c78d0c4973b44dff2719dfe84f9",
     "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183": "0898540622147bb6b0403de4fcf36c4502b87d70fe55499cfc0bbb1c6ea3e6a4",
     "fa-e_face-back_fm_label-True_dp_label-True_ports-True_1050-1050": "f2c2237aca4a1e3e750c2e8048e627a83f0b8c26119c88435c0a873671cfc5c7",
     "fa-x20r4_face-back_fm_label-True_dp_label-True_ports-True_183-183": "f230a19ed7f90f227706dd0888e6e6b82ef50d0b161863bfece1a3c791866bd7",
@@ -48,7 +49,7 @@
     "fa-er1b_face-front_bezel-True_fm_label-True_dp_label-True_ports-True_186": "6ba1ad69209a9e508f862395e381fc8351bfc3745a430c163fe3c1dd2bde0610",
     "fa-er1b_face-front_fm_label-True_dp_label-True_ports-True_186": "187cba3b21c5f804e5ab1e75a676789d251f998e780dfc224d9534ba63662226",
     "fa-x90r4b_face-back_fm_label-True_dp_label-True_ports-True_3-0.02-45": "993b02feb560377d26db4b090712f24f81e5daa9b64163b67fd82165df236f23",
-    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "02f8d4d4276d77b1c1c470e0a0af202b65e6464c6ea9a24e85ddcfd405388fe4",
+    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "15a75861511e852191ba978d1b9b1cc740ffd709bbe9500d034700f4c29d84f4",
     "fb-e_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True": "a5ce6742f5a1adb0864a3a23b5452e3d6c81147c30c950b61680912b4d321440",
     "fa-x90r4_face-back_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_3-0.02-45_json-True": {
         "image_type": "png",
@@ -84,7 +85,7 @@
                     "750GB",
                     "scm",
                     4,
-                    "DM Cache 3"
+                    "DM Cache 3TB"
                 ],
                 [
                     "Blank",
@@ -2388,7 +2389,7 @@
         }
     },
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0": "bff2f404514651278f5a5261e46aadc1003607ade7819bda5f4538bf5f6f8869",
-    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "88449f9691d65a7e5fe0e7762b1534058decd782e1599cfab4621c92272afb7b",
+    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "e4bb4d2bd2358fa5b9636c322f4f8b6fc9ae6bc1adc69dd3f21bfafedbbc6993",
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_json-True": {
         "image_type": "png",
         "config": {
