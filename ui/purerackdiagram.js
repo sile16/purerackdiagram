@@ -922,7 +922,7 @@ $(function () {
 
   // Add blade configuration
   $('#add-blade-config').click(function() {
-    const dfmSize = $('#dfm-size').val().trim();
+    const fmSize = $('#fm-size-blade').val().trim();
     const bladeCount = parseInt($('#blade-count').val());
     const firstSlot = parseInt($('#first-slot-blade').val());
     const targetChassis = parseInt($('#target-chassis').val());
@@ -934,8 +934,8 @@ $(function () {
     });
     
     // Validation
-    if (!dfmSize) {
-      alert('Please enter DFM Size');
+    if (!fmSize) {
+      alert('Please enter FM Size');
       return;
     }
     
@@ -957,7 +957,7 @@ $(function () {
     // Create blade configuration object
     const bladeConfig = {
       bays: selectedBays,
-      dfm_size: dfmSize,
+      fm_size: fmSize,
       blade_count: bladeCount,
       first_slot: firstSlot,
       blade_model: 'fb-s200' // Default for now
@@ -974,7 +974,7 @@ $(function () {
     bladesV2Data[targetChassis].blades.push(bladeConfig);
     
     // Clear form
-    $('#dfm-size').val('');
+    $('#fm-size-blade').val('');
     $('#blade-count').val('1');
     $('#first-slot-blade').val('1');
     $('#blade-form input[type="checkbox"]').prop('checked', false);
@@ -1011,7 +1011,7 @@ $(function () {
         chassis.blades.forEach((blade, bladeIndex) => {
           const baysText = blade.bays.join(', ');
           html += `<div class="datapack-item">
-            <span><strong>Bays ${baysText}:</strong> ${blade.dfm_size} × ${blade.blade_count} blades (starting slot ${blade.first_slot})</span>
+            <span><strong>Bays ${baysText}:</strong> ${blade.fm_size} × ${blade.blade_count} blades (starting slot ${blade.first_slot})</span>
             <button class="btn btn-xs btn-danger" onclick="removeBladeConfig(${chassisIndex}, ${bladeIndex})">Remove</button>
           </div>`;
         });

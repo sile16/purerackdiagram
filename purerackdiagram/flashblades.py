@@ -95,7 +95,7 @@ class FBSDiagram():
             raise InvalidDatapackException(f"Invalid bladesv2 JSON: {str(e)}")
         
         # Build final blade configuration data model
-        # Structure: chassis_blades[chassis_idx][blade_idx][bay_idx] = dfm_config
+        # Structure: chassis_blades[chassis_idx][blade_idx][bay_idx] = fm_config
         chassis_blades = []
         
         # Process each chassis in the input data
@@ -109,7 +109,7 @@ class FBSDiagram():
             # Process each blade configuration group
             for blade_group in chassis.get('blades', []):
                 bays = blade_group.get('bays', [])  # Physical bay numbers 1-4
-                dfm_size = blade_group.get('dfm_size', '24TB')
+                fm_size = blade_group.get('fm_size', '24TB')
                 blade_count = blade_group.get('blade_count', 1)
                 first_slot = blade_group.get('first_slot', 1)  # Physical slot number 1-10
                 blade_model = blade_group.get('blade_model', config['model'])
@@ -118,9 +118,9 @@ class FBSDiagram():
                 if not isinstance(bays, list) or not bays:
                     raise InvalidDatapackException(f"Invalid bays specification for chassis {chassis_idx}")
                 
-                # Create DFM configuration 
-                dfm_config = {
-                    'dfm_size': dfm_size,
+                # Create FM configuration 
+                fm_config = {
+                    'fm_size': fm_size,
                     'blade_count': blade_count,
                     'first_slot': first_slot,
                     'blade_model': blade_model
@@ -150,7 +150,7 @@ class FBSDiagram():
                         for bay_num in bays:  # Physical bay numbers 1-4
                             if 1 <= bay_num <= 4:  # Validate bay number
                                 bay_idx = bay_num - 1  # Convert to 0-based (bay 1 = index 0)
-                                chassis_blades[current_chassis][slot_idx][bay_idx] = dfm_config
+                                chassis_blades[current_chassis][slot_idx][bay_idx] = fm_config
                     
                     # Update for next chassis
                     remaining_blades -= blades_for_this_chassis
@@ -237,17 +237,17 @@ class FBSDiagram():
             # Create blade image for this specific blade
             blade_img = await RackImage(key).get_image()
             
-            # Add DFMs to each bay in this blade based on configuration
-            for bay_idx, dfm_config in enumerate(blade_bays):
-                if dfm_config is None or bay_idx >= len(fm_loc):
+            # Add FMs to each bay in this blade based on configuration
+            for bay_idx, fm_config in enumerate(blade_bays):
+                if fm_config is None or bay_idx >= len(fm_loc):
                     continue
                     
-                # Create DFM with specific size
-                dfm_name = 'png/pure_fa_fm_nvme.png'
-                fm_img = await RackImage(dfm_name).get_image()
-                apply_fm_label(fm_img, str(dfm_config['dfm_size']), "qlc")
+                # Create FM with specific size
+                fm_name = 'png/pure_fa_fm_nvme.png'
+                fm_img = await RackImage(fm_name).get_image()
+                apply_fm_label(fm_img, str(fm_config['fm_size']), "qlc")
                 
-                # Paste this DFM into the specific bay location on the blade
+                # Paste this FM into the specific bay location on the blade
                 blade_img.paste(fm_img, fm_loc[bay_idx])
 
             # Add model label to the blade
