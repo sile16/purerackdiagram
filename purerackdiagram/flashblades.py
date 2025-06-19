@@ -6,6 +6,7 @@ from PIL import Image
 from PIL import ImageFont
 # Import custom exceptions
 import sys
+import re
 from .utils import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
 from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
 
@@ -23,7 +24,8 @@ class FBSDiagram():
         self.ports = []
 
         config = {}
-        config["model"] = params.get("model").lower()
+        raw_model = params.get("model").lower()
+        config["model"] = self._parse_and_normalize_model(raw_model)
         config["chassis"] = int(params.get("no_of_chassis", 1))
         config['ru'] = config["chassis"]*5
         config["face"] = params.get("face", "front").lower()
@@ -49,9 +51,8 @@ class FBSDiagram():
             raise InvalidConfigurationException(f"Invalid XFM Face, {config['xfm_face']}")
 
 
-        valid_models = ['fb-s200', 'fb-s500', 'fb-e', 'fb-s100']
-        if config['model'] not in valid_models:
-            raise InvalidConfigurationException('please provide a valid model: {}'.format(valid_models))
+        if not self._is_valid_model_format(config['model']):
+            raise InvalidConfigurationException('please provide a valid model format: fb-s{number}[r{version}] or fb-e')
 
         # Only validate legacy blades if not using bladesv2
         if "bladesv2" not in params:
@@ -86,6 +87,53 @@ class FBSDiagram():
             config['ru'] += 2
 
         self.config = config
+
+    def _parse_and_normalize_model(self, raw_model):
+        """Parse model string and add default r2 if no r-version specified"""
+        if raw_model == 'fb-e':
+            return raw_model
+            
+        # Check for existing r-version patterns: fb-s{number}r{version} or fb-er{version}
+        if re.match(r'^fb-s(\d+)r(\d+)$', raw_model) or re.match(r'^fb-er(\d+)$', raw_model):
+            return raw_model  # Already has r-version
+            
+        # Check for base model patterns: fb-s{number} or fb-e
+        if re.match(r'^fb-s(\d+)$', raw_model):
+            return f"{raw_model}r2"  # Add default r2 version
+        elif raw_model == 'fb-e':
+            return 'fb-er2'  # Convert fb-e to fb-er2
+            
+        # Return as-is for invalid formats (will be caught by validation)
+        return raw_model
+
+    def _is_valid_model_format(self, model):
+        """Validate model format: fb-s{number}r{version}, fb-er{version}, or fb-e"""
+        if model == 'fb-e':
+            return True
+            
+        # Check r-version patterns: fb-s{number}r{version} or fb-er{version}
+        return bool(re.match(r'^fb-s(\d+)r(\d+)$|^fb-er(\d+)$', model))
+
+    def _generate_blade_model_text(self, model):
+        """Generate blade model text including r-version for display"""
+        if model == 'fb-e':
+            return 'E'
+            
+        # Parse fb-er{version} format
+        er_match = re.match(r'^fb-er(\d+)$', model)
+        if er_match:
+            r_version = er_match.group(1)
+            return f"ER{r_version}"
+            
+        # Parse fb-s{number}r{version} format
+        s_match = re.match(r'^fb-s(\d+)r(\d+)$', model)
+        if s_match:
+            number = s_match.group(1)
+            r_version = s_match.group(2)
+            return f"S{number}R{r_version}"
+            
+        # Fallback (shouldn't happen with proper validation)
+        return model.split("-")[1].upper()
     
     def _init_blades_v2(self, params, config):
         """Initialize bladesv2 configuration from JSON-encoded parameter"""
@@ -313,7 +361,7 @@ class FBSDiagram():
         logging.debug("Starting to get image for configuration: %s", str(self.config))
 
         c = self.config
-        blade_model_text = self.config['model'].split("-")[1].upper()
+        blade_model_text = self._generate_blade_model_text(self.config['model'])
 
         if blade_model_text == "E":
             blade_model_text = "EC"

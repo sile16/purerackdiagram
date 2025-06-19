@@ -960,7 +960,7 @@ $(function () {
       fm_size: fmSize,
       blade_count: bladeCount,
       first_slot: firstSlot,
-      blade_model: 'fb-s200' // Default for now
+      blade_model: 'fb-s200r2' // Default for now
     };
     
     // Add to data structure

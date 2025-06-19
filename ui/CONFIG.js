@@ -59,7 +59,7 @@ var FB_OPTIONS = {
 };
 
 var FBS_OPTIONS = {
-    model: ['fb-s200', 'fb-s500', 'fb-s100', 'fb-e'],
+    model: ['fb-s200r2', 'fb-s500r2', 'fb-s200r1', 'fb-s500r1', 'fb-s100r1', 'fb-er2', 'fb-er1', 'fb-e'],
     face: ['front', 'back'],
     xfm: ['', 'FALSE', 'TRUE'],
     direction: ['', 'up', 'down'],

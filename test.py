@@ -28,6 +28,26 @@ save_dir = 'test_results/'
 more_tests = [
     {
         "queryStringParameters": {
+            "model": "fb-s200r2",
+            "face": "front",
+            "dfm_label": True,
+            "bladesv2": jsonurl.dumps([
+                {
+                    "gen": "1",
+                    "blades": [
+                        {
+                            "bays": [1, 2, 3, 4],
+                            "fm_size": "24TB",
+                            "blade_count": 5,
+                            "blade_model": "fb-s200r2"
+                        }
+                    ]
+                }
+            ])
+        }
+    },
+    {
+        "queryStringParameters": {
             "model": "fa-xl130r5",
             "protocol": "eth",
             "face": "front",
