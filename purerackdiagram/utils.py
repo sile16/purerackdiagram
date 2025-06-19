@@ -172,6 +172,130 @@ def combine_images_vertically(image_ports):
     return new_im, all_ports
 
 
+def combine_metadata_vertically(image_ports):
+    """Lightweight version of combine_images_vertically for json_only mode.
+    Calculates dimensions and port locations without creating PIL Images.
+    
+    Args:
+        image_ports: List of dicts with 'img_size' and 'ports' keys
+        
+    Returns:
+        tuple: (final_size, all_ports) where final_size is (width, height)
+    """
+    # Extract sizes from metadata instead of actual images
+    sizes = [i['img_size'] for i in image_ports]
+    widths, heights = zip(*sizes)
+    total_height = sum(heights)
+    total_width = max(widths)
+    
+    logger.debug("Combining metadata vertically")
+    
+    y_offset = 0
+    all_ports = []
+    for imp in image_ports:
+        img_size = imp['img_size']
+        ports = imp['ports']
+        
+        # Center the x difference if an image is slightly smaller width
+        x_offset = int((total_width - img_size[0]) / 2)
+        
+        # Calculate new port locations
+        for p in ports:
+            new_port = p.copy()
+            new_loc = (p['loc'][0] + x_offset, p['loc'][1] + y_offset)
+            new_port['loc'] = new_loc
+            all_ports.append(new_port)
+            
+        y_offset += img_size[1]
+    
+    return (total_width, total_height), all_ports
+
+
+def add_port_metadata(all_ports, draw_ports_flag):
+    """Add symbol metadata to ports without drawing on image.
+    Extracted from draw_ports_on_image() for json_only mode.
+    
+    Args:
+        all_ports: List of port dictionaries to modify
+        draw_ports_flag: Boolean (for compatibility, not used in metadata-only mode)
+    """
+    for p in all_ports:
+        services = p.get('services', [])
+        if 'management' in services and len(services) == 1:
+            color = '#00B2A9'
+            p['symbol_name'] = "Management"
+            p['symbol_shape'] = "triangle_up"
+            p['symbol_color'] = color
+
+        elif services and services[0] == 'replication':
+            color = '#934DD6'
+            p['symbol_name'] = "Replication"
+            p['symbol_shape'] = "triangle_up"
+            p['symbol_color'] = color
+
+        elif 'port_type' not in p:
+            continue
+
+        elif p['port_type'] == 'sas':
+            color = 'blue'
+            p['symbol_name'] = "SAS"
+            p['symbol_shape'] = "rectangle"
+            p['symbol_color'] = color
+
+        elif services and services[0] == 'shelf':
+            color = '#FCDC4D'
+            p['symbol_name'] = "Shelf"
+            p['symbol_shape'] = "triangle_down"
+            p['symbol_color'] = color
+
+        elif p['port_type'] == 'fc':
+            color = '#FE5000'
+            p['symbol_name'] = "Fibre Channel"
+            p['symbol_shape'] = "square"
+            p['symbol_color'] = color
+
+        elif p['port_type'] == 'eth_roce':
+            color = "#FD9627"
+            p['symbol_name'] = "Ethernet / RoCE"
+            p['symbol_shape'] = "triangle_up"
+            p['symbol_color'] = color
+
+        elif p['port_type'] == 'eth':
+            color = '#D90368'
+            p['symbol_name'] = "Ethernet"
+            p['symbol_shape'] = "triangle_up"
+            p['symbol_color'] = color
+
+        else:
+            logger.warning(f"Unknown port type: {p['port_type']}")
+
+
+def resize_metadata_and_ports(img_size, all_ports):
+    """Calculate resize scaling for metadata without creating resized image.
+    Extracted from resize_image_and_ports() for json_only mode.
+    
+    Args:
+        img_size: Tuple of (width, height) 
+        all_ports: List of port dictionaries to modify
+        
+    Returns:
+        tuple: Final (width, height) after potential resizing
+    """
+    max_height = 4604
+    if img_size[1] > max_height:
+        wpercent = (max_height / float(img_size[1]))
+        hsize = int((float(img_size[0]) * float(wpercent)))
+        final_size = (hsize, max_height)
+        
+        # Scale port locations
+        for p in all_ports:
+            p['loc'] = (int(p['loc'][0] * wpercent), int(p['loc'][1] * wpercent))
+            
+        return final_size
+    
+    return img_size
+
+
 def apply_text(img, text, x_loc, y_loc, font_size=15, rotate_degrees=0):
     global ttf_path
 

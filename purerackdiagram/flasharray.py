@@ -1360,6 +1360,23 @@ class FADiagram():
             all_image_ports.reverse()
 
         return all_image_ports
+
+    async def get_image_metadata_only(self):
+        """Lightweight version of get_image for json_only mode."""
+        tasks = []
+
+        tasks.append(FAChassis(self.config).get_image_metadata_only())
+
+        for shelf in self.config["shelves"]:
+            tasks.append(FAShelf(shelf).get_image_metadata_only())
+
+        # this returns the results of the all the tasks in a list
+        all_metadata = await asyncio.gather(*tasks)
+
+        if self.config["direction"] == "up":
+            all_metadata.reverse()
+
+        return all_metadata
     
         #final_img, all_ports = combine_images_vertically(all_image_ports)
         #self.ports = all_ports

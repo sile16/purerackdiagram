@@ -399,6 +399,89 @@ class FBSDiagram():
             all_images.reverse()
 
         return all_images
+
+    async def get_image_metadata_only(self):
+        """Lightweight version of get_image for json_only mode.
+        Returns metadata with image sizes instead of actual PIL Images.
+        """
+        tasks = []
+
+        logging.debug("Starting to get image metadata for configuration: %s", str(self.config))
+
+        c = self.config
+        blade_model_text = self._generate_blade_model_text(self.config['model'])
+
+        if blade_model_text == "E":
+            blade_model_text = "EC"
+
+        # Handle bladesv2 or legacy blade processing
+        if 'bladesv2_final' in self.config:
+            # Use bladesv2 configuration
+            for i in range(self.config["chassis"]):
+                tasks.append(self.build_chassis_metadata_only(0, blade_model_text, i))
+                
+                # expansions shelves we change the blade model to EX
+                if blade_model_text == "EC":
+                    blade_model_text = "EX"
+        else:
+            # Legacy blade processing
+            blades_left = c['blades']
+            for i in range(self.config["chassis"]):
+                tasks.append(self.build_chassis_metadata_only(blades_left, blade_model_text, i))
+                blades_left -= 10
+
+                # expansions shelves we change the blade model to EX
+                if blade_model_text == "EC":
+                    blade_model_text = "EX"
+
+        if self.config['xfm']:
+            xfm_face = self.config['xfm_face']
+            for x in range(2):
+                tasks.append(
+                self.get_rack_metadata_only(f"png/pure_fb_xfm_{self.config['xfm_model']}_{xfm_face}.png"))
+            
+
+        all_metadata = await asyncio.gather(*tasks)
+        if self.config["direction"] == "up":
+            all_metadata.reverse()
+
+        return all_metadata
+
+    async def build_chassis_metadata_only(self, number_of_blades, blade_model_text, chassis_idx=0):
+        """Metadata-only version of build_chassis for json_only mode."""
+        logging.debug("Building chassis metadata with %s blades", number_of_blades)
+        # For legacy mode, limit to 10 blades per chassis
+        if 'bladesv2_final' not in self.config:
+            number_of_blades = min(10, number_of_blades)
+        
+        face = self.config["face"]
+        model = blade_model_text[0].lower()
+
+        if face == 'front':
+            if self.config['bezel']:
+                img_key = f"png/pure_fb{model}_bezel.png"
+            else:
+                img_key = f"png/pure_fb{model}_front.png"
+        else:
+            img_key = f"png/pure_fb{model}_back.png"
+
+        if img_key in global_config:
+            self.img_info = global_config[img_key]
+
+        ports = []
+        add_ports_at_offset(img_key, (0, 0), ports)
+
+        # Get image size from config instead of loading actual image
+        img_size = global_config[img_key]['size']
+
+        return {'img_size': img_size, 'ports': ports}
+
+    async def get_rack_metadata_only(self, key):
+        """Metadata-only version of get_rack_image_with_ports for json_only mode."""
+        ports = []
+        add_ports_at_offset(key, (0, 0), ports)
+        img_size = global_config[key]['size']
+        return {'img_size': img_size, 'ports': ports}
     
         # final_img, all_ports = combine_images_vertically(all_images)
         # self.ports = all_ports

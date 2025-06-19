@@ -13,7 +13,7 @@ import traceback
 import boto3
 from PIL import Image, ImageDraw, ImageFont
 
-from purerackdiagram.utils import combine_images_vertically
+from purerackdiagram.utils import combine_images_vertically, combine_metadata_vertically, add_port_metadata, resize_metadata_and_ports
 import purerackdiagram
 from purerackdiagram.utils import RackDiagramException, InvalidConfigurationException, InvalidDatapackException
 
@@ -581,117 +581,169 @@ def handler(event, context):
         diagram = purerackdiagram.get_diagram(params)
         logger.info(f"Diagram created: {diagram}")
         
-        img_ports_list = asyncio.run(diagram.get_image())
-        logger.info("Images created successfully")
+        # Check for json_only optimization early
+        json_only_mode = 'json_only' in params
+        
+        if json_only_mode:
+            # Fast path for json_only: use metadata-only methods
+            logger.info("Using json_only optimization path")
+            
+            # Check if diagram supports metadata-only mode
+            if hasattr(diagram, 'get_image_metadata_only'):
+                img_metadata_list = asyncio.run(diagram.get_image_metadata_only())
+                logger.info("Metadata created successfully")
+                
+                # Process metadata without creating actual images
+                final_size, all_ports = combine_metadata_vertically(img_metadata_list)
+                
+                draw_ports_flag = False
+                if 'ports' in params and (
+                    params['ports'] == True or
+                    params['ports'].upper() == "TRUE"
+                    or params['ports'].upper() == "YES"):
+                    draw_ports_flag = True
 
-        # Check for "individual" param
-        individual = False
-        if 'individual' in params:
-            individual = True
+                if all_ports:
+                    all_ports = sort_ports(all_ports)
 
-        if individual:
-            # img_ports_list expected as a list of dict, each containing 'img' and 'ports'
-            return handle_individual_processing(img_ports_list, diagram, params)
-
-        # If not individual, do old vertical combine:
-        final_img, all_ports = combine_images_vertically(img_ports_list)
-        img_original_size = final_img.size
-        draw_ports_flag = False
-        if 'ports' in params and (
-            params['ports'] == True or
-            params['ports'].upper() == "TRUE"
-            or params['ports'].upper() == "YES"):
-            draw_ports_flag = True
-
-        if all_ports:
-            all_ports = sort_ports(all_ports)
-
-        draw_ports_on_image(final_img, all_ports, draw_ports_flag, img_original_size)
-        final_img = resize_image_and_ports(final_img, all_ports)
-
-        buffered = BytesIO()
-        final_img.save(buffered, format="PNG")
-        size_of_buffered_in_mib = len(buffered.getvalue()) / ( 1024 * 1024 )
-
-        if 'vssx' in params and params['vssx']:
-            name, vssx_buffer = create_vssx_for_image(final_img, all_ports, diagram, params)
-            zip_file_size = len(vssx_buffer.getvalue()) / (1024 * 1024)
-            if zip_file_size > use_s3_size_limit:
-                s3_link = upload_to_s3(vssx_buffer, "vssx", "application/vnd.ms-visio.stencil", f'attachment; filename="{name}.vssx"')
-                return {
-                    "statusCode": 302,
-                    "headers": {
-                        "Location": s3_link,
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET'
-                    }
-                }
-            zip_str = base64.b64encode(vssx_buffer.getvalue()).decode('utf-8')
-            content_disposition = f'attachment; filename="{name}.vssx"'
-            return create_response(
-                status_code=200,
-                body=zip_str,
-                headers={
-                    "Content-Type": "application/vnd.ms-visio.stencil",
-                    'content-disposition': content_disposition
-                },
-                is_base64_encoded=True,
-                params=original_params,
-                diagram=diagram
-            )
-        else:
-            data = {"image_type": "png",
+                # Add port metadata without drawing
+                add_port_metadata(all_ports, draw_ports_flag)
+                
+                # Calculate final size with resize scaling
+                final_size = resize_metadata_and_ports(final_size, all_ports)
+                
+                # Create lightweight response data
+                data = {
+                    "image_type": "png",
                     "config": diagram.config,
                     "ports": all_ports,
                     "execution_duration": time.time() - program_time_s,
                     "error": None,
-                    "image_size": final_img.size,
-                    "image_mib": size_of_buffered_in_mib,
+                    "image_size": final_size,
+                    "image_mib": 0,  # Estimated as 0 since no image was created
                     "params": original_params,
-                    "image": None }
-
-            if 'json_only' in params:
-                return create_response(
-                    status_code=200,
-                    body=json.dumps(data, indent=4),
-                    headers={"Content-Type": "application/json"},
-                    params=original_params,
-                    diagram=diagram
-                )
-
-            if size_of_buffered_in_mib > use_s3_size_limit:
-                link = upload_to_s3(buffered, "png", "image/png", 'inline')
-                data["image"] = link
-                data['image_type'] = "link"
-            else:
-                data["image"] = base64.b64encode(buffered.getvalue()).decode('utf-8')
-                data['image_type'] = "png"
-
-            if 'json' in params and params['json']:
-                return create_response(
-                    status_code=200,
-                    body=json.dumps(data, indent=4),
-                    headers={"Content-Type": "application/json"},
-                    params=original_params,
-                    diagram=diagram
-                )
-
-            if size_of_buffered_in_mib > use_s3_size_limit:
-                return {
-                    "statusCode": 302,
-                    "headers": {"Location": data["image"],
-                                'Access-Control-Allow-Origin': '*',
-                                'Access-Control-Allow-Methods': 'GET'}
+                    "image": None
                 }
 
-            return create_response(
-                status_code=200,
-                body=data['image'],
-                headers={"Content-Type": "image/png"},
-                is_base64_encoded=True,
-                params=original_params,
-                diagram=diagram
-            )
+                return create_response(
+                    status_code=200,
+                    body=json.dumps(data, indent=4),
+                    headers={"Content-Type": "application/json"},
+                    params=original_params,
+                    diagram=diagram
+                )
+            else:
+                # Fallback to normal path if metadata-only not supported
+                logger.warning("Diagram doesn't support metadata-only mode, falling back to normal path")
+                json_only_mode = False
+        
+        if not json_only_mode:
+            # Normal path: create actual images
+            img_ports_list = asyncio.run(diagram.get_image())
+            logger.info("Images created successfully")
+
+            # Check for "individual" param
+            individual = False
+            if 'individual' in params:
+                individual = True
+
+            if individual:
+                # img_ports_list expected as a list of dict, each containing 'img' and 'ports'
+                return handle_individual_processing(img_ports_list, diagram, params)
+
+            # If not individual, do old vertical combine:
+            final_img, all_ports = combine_images_vertically(img_ports_list)
+            img_original_size = final_img.size
+            draw_ports_flag = False
+            if 'ports' in params and (
+                params['ports'] == True or
+                params['ports'].upper() == "TRUE"
+                or params['ports'].upper() == "YES"):
+                draw_ports_flag = True
+
+            if all_ports:
+                all_ports = sort_ports(all_ports)
+
+            draw_ports_on_image(final_img, all_ports, draw_ports_flag, img_original_size)
+            final_img = resize_image_and_ports(final_img, all_ports)
+
+            buffered = BytesIO()
+            final_img.save(buffered, format="PNG")
+            size_of_buffered_in_mib = len(buffered.getvalue()) / ( 1024 * 1024 )
+
+            if 'vssx' in params and params['vssx']:
+                name, vssx_buffer = create_vssx_for_image(final_img, all_ports, diagram, params)
+                zip_file_size = len(vssx_buffer.getvalue()) / (1024 * 1024)
+                if zip_file_size > use_s3_size_limit:
+                    s3_link = upload_to_s3(vssx_buffer, "vssx", "application/vnd.ms-visio.stencil", f'attachment; filename="{name}.vssx"')
+                    return {
+                        "statusCode": 302,
+                        "headers": {
+                            "Location": s3_link,
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET'
+                        }
+                    }
+                zip_str = base64.b64encode(vssx_buffer.getvalue()).decode('utf-8')
+                content_disposition = f'attachment; filename="{name}.vssx"'
+                return create_response(
+                    status_code=200,
+                    body=zip_str,
+                    headers={
+                        "Content-Type": "application/vnd.ms-visio.stencil",
+                        'content-disposition': content_disposition
+                    },
+                    is_base64_encoded=True,
+                    params=original_params,
+                    diagram=diagram
+                )
+            else:
+                data = {"image_type": "png",
+                        "config": diagram.config,
+                        "ports": all_ports,
+                        "execution_duration": time.time() - program_time_s,
+                        "error": None,
+                        "image_size": final_img.size,
+                        "image_mib": size_of_buffered_in_mib,
+                        "params": original_params,
+                        "image": None }
+
+                # Note: json_only is now handled earlier in the optimized path
+                # This else block handles normal image responses
+
+                if size_of_buffered_in_mib > use_s3_size_limit:
+                    link = upload_to_s3(buffered, "png", "image/png", 'inline')
+                    data["image"] = link
+                    data['image_type'] = "link"
+                else:
+                    data["image"] = base64.b64encode(buffered.getvalue()).decode('utf-8')
+                    data['image_type'] = "png"
+
+                if 'json' in params and params['json']:
+                    return create_response(
+                        status_code=200,
+                        body=json.dumps(data, indent=4),
+                        headers={"Content-Type": "application/json"},
+                        params=original_params,
+                        diagram=diagram
+                    )
+
+                if size_of_buffered_in_mib > use_s3_size_limit:
+                    return {
+                        "statusCode": 302,
+                        "headers": {"Location": data["image"],
+                                    'Access-Control-Allow-Origin': '*',
+                                    'Access-Control-Allow-Methods': 'GET'}
+                    }
+
+                return create_response(
+                    status_code=200,
+                    body=data['image'],
+                    headers={"Content-Type": "image/png"},
+                    is_base64_encoded=True,
+                    params=original_params,
+                    diagram=diagram
+                )
 
     # Catch all exceptions and then handle by type
     except Exception as e:

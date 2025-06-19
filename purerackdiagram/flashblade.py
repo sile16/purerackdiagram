@@ -144,6 +144,46 @@ class FBDiagram():
             all_images.reverse()
 
         return all_images
+
+    async def get_image_metadata_only(self):
+        """Lightweight version of get_image for json_only mode."""
+        tasks = []
+
+        for i in range(self.config["chassis"]):
+            tasks.append(self.build_chassis_metadata_only(i))
+
+        if self.config['xfm']:
+            xfm_face = self.config['xfm_face']
+            for x in range(2):
+                tasks.append(
+                self.get_rack_metadata_only(f"png/pure_fb_xfm_{self.config['xfm_model']}_{xfm_face}.png"))
+            
+
+        all_metadata = await asyncio.gather(*tasks)
+        if self.config["direction"] == "up":
+            all_metadata.reverse()
+
+        return all_metadata
+
+    async def build_chassis_metadata_only(self, chassis_idx):
+        """Metadata-only version of build_chassis for json_only mode."""
+        face = self.config["face"]
+        if face == 'front':
+            img_key = "png/pure_fb_front.png"
+        else:
+            img_key = "png/pure_fb_back.png"
+
+        ports = []
+        add_ports_at_offset(img_key, (0, 0), ports)
+        img_size = global_config[img_key]['size']
+        return {'img_size': img_size, 'ports': ports}
+
+    async def get_rack_metadata_only(self, key):
+        """Metadata-only version of get_rack_image_with_ports for json_only mode."""
+        ports = []
+        add_ports_at_offset(key, (0, 0), ports)
+        img_size = global_config[key]['size']
+        return {'img_size': img_size, 'ports': ports}
     
         # final_img, all_ports = combine_images_vertically(all_images)
         # self.ports = all_ports
