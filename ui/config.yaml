@@ -7084,7 +7084,7 @@ png/pure_fbs_blade.png:
     - 630
   model_text_loc: !!python/tuple
   - 199
-  - 549
+  - 545
 png/pure_fbs_front.png:
   blade_loc:
   - *id392
