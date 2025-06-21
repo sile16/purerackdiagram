@@ -588,7 +588,7 @@ def update_static_fbs_blade_loc(config):
     ]
    
 
-    model_text_loc =  (199, 549)
+    model_text_loc =  (199, 545)
 
     config[key] = {'fm_loc': fm_loc,
                    'model_text_loc': model_text_loc }

@@ -26,6 +26,7 @@ class FBSDiagram():
         config = {}
         raw_model = params.get("model").lower()
         config["model"] = self._parse_and_normalize_model(raw_model)
+        config["model_parsed"] = self._parse_model_to_json(config["model"])
         config["chassis"] = int(params.get("no_of_chassis", 1))
         config['ru'] = config["chassis"]*5
         config["face"] = params.get("face", "front").lower()
@@ -90,18 +91,21 @@ class FBSDiagram():
 
     def _parse_and_normalize_model(self, raw_model):
         """Parse model string and add default r2 if no r-version specified"""
-        if raw_model == 'fb-e':
-            return raw_model
-            
         # Check for existing r-version patterns: fb-s{number}r{version} or fb-er{version}
         if re.match(r'^fb-s(\d+)r(\d+)$', raw_model) or re.match(r'^fb-er(\d+)$', raw_model):
             return raw_model  # Already has r-version
             
         # Check for base model patterns: fb-s{number} or fb-e
-        if re.match(r'^fb-s(\d+)$', raw_model):
-            return f"{raw_model}r2"  # Add default r2 version
+        s_match = re.match(r'^fb-s(\d+)$', raw_model)
+        if s_match:
+            model_number = s_match.group(1)
+            # S200 and S500 get default r2, S100 gets default r1
+            if model_number in ['200', '500']:
+                return f"{raw_model}r2"
+            else:
+                return f"{raw_model}r1"
         elif raw_model == 'fb-e':
-            return 'fb-er2'  # Convert fb-e to fb-er2
+            return 'fb-er1'  # E series gets default r1
             
         # Return as-is for invalid formats (will be caught by validation)
         return raw_model
@@ -114,26 +118,90 @@ class FBSDiagram():
         # Check r-version patterns: fb-s{number}r{version} or fb-er{version}
         return bool(re.match(r'^fb-s(\d+)r(\d+)$|^fb-er(\d+)$', model))
 
-    def _generate_blade_model_text(self, model):
-        """Generate blade model text including r-version for display"""
+    def _parse_model_to_json(self, model):
+        """Parse model string into structured JSON data for easy access.
+        
+        Returns:
+            dict: {
+                "type": "s" | "e",
+                "number": str (for S-series only),
+                "revision": str,
+                "full_model": str
+            }
+        """
         if model == 'fb-e':
-            return 'E'
+            return {
+                "type": "e",
+                "number": None,
+                "revision": "1",  # fb-e is equivalent to fb-er1
+                "full_model": model
+            }
             
         # Parse fb-er{version} format
         er_match = re.match(r'^fb-er(\d+)$', model)
         if er_match:
-            r_version = er_match.group(1)
-            return f"ER{r_version}"
+            return {
+                "type": "e", 
+                "number": None,
+                "revision": er_match.group(1),
+                "full_model": model
+            }
             
         # Parse fb-s{number}r{version} format
         s_match = re.match(r'^fb-s(\d+)r(\d+)$', model)
         if s_match:
-            number = s_match.group(1)
-            r_version = s_match.group(2)
-            return f"S{number}R{r_version}"
+            return {
+                "type": "s",
+                "number": s_match.group(1),
+                "revision": s_match.group(2),
+                "full_model": model
+            }
             
         # Fallback (shouldn't happen with proper validation)
-        return model.split("-")[1].upper()
+        return {
+            "type": "unknown",
+            "number": None,
+            "revision": "1",
+            "full_model": model
+        }
+
+    def _generate_blade_model_text_from_parsed(self, model_parsed):
+        """Generate blade model text from parsed JSON data for display.
+        
+        Args:
+            model_parsed: Dict containing parsed model data
+            
+        Returns:
+            str: Model text for blade display (e.g., "S200", "S200r2", "E", "Er2")
+        """
+        model_type = model_parsed["type"]
+        revision = model_parsed["revision"]
+        
+        if model_type == "e":
+            # E-series: only show r-version if not r1 (preserve backward compatibility)
+            if revision == "1":
+                return "E"
+            else:
+                return f"Er{revision}"
+                
+        elif model_type == "s":
+            # S-series: only show r-version if not r1 (preserve backward compatibility)
+            number = model_parsed["number"]
+            if revision == "1":
+                return f"S{number}"
+            else:
+                return f"S{number}r{revision}"
+                
+        else:
+            # Fallback for unknown types
+            return model_parsed["full_model"].split("-")[1].upper()
+
+    def _generate_blade_model_text(self, model):
+        """Legacy method - generates blade model text by parsing model string.
+        This method is kept for compatibility but now uses the JSON parsing approach.
+        """
+        model_parsed = self._parse_model_to_json(model)
+        return self._generate_blade_model_text_from_parsed(model_parsed)
     
     def _init_blades_v2(self, params, config):
         """Initialize bladesv2 configuration from JSON-encoded parameter"""
@@ -244,8 +312,10 @@ class FBSDiagram():
 
         # Add model label
         label_loc = global_config[key]['model_text_loc']
+        # Move text 4 pixels higher (reduce y coordinate by 4)
+        label_loc = (label_loc[0], label_loc[1])
         ttf_path = global_config['ttf_path']
-        font_size = 25
+        font_size = 24
 
         font = ImageFont.truetype(ttf_path, size=font_size)
         _, _, w, h = font.getbbox(blade_model_text)
@@ -300,8 +370,10 @@ class FBSDiagram():
 
             # Add model label to the blade
             label_loc = global_config[key]['model_text_loc']
+            # Move text 4 pixels higher (reduce y coordinate by 4)
+            label_loc = (label_loc[0], label_loc[1])
             ttf_path = global_config['ttf_path']
-            font_size = 25
+            font_size = 24
 
             font = ImageFont.truetype(ttf_path, size=font_size)
             _, _, w, h = font.getbbox(blade_model_text)
@@ -361,10 +433,15 @@ class FBSDiagram():
         logging.debug("Starting to get image for configuration: %s", str(self.config))
 
         c = self.config
-        blade_model_text = self._generate_blade_model_text(self.config['model'])
+        blade_model_text = self._generate_blade_model_text_from_parsed(self.config['model_parsed'])
 
-        if blade_model_text == "E":
-            blade_model_text = "EC"
+        # Convert E-series blade text for chassis (E → EC, ER2 → ECR2, etc.)
+        if blade_model_text.startswith("E"):
+            if blade_model_text == "E":
+                blade_model_text = "EC"
+            else:
+                # Handle ER2, ER3, etc. → ECR2, ECR3, etc.
+                blade_model_text = blade_model_text.replace("E", "EC", 1)
 
         # Handle bladesv2 or legacy blade processing
         if 'bladesv2_final' in self.config:
@@ -373,9 +450,9 @@ class FBSDiagram():
                 # For bladesv2, we don't need to track blades_left since it's managed per chassis
                 tasks.append(self.build_chassis(0, blade_model_text, i))
                 
-                # expansions shelves we change the blade model to EX
-                if blade_model_text == "EC":
-                    blade_model_text = "EX"
+                # expansions shelves we change the blade model to EX (EC → EX, ECR2 → EXR2, etc.)
+                if blade_model_text.startswith("EC"):
+                    blade_model_text = blade_model_text.replace("EC", "EX", 1)
         else:
             # Legacy blade processing
             blades_left = c['blades']
@@ -383,9 +460,9 @@ class FBSDiagram():
                 tasks.append(self.build_chassis(blades_left, blade_model_text, i))
                 blades_left -= 10
 
-                # expansions shelves we change the blade model to EX
-                if blade_model_text == "EC":
-                    blade_model_text = "EX"
+                # expansions shelves we change the blade model to EX (EC → EX, ECR2 → EXR2, etc.)
+                if blade_model_text.startswith("EC"):
+                    blade_model_text = blade_model_text.replace("EC", "EX", 1)
 
         if self.config['xfm']:
             xfm_face = self.config['xfm_face']
