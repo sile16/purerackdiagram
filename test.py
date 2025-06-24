@@ -7,6 +7,7 @@ import json
 import traceback
 import os
 import requests
+import jsondiff
 
 import lambdaentry
 from purerackdiagram.utils import global_config
@@ -1388,10 +1389,16 @@ def create_test_image(item, count, total):
     folder = "test_results"
     file_name = f"{item['model']}"
     for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
-    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 'chassis_gen' ]:
+    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 
+    'chassis_gen', 'json_only', 'datapacksv2', 'bladesv2' ]:
         if n in item:
             if n == 'datapacks':
                 file_name += f"_{str(item[n]).replace('/', '-')}"
+            elif n == 'datapacksv2' or n == 'bladesv2':
+                #sha256 hash the datapacksv2 value
+                h = hashlib.sha256()
+                h.update(item[n].encode('utf-8'))
+                file_name += f"_{n}-{h.hexdigest()[:8]}"
             else:
                 file_name += f"_{n}-{item[n]}"
 
@@ -1475,8 +1482,29 @@ def get_all_tests():
     for test in more_tests:
         #if not test['queryStringParameters'].get('json'):
         #    continue
-        yield test['queryStringParameters']
+        json_test = test['queryStringParameters']
+        yield json_test
         count += 1
+
+        if 'json' not in json_test:
+            json_test = json_test.copy()
+            json_test['json'] = True
+            yield json_test
+
+        if 'json_only' not in json_test:
+            #json onlytest
+            json_test = json_test.copy()
+            json_test['json_only'] = True
+            yield json_test
+    
+    #return count
+        
+        
+
+
+
+
+        
 
     for cg in ['1', '2']:
         for model in ['x50r4', 'c50r4', 'c20', 'c50r4b', 'x50r4b', 'er1', 'er1b']:
@@ -1642,16 +1670,60 @@ def test_all(args):
 
     errors = 0
     warnings = 0
-    for key in results:
+    json_only_to_original = 0
+    for key,_ in results.items():
         if key not in validation:
             warnings += 1
             print("WARNING missing key:{}".format(key))
+        elif 'vssx' in key:
+            pass # always different because unique key
+        elif 'json_only' in key:
+            
+            diff = True
+            try:
+                res_json = results[key].copy()
+                val_json = validation[key].copy()
+                diff = jsondiff.diff(val_json, res_json)
+            except Exception as ex:
+                pass
+            
+            if diff:
+                errors += 1
+                print("Error JSON Only Changed!!:{}".format(key))
+                print(diff)
+
+            original_json_key = key.replace("_json_only-True", "")
+
+            if original_json_key not in validation:
+                original_json_key = key.replace("_json_only-True", "_json-True")
+                if original_json_key not in validation:
+                    continue
+
+            json_only_to_original += 1
+            val_json = validation[original_json_key]
+
+            # Now lets compare to 
+            ignore_keys = ['image_size', 'execution_duration', 'image', "image_mib", "params", "json_only", "json", "image_type"]
+            for k in ignore_keys:
+                if k in res_json:
+                    del res_json[k]
+                if k in val_json:
+                    del val_json[k]
+
+            diff = True
+            diff = jsondiff.diff(val_json, res_json)
+            if diff:
+                errors += 1
+                print("Error JSON_Only, vs JSON difference!!:{}".format(original_json_key))
+                print(diff)
+
+
         elif 'json' in key:
             # use jsondiff to compare the two
             # load the two strings into json objects, results
             # compare json
 
-            import jsondiff
+
             diff = True
             try:
                 res_json = results[key]
@@ -1664,12 +1736,14 @@ def test_all(args):
                 errors += 1
                 print("Error JSON Changed!!:{}".format(key))
                 print(diff)
-        elif 'vssx' in key:
-            pass # always different because unique key
+            
+            
+        
         elif results[key] != validation[key]:
             errors += 1
             print(f"Error Image Changed!!: {key} (file://{os.path.abspath(os.path.join(save_dir, key))}.png)")
     print("Test Complete {} Errors Found {} Warning".format(errors, warnings))
+    print("JSON Only to Original: {}".format(json_only_to_original))
 
 
 def main(args):

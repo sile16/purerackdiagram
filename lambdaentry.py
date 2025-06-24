@@ -168,7 +168,11 @@ def draw_triangle_down(draw, x, y, size, color):
 
 
 def sort_ports(all_ports):
+
     def port_key(port):
+        global unknown_count
+        if 'name' not in port:
+            return ('uknown', 'unknown', 99, sum(port['loc']))
         name = port.get('name', 'ct0.eth0')
         parts = name.split('.')
         controller = parts[0]
@@ -178,7 +182,8 @@ def sort_ports(all_ports):
             protocol_and_number = "eth0"
         protocol = ''.join([char for char in protocol_and_number if not char.isdigit()])
         number = ''.join([char for char in protocol_and_number if char.isdigit()])
-        return (controller, protocol, int(number))
+
+        return (controller, protocol, int(number), sum(port['loc']))
     return sorted(all_ports, key=port_key)
 
 
@@ -555,6 +560,7 @@ def handler(event, context):
     global program_time_s
     program_time_s = time.time()
     params = {}
+    all_ports = []
     original_params = {}
     diagram = None
 
