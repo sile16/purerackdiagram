@@ -1353,14 +1353,9 @@ def test_lambda(params, outputfile):
 
     elif results['headers'].get("Content-Type") == 'application/json':
         if 'body' in results:
-            #img_str = json.dumps(results['body'], indent=4, ensure_ascii=False)
-            # replace this '"execution_duration": 0.8748149871826172', with '"execution_duration": 1',
-            # match for any value
-
+            
             obj = json.loads(results['body'])
-            #obj['execution_duration'] = 1
             del obj['image']
-            #results['body'] = json.dumps(obj, indent=4, ensure_ascii=False)
             results['body'] = obj
 
             with open(outputfile + '.json', 'w',  encoding='utf-8') as outfile:
