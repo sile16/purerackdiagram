@@ -1,4 +1,6 @@
 import yaml
+import os
+from PIL import Image
 
 # Updates the config.yaml file with location information
 
@@ -52,6 +54,7 @@ def main():
 
 
     update_static_fbs_blade_loc(config)
+    update_image_sizes(config)
 
     with open('purerackdiagram/config.yaml', 'w') as f:
         yaml.dump(config, f, default_flow_style=False)
@@ -1615,6 +1618,39 @@ def update_static_mezz_port_loc(config):
                           'mezz': True,
                           'services': ['shelf']})
     config[key] = {'ports': all_ports}
+
+
+def update_image_sizes(config):
+    """Add image size information to config for all PNG files"""
+    # Scan both purerackdiagram/png and lambda/purerackdiagram/png directories
+    png_dirs = [
+        'purerackdiagram/png',
+        'lambda/purerackdiagram/png'
+    ]
+    
+    for png_dir in png_dirs:
+        if not os.path.exists(png_dir):
+            continue
+            
+        for filename in os.listdir(png_dir):
+            if not filename.endswith('.png'):
+                continue
+                
+            filepath = os.path.join(png_dir, filename)
+            config_key = f'png/{filename}'
+            
+            try:
+                with Image.open(filepath) as img:
+                    width, height = img.size
+                    
+                # Add size info to existing config entry or create new one
+                if config_key not in config:
+                    config[config_key] = {}
+                    
+                config[config_key]['size'] = [width, height]
+                
+            except Exception as e:
+                print(f"Warning: Could not get size for {filepath}: {e}")
 
 
 if __name__ == "__main__":

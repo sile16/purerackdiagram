@@ -1358,7 +1358,7 @@ def test_lambda(params, outputfile):
             # match for any value
 
             obj = json.loads(results['body'])
-            obj['execution_duration'] = 1
+            #obj['execution_duration'] = 1
             del obj['image']
             #results['body'] = json.dumps(obj, indent=4, ensure_ascii=False)
             results['body'] = obj
@@ -1678,11 +1678,20 @@ def test_all(args):
         elif 'vssx' in key:
             pass # always different because unique key
         elif 'json_only' in key:
+
+            # Now lets compare to 
             
+            ignore_keys = [ 'execution_duration', 'image']
+                
             diff = True
             try:
                 res_json = results[key].copy()
                 val_json = validation[key].copy()
+                for k in ignore_keys:
+                    if k in res_json:
+                        del res_json[k]
+                    if k in val_json:
+                        del val_json[k]
                 diff = jsondiff.diff(val_json, res_json)
             except Exception as ex:
                 pass
@@ -1698,17 +1707,21 @@ def test_all(args):
                 original_json_key = key.replace("_json_only-True", "_json-True")
                 if original_json_key not in validation:
                     continue
+            
+            
 
             json_only_to_original += 1
             val_json = validation[original_json_key]
 
-            # Now lets compare to 
             ignore_keys = ['image_size', 'execution_duration', 'image', "image_mib", "params", "json_only", "json", "image_type"]
+            
             for k in ignore_keys:
                 if k in res_json:
                     del res_json[k]
                 if k in val_json:
                     del val_json[k]
+
+            
 
             diff = True
             diff = jsondiff.diff(val_json, res_json)
@@ -1723,11 +1736,17 @@ def test_all(args):
             # load the two strings into json objects, results
             # compare json
 
-
+            ignore_keys = [ 'execution_duration']
+            
             diff = True
             try:
                 res_json = results[key]
                 val_json = validation[key]
+                for k in ignore_keys:
+                    if k in res_json:
+                        del res_json[k]
+                    if k in val_json:
+                        del val_json[k]
                 diff = jsondiff.diff(val_json, res_json)
             except Exception as ex:
                 pass

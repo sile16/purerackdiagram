@@ -22,6 +22,7 @@ logging = logging.getLogger(__name__)
 class FBSDiagram():
     def __init__(self, params):
         self.ports = []
+        self.json_only = params.get('json_only', False)
 
         config = {}
         raw_model = params.get("model").lower()
@@ -299,11 +300,11 @@ class FBSDiagram():
     async def _add_blades_legacy(self, base_img, number_of_blades, blade_model_text):
         """Legacy blade addition logic"""
         key = 'png/pure_fbs_blade.png'
-        blade_img = await RackImage(key).get_image()
+        blade_img = await RackImage(key, self.json_only).get_image()
         fm_loc = global_config[key]['fm_loc']
 
         dfm_name = 'png/pure_fa_fm_nvme.png'
-        fm_img = await RackImage(dfm_name).get_image()
+        fm_img = await RackImage(dfm_name, self.json_only).get_image()
         apply_fm_label(fm_img, str(self.config['dfm_size']), "qlc")
 
         # Paste in the DFMs
@@ -353,7 +354,7 @@ class FBSDiagram():
                 continue
                 
             # Create blade image for this specific blade
-            blade_img = await RackImage(key).get_image()
+            blade_img = await RackImage(key, self.json_only).get_image()
             
             # Add FMs to each bay in this blade based on configuration
             for bay_idx, fm_config in enumerate(blade_bays):
@@ -362,7 +363,7 @@ class FBSDiagram():
                     
                 # Create FM with specific size
                 fm_name = 'png/pure_fa_fm_nvme.png'
-                fm_img = await RackImage(fm_name).get_image()
+                fm_img = await RackImage(fm_name, self.json_only).get_image()
                 apply_fm_label(fm_img, str(fm_config['fm_size']), "qlc")
                 
                 # Paste this FM into the specific bay location on the blade
@@ -415,7 +416,7 @@ class FBSDiagram():
         ports = []
         add_ports_at_offset(img_key, (0, 0), ports)
 
-        base_img = await RackImage(img_key).get_image()
+        base_img = await RackImage(img_key, self.json_only).get_image()
 
         if "front" in img_key:
             await self.add_blades(base_img, number_of_blades, blade_model_text, chassis_idx)
@@ -425,7 +426,7 @@ class FBSDiagram():
     async def get_rack_image_with_ports(self, key):
         ports = []
         add_ports_at_offset(key, (0, 0), ports)
-        return {'img': await RackImage(key).get_image(), 'ports': ports}
+        return {'img': await RackImage(key, self.json_only).get_image(), 'ports': ports}
 
     async def get_image(self):
         tasks = []

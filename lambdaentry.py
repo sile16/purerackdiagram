@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from purerackdiagram.utils import combine_images_vertically
 import purerackdiagram
-from purerackdiagram.utils import RackDiagramException, InvalidConfigurationException, InvalidDatapackException
+from purerackdiagram.utils import RackDiagramException, InvalidConfigurationException, InvalidDatapackException, MockImage
 
 # Configure logging for Lambda
 logger = logging.getLogger()
@@ -584,11 +584,54 @@ def handler(event, context):
         original_params = dict(params)
         logger.info(f"Processing request with parameters: {json.dumps(params)}")
         
+        # Check for json_only parameter to enable fast mode
+        json_only_mode = 'json_only' in params
+        if json_only_mode:
+            params['json_only'] = True
+        
         diagram = purerackdiagram.get_diagram(params)
         logger.info(f"Diagram created: {diagram}")
         
         img_ports_list = asyncio.run(diagram.get_image())
         logger.info("Images created successfully")
+        
+        # If json_only mode, return early with just port data
+        if json_only_mode:
+            # Combine the ports from all image_ports
+            final_img, all_ports = combine_images_vertically(img_ports_list)
+            if all_ports:
+                all_ports = sort_ports(all_ports)
+            
+            # Add port symbols for consistency with regular JSON mode
+            draw_ports_flag = False
+            if 'ports' in params and (
+                params['ports'] == True or
+                params['ports'].upper() == "TRUE"
+                or params['ports'].upper() == "YES"):
+                draw_ports_flag = True
+            
+            draw_ports_on_image(final_img, all_ports, draw_ports_flag, final_img.size)
+            final_img = resize_image_and_ports(final_img, all_ports)
+            
+            data = {
+                "image_type": "json_only",
+                "config": diagram.config,
+                "ports": all_ports,
+                "execution_duration": time.time() - program_time_s,
+                "error": None,
+                "image_size": None,
+                "image_mib": 0,
+                "params": original_params,
+                "image": None
+            }
+            
+            return create_response(
+                status_code=200,
+                body=json.dumps(data, indent=4),
+                headers={"Content-Type": "application/json"},
+                params=original_params,
+                diagram=diagram
+            )
 
         # Check for "individual" param
         individual = False

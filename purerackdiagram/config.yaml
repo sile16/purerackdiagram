@@ -791,6 +791,10 @@ pci_valid_cards:
 - sas
 - dca
 - blank
+png/old_pure_fbs_back.png:
+  size:
+  - 2606
+  - 1288
 png/pure_fa_2eth100_fh.png:
   ports:
   - loc: &id004 !!python/tuple
@@ -816,6 +820,9 @@ png/pure_fa_2eth100_fh.png:
     port_speeds: *id002
     port_type: eth
     services: *id003
+  size:
+  - 578
+  - 78
 png/pure_fa_2eth100_hh.png:
   ports:
   - loc: &id008 !!python/tuple
@@ -838,6 +845,9 @@ png/pure_fa_2eth100_hh.png:
     port_speeds: *id002
     port_type: eth
     services: *id003
+  size:
+  - 375
+  - 78
 png/pure_fa_2eth100roce_fh.png:
   ports:
   - loc: *id004
@@ -861,6 +871,9 @@ png/pure_fa_2eth100roce_fh.png:
     port_speeds: *id006
     port_type: eth_roce
     services: *id007
+  size:
+  - 578
+  - 78
 png/pure_fa_2eth100roce_hh.png:
   ports:
   - loc: *id008
@@ -879,6 +892,9 @@ png/pure_fa_2eth100roce_hh.png:
     port_speeds: *id006
     port_type: eth_roce
     services: *id007
+  size:
+  - 375
+  - 78
 png/pure_fa_2eth200roce_fh.png:
   ports:
   - loc: *id004
@@ -902,6 +918,9 @@ png/pure_fa_2eth200roce_fh.png:
     port_speeds: *id010
     port_type: eth_roce
     services: *id011
+  size:
+  - 578
+  - 78
 png/pure_fa_2eth200roce_hh.png:
   ports:
   - loc: *id008
@@ -920,6 +939,9 @@ png/pure_fa_2eth200roce_hh.png:
     port_speeds: *id010
     port_type: eth_roce
     services: *id011
+  size:
+  - 375
+  - 78
 png/pure_fa_2eth25_fh.png:
   ports:
   - loc: &id015 !!python/tuple
@@ -947,6 +969,9 @@ png/pure_fa_2eth25_fh.png:
     port_speeds: *id013
     port_type: eth
     services: *id014
+  size:
+  - 578
+  - 78
 png/pure_fa_2eth25_hh.png:
   ports:
   - loc: *id015
@@ -965,6 +990,9 @@ png/pure_fa_2eth25_hh.png:
     port_speeds: *id013
     port_type: eth
     services: *id014
+  size:
+  - 375
+  - 78
 png/pure_fa_2eth25roce_fh.png:
   ports:
   - loc: *id015
@@ -988,6 +1016,9 @@ png/pure_fa_2eth25roce_fh.png:
     port_speeds: *id018
     port_type: eth_roce
     services: *id019
+  size:
+  - 578
+  - 78
 png/pure_fa_2eth25roce_hh.png:
   ports:
   - loc: *id015
@@ -1006,6 +1037,9 @@ png/pure_fa_2eth25roce_hh.png:
     port_speeds: *id018
     port_type: eth_roce
     services: *id019
+  size:
+  - 375
+  - 78
 png/pure_fa_2eth40_fh.png:
   ports:
   - loc: *id004
@@ -1025,6 +1059,9 @@ png/pure_fa_2eth40_fh.png:
     port_speeds: *id020
     port_type: eth
     services: *id003
+  size:
+  - 578
+  - 78
 png/pure_fa_2eth40_hh.png:
   ports:
   - loc: *id008
@@ -1043,6 +1080,9 @@ png/pure_fa_2eth40_hh.png:
     port_speeds: *id020
     port_type: eth
     services: *id003
+  size:
+  - 375
+  - 78
 png/pure_fa_2eth_fh.png:
   ports:
   - loc: *id015
@@ -1061,6 +1101,9 @@ png/pure_fa_2eth_fh.png:
     port_speeds: *id013
     port_type: eth
     services: *id014
+  size:
+  - 578
+  - 78
 png/pure_fa_2eth_hh.png:
   ports:
   - loc: *id015
@@ -1079,6 +1122,9 @@ png/pure_fa_2eth_hh.png:
     port_speeds: *id013
     port_type: eth
     services: *id014
+  size:
+  - 375
+  - 78
 png/pure_fa_2ethbaset_fh.png:
   ports:
   - loc: &id024 !!python/tuple
@@ -1105,6 +1151,9 @@ png/pure_fa_2ethbaset_fh.png:
     port_speeds: *id022
     port_type: eth
     services: *id023
+  size:
+  - 578
+  - 78
 png/pure_fa_2ethbaset_hh.png:
   ports:
   - loc: *id024
@@ -1123,6 +1172,9 @@ png/pure_fa_2ethbaset_hh.png:
     port_speeds: *id022
     port_type: eth
     services: *id023
+  size:
+  - 375
+  - 78
 png/pure_fa_2fc_fh.png:
   ports:
   - loc: *id015
@@ -1146,6 +1198,9 @@ png/pure_fa_2fc_fh.png:
     port_speeds: *id027
     port_type: fc
     services: *id028
+  size:
+  - 578
+  - 78
 png/pure_fa_2fc_hh.png:
   ports:
   - loc: *id015
@@ -1164,6 +1219,9 @@ png/pure_fa_2fc_hh.png:
     port_speeds: *id027
     port_type: fc
     services: *id028
+  size:
+  - 375
+  - 78
 png/pure_fa_4eth25_fh.png:
   ports:
   - loc: &id029 !!python/tuple
@@ -1206,6 +1264,9 @@ png/pure_fa_4eth25_fh.png:
     port_speeds: *id018
     port_type: eth
     services: *id019
+  size:
+  - 578
+  - 78
 png/pure_fa_4eth25_hh.png:
   ports:
   - loc: &id033 !!python/tuple
@@ -1248,6 +1309,9 @@ png/pure_fa_4eth25_hh.png:
     port_speeds: *id018
     port_type: eth
     services: *id019
+  size:
+  - 375
+  - 78
 png/pure_fa_4eth25roce_fh.png:
   ports:
   - loc: *id029
@@ -1282,6 +1346,9 @@ png/pure_fa_4eth25roce_fh.png:
     port_speeds: *id018
     port_type: eth_roce
     services: *id019
+  size:
+  - 578
+  - 78
 png/pure_fa_4eth25roce_hh.png:
   ports:
   - loc: *id033
@@ -1316,6 +1383,9 @@ png/pure_fa_4eth25roce_hh.png:
     port_speeds: *id018
     port_type: eth_roce
     services: *id019
+  size:
+  - 375
+  - 78
 png/pure_fa_4fc_fh.png:
   ports:
   - loc: *id029
@@ -1350,6 +1420,9 @@ png/pure_fa_4fc_fh.png:
     port_speeds: *id027
     port_type: fc
     services: *id028
+  size:
+  - 578
+  - 78
 png/pure_fa_4fc_hh.png:
   ports:
   - loc: *id033
@@ -1384,6 +1457,25 @@ png/pure_fa_4fc_hh.png:
     port_speeds: *id027
     port_type: fc
     services: *id028
+  size:
+  - 375
+  - 78
+png/pure_fa_blank_fh.png:
+  size:
+  - 578
+  - 78
+png/pure_fa_blank_hh.png:
+  size:
+  - 375
+  - 78
+png/pure_fa_c_emezz.png:
+  size:
+  - 484
+  - 203
+png/pure_fa_c_nvram.png:
+  size:
+  - 509
+  - 205
 png/pure_fa_c_r1_back.png:
   ct0_mezz_loc: &id084 !!python/tuple
   - 585
@@ -1593,6 +1685,13 @@ png/pure_fa_c_r1_back.png:
   - &id091 !!python/tuple
     - 33
     - 491
+  size:
+  - 2625
+  - 781
+png/pure_fa_c_r1_bezel.png:
+  size:
+  - 2844
+  - 766
 png/pure_fa_c_r1_front.png:
   fm_loc:
   - &id055 !!python/tuple
@@ -1689,6 +1788,9 @@ png/pure_fa_c_r1_front.png:
   - &id093 !!python/tuple
     - 1813
     - 28
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r1_front_cg2.png:
   fm_loc:
   - *id055
@@ -2438,6 +2540,13 @@ png/pure_fa_c_r3_back.png:
     port_speeds: *id134
     port_type: eth
     services: *id135
+  size:
+  - 2625
+  - 781
+png/pure_fa_c_r3_bezel.png:
+  size:
+  - 2844
+  - 766
 png/pure_fa_c_r3_front.png:
   fm_loc:
   - *id055
@@ -2472,6 +2581,9 @@ png/pure_fa_c_r3_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r3_front_cg2.png:
   fm_loc:
   - *id055
@@ -2799,6 +2911,13 @@ png/pure_fa_c_r4_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_c_r4_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4_front.png:
   fm_loc:
   - *id055
@@ -2833,6 +2952,9 @@ png/pure_fa_c_r4_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4_front_cg2.png:
   fm_loc:
   - *id055
@@ -2864,6 +2986,9 @@ png/pure_fa_c_r4_front_cg2.png:
   - *id081
   - *id082
   model_text_loc: *id083
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4b_back.png:
   ct0_mezz_loc: *id084
   ct0_pci_loc:
@@ -2984,6 +3109,13 @@ png/pure_fa_c_r4b_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_c_r4b_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4b_front.png:
   fm_loc:
   - *id055
@@ -3018,6 +3150,9 @@ png/pure_fa_c_r4b_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4b_front_cg2.png:
   fm_loc:
   - *id055
@@ -3049,6 +3184,9 @@ png/pure_fa_c_r4b_front_cg2.png:
   - *id081
   - *id082
   model_text_loc: *id083
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4c_back.png:
   ct0_mezz_loc: *id084
   ct0_pci_loc:
@@ -3156,6 +3294,13 @@ png/pure_fa_c_r4c_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_c_r4c_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4c_front.png:
   fm_loc:
   - *id055
@@ -3190,6 +3335,9 @@ png/pure_fa_c_r4c_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r4c_front_cg2.png:
   fm_loc:
   - *id055
@@ -3221,6 +3369,9 @@ png/pure_fa_c_r4c_front_cg2.png:
   - *id081
   - *id082
   model_text_loc: *id083
+  size:
+  - 2859
+  - 781
 png/pure_fa_c_r5_back.png:
   ct0_mezz_loc: *id084
   ct0_pci_loc:
@@ -3251,6 +3402,26 @@ png/pure_fa_c_r5_front.png:
   nvram_loc:
   - *id092
   - *id093
+png/pure_fa_c_rbc_front_cg2.png:
+  size:
+  - 2859
+  - 781
+png/pure_fa_dc_1300.png:
+  size:
+  - 442
+  - 248
+png/pure_fa_dc_2000.png:
+  size:
+  - 442
+  - 248
+png/pure_fa_dca_fh.png:
+  size:
+  - 578
+  - 78
+png/pure_fa_dca_hh.png:
+  size:
+  - 375
+  - 78
 png/pure_fa_e_r1_back.png:
   ct0_mezz_loc: &id171 !!python/tuple
   - 709
@@ -3294,6 +3465,13 @@ png/pure_fa_e_r1_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_e_r1_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_e_r1_front.png:
   fm_loc:
   - *id055
@@ -3330,6 +3508,9 @@ png/pure_fa_e_r1_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_e_r1_front_cg2.png:
   fm_loc:
   - *id055
@@ -3361,6 +3542,9 @@ png/pure_fa_e_r1_front_cg2.png:
   - *id081
   - *id082
   model_text_loc: *id170
+  size:
+  - 2859
+  - 781
 png/pure_fa_e_r1b_back.png:
   ct0_mezz_loc: *id171
   ct0_pci_loc:
@@ -3402,6 +3586,13 @@ png/pure_fa_e_r1b_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_e_r1b_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_e_r1b_front.png:
   fm_loc:
   - *id055
@@ -3436,6 +3627,9 @@ png/pure_fa_e_r1b_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_e_r1b_front_cg2.png:
   fm_loc:
   - *id055
@@ -3467,6 +3661,9 @@ png/pure_fa_e_r1b_front_cg2.png:
   - *id081
   - *id082
   model_text_loc: *id170
+  size:
+  - 2859
+  - 781
 png/pure_fa_e_r1c_back.png:
   ct0_mezz_loc: *id171
   ct0_pci_loc:
@@ -3768,6 +3965,26 @@ png/pure_fa_e_r5_front.png:
   nvram_loc:
   - *id092
   - *id093
+png/pure_fa_fm_blank.png:
+  size:
+  - 101
+  - 513
+png/pure_fa_fm_nvme-qlc.png:
+  size:
+  - 101
+  - 513
+png/pure_fa_fm_nvme.png:
+  size:
+  - 101
+  - 513
+png/pure_fa_fm_sas.png:
+  size:
+  - 101
+  - 513
+png/pure_fa_fm_scm.png:
+  size:
+  - 101
+  - 513
 png/pure_fa_m_r1_back.png:
   ct0_mezz_loc: *id171
   ct0_pci_loc:
@@ -3797,6 +4014,13 @@ png/pure_fa_m_r1_back.png:
   - !!python/tuple
     - 2182
     - 579
+  size:
+  - 2859
+  - 781
+png/pure_fa_m_r1_bezel.png:
+  size:
+  - 2844
+  - 766
 png/pure_fa_m_r1_front.png:
   fm_loc:
   - &id189 !!python/tuple
@@ -3893,6 +4117,9 @@ png/pure_fa_m_r1_front.png:
   - &id219 !!python/tuple
     - 1805
     - 20
+  size:
+  - 2844
+  - 766
 png/pure_fa_m_r2_back.png:
   ct0_mezz_loc: *id171
   ct0_pci_loc:
@@ -3914,6 +4141,13 @@ png/pure_fa_m_r2_back.png:
   - !!python/tuple
     - 2182
     - 579
+  size:
+  - 2859
+  - 781
+png/pure_fa_m_r2_bezel.png:
+  size:
+  - 2844
+  - 766
 png/pure_fa_m_r2_front.png:
   fm_loc:
   - *id189
@@ -3948,6 +4182,9 @@ png/pure_fa_m_r2_front.png:
   nvram_loc:
   - *id218
   - *id219
+  size:
+  - 2844
+  - 766
 png/pure_fa_m_r3_back.png:
   ct0_mezz_loc: *id171
   ct0_pci_loc:
@@ -4037,6 +4274,9 @@ png/pure_fa_mgmt2ethbaset_fh.png:
     port_type: eth
     services: &id220
     - management
+  size:
+  - 578
+  - 78
 png/pure_fa_mgmt2ethbaset_hh.png:
   ports:
   - loc: *id024
@@ -4047,6 +4287,9 @@ png/pure_fa_mgmt2ethbaset_hh.png:
     port_speeds: *id022
     port_type: eth
     services: *id220
+  size:
+  - 375
+  - 78
 png/pure_fa_nvme_shelf_back.png:
   ports:
   - loc: !!python/tuple
@@ -4156,6 +4399,9 @@ png/pure_fa_nvme_shelf_back.png:
   - !!python/tuple
     - 43
     - 499
+  size:
+  - 2625
+  - 781
 png/pure_fa_nvme_shelf_front.png:
   fm_loc:
   - *id055
@@ -4186,6 +4432,9 @@ png/pure_fa_nvme_shelf_front.png:
   - *id080
   - *id081
   - *id082
+  size:
+  - 2859
+  - 781
 png/pure_fa_rc_r3_back.png:
   ct0_mezz_loc: *id084
   ct0_pci_loc:
@@ -4220,6 +4469,13 @@ png/pure_fa_rc_r3_back.png:
   - *id242
   - *id243
   - *id244
+  size:
+  - 2625
+  - 781
+png/pure_fa_rc_r3_bezel.png:
+  size:
+  - 2844
+  - 766
 png/pure_fa_rc_r3_front.png:
   fm_loc:
   - *id055
@@ -4251,6 +4507,9 @@ png/pure_fa_rc_r3_front.png:
   - *id081
   - *id082
   model_text_loc: *id083
+  size:
+  - 2859
+  - 781
 png/pure_fa_rc_r3b_front.png:
   fm_loc:
   - *id055
@@ -4356,6 +4615,9 @@ png/pure_fa_sas_fh.png:
     port_speeds: *id246
     port_type: sas
     services: *id247
+  size:
+  - 594
+  - 94
 png/pure_fa_sas_hh.png:
   ports:
   - loc: !!python/tuple
@@ -4398,6 +4660,13 @@ png/pure_fa_sas_hh.png:
     port_speeds: *id246
     port_type: sas
     services: *id247
+  size:
+  - 375
+  - 78
+png/pure_fa_sas_shelf_back.png:
+  size:
+  - 2844
+  - 516
 png/pure_fa_sas_shelf_front.png:
   fm_loc:
   - !!python/tuple
@@ -4472,6 +4741,9 @@ png/pure_fa_sas_shelf_front.png:
   - !!python/tuple
     - 2605
     - 1
+  size:
+  - 2844
+  - 516
 png/pure_fa_x_emezz.png:
   ports:
   - loc: !!python/tuple
@@ -4526,6 +4798,13 @@ png/pure_fa_x_emezz.png:
     port_type: eth_roce
     services:
     - shelf
+  size:
+  - 484
+  - 203
+png/pure_fa_x_nvram.png:
+  size:
+  - 509
+  - 205
 png/pure_fa_x_r1_back.png:
   ct0_mezz_loc: *id084
   ct0_pci_loc:
@@ -4563,6 +4842,13 @@ png/pure_fa_x_r1_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_x_r1_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r1_front.png:
   fm_loc:
   - *id055
@@ -4597,6 +4883,9 @@ png/pure_fa_x_r1_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r1_front_cg2.png:
   fm_loc:
   - *id055
@@ -4840,6 +5129,13 @@ png/pure_fa_x_r2_back.png:
   - *id269
   - *id270
   - *id271
+  size:
+  - 2625
+  - 781
+png/pure_fa_x_r2_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r2_front.png:
   fm_loc:
   - *id055
@@ -4874,6 +5170,9 @@ png/pure_fa_x_r2_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r2_front_cg2.png:
   fm_loc:
   - *id055
@@ -5058,6 +5357,13 @@ png/pure_fa_x_r3_back.png:
   - *id242
   - *id243
   - *id244
+  size:
+  - 2625
+  - 781
+png/pure_fa_x_r3_bezel.png:
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r3_front.png:
   fm_loc:
   - *id055
@@ -5092,6 +5398,9 @@ png/pure_fa_x_r3_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r3_front_cg2.png:
   fm_loc:
   - *id055
@@ -5281,6 +5590,17 @@ png/pure_fa_x_r4_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_x_r4_back_small.png:
+  size:
+  - 2625
+  - 781
+png/pure_fa_x_r4_bezel.png:
+  size:
+  - 2858
+  - 781
 png/pure_fa_x_r4_front.png:
   fm_loc:
   - *id055
@@ -5315,6 +5635,9 @@ png/pure_fa_x_r4_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r4_front_cg2.png:
   fm_loc:
   - *id055
@@ -5346,6 +5669,9 @@ png/pure_fa_x_r4_front_cg2.png:
   - *id081
   - *id082
   model_text_loc: *id083
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r4b_back.png:
   ct0_mezz_loc: *id084
   ct0_pci_loc:
@@ -5387,6 +5713,13 @@ png/pure_fa_x_r4b_back.png:
   psu_loc:
   - *id090
   - *id091
+  size:
+  - 2625
+  - 781
+png/pure_fa_x_r4b_bezel.png:
+  size:
+  - 2858
+  - 781
 png/pure_fa_x_r4b_front.png:
   fm_loc:
   - *id055
@@ -5421,6 +5754,9 @@ png/pure_fa_x_r4b_front.png:
   nvram_loc:
   - *id092
   - *id093
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r4b_front_cg2.png:
   fm_loc:
   - *id055
@@ -5452,6 +5788,9 @@ png/pure_fa_x_r4b_front_cg2.png:
   - *id081
   - *id082
   model_text_loc: *id083
+  size:
+  - 2859
+  - 781
 png/pure_fa_x_r4c_back.png:
   ct0_mezz_loc: *id084
   ct0_pci_loc:
@@ -5618,6 +5957,9 @@ png/pure_fa_x_smezz.png:
     port_type: sas
     services:
     - shelf
+  size:
+  - 484
+  - 203
 png/pure_fa_xl_r1_back.png:
   ct0_pci_loc:
   - &id278 !!python/tuple
@@ -5728,6 +6070,13 @@ png/pure_fa_xl_r1_back.png:
     port_speeds: *id276
     port_type: eth
     services: *id277
+  size:
+  - 2859
+  - 1302
+png/pure_fa_xl_r1_bezel.png:
+  size:
+  - 2859
+  - 1302
 png/pure_fa_xl_r1_front.png:
   fm_loc:
   - &id291 !!python/tuple
@@ -5853,6 +6202,9 @@ png/pure_fa_xl_r1_front.png:
   model_text_loc: &id331 !!python/tuple
   - 22
   - 245
+  size:
+  - 2859
+  - 1302
 png/pure_fa_xl_r5_back.png:
   ct0_pci_loc:
   - *id278
@@ -5897,6 +6249,13 @@ png/pure_fa_xl_r5_back.png:
   - *id288
   - *id289
   - *id290
+  size:
+  - 2859
+  - 1302
+png/pure_fa_xl_r5_bezel.png:
+  size:
+  - 2859
+  - 1302
 png/pure_fa_xl_r5_front.png:
   fm_loc:
   - *id291
@@ -5940,6 +6299,9 @@ png/pure_fa_xl_r5_front.png:
   - *id329
   - *id330
   model_text_loc: *id331
+  size:
+  - 2859
+  - 1302
 png/pure_fb_back_efm110.png:
   ports:
   - loc: !!python/tuple
@@ -5982,6 +6344,9 @@ png/pure_fb_back_efm110.png:
     - 684
     name: fm1.eth4
     port_type: eth
+  size:
+  - 2844
+  - 1031
 png/pure_fb_back_efm310.png:
   ports:
   - loc: !!python/tuple
@@ -6034,6 +6399,13 @@ png/pure_fb_back_efm310.png:
     - 460
     name: mgmt
     port_type: eth
+  size:
+  - 2844
+  - 1019
+png/pure_fb_front.png:
+  size:
+  - 2859
+  - 1047
 png/pure_fb_xfm_3200e_back.png:
   ports:
   - loc: &id349 !!python/tuple
@@ -6446,6 +6818,17 @@ png/pure_fb_xfm_3200e_back.png:
     port_type: eth
     services:
     - management
+  size:
+  - 2593
+  - 264
+png/pure_fb_xfm_3200e_bezel.png:
+  size:
+  - 2850
+  - 253
+png/pure_fb_xfm_3200e_front.png:
+  size:
+  - 2850
+  - 264
 png/pure_fb_xfm_8400_back.png:
   ports:
   - loc: *id349
@@ -6872,6 +7255,25 @@ png/pure_fb_xfm_8400_back.png:
     port_type: eth
     services:
     - management
+  size:
+  - 2593
+  - 264
+png/pure_fb_xfm_8400_bezel.png:
+  size:
+  - 2850
+  - 253
+png/pure_fb_xfm_8400_front.png:
+  size:
+  - 2850
+  - 264
+png/pure_fb_xfm_back.png:
+  size:
+  - 2844
+  - 264
+png/pure_fb_xfm_front.png:
+  size:
+  - 2844
+  - 284
 png/pure_fbe_back.png:
   ports:
   - &id382
@@ -7024,6 +7426,13 @@ png/pure_fbe_back.png:
     port_speeds: *id380
     port_type: eth
     services: *id381
+  size:
+  - 2606
+  - 1288
+png/pure_fbe_bezel.png:
+  size:
+  - 2856
+  - 1294
 png/pure_fbe_front.png:
   blade_loc:
   - &id392 !!python/tuple
@@ -7056,6 +7465,9 @@ png/pure_fbe_front.png:
   - !!python/tuple
     - 2458
     - 34
+  size:
+  - 2850
+  - 1288
 png/pure_fbs_back.png:
   ports:
   - *id382
@@ -7068,6 +7480,13 @@ png/pure_fbs_back.png:
   - *id389
   - *id390
   - *id391
+  size:
+  - 2606
+  - 1288
+png/pure_fbs_bezel.png:
+  size:
+  - 2856
+  - 1294
 png/pure_fbs_blade.png:
   fm_loc:
   - !!python/tuple
@@ -7085,6 +7504,9 @@ png/pure_fbs_blade.png:
   model_text_loc: !!python/tuple
   - 199
   - 545
+  size:
+  - 244
+  - 1181
 png/pure_fbs_front.png:
   blade_loc:
   - *id392
@@ -7115,6 +7537,9 @@ png/pure_fbs_front.png:
   - !!python/tuple
     - 2458
     - 34
+  size:
+  - 2850
+  - 1288
 port_naming_xcr2:
   mezz:
     eth: 6

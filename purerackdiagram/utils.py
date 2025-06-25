@@ -18,6 +18,102 @@ cache_lock = asyncio.Lock()
 root_path = os.path.dirname(purerackdiagram.__file__)
 ttf_path = os.path.join(root_path, "Lato-Regular.ttf")
 
+
+class MockImage:
+    """A lightweight mock image that has size properties but skips PIL operations"""
+    
+    def __init__(self, size, mode="RGBA"):
+        self.size = size
+        self.mode = mode
+        self.readonly = False
+        self.format = "PNG"
+        self.im = None  # Mock core image object
+    
+    @classmethod
+    def from_config(cls, image_path):
+        """Create a MockImage from config size data"""
+        config_key = f"png/{os.path.basename(image_path)}"
+        
+        if config_key in global_config and 'size' in global_config[config_key]:
+            width, height = global_config[config_key]['size']
+            return cls((width, height))
+        else:
+            # Fallback: load image to get size, but don't keep it in memory
+            with Image.open(image_path) as img:
+                return cls(img.size)
+    
+    def paste(self, im, box=None):
+        """Mock paste operation - does nothing"""
+        pass
+    
+    def resize(self, size, resample=None):
+        """Mock resize operation - returns new MockImage with new size"""
+        return MockImage(size, self.mode)
+    
+    def save(self, fp, format=None, **params):
+        """Mock save operation - does nothing"""
+        pass
+    
+    def convert(self, mode):
+        """Mock convert operation - returns new MockImage with new mode"""
+        return MockImage(self.size, mode)
+    
+    def load(self):
+        """Mock load operation - does nothing"""
+        pass
+    
+    def getdraw(self, mode=None):
+        """Mock getdraw operation - returns mock draw object"""
+        return MockImageDraw()
+    
+    def rotate(self, angle, resample=0, expand=0, center=None, translate=None, fillcolor=None):
+        """Mock rotate operation - returns self or new MockImage"""
+        if expand:
+            # For expand=True, we'd normally change size, but for simplicity return same size
+            return MockImage(self.size, self.mode)
+        return self
+    
+    def crop(self, box=None):
+        """Mock crop operation - returns new MockImage"""
+        if box:
+            width = box[2] - box[0]
+            height = box[3] - box[1]
+            return MockImage((width, height), self.mode)
+        return MockImage(self.size, self.mode)
+    
+    def _new(self, core_image):
+        """Mock _new method for PIL compatibility"""
+        return MockImage(self.size, self.mode)
+    
+    def copy(self):
+        """Mock copy method"""
+        return MockImage(self.size, self.mode)
+
+
+class MockImageDraw:
+    """A mock ImageDraw that does nothing"""
+    
+    def __init__(self):
+        pass
+        
+    def text(self, xy, text, fill=None, font=None, anchor=None, spacing=4, align="left"):
+        """Mock text drawing - does nothing"""
+        pass
+        
+    def rectangle(self, xy, fill=None, outline=None, width=1):
+        """Mock rectangle drawing - does nothing"""
+        pass
+        
+    def polygon(self, xy, fill=None, outline=None, width=1):
+        """Mock polygon drawing - does nothing"""
+        pass
+        
+    def textbbox(self, xy, text, font=None, anchor=None, spacing=4, align="left"):
+        """Mock textbbox - returns mock bounding box"""
+        # Return a reasonable fake bounding box
+        text_len = len(str(text)) if text else 0
+        return (0, 0, text_len * 10, 20)  # fake width based on text length
+
 global_config = None
 with open(os.path.join(root_path, 'config.yaml'), 'r') as f:
     global_config = yaml.full_load(f)
@@ -48,22 +144,25 @@ class RackImage():
     with img = Image.open(key)  lol!
     """
 
-    def __init__(self, key):
+    def __init__(self, key, json_only=False):
         global root_path
 
         # key is the file name, s3 terminology.
         self.key = os.path.join(root_path, key)
+        self.original_key = key
         self.img = None
+        self.json_only = json_only
         self.io_lock = asyncio.Lock()
 
         # on object creation, see if this key has laready been requested.
         # potential race, if two object check but... worst case is we miss
         # a caching opportunity and just load twice.
-        if key in cache:
+        cache_key = f"{key}_{json_only}"
+        if cache_key in cache:
             self.primary = False
-            self.primary_obj = cache[key]
+            self.primary_obj = cache[cache_key]
         else:
-            cache[key] = self
+            cache[cache_key] = self
             self.primary = True
 
     async def get_image(self):
@@ -78,7 +177,10 @@ class RackImage():
             # when secondary comes through need to
             # return image that's already loaded
             if self.img:
-                return self.img.copy()
+                if isinstance(self.img, MockImage):
+                    return self.img  # MockImages don't need copying
+                else:
+                    return self.img.copy()
 
             loop = asyncio.get_event_loop()
 
@@ -88,25 +190,31 @@ class RackImage():
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 await loop.run_in_executor(pool, self.load_img)
 
-            return self.img.copy()
+            if isinstance(self.img, MockImage):
+                return self.img  # MockImages don't need copying
+            else:
+                return self.img.copy()
 
     def load_img(self):
-        # load image from disk
-
-        self.img = Image.open(self.key)
-        
-        # check and convet to RGBA:
-        if self.img.format == 'PNG':
-            # and is not RGBA
-            if not self.img.mode == 'RGBA':
-                logger.debug("!!Converting image {self.key} to RGBA")
-                self.img = self.img.convert("RGBA")
-            else:
-                logger.debug("Image {self.key} already in RGBA")
-        self.img.load()
-           
-
-        logger.debug("Loaded: {}".format(self.key))
+        # load image from disk or create MockImage
+        if self.json_only:
+            # Create MockImage from config size data
+            self.img = MockImage.from_config(self.key)
+            logger.debug("Created MockImage for: {}".format(self.key))
+        else:
+            self.img = Image.open(self.key)
+            
+            # check and convet to RGBA:
+            if self.img.format == 'PNG':
+                # and is not RGBA
+                if not self.img.mode == 'RGBA':
+                    logger.debug("!!Converting image {self.key} to RGBA")
+                    self.img = self.img.convert("RGBA")
+                else:
+                    logger.debug("Image {self.key} already in RGBA")
+            self.img.load()
+               
+            logger.debug("Loaded: {}".format(self.key))
 
 
 
@@ -143,7 +251,21 @@ def combine_images_vertically(image_ports):
     total_width = max(widths)
 
     logger.debug("Combining images vertically")
-    new_im = Image.new("RGBA", (total_width, total_height))
+    
+    # Check if all images are MockImages
+    all_mock = all(isinstance(img, MockImage) for img in images)
+    any_mock = any(isinstance(img, MockImage) for img in images)
+    
+    if all_mock:
+        # Create a MockImage for the combined result
+        new_im = MockImage((total_width, total_height))
+    elif any_mock:
+        # Mixed images - this shouldn't happen, but handle gracefully
+        logger.warning("Mixed MockImage and PIL Images detected, forcing MockImage mode")
+        new_im = MockImage((total_width, total_height))
+    else:
+        # Regular PIL image combination
+        new_im = Image.new("RGBA", (total_width, total_height))
 
     y_offset = 0
     all_ports = []
@@ -153,7 +275,10 @@ def combine_images_vertically(image_ports):
 
         # center the x difference if an image is slightly smaller width
         x_offset = int((total_width - im.size[0]) / 2)
-        new_im.paste(im, (x_offset, y_offset))
+        
+        # Only paste if not using MockImages
+        if not isinstance(new_im, MockImage) and not isinstance(im, MockImage):
+            new_im.paste(im, (x_offset, y_offset))
 
         
         #calculate new port location
@@ -167,7 +292,7 @@ def combine_images_vertically(image_ports):
 
     #convert from RGBA to RGB to reduce file size
     logger.debug("Converting image to RGB")
-    new_im = new_im.convert('RGB')
+    new_im = new_im.convert('RGB')  # Works for both PIL Images and MockImages
 
     return new_im, all_ports
 

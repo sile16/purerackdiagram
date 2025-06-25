@@ -24,6 +24,7 @@ logger.setLevel(logging.WARNING)
 class FAShelf():
     def __init__(self, params):
         self.config = params
+        self.json_only = params.get('json_only', False)
         self.start_img_event = asyncio.Event()
         self.ports = []
 
@@ -49,7 +50,7 @@ class FAShelf():
         c = self.config
         key = "png/pure_fa_{}_shelf_{}.png".format(c["shelf_type"], c["face"])
 
-        self.tmp_img = await RackImage(key).get_image()
+        self.tmp_img = await RackImage(key, self.json_only).get_image()
 
         # Load image info
         self.img_info = {}
@@ -67,7 +68,7 @@ class FAShelf():
 
             key = "png/pure_fa_dc_1300.png"
 
-            dc_power_img = await RackImage(key).get_image()
+            dc_power_img = await RackImage(key, self.json_only).get_image()
             await self.start_img_event.wait()
             self.tmp_img.paste(dc_power_img, self.img_info['psu_loc'][0])
             self.tmp_img.paste(dc_power_img, self.img_info['psu_loc'][1])
@@ -103,7 +104,7 @@ class FAShelf():
             if fm_str == 'Blank':
                 num_modules = 14
 
-            fm_img = await RackImage(img_name).get_image()
+            fm_img = await RackImage(img_name, self.json_only).get_image()
 
             if self.config['fm_label']:
                 apply_fm_label(fm_img, fm_str, fm_type)
@@ -187,7 +188,7 @@ class FAShelf():
                 num_modules = 12
             dp_size = dp[3]
             fm_img_str = "png/pure_fa_fm_{}.png".format(fm_type)
-            fm_img = await RackImage(fm_img_str).get_image()
+            fm_img = await RackImage(fm_img_str, self.json_only).get_image()
 
             if self.config['fm_label']:
                 apply_fm_label(fm_img, fm_str, fm_type)
@@ -229,8 +230,10 @@ class FAChassis():
 
     def __init__(self, params):
         config = params.copy()
-        del config["shelves"]
+        if "shelves" in config:
+            del config["shelves"]
         self.config = config
+        self.json_only = config.get('json_only', False)
         self.start_img_event = asyncio.Event()
         self.ch0_fm_loc = None
         self.ports = []
@@ -250,7 +253,7 @@ class FAChassis():
         if c["face"] == "front":
             if  c["bezel"]:
                 key += "_bezel.png"
-                img =  await RackImage(key).get_image()
+                img =  await RackImage(key, self.json_only).get_image()
                 return {'img': img, 'ports': []}
             
             if c['release'] in [1] and c['generation'] in ['c', 'e'] or (
@@ -371,7 +374,7 @@ class FAChassis():
 
 
     async def get_base_img(self, key):
-        self.tmp_img = await RackImage(key).get_image()
+        self.tmp_img = await RackImage(key, self.json_only).get_image()
         self.start_img_event.set()
 
     async def add_power(self):
@@ -389,7 +392,7 @@ class FAChassis():
             else:
                 key = f"png/pure_fa_dc_{self.config['dc_power']}.png"
 
-            dc_power_img = await RackImage(key).get_image()
+            dc_power_img = await RackImage(key, self.json_only).get_image()
             await self.start_img_event.wait()
             if 'psu_loc' in self.img_info:
                 self.tmp_img.paste(dc_power_img, self.img_info['psu_loc'][0])
@@ -422,7 +425,7 @@ class FAChassis():
             return
         
 
-        nvram_img = await RackImage("png/pure_fa_x_nvram.png").get_image()
+        nvram_img = await RackImage("png/pure_fa_x_nvram.png", self.json_only).get_image()
 
         await self.start_img_event.wait()
         self.tmp_img.paste(nvram_img, self.img_info['nvram_loc'][0])
@@ -465,7 +468,7 @@ class FAChassis():
 
         key = "png/pure_fa_{}_{}.png".format(card_type, height)
 
-        card_img = await RackImage(key).get_image()
+        card_img = await RackImage(key, self.json_only).get_image()
         await self.start_img_event.wait() # why is this here ?
 
         # check to see if this is the default card in this slot
@@ -519,7 +522,7 @@ class FAChassis():
 
         if self.config['mezz']:
             key = "png/pure_fa_x_{}.png".format(self.config["mezz"])
-            mezz_img = await RackImage(key).get_image()
+            mezz_img = await RackImage(key, self.json_only).get_image()
             await self.start_img_event.wait()
 
             self.tmp_img.paste(mezz_img, self.img_info['ct0_mezz_loc'])
@@ -580,7 +583,7 @@ class FAChassis():
             dp_size = dp[3]
 
             file_name = "png/pure_fa_fm_{}.png".format(fm_type)
-            fm_img = await RackImage(file_name).get_image()
+            fm_img = await RackImage(file_name, self.json_only).get_image()
             
 
             if self.config['fm_label']:
@@ -650,7 +653,7 @@ class FAChassis():
                     slots[x] = fm_type
         
         # add blanks to slots without
-        blank_img = await RackImage("png/pure_fa_fm_blank.png").get_image()
+        blank_img = await RackImage("png/pure_fa_fm_blank.png", self.json_only).get_image()
         if self.config['fm_label']:
             apply_fm_label(blank_img, "Blank", "")
     
@@ -744,6 +747,10 @@ def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided, rotated
     if dp_size == '0TB':
         return img
     
+    # Handle MockImage case early
+    if hasattr(img, '__class__') and img.__class__.__name__ == 'MockImage':
+        return img  # For MockImages, just return the original image
+    
     global ttf_path
     # temp image same size as our chassis.
     tmp = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -794,6 +801,10 @@ def apply_dp_labelv2(img, dp_size, start_loc_provided, end_loc_provided, rotated
     return composite_img
 
 def apply_dp_label(img, dp_size, x_offset, y_offset, right, full=False):
+    # Handle MockImage case early
+    if hasattr(img, '__class__') and img.__class__.__name__ == 'MockImage':
+        return img  # For MockImages, just return the original image
+        
     global ttf_path
     # temp image same size as our chassis.
     tmp = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -1142,6 +1153,7 @@ class FADiagram():
         config = {}
         c=config
         self.ports = []
+        self.json_only = params.get('json_only', False)
 
         config["model_str"] = params["model"].lower()
 
@@ -1348,10 +1360,14 @@ class FADiagram():
     async def get_image(self):
         tasks = []
 
-        tasks.append(FAChassis(self.config).get_image())
+        chassis_config = self.config.copy()
+        chassis_config['json_only'] = self.json_only
+        tasks.append(FAChassis(chassis_config).get_image())
 
         for shelf in self.config["shelves"]:
-            tasks.append(FAShelf(shelf).get_image())
+            shelf_config = shelf.copy()
+            shelf_config['json_only'] = self.json_only
+            tasks.append(FAShelf(shelf_config).get_image())
 
         # this returns the results of the all the tasks in a list
         all_image_ports = await asyncio.gather(*tasks)

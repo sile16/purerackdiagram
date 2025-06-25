@@ -188,7 +188,7 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.17197108268737793,
         "error": null,
         "image_size": [
             2850,
@@ -204,7 +204,7 @@
         }
     },
     "fb-s200r2_face-front_json-True_json_only-True_bladesv2-ed74080d": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-s200r2",
             "model_parsed": {
@@ -391,13 +391,10 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.023025989532470703,
         "error": null,
-        "image_size": [
-            2850,
-            1288
-        ],
-        "image_mib": 0.17314434051513672,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-s200r2",
             "face": "front",
@@ -506,7 +503,7 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.4545731544494629,
         "error": null,
         "image_size": [
             2859,
@@ -525,7 +522,7 @@
         }
     },
     "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_json-True_json_only-True_datapacksv2-57e9ba0d": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130r5",
             "generation": "xl",
@@ -622,13 +619,10 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.138718843460083,
         "error": null,
-        "image_size": [
-            2859,
-            2083
-        ],
-        "image_mib": 0.6412181854248047,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130r5",
             "protocol": "eth",
@@ -1032,7 +1026,7 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.6617629528045654,
         "error": null,
         "image_size": [
             2850,
@@ -1048,7 +1042,7 @@
         }
     },
     "fb-s200_face-front_json-True_json_only-True_bladesv2-0e8e6cef": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-s200r2",
             "model_parsed": {
@@ -1437,13 +1431,10 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.11110115051269531,
         "error": null,
-        "image_size": [
-            2850,
-            3104
-        ],
-        "image_mib": 1.505758285522461,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-s200",
             "face": "front",
@@ -1844,7 +1835,7 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.7785289287567139,
         "error": null,
         "image_size": [
             2850,
@@ -1860,7 +1851,7 @@
         }
     },
     "fb-s200_face-front_json-True_json_only-True_bladesv2-a2de98b4": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-s200r2",
             "model_parsed": {
@@ -2249,13 +2240,10 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.15867209434509277,
         "error": null,
-        "image_size": [
-            2850,
-            3104
-        ],
-        "image_mib": 1.505758285522461,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-s200",
             "face": "front",
@@ -2778,7 +2766,7 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 1.0760550498962402,
         "error": null,
         "image_size": [
             2850,
@@ -2794,7 +2782,7 @@
         }
     },
     "fb-s200_face-front_json-True_json_only-True_bladesv2-abfaa3a2": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-s200r2",
             "model_parsed": {
@@ -3305,13 +3293,10 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.15236711502075195,
         "error": null,
-        "image_size": [
-            2850,
-            4392
-        ],
-        "image_mib": 1.582667350769043,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-s200",
             "face": "front",
@@ -3420,7 +3405,7 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.4042990207672119,
         "error": null,
         "image_size": [
             2859,
@@ -3439,7 +3424,7 @@
         }
     },
     "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_json-True_json_only-True_datapacksv2-293dfdae": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130r5",
             "generation": "xl",
@@ -3536,13 +3521,10 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.02782917022705078,
         "error": null,
-        "image_size": [
-            2859,
-            2083
-        ],
-        "image_mib": 0.6382722854614258,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130r5",
             "protocol": "eth",
@@ -3591,7 +3573,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.09981417655944824,
         "error": null,
         "image_size": [
             2859,
@@ -3610,7 +3592,7 @@
         }
     },
     "fa-x70r2_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r2",
             "generation": "x",
@@ -3644,13 +3626,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.10097098350524902,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.09113788604736328,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r2",
             "protocol": "eth",
@@ -3762,7 +3741,7 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.3409099578857422,
         "error": null,
         "image_size": [
             2859,
@@ -3781,7 +3760,7 @@
         }
     },
     "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_json-True_json_only-True_datapacksv2-b53c357a": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130r5",
             "generation": "xl",
@@ -3878,13 +3857,10 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.04480481147766113,
         "error": null,
-        "image_size": [
-            2859,
-            2083
-        ],
-        "image_mib": 0.6424856185913086,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130r5",
             "protocol": "eth",
@@ -3957,7 +3933,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.24700307846069336,
         "error": null,
         "image_size": [
             2859,
@@ -3976,7 +3952,7 @@
         }
     },
     "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_json-True_json_only-True_datapacksv2-4eadb214": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130r5",
             "generation": "xl",
@@ -4034,13 +4010,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.011525154113769531,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 0.5063447952270508,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130r5",
             "protocol": "eth",
@@ -4089,7 +4062,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.18300795555114746,
         "error": null,
         "image_size": [
             2859,
@@ -4108,7 +4081,7 @@
         }
     },
     "fa-xl130r5_face-front_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130r5",
             "generation": "xl",
@@ -4142,13 +4115,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.0618128776550293,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 0.4836702346801758,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130r5",
             "protocol": "eth",
@@ -4181,7 +4151,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.5302488803863525,
         "error": null,
         "image_size": [
             2859,
@@ -4201,7 +4171,7 @@
         }
     },
     "fa-xl130r5_face-front_bezel-True_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130r5",
             "generation": "xl",
@@ -4219,13 +4189,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.024446964263916016,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 2.959075927734375,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130r5",
             "protocol": "eth",
@@ -4957,7 +4924,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.18183183670043945,
         "error": null,
         "image_size": [
             2859,
@@ -4977,7 +4944,7 @@
         }
     },
     "fa-xl130r5_face-back_bezel-True_fm_label-True_dp_label-True_addoncards-2eth100,2eth200roce,2fc_366_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130r5",
             "generation": "xl",
@@ -5693,13 +5660,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.03597307205200195,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 1.265009880065918,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130r5",
             "protocol": "eth",
@@ -5733,7 +5697,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.0815422534942627,
         "error": null,
         "image_size": [
             2844,
@@ -5753,7 +5717,7 @@
         }
     },
     "fa-rc20_face-front_bezel-True_fm_label-True_dp_label-True_addoncards-2eth100,2eth100,2fc_148_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-rc20",
             "generation": "rc",
@@ -5771,13 +5735,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.05934786796569824,
         "error": null,
-        "image_size": [
-            2844,
-            766
-        ],
-        "image_mib": 0.4011068344116211,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-rc20",
             "protocol": "eth",
@@ -6453,7 +6414,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.17695212364196777,
         "error": null,
         "image_size": [
             2625,
@@ -6472,7 +6433,7 @@
         }
     },
     "fa-rc20_face-back_fm_label-True_dp_label-True_addoncards-2eth100,2eth100,2fc_148_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-rc20",
             "generation": "rc",
@@ -7132,13 +7093,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.003604888916015625,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 0.27271175384521484,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-rc20",
             "protocol": "eth",
@@ -7187,7 +7145,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.16110992431640625,
         "error": null,
         "image_size": [
             2859,
@@ -7205,7 +7163,7 @@
         }
     },
     "fa-rc20_face-front_fm_label-True_dp_label-True_148_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-rc20",
             "generation": "rc",
@@ -7239,13 +7197,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.008018970489501953,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.09593868255615234,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-rc20",
             "protocol": "eth",
@@ -7293,7 +7248,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.14114904403686523,
         "error": null,
         "image_size": [
             2859,
@@ -7311,7 +7266,7 @@
         }
     },
     "fa-rc20r3_face-front_fm_label-True_dp_label-True_148_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-rc20r3",
             "generation": "rc",
@@ -7345,13 +7300,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.11759209632873535,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.09593868255615234,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-rc20r3",
             "protocol": "fc",
@@ -7468,7 +7420,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.11179327964782715,
         "error": null,
         "image_size": [
             2859,
@@ -7486,7 +7438,7 @@
         }
     },
     "fa-x70r4b_face-front_fm_label-True_dp_label-True_11-13-0.06_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r4b",
             "generation": "x",
@@ -7559,13 +7511,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.008442163467407227,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.11550235748291016,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r4b",
             "protocol": "fc",
@@ -7652,7 +7601,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.1309659481048584,
         "error": null,
         "image_size": [
             2859,
@@ -7670,7 +7619,7 @@
         }
     },
     "fa-x70r4b_face-front_fm_label-True_dp_label-True_15-11-0.04_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r4b",
             "generation": "x",
@@ -7743,13 +7692,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.03116321563720703,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.12069034576416016,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r4b",
             "protocol": "fc",
@@ -7836,7 +7782,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.14465117454528809,
         "error": null,
         "image_size": [
             2859,
@@ -7854,7 +7800,7 @@
         }
     },
     "fa-x70r4b_face-front_fm_label-True_dp_label-True_18-11-0.02_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r4b",
             "generation": "x",
@@ -7927,13 +7873,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.023910999298095703,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.1223154067993164,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r4b",
             "protocol": "fc",
@@ -8059,7 +8002,7 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.3262207508087158,
         "error": null,
         "image_size": [
             2859,
@@ -8077,7 +8020,7 @@
         }
     },
     "fa-xl170_face-front_fm_label-True_dp_label-True_18-13-63-63-63_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl170",
             "generation": "xl",
@@ -8189,13 +8132,10 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.07823991775512695,
         "error": null,
-        "image_size": [
-            2859,
-            2083
-        ],
-        "image_mib": 0.6189327239990234,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl170",
             "protocol": "fc",
@@ -8267,7 +8207,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.1522839069366455,
         "error": null,
         "image_size": [
             2859,
@@ -8285,7 +8225,7 @@
         }
     },
     "fa-er1b_face-front_fm_label-True_dp_label-True_1050-1050_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-er1b",
             "generation": "e",
@@ -8343,13 +8283,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.008218050003051758,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.12676143646240234,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-er1b",
             "protocol": "fc",
@@ -8432,7 +8369,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.14061498641967773,
         "error": null,
         "image_size": [
             2859,
@@ -8451,7 +8388,7 @@
         }
     },
     "fa-er1b_face-front_fm_label-True_dp_label-True_1050-1050_json-True_chassis_gen-2_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-er1b",
             "generation": "e",
@@ -8509,13 +8446,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.008862972259521484,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.12676143646240234,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-er1b",
             "protocol": "fc",
@@ -8564,7 +8498,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.07843208312988281,
         "error": null,
         "image_size": [
             2859,
@@ -8580,7 +8514,7 @@
         }
     },
     "fa-er1b_face-front_0_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-er1b",
             "generation": "e",
@@ -8614,13 +8548,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.008400678634643555,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.11575126647949219,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-er1b",
             "protocol": "fc",
@@ -8666,7 +8597,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.10567188262939453,
         "error": null,
         "image_size": [
             2859,
@@ -8683,7 +8614,7 @@
         }
     },
     "fa-er1b_face-front_0_json-True_chassis_gen-2_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-er1b",
             "generation": "e",
@@ -8717,13 +8648,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.0018548965454101562,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.11575126647949219,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-er1b",
             "protocol": "fc",
@@ -8770,7 +8698,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.09555315971374512,
         "error": null,
         "image_size": [
             2859,
@@ -8787,7 +8715,7 @@
         }
     },
     "fa-e_face-front_0_json-True_chassis_gen-2_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-e",
             "generation": "e",
@@ -8821,13 +8749,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.04758000373840332,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.11575126647949219,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-e",
             "protocol": "fc",
@@ -8874,7 +8799,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.1062018871307373,
         "error": null,
         "image_size": [
             2859,
@@ -8891,7 +8816,7 @@
         }
     },
     "fa-c20r4b_face-front_240_json-True_chassis_gen-2_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-c20r4b",
             "generation": "c",
@@ -8925,13 +8850,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.04574108123779297,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.12124156951904297,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-c20r4b",
             "protocol": "fc",
@@ -9002,7 +8924,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.18560123443603516,
         "error": null,
         "image_size": [
             2859,
@@ -9021,7 +8943,7 @@
         }
     },
     "fa-x90r4_face-front_fm_label-True_dp_label-True_ports-True_183-40_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x90r4",
             "generation": "x",
@@ -9079,13 +9001,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.08075499534606934,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.11948394775390625,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x90r4",
             "datapacks": "183/40",
@@ -9134,7 +9053,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.09517884254455566,
         "error": null,
         "image_size": [
             2859,
@@ -9154,7 +9073,7 @@
         }
     },
     "fa-c50r4_face-front_fm_label-True_dp_label-True_ports-True_186_json-True_chassis_gen-2_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-c50r4",
             "generation": "c",
@@ -9188,13 +9107,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.04779195785522461,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.10092353820800781,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-c50r4",
             "datapacks": "186",
@@ -9244,7 +9160,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.15740513801574707,
         "error": null,
         "image_size": [
             2859,
@@ -9263,7 +9179,7 @@
         }
     },
     "fa-c50r4_face-front_fm_label-True_dp_label-True_ports-True_186_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-c50r4",
             "generation": "c",
@@ -9297,13 +9213,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.013152122497558594,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.09798145294189453,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-c50r4",
             "datapacks": "186",
@@ -9316,9 +9229,761 @@
             "json_only": true
         }
     },
-    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True": "0e52feb60ecc3bbfc9a1ecc909740c03a6612f40a1fa400cac27009def643d48",
-    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True_json-True": "d1a1b16f22add9bec78ded98cff57325ca2b1c613c50f044f5c3fa17389a51a2",
-    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True_json-True_json_only-True": "c308dd9f4df287b35d3f7ae081d5df63c92b73ba07702e82ec06cf362930b514",
+    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True": "bd2bf2eaebaf24d808d204b4dce24e53ee70993a8982998be545d15be3ac262a",
+    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True_json-True": "bd2bf2eaebaf24d808d204b4dce24e53ee70993a8982998be545d15be3ac262a",
+    "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_vssx-True_json-True_json_only-True": {
+        "image_type": "json_only",
+        "config": {
+            "model_str": "fa-x50r4b",
+            "generation": "x",
+            "rev": "b",
+            "model_num": 50,
+            "release": 4,
+            "direction": "up",
+            "ru": 6,
+            "face": "back",
+            "bezel": false,
+            "dc_power": false,
+            "protocol": "fc",
+            "mezz": null,
+            "default_pci_config": [
+                null,
+                "4fc",
+                null,
+                null,
+                null
+            ],
+            "pci_config": [
+                null,
+                "4fc",
+                null,
+                null,
+                null
+            ],
+            "chassis_datapacks": [
+                [
+                    "18.3TB",
+                    "nvme",
+                    10,
+                    "183"
+                ]
+            ],
+            "shelves": [
+                {
+                    "shelf_type": "nvme",
+                    "face": "back",
+                    "dc_power": false
+                }
+            ]
+        },
+        "ports": [
+            {
+                "loc": [
+                    735,
+                    315
+                ],
+                "name": "ct0.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    671,
+                    1089
+                ],
+                "name": "ct0.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    854,
+                    315
+                ],
+                "name": "ct0.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    1089
+                ],
+                "name": "ct0.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    976,
+                    315
+                ],
+                "name": "ct0.eth2",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    1089
+                ],
+                "name": "ct0.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1090,
+                    315
+                ],
+                "name": "ct0.eth3",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    990,
+                    1089
+                ],
+                "name": "ct0.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    1001
+                ],
+                "name": "ct0.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1945,
+                    1074
+                ],
+                "name": "ct0.eth5",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1477,
+                    904
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    904
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    904
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    904
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    735,
+                    695
+                ],
+                "name": "ct1.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    671,
+                    1469
+                ],
+                "name": "ct1.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    854,
+                    695
+                ],
+                "name": "ct1.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    1469
+                ],
+                "name": "ct1.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    976,
+                    695
+                ],
+                "name": "ct1.eth2",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    1469
+                ],
+                "name": "ct1.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1090,
+                    695
+                ],
+                "name": "ct1.eth3",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    990,
+                    1469
+                ],
+                "name": "ct1.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    1381
+                ],
+                "name": "ct1.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1945,
+                    1454
+                ],
+                "name": "ct1.eth5",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1477,
+                    1282
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    1282
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    1282
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    1282
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            }
+        ],
+        "execution_duration": 0.031913042068481445,
+        "error": null,
+        "image_size": null,
+        "image_mib": 0,
+        "params": {
+            "model": "fa-x50r4b",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "",
+            "dp_label": true,
+            "fm_label": true,
+            "ports": true,
+            "individual": "True",
+            "vssx": "True",
+            "json": true,
+            "json_only": true
+        }
+    },
     "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183": "0898540622147bb6b0403de4fcf36c4502b87d70fe55499cfc0bbb1c6ea3e6a4",
     "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_json-True": {
         "image_type": "png",
@@ -10055,7 +10720,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.596358060836792,
         "error": null,
         "image_size": [
             2625,
@@ -10074,7 +10739,7 @@
         }
     },
     "fa-x50r4b_face-back_fm_label-True_dp_label-True_ports-True_183-183_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x50r4b",
             "generation": "x",
@@ -10808,13 +11473,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.0056760311126708984,
         "error": null,
-        "image_size": [
-            2625,
-            1562
-        ],
-        "image_mib": 2.5533552169799805,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x50r4b",
             "datapacks": "183-183",
@@ -11455,7 +12117,7 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.588594913482666,
         "error": null,
         "image_size": [
             2625,
@@ -11474,7 +12136,7 @@
         }
     },
     "fa-e_face-back_fm_label-True_dp_label-True_ports-True_1050-1050_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-e",
             "generation": "e",
@@ -12100,13 +12762,10 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.033685922622680664,
         "error": null,
-        "image_size": [
-            2625,
-            1562
-        ],
-        "image_mib": 2.5538740158081055,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-e",
             "datapacks": "1050-1050",
@@ -12747,7 +13406,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.4847888946533203,
         "error": null,
         "image_size": [
             2625,
@@ -12766,7 +13425,7 @@
         }
     },
     "fa-x20r4_face-back_fm_label-True_dp_label-True_ports-True_183-183_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x20r4",
             "generation": "x",
@@ -13392,13 +14051,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.00821995735168457,
         "error": null,
-        "image_size": [
-            2625,
-            1562
-        ],
-        "image_mib": 2.5530166625976562,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x20r4",
             "datapacks": "183-183",
@@ -14159,7 +14815,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.45121097564697266,
         "error": null,
         "image_size": [
             2625,
@@ -14178,7 +14834,7 @@
         }
     },
     "fa-x50r4_face-back_fm_label-True_dp_label-True_ports-True_183-183_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x50r4",
             "generation": "x",
@@ -14924,13 +15580,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.08881092071533203,
         "error": null,
-        "image_size": [
-            2625,
-            1562
-        ],
-        "image_mib": 2.5171470642089844,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x50r4",
             "datapacks": "183-183",
@@ -15566,7 +16219,7 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.42867493629455566,
         "error": null,
         "image_size": [
             2625,
@@ -15585,7 +16238,7 @@
         }
     },
     "fa-c20_face-back_fm_label-True_dp_label-True_ports-True_186-260-1050_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-c20",
             "generation": "c",
@@ -16206,13 +16859,10 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.029553890228271484,
         "error": null,
-        "image_size": [
-            2625,
-            1562
-        ],
-        "image_mib": 2.592679977416992,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-c20",
             "datapacks": "186/260-1050",
@@ -16261,7 +16911,7 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.35429811477661133,
         "error": null,
         "image_size": [
             2856,
@@ -16280,7 +16930,7 @@
         }
     },
     "fb-s200_face-front_bezel-True_ports-TRUE_no_of_blades-18_drive_size-75_no_of_drives_per_blade-4_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-s200r2",
             "model_parsed": {
@@ -16303,13 +16953,10 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.12718701362609863,
         "error": null,
-        "image_size": [
-            2856,
-            3116
-        ],
-        "image_mib": 1.6758193969726562,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-s200",
             "no_of_blades": 18,
@@ -16342,7 +16989,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.2512359619140625,
         "error": null,
         "image_size": [
             2859,
@@ -16361,7 +17008,7 @@
         }
     },
     "fa-er1b_face-front_bezel-True_fm_label-True_dp_label-True_ports-True_186_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-er1b",
             "generation": "e",
@@ -16379,13 +17026,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.0031630992889404297,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.9106712341308594,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-er1b",
             "datapacks": "186",
@@ -16434,7 +17078,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.12534189224243164,
         "error": null,
         "image_size": [
             2859,
@@ -16452,7 +17096,7 @@
         }
     },
     "fa-er1b_face-front_fm_label-True_dp_label-True_ports-True_186_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-er1b",
             "generation": "e",
@@ -16486,13 +17130,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.10323572158813477,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.09895896911621094,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-er1b",
             "datapacks": "186",
@@ -17190,7 +17831,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.3405289649963379,
         "error": null,
         "image_size": [
             2625,
@@ -17208,7 +17849,7 @@
         }
     },
     "fa-x90r4b_face-back_fm_label-True_dp_label-True_ports-True_3-0.02-45_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x90r4b",
             "generation": "x",
@@ -17892,13 +18533,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.005231142044067383,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 2.1055335998535156,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x90r4b",
             "datapacks": "3/0.02/45",
@@ -17910,9 +18548,48 @@
             "json_only": true
         }
     },
-    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "a7521d98667980ebadd48c1079e2cbc0ffdfc8414db5d67acbb0bcedb4950c3f",
-    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True_json-True": "7b9be78dd384f7a4e212be63f785f8bd8524c90b1d110762746c87982b08de23",
-    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True_json-True_json_only-True": "a7521d98667980ebadd48c1079e2cbc0ffdfc8414db5d67acbb0bcedb4950c3f",
+    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True": "7bac800f8be782e04da2d9b55eaad9b6755aa8562c529080e2698a18542a35bd",
+    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True_json-True": "7bac800f8be782e04da2d9b55eaad9b6755aa8562c529080e2698a18542a35bd",
+    "fb-s200_face-front_ports-TRUE_no_of_blades-15_drive_size-75_no_of_drives_per_blade-4_vssx-True_json-True_json_only-True": {
+        "image_type": "json_only",
+        "config": {
+            "model": "fb-s200r2",
+            "model_parsed": {
+                "type": "s",
+                "number": "200",
+                "revision": "2",
+                "full_model": "fb-s200r2"
+            },
+            "chassis": 2,
+            "ru": 7,
+            "face": "front",
+            "xfm_face": "front",
+            "bezel": false,
+            "direction": "up",
+            "dfm_size": 75.0,
+            "dfm_count": 4,
+            "blades": 15,
+            "xfm_model": "8400",
+            "xfm": true,
+            "xfm_show_front": false
+        },
+        "ports": [],
+        "execution_duration": 0.012753009796142578,
+        "error": null,
+        "image_size": null,
+        "image_mib": 0,
+        "params": {
+            "model": "fb-s200",
+            "no_of_blades": 15,
+            "face": "front",
+            "no_of_drives_per_blade": 4,
+            "drive_size": 75,
+            "ports": "TRUE",
+            "vssx": true,
+            "json": true,
+            "json_only": true
+        }
+    },
     "fb-e_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True": "a5ce6742f5a1adb0864a3a23b5452e3d6c81147c30c950b61680912b4d321440",
     "fb-e_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_json-True": {
         "image_type": "png",
@@ -18189,7 +18866,7 @@
                 "symbol_color": "#00B2A9"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.12190508842468262,
         "error": null,
         "image_size": [
             2606,
@@ -18210,7 +18887,7 @@
         }
     },
     "fb-e_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-er1",
             "model_parsed": {
@@ -18484,13 +19161,10 @@
                 "symbol_color": "#00B2A9"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.02503681182861328,
         "error": null,
-        "image_size": [
-            2606,
-            1288
-        ],
-        "image_mib": 0.4218788146972656,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-e",
             "chassis": 2,
@@ -19298,7 +19972,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.3201601505279541,
         "error": null,
         "image_size": [
             2625,
@@ -19319,7 +19993,7 @@
         }
     },
     "fa-x90r4_face-back_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_3-0.02-45_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x90r4",
             "generation": "x",
@@ -20111,13 +20785,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.0015239715576171875,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 2.022216796875,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x90r4",
             "datapacks": "3/0.02/45",
@@ -20830,7 +21501,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.2980778217315674,
         "error": null,
         "image_size": [
             2625,
@@ -20848,7 +21519,7 @@
         }
     },
     "fa-x90r4_face-back_fm_label-True_dp_label-True_ports-True_3-0.02-45_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x90r4",
             "generation": "x",
@@ -21544,13 +22215,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.046025991439819336,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 2.0653200149536133,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x90r4",
             "datapacks": "3/0.02/45",
@@ -22598,7 +23266,7 @@
                 "symbol_color": "blue"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.10964488983154297,
         "error": null,
         "image_size": [
             2625,
@@ -22618,7 +23286,7 @@
         }
     },
     "fa-c40r1_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth25roce,2eth,2eth_ports-True_366_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-c40r1",
             "generation": "c",
@@ -23652,13 +24320,10 @@
                 "symbol_color": "blue"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.01606297492980957,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 0.2994832992553711,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-c40r1",
             "datapacks": "366",
@@ -23747,7 +24412,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.2484908103942871,
         "error": null,
         "image_size": [
             2859,
@@ -23764,7 +24429,7 @@
         }
     },
     "fa-xl170_face-front_fm_label-True_dp_label-True_183-72-91_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl170",
             "generation": "xl",
@@ -23837,13 +24502,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.007524013519287109,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 0.5074090957641602,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl170",
             "datapacks": "183/72/91",
@@ -24473,7 +25135,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.16484713554382324,
         "error": null,
         "image_size": [
             2859,
@@ -24495,7 +25157,7 @@
         }
     },
     "fa-xl130_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_91-91-91-36_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130",
             "generation": "xl",
@@ -25113,13 +25775,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.006369113922119141,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 1.2027034759521484,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130",
             "datapacks": "91/91/91/36",
@@ -26277,7 +26936,7 @@
                 "symbol_color": "blue"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.3718891143798828,
         "error": null,
         "image_size": [
             2625,
@@ -26299,7 +26958,7 @@
         }
     },
     "fa-x20r4_face-back_fm_label-True_dp_label-True_addoncards-sas,4eth25,4fc_ports-True_31_direction-down_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x20r4",
             "generation": "x",
@@ -27439,13 +28098,10 @@
                 "symbol_color": "blue"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.014660120010375977,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 1.9901819229125977,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x20r4",
             "datapacks": "31",
@@ -28255,7 +28911,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.36162495613098145,
         "error": null,
         "image_size": [
             2625,
@@ -28276,7 +28932,7 @@
         }
     },
     "fa-x90r4_face-back_fm_label-True_dp_label-True_addoncards-2eth100,4eth25,2eth25roce,2eth_ports-True_31_direction-down_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x90r4",
             "generation": "x",
@@ -29068,13 +29724,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.04394102096557617,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 2.0088415145874023,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x90r4",
             "datapacks": "31",
@@ -29643,7 +30296,7 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.32594895362854004,
         "error": null,
         "image_size": [
             2625,
@@ -29665,7 +30318,7 @@
         }
     },
     "fa-er1_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_750_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-er1",
             "generation": "e",
@@ -30217,13 +30870,10 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.013231754302978516,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 2.109426498413086,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-er1",
             "datapacks": "750",
@@ -30275,7 +30925,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.21507811546325684,
         "error": null,
         "image_size": [
             2859,
@@ -30297,7 +30947,7 @@
         }
     },
     "fa-e_face-front_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_750_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-e",
             "generation": "e",
@@ -30331,13 +30981,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.0030679702758789062,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.09824466705322266,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-e",
             "datapacks": "750",
@@ -30373,7 +31020,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.2518949508666992,
         "error": null,
         "image_size": [
             2859,
@@ -30396,7 +31043,7 @@
         }
     },
     "fa-e_face-front_bezel-True_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_750_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-e",
             "generation": "e",
@@ -30414,13 +31061,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.033566951751708984,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.9106712341308594,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-e",
             "datapacks": "750",
@@ -31039,7 +31683,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.20803570747375488,
         "error": null,
         "image_size": [
             2859,
@@ -31061,7 +31705,7 @@
         }
     },
     "fa-xl130_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_91_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130",
             "generation": "xl",
@@ -31661,13 +32305,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.04179811477661133,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 1.2027034759521484,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130",
             "datapacks": "91",
@@ -31742,7 +32383,7 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.18218398094177246,
         "error": null,
         "image_size": [
             2859,
@@ -31761,7 +32402,7 @@
         }
     },
     "fa-x90r2_face-front_fm_label-True_dp_label-True_38.0-31_direction-down_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x90r2",
             "generation": "x",
@@ -31819,13 +32460,10 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.03537297248840332,
         "error": null,
-        "image_size": [
-            2859,
-            1562
-        ],
-        "image_mib": 0.2184772491455078,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x90r2",
             "datapacks": "38.0-31",
@@ -36102,7 +36740,7 @@
                 "symbol_color": "#00B2A9"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 1.2570548057556152,
         "error": null,
         "image_size": [
             894,
@@ -36120,7 +36758,7 @@
         }
     },
     "fb-e_face-back_ports-TRUE_no_of_blades-100_drive_size-48_no_of_drives_per_blade-4_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-er1",
             "model_parsed": {
@@ -40382,13 +41020,10 @@
                 "symbol_color": "#00B2A9"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.02686476707458496,
         "error": null,
-        "image_size": [
-            894,
-            4604
-        ],
-        "image_mib": 4.580484390258789,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-e",
             "no_of_blades": 100,
@@ -40545,7 +41180,7 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.20816802978515625,
         "error": null,
         "image_size": [
             2859,
@@ -40564,7 +41199,7 @@
         }
     },
     "fa-x90r2_face-front_fm_label-True_dp_label-True_38.0-38.0-31-63-127-0_direction-down_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x90r2",
             "generation": "x",
@@ -40708,13 +41343,10 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.1060190200805664,
         "error": null,
-        "image_size": [
-            2859,
-            2343
-        ],
-        "image_mib": 0.32503509521484375,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x90r2",
             "datapacks": "38.0/38.0-31/63-127/0",
@@ -41340,7 +41972,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.2672910690307617,
         "error": null,
         "image_size": [
             2859,
@@ -41362,7 +41994,7 @@
         }
     },
     "fa-xl130_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-2eth100_ports-True_91-91-91_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130",
             "generation": "xl",
@@ -41974,13 +42606,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.09205818176269531,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 1.2027034759521484,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130",
             "datapacks": "91/91/91",
@@ -42568,7 +43197,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.38930201530456543,
         "error": null,
         "image_size": [
             2625,
@@ -42589,7 +43218,7 @@
         }
     },
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x50r4",
             "generation": "x",
@@ -43159,13 +43788,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.02929210662841797,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 2.147637367248535,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x50r4",
             "datapacks": "63/0",
@@ -43180,9 +43806,598 @@
             "json_only": true
         }
     },
-    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "af6785fa1bfebb096de3ea61b6545839456c8e843f5316808bfafc228e13a367",
-    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True_json-True": "af6785fa1bfebb096de3ea61b6545839456c8e843f5316808bfafc228e13a367",
-    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True_json-True_json_only-True": "af6785fa1bfebb096de3ea61b6545839456c8e843f5316808bfafc228e13a367",
+    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True": "f5fb19858f176b8a98d7aae538d14f77a99353de6d9b304d8a5adb87403f58e5",
+    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True_json-True": "7892349795b18f7016406129e996e1ef69849afe5c7c0b913d76e7354723564c",
+    "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_vssx-True_json-True_json_only-True": {
+        "image_type": "json_only",
+        "config": {
+            "model_str": "fa-x50r4",
+            "generation": "x",
+            "rev": "",
+            "model_num": 50,
+            "release": 4,
+            "direction": "up",
+            "ru": 3,
+            "face": "back",
+            "bezel": false,
+            "dc_power": false,
+            "protocol": "fc",
+            "mezz": null,
+            "default_pci_config": [
+                "mgmt2ethbaset",
+                "4fc",
+                null,
+                null,
+                null
+            ],
+            "pci_config": [
+                "mgmt2ethbaset",
+                "4fc",
+                null,
+                null,
+                null
+            ],
+            "chassis_datapacks": [
+                [
+                    "4.5TB",
+                    "nvme",
+                    14,
+                    "63"
+                ],
+                [
+                    "Blank",
+                    "blank",
+                    10,
+                    "0"
+                ]
+            ],
+            "shelves": []
+        },
+        "ports": [
+            {
+                "loc": [
+                    671,
+                    308
+                ],
+                "name": "ct0.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    308
+                ],
+                "name": "ct0.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    308
+                ],
+                "name": "ct0.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    990,
+                    308
+                ],
+                "name": "ct0.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    220
+                ],
+                "name": "ct0.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    834,
+                    123
+                ],
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g",
+                    "10g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "pci_slot": 0,
+                "pci_slot_height": "Half Height",
+                "pci_card": "mgmt2ethbaset",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.eth5",
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1477,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    123
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct0",
+                "name": "ct0.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    671,
+                    688
+                ],
+                "name": "ct1.eth0",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    786,
+                    688
+                ],
+                "name": "ct1.eth1",
+                "port_connector": "qsfp28",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "50g",
+                    "100g"
+                ],
+                "port_type": "eth_roce",
+                "services": [
+                    "shelf"
+                ],
+                "symbol_name": "Shelf",
+                "symbol_shape": "triangle_down",
+                "symbol_color": "#FCDC4D"
+            },
+            {
+                "loc": [
+                    902,
+                    688
+                ],
+                "name": "ct1.eth2",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speeds": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    990,
+                    688
+                ],
+                "name": "ct1.eth3",
+                "port_connector": "sfp",
+                "port_sfp_connector": "LC",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "10g"
+                ],
+                "port_speeds": [
+                    "10g",
+                    "25g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "replication",
+                    "data"
+                ],
+                "symbol_name": "Replication",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#934DD6"
+            },
+            {
+                "loc": [
+                    1945,
+                    600
+                ],
+                "name": "ct1.eth4",
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    834,
+                    501
+                ],
+                "port_connector": "rj45",
+                "port_sfp_connector": null,
+                "port_sfp_present": false,
+                "port_sfp_speed": [],
+                "port_speeds": [
+                    "1g",
+                    "10g"
+                ],
+                "port_type": "eth",
+                "services": [
+                    "management"
+                ],
+                "pci_slot": 0,
+                "pci_slot_height": "Half Height",
+                "pci_card": "mgmt2ethbaset",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.eth5",
+                "symbol_name": "Management",
+                "symbol_shape": "triangle_up",
+                "symbol_color": "#00B2A9"
+            },
+            {
+                "loc": [
+                    1477,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc4",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1568,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc5",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1657,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc6",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            },
+            {
+                "loc": [
+                    1749,
+                    501
+                ],
+                "port_connector": "sfp",
+                "port_sfp_connector": "lc",
+                "port_sfp_present": true,
+                "port_sfp_speed": [
+                    "32g"
+                ],
+                "port_speeds": [
+                    "32g",
+                    "64g"
+                ],
+                "port_type": "fc",
+                "services": [
+                    "data",
+                    "replication"
+                ],
+                "pci_slot": 1,
+                "pci_slot_height": "Full Height",
+                "pci_card": "4fc",
+                "default_card": true,
+                "controller": "ct1",
+                "name": "ct1.fc7",
+                "symbol_name": "Fibre Channel",
+                "symbol_shape": "square",
+                "symbol_color": "#FE5000"
+            }
+        ],
+        "execution_duration": 0.00661015510559082,
+        "error": null,
+        "image_size": null,
+        "image_mib": 0,
+        "params": {
+            "model": "fa-x50r4",
+            "datapacks": "63/0",
+            "protocol": "FC",
+            "addoncards": "",
+            "face": "back",
+            "fm_label": "True",
+            "dp_label": "True",
+            "local_delay": 0,
+            "ports": "True",
+            "vssx": "True",
+            "json": true,
+            "json_only": true
+        }
+    },
     "fb-e_face-front_ports-TRUE_no_of_blades-30_drive_size-24_no_of_drives_per_blade-3": "059dc0d048bf05c96adeff50f081d291ef8cdba35090b1d9b191b15222727601",
     "fb-e_face-front_ports-TRUE_no_of_blades-30_drive_size-24_no_of_drives_per_blade-3_json-True": {
         "image_type": "png",
@@ -43208,7 +44423,7 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.4772989749908447,
         "error": null,
         "image_size": [
             2850,
@@ -43226,7 +44441,7 @@
         }
     },
     "fb-e_face-front_ports-TRUE_no_of_blades-30_drive_size-24_no_of_drives_per_blade-3_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-er1",
             "model_parsed": {
@@ -43249,13 +44464,10 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.03174304962158203,
         "error": null,
-        "image_size": [
-            2850,
-            4392
-        ],
-        "image_mib": 1.4997434616088867,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-e",
             "no_of_blades": 30,
@@ -44307,7 +45519,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.30121588706970215,
         "error": null,
         "image_size": [
             2625,
@@ -44328,7 +45540,7 @@
         }
     },
     "fa-x50r4_face-back_fm_label-True_dp_label-True_addoncards-4fc,2eth,2eth40,2fc,2fc_ports-True_63-0_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x50r4",
             "generation": "x",
@@ -45366,13 +46578,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.02267909049987793,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 2.0248804092407227,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x50r4",
             "datapacks": "63/0",
@@ -45412,7 +46621,7 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.1662590503692627,
         "error": null,
         "image_size": [
             2850,
@@ -45430,7 +46639,7 @@
         }
     },
     "fb-s200_face-front_ports-TRUE_no_of_blades-10_drive_size-24_no_of_drives_per_blade-3_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model": "fb-s200r2",
             "model_parsed": {
@@ -45453,13 +46662,10 @@
             "xfm_show_front": false
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.011918783187866211,
         "error": null,
-        "image_size": [
-            2850,
-            1288
-        ],
-        "image_mib": 0.10969066619873047,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb-s200",
             "no_of_blades": 10,
@@ -45795,7 +47001,7 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.09551692008972168,
         "error": null,
         "image_size": [
             2625,
@@ -45817,7 +47023,7 @@
         }
     },
     "fa-c40r3_face-back_fm_label-True_dp_label-True_addoncards-_ports-True_366_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-c40r3",
             "generation": "c",
@@ -46139,13 +47345,10 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.04961895942687988,
         "error": null,
-        "image_size": [
-            2625,
-            781
-        ],
-        "image_mib": 0.20821762084960938,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-c40r3",
             "datapacks": "366",
@@ -46227,7 +47430,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.24498510360717773,
         "error": null,
         "image_size": [
             2859,
@@ -46249,7 +47452,7 @@
         }
     },
     "fa-xl130_face-front_mezz-smezz_fm_label-True_dp_label-True_addoncards-_ports-True_91-91-91_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130",
             "generation": "xl",
@@ -46313,13 +47516,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.024394989013671875,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 0.48805713653564453,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130",
             "datapacks": "91/91/91",
@@ -46835,7 +48035,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.26994991302490234,
         "error": null,
         "image_size": [
             2859,
@@ -46857,7 +48057,7 @@
         }
     },
     "fa-xl130_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-_ports-True_63-0_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130",
             "generation": "xl",
@@ -47355,13 +48555,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.03144502639770508,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 1.1971473693847656,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130",
             "datapacks": "63/0",
@@ -48793,7 +49990,7 @@
                 "symbol_color": "blue"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.14983105659484863,
         "error": null,
         "image_size": [
             2859,
@@ -48815,7 +50012,7 @@
         }
     },
     "fa-xl130_face-back_mezz-smezz_fm_label-True_dp_label-True_addoncards-sas,2fc,4fc,2eth,2ethbaset,2eth40,2fc,2fc,2fc,2fc_ports-True_63-0_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-xl130",
             "generation": "xl",
@@ -50229,13 +51426,10 @@
                 "symbol_color": "blue"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.1142740249633789,
         "error": null,
-        "image_size": [
-            2859,
-            1302
-        ],
-        "image_mib": 1.1818647384643555,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-xl130",
             "datapacks": "63/0",
@@ -52098,7 +53292,7 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.4895660877227783,
         "error": null,
         "image_size": [
             2844,
@@ -52118,7 +53312,7 @@
         }
     },
     "fb_face-back_ports-True_efm-efm310_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "chassis": 2,
             "ru": 10,
@@ -53963,13 +55157,10 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.009750843048095703,
         "error": null,
-        "image_size": [
-            2844,
-            2566
-        ],
-        "image_mib": 1.956467628479004,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb",
             "chassis": 2,
@@ -54671,7 +55862,7 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.13540005683898926,
         "error": null,
         "image_size": [
             2859,
@@ -54693,7 +55884,7 @@
         }
     },
     "fa-x70r1_face-back_bezel-FALSE_fm_label-FALSE_dp_label-FALSE_addoncards-_91-91-45-45_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r1",
             "generation": "m",
@@ -55379,13 +56570,10 @@
                 "symbol_color": "#FE5000"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.04514575004577637,
         "error": null,
-        "image_size": [
-            2859,
-            1562
-        ],
-        "image_mib": 0.5100946426391602,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r1",
             "protocol": "fc",
@@ -56195,7 +57383,7 @@
                 "symbol_color": "#FCDC4D"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.2172691822052002,
         "error": null,
         "image_size": [
             2625,
@@ -56217,7 +57405,7 @@
         }
     },
     "fa-c60_face-back_bezel-FALSE_fm_label-True_dp_label-Ture_addoncards-_csize-879_91-91-45-45_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-c60",
             "generation": "c",
@@ -57009,13 +58197,10 @@
                 "symbol_color": "#FCDC4D"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.03886699676513672,
         "error": null,
-        "image_size": [
-            2625,
-            1562
-        ],
-        "image_mib": 0.439727783203125,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-c60",
             "protocol": "eth",
@@ -57106,7 +58291,7 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.2076711654663086,
         "error": null,
         "image_size": [
             2859,
@@ -57126,7 +58311,7 @@
         }
     },
     "fa-x70r1_face-front_fm_label-True_dp_label-FALSE_addoncards-_292-45-45_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r1",
             "generation": "x",
@@ -57199,13 +58384,10 @@
             ]
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.028422117233276367,
         "error": null,
-        "image_size": [
-            2859,
-            1562
-        ],
-        "image_mib": 0.18563365936279297,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r1",
             "protocol": "fc",
@@ -59946,7 +61128,7 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 1.294152021408081,
         "error": null,
         "image_size": [
             1221,
@@ -59964,7 +61146,7 @@
         }
     },
     "fb_face-back_efm-efm310_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "chassis": 10,
             "ru": 42,
@@ -62689,13 +63871,10 @@
                 "symbol_color": "#D90368"
             }
         ],
-        "execution_duration": 1,
+        "execution_duration": 0.05011892318725586,
         "error": null,
-        "image_size": [
-            1221,
-            4604
-        ],
-        "image_mib": 3.2454423904418945,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fb",
             "chassis": 10,
@@ -62758,7 +63937,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.14207100868225098,
         "error": null,
         "image_size": [
             2859,
@@ -62778,7 +63957,7 @@
         }
     },
     "fa-x70r1_face-front_fm_label-True_dp_label-FALSE_addoncards-_0-127_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r1",
             "generation": "x",
@@ -62827,13 +64006,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.06969881057739258,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.07979297637939453,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r1",
             "protocol": "fc",
@@ -62898,7 +64074,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.07822895050048828,
         "error": null,
         "image_size": [
             2859,
@@ -62918,7 +64094,7 @@
         }
     },
     "fa-x70r1_face-front_fm_label-True_dp_label-FALSE_addoncards-_127-0_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r1",
             "generation": "x",
@@ -62967,13 +64143,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.007493019104003906,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.07986736297607422,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r1",
             "protocol": "fc",
@@ -63038,7 +64211,7 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.1514120101928711,
         "error": null,
         "image_size": [
             2859,
@@ -63058,7 +64231,7 @@
         }
     },
     "fa-x70r1_face-front_fm_label-True_dp_label-True_addoncards-_3-127_direction-up_json-True_json_only-True": {
-        "image_type": "png",
+        "image_type": "json_only",
         "config": {
             "model_str": "fa-x70r1",
             "generation": "x",
@@ -63107,13 +64280,10 @@
             "shelves": []
         },
         "ports": [],
-        "execution_duration": 1,
+        "execution_duration": 0.031073808670043945,
         "error": null,
-        "image_size": [
-            2859,
-            781
-        ],
-        "image_mib": 0.11365318298339844,
+        "image_size": null,
+        "image_mib": 0,
         "params": {
             "model": "fa-x70r1",
             "protocol": "fc",

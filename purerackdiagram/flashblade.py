@@ -14,6 +14,7 @@ class FBDiagram():
     
     def __init__(self, params):
         self.ports = []
+        self.json_only = params.get('json_only', False)
 
         config = {}
         config["chassis"] = int(params.get("chassis", 1))
@@ -104,7 +105,7 @@ class FBDiagram():
         ports = []
         add_ports_at_offset(img_key, (0, 0), ports)
 
-        img = await RackImage(img_key).get_image()
+        img = await RackImage(img_key, self.json_only).get_image()
 
         if face == "front":
             blade_index_offset = number * 15
@@ -124,7 +125,7 @@ class FBDiagram():
     async def get_rack_image_with_ports(self, key):
         ports = []
         add_ports_at_offset(key, (0, 0), ports)
-        return {'img': await RackImage(key).get_image(), 'ports': ports}
+        return {'img': await RackImage(key, self.json_only).get_image(), 'ports': ports}
 
     async def get_image(self):
         tasks = []
