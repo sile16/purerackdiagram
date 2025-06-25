@@ -1505,135 +1505,158 @@ def get_all_tests():
 
 
         
-
-    for cg in ['1', '2']:
-        for model in ['x50r4', 'c50r4', 'c20', 'c50r4b', 'x50r4b', 'er1', 'er1b']:
-                params = {"model": f"fa-{model}",
-                            "datapacks": "0",
-                            "face": "front",
-                            'chassi_gen': cg,
-                            "fm_label": True,
-                            "dp_label": True,
-                            }
-                yield params
-    
-    
-    # Test all Models with a front data pack and shelf.
-    for model in models:
-        #continue
-        model = model.split('-')[0] + '-' + model.split('-')[1]
-        if 'c' in model or 'e' in model:
-            count += 1
-            params = {"model": model,
-                        "fm_label": True,
-                        "dp_label": True,
-                        "csize": '984'}
-            yield params
-        else:
-            for dp in dps:
+    for json_test in ["ignore","json","json_only"]:
+        for cg in ['1', '2']:
+            for model in ['x50r4', 'c50r4', 'c20', 'c50r4b', 'x50r4b', 'er1', 'er1b']:
+                    params = {"model": f"fa-{model}",
+                                "datapacks": "0",
+                                "face": "front",
+                                'chassi_gen': cg,
+                                "fm_label": True,
+                                "dp_label": True,
+                                json_test: "True" }
+                    
+                    yield params
+        
+        
+        # Test all Models with a front data pack and shelf.
+        
+        for model in models:
+            #continue
+            model = model.split('-')[0] + '-' + model.split('-')[1]
+            if 'c' in model or 'e' in model:
                 count += 1
                 params = {"model": model,
                             "fm_label": True,
                             "dp_label": True,
-                            "datapacks": dp}
+                            "csize": '984',
+                            json_test: "True"}
+                
+                yield params
+            else:
+                for dp in dps:
+                    count += 1
+                    params = {"model": model,
+                                "fm_label": True,
+                                "dp_label": True,
+                                "datapacks": dp,
+                                json_test: "True"}
+                    
+                    yield params
+
+            # The bezel.
+            params = {"model": model,
+                        "fm_label": True,
+                        "dp_label": True,
+                        "bezel": True,
+                        "datapacks": '366',
+                        json_test: "True"}
+            
+            yield params
+
+        for csize in csizes:
+            count += 1
+            params = {"model": 'fa-c60',
+                        "fm_label": True,
+                        "dp_label": True,
+                        "csize": csize,
+                        json_test: "True"}
+            
+            yield params
+        
+        #Test all Datapacks on the front.
+        for dp in valid_chassis_dps:
+            count += 1
+            params = {"model": "fa-x70r1",
+                        "fm_label": True,
+                        "dp_label": True,
+                        "datapacks": dp,
+                        json_test: "True"}
+            
+            yield params
+
+        for dp in valid_shelf_dps:
+            count += 1
+            params = {"model": "fa-x70r4",
+                        "fm_label": True,
+                        "dp_label": True,
+                        "datapacks": f"63-{dp}",
+                        json_test: "True"}
+            
+            yield params
+                
+
+        # back:
+        addon_cards = global_config['pci_valid_cards']
+
+        #every model and shelf back view.
+        for model in models:
+            #continue
+            model = model.split('-')[0] + '-' + model.split('-')[1]
+            
+            if 'c' in model or 'e' in model:
+                params = {"model": model,
+                            "addoncards": '4fc',
+                            "face": "back",
+                            "csize": '984',
+                            "ports": True,
+                            json_test: "True"}
+                
+                count += 1
                 yield params
 
-        # The bezel.
-        params = {"model": model,
-                    "fm_label": True,
-                    "dp_label": True,
-                    "bezel": True,
-                    "datapacks": '366'}
-        yield params
+            else:
+                params = {"model": model,
+                            "datapacks": "63-24.0-45",
+                            "addoncards": '4fc',
+                            "face": "back",
+                            "ports": True,
+                            json_test: "True"}
+                
+                count += 1
+                yield params
 
-    for csize in csizes:
-        count += 1
-        params = {"model": 'fa-c60',
-                    "fm_label": True,
-                    "dp_label": True,
-                    "csize": csize}
-        yield params
-    
-    #Test all Datapacks on the front.
-    for dp in valid_chassis_dps:
-        count += 1
-        params = {"model": "fa-x70r1",
-                    "fm_label": True,
-                    "dp_label": True,
-                    "datapacks": dp}
-        yield params
+            # every model with each card.
+            for card in addon_cards:
+                params = {"model": model,
+                            "datapacks": "366",
+                            "addoncards": f"{card},{card},{card}",
+                            "face": "back",
+                            "ports": True,
+                            json_test: "True"}
+                count += 1
+                yield params
 
-    for dp in valid_shelf_dps:
-        count += 1
-        params = {"model": "fa-x70r4",
-                    "fm_label": True,
-                    "dp_label": True,
-                    "datapacks": f"63-{dp}"}
-        yield params
-            
 
-    # back:
-    addon_cards = global_config['pci_valid_cards']
 
-    #every model and shelf back view.
-    for model in models:
-        #continue
-        model = model.split('-')[0] + '-' + model.split('-')[1]
         
-        if 'c' in model or 'e' in model:
-            params = {"model": model,
-                        "addoncards": '4fc',
-                        "face": "back",
-                        "csize": '984',
-                        "ports": True}
-            count += 1
-            yield params
 
-        else:
-            params = {"model": model,
-                        "datapacks": "63-24.0-45",
-                        "addoncards": '4fc',
-                        "face": "back",
-                        "ports": True}
-            count += 1
-            yield params
+        for blades in [10, 15, 30]:
+            for dfms in [2, 4]:
+                for size in [24.0, 48.2]:
+                    for face in ['front', 'back']:
+                        params = {"model": "fb-s200",
+                                "no_of_blades": blades,
+                                "face": face,
+                                "no_of_drives_per_blade": dfms,
+                                "drive_size": size,
+                                "ports": True,
+                                json_test: "True"}
+                        
+                        count += 1
+                        yield params
+                        params = {"model": "fb-e",
+                                "no_of_blades": blades,
+                                "face": face,
+                                "no_of_drives_per_blade": dfms,
+                                "drive_size": size,
+                                "ports": "TRUE",
+                                json_test: "True"}
+                        
+                        count += 1
+                        yield params
 
-        # every model with each card.
-        for card in addon_cards:
-            params = {"model": model,
-                        "datapacks": "366",
-                        "addoncards": f"{card},{card},{card}",
-                        "face": "back",
-                        "ports": True}
-            count += 1
-            yield params
-
-
-
-    
-
-    for blades in [10, 15, 30]:
-        for dfms in [2, 4]:
-            for size in [24.0, 48.2]:
-                for face in ['front', 'back']:
-                    params = {"model": "fb-s200",
-                              "no_of_blades": blades,
-                              "face": face,
-                              "no_of_drives_per_blade": dfms,
-                              "drive_size": size,
-                              "ports": True}
-                    count += 1
-                    yield params
-                    params = {"model": "fb-e",
-                              "no_of_blades": blades,
-                              "face": face,
-                              "no_of_drives_per_blade": dfms,
-                              "drive_size": size,
-                              "ports": "TRUE"}
-                    count += 1
-                    yield params
-
-    
+        
 
 
 
@@ -1701,17 +1724,21 @@ def test_all(args):
                 print("Error JSON Only Changed!!:{}".format(key))
                 print(diff)
 
-            original_json_key = key.replace("_json_only-True", "")
+            
+            original_json_key = key.replace("_json_only-True", "_json-True")
 
             if original_json_key not in validation:
-                original_json_key = key.replace("_json_only-True", "_json-True")
+                original_json_key = key.replace("_json_only-True", "")
                 if original_json_key not in validation:
                     continue
             
             
 
-            json_only_to_original += 1
+            
             val_json = validation[original_json_key]
+            if type(val_json) is str:
+                continue # it's a hash value for an image not json
+            json_only_to_original += 1
 
             ignore_keys = ['image_size', 'execution_duration', 'image', "image_mib", "params", "json_only", "json", "image_type"]
             
