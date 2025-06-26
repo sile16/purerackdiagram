@@ -682,17 +682,6 @@ more_tests = [
             "model": "fa-x20r4",
             "datapacks": "183-183",
             "face": "back",
-            "dc_power": "1300",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
-        }
-    },
-    {
-        "queryStringParameters": {
-            "model": "fa-x20r4",
-            "datapacks": "183-183",
-            "face": "back",
             "dc_power": "2000",
             "dp_label": True,
             "fm_label": True,
@@ -1007,18 +996,6 @@ more_tests = [
             "json": "True"
         }
     },
-     {  ## keep this as an error message on purpose.
-        "queryStringParameters": {
-            "model": "fa-x90r2",
-            "datapacks": "38.0/38.0-31/63-127/0",
-            "direction": "down",
-            "chassis": 2,
-            "face": "front",
-            "dp_label": "True",
-            "fm_label": "True",
-            "json": "True"
-        }
-    },
     {
         "queryStringParameters": {
             "model": "fa-xl130",
@@ -1076,16 +1053,6 @@ more_tests = [
         }
     },
         {
-        "queryStringParameters": {
-            "model": "fb-e",
-            "no_of_blades": 30,
-            "face": "front",
-            "no_of_drives_per_blade": 3,
-            "drive_size": 24,
-            "ports": "TRUE"
-        }
-    },
-    {
         "queryStringParameters": {
             "model": "fb-e",
             "no_of_blades": 30,
@@ -1380,12 +1347,18 @@ def create_test_image_original(item, count, total):
     
 
 # Now define the new create_test_image function
+# Global set to track all generated keys for duplicate detection
+_generated_keys = {}  # Change to dict to store both key and item
+_duplicate_keys = []
+
 def create_test_image(item, count, total):
     folder = "test_results"
     file_name = f"{item['model']}"
     for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
     'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 
-    'chassis_gen', 'json_only', 'datapacksv2', 'bladesv2' ]:
+    'chassis_gen', 'json_only', 'datapacksv2', 'bladesv2', 'protocol', 'chassis', 'dc_power', 'individual',
+    'jsononly', 'pci0', 'pci1', 'pci2', 'pci3', 'pci4', 'pci5', 'local_delay', 'chassi_gen', 
+    'blades', 'dfm_label' ]:
         if n in item:
             if n == 'datapacks':
                 file_name += f"_{str(item[n]).replace('/', '-')}"
@@ -1395,7 +1368,45 @@ def create_test_image(item, count, total):
                 h.update(item[n].encode('utf-8'))
                 file_name += f"_{n}-{h.hexdigest()[:8]}"
             else:
-                file_name += f"_{n}-{item[n]}"
+                # Normalize boolean and numeric values for consistent keys
+                value = item[n]
+                if isinstance(value, bool):
+                    # Convert boolean to string with type prefix
+                    value = f"bool_{str(value)}"
+                elif isinstance(value, str) and value.lower() in ['true', 'false']:
+                    # String representations of boolean values
+                    value = f"str_{value.lower().capitalize()}"
+                elif isinstance(value, str) and value in ['TRUE', 'FALSE']:
+                    # All caps string representations  
+                    value = f"str_{value.lower().capitalize()}"
+                elif value == 'True' or value == 'False':
+                    # Exact string literals
+                    value = f"str_{value}"
+                else:
+                    # All other values - include type info for better differentiation
+                    value = f"{type(value).__name__}_{str(value)}"
+                file_name += f"_{n}-{value}"
+    
+    # Check for duplicate keys and compare with json_diff
+    if file_name in _generated_keys:
+        # Use json_diff to check if items are truly identical
+        original_item = _generated_keys[file_name]
+        diff = jsondiff.diff(original_item, item)
+        
+        if not diff:
+            # Truly identical - this is a real duplicate
+            print(f"TRUE DUPLICATE DETECTED: {file_name}")
+            print(f"  Items are identical: {item}")
+            _duplicate_keys.append((file_name, original_item, item, "identical"))
+        else:
+            # Different items with same key - key generation needs improvement
+            print(f"KEY CONFLICT DETECTED: {file_name}")
+            print(f"  Original item: {original_item}")
+            print(f"  Current item:  {item}")
+            print(f"  Differences:   {diff}")
+            _duplicate_keys.append((file_name, original_item, item, "different"))
+    else:
+        _generated_keys[file_name] = item
 
     try:
         results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name))
@@ -1500,7 +1511,7 @@ def get_all_tests():
 
 
         
-    for json_test in ["ignore","json","json_only"]:
+    for json_test in [None,"json","json_only"]:
         for cg in ['1', '2']:
             for model in ['x50r4', 'c50r4', 'c20', 'c50r4b', 'x50r4b', 'er1', 'er1b']:
                     params = {"model": f"fa-{model}",
@@ -1508,8 +1519,9 @@ def get_all_tests():
                                 "face": "front",
                                 'chassi_gen': cg,
                                 "fm_label": True,
-                                "dp_label": True,
-                                json_test: "True" }
+                                "dp_label": True}
+                    if json_test is not None:
+                        params[json_test] = "True"
                     
                     yield params
         
@@ -1518,14 +1530,15 @@ def get_all_tests():
         
         for model in models:
             #continue
-            model = model.split('-')[0] + '-' + model.split('-')[1]
+            #model = model.split('-')[0] + '-' + model.split('-')[1]
             if 'c' in model or 'e' in model:
                 count += 1
                 params = {"model": model,
                             "fm_label": True,
                             "dp_label": True,
-                            "csize": '984',
-                            json_test: "True"}
+                            "csize": '984'}
+                if json_test is not None:
+                    params[json_test] = "True"
                 
                 yield params
             else:
@@ -1534,8 +1547,9 @@ def get_all_tests():
                     params = {"model": model,
                                 "fm_label": True,
                                 "dp_label": True,
-                                "datapacks": dp,
-                                json_test: "True"}
+                                "datapacks": dp}
+                    if json_test is not None:
+                        params[json_test] = "True"
                     
                     yield params
 
@@ -1544,8 +1558,9 @@ def get_all_tests():
                         "fm_label": True,
                         "dp_label": True,
                         "bezel": True,
-                        "datapacks": '366',
-                        json_test: "True"}
+                        "datapacks": '366'}
+            if json_test is not None:
+                params[json_test] = "True"
             
             yield params
 
@@ -1554,8 +1569,9 @@ def get_all_tests():
             params = {"model": 'fa-c60',
                         "fm_label": True,
                         "dp_label": True,
-                        "csize": csize,
-                        json_test: "True"}
+                        "csize": csize}
+            if json_test is not None:
+                params[json_test] = "True"
             
             yield params
         
@@ -1565,8 +1581,9 @@ def get_all_tests():
             params = {"model": "fa-x70r1",
                         "fm_label": True,
                         "dp_label": True,
-                        "datapacks": dp,
-                        json_test: "True"}
+                        "datapacks": dp}
+            if json_test is not None:
+                params[json_test] = "True"
             
             yield params
 
@@ -1575,8 +1592,9 @@ def get_all_tests():
             params = {"model": "fa-x70r4",
                         "fm_label": True,
                         "dp_label": True,
-                        "datapacks": f"63-{dp}",
-                        json_test: "True"}
+                        "datapacks": f"63-{dp}"}
+            if json_test is not None:
+                params[json_test] = "True"
             
             yield params
                 
@@ -1587,15 +1605,16 @@ def get_all_tests():
         #every model and shelf back view.
         for model in models:
             #continue
-            model = model.split('-')[0] + '-' + model.split('-')[1]
+            #model = model.split('-')[0] + '-' + model.split('-')[1]
             
             if 'c' in model or 'e' in model:
                 params = {"model": model,
                             "addoncards": '4fc',
                             "face": "back",
                             "csize": '984',
-                            "ports": True,
-                            json_test: "True"}
+                            "ports": True}
+                if json_test is not None:
+                    params[json_test] = "True"
                 
                 count += 1
                 yield params
@@ -1605,8 +1624,9 @@ def get_all_tests():
                             "datapacks": "63-24.0-45",
                             "addoncards": '4fc',
                             "face": "back",
-                            "ports": True,
-                            json_test: "True"}
+                            "ports": True}
+                if json_test is not None:
+                    params[json_test] = "True"
                 
                 count += 1
                 yield params
@@ -1617,8 +1637,9 @@ def get_all_tests():
                             "datapacks": "366",
                             "addoncards": f"{card},{card},{card}",
                             "face": "back",
-                            "ports": True,
-                            json_test: "True"}
+                            "ports": True}
+                if json_test is not None:
+                    params[json_test] = "True"
                 count += 1
                 yield params
 
@@ -1635,8 +1656,9 @@ def get_all_tests():
                                 "face": face,
                                 "no_of_drives_per_blade": dfms,
                                 "drive_size": size,
-                                "ports": True,
-                                json_test: "True"}
+                                "ports": True}
+                        if json_test is not None:
+                            params[json_test] = "True"
                         
                         count += 1
                         yield params
@@ -1645,8 +1667,9 @@ def get_all_tests():
                                 "face": face,
                                 "no_of_drives_per_blade": dfms,
                                 "drive_size": size,
-                                "ports": "TRUE",
-                                json_test: "True"}
+                                "ports": "TRUE"}
+                        if json_test is not None:
+                            params[json_test] = "True"
                         
                         count += 1
                         yield params
@@ -1682,6 +1705,69 @@ def test_all(args):
 
     with open("test_results.json", "w") as f:
         json.dump(results, f, indent=4, ensure_ascii=False)
+    
+    # Report duplicate keys with categorization
+    if _duplicate_keys:
+        # Separate true duplicates from key conflicts
+        true_duplicates = []
+        key_conflicts = []
+        
+        for entry in _duplicate_keys:
+            if len(entry) == 4:  # New format with type
+                key, original, duplicate, dup_type = entry
+                if dup_type == "identical":
+                    true_duplicates.append((key, original, duplicate))
+                else:
+                    key_conflicts.append((key, original, duplicate))
+            else:  # Old format - assume it's a conflict
+                key_conflicts.append(entry)
+        
+        print(f"\n=== DUPLICATE ANALYSIS SUMMARY ===")
+        print(f"Total issues found: {len(_duplicate_keys)}")
+        print(f"True duplicates (identical tests): {len(true_duplicates)}")
+        print(f"Key conflicts (different tests, same key): {len(key_conflicts)}")
+        
+        if true_duplicates:
+            print(f"\n=== TRUE DUPLICATES (Test Generation Issues) ===")
+            for i, (key, original, duplicate) in enumerate(true_duplicates[:10]):  # Show first 10
+                print(f"{i+1}. Key: {key}")
+                print(f"   Test params: {original}")
+        
+        if key_conflicts:
+            print(f"\n=== KEY CONFLICTS (Key Generation Issues) ===")
+            for i, (key, original, duplicate) in enumerate(key_conflicts[:5]):  # Show first 5
+                print(f"{i+1}. Key: {key}")
+                print(f"   Original: {original}")
+                print(f"   Current:  {duplicate}")
+                print(f"   Diff:     {jsondiff.diff(original, duplicate)}")
+        
+        # Save detailed report
+        with open("duplicate_keys_report.json", "w") as f:
+            json.dump({
+                "total_issues": len(_duplicate_keys),
+                "true_duplicates": len(true_duplicates),
+                "key_conflicts": len(key_conflicts),
+                "true_duplicate_details": [
+                    {"key": key, "params": original} for key, original, duplicate in true_duplicates
+                ],
+                "key_conflict_details": [
+                    {
+                        "key": key, 
+                        "original": original, 
+                        "duplicate": duplicate,
+                        "differences": jsondiff.diff(original, duplicate)
+                    } for key, original, duplicate in key_conflicts
+                ]
+            }, f, indent=4, ensure_ascii=False)
+        print(f"\nDetailed report saved to duplicate_keys_report.json")
+    
+    print(f"Total unique keys generated: {len(_generated_keys)}")
+    print(f"Total tests processed: {len(results)}")
+    
+    # Count duplicates for final summary
+    true_dup_count = len([x for x in _duplicate_keys if len(x) == 4 and x[3] == "identical"])
+    key_conflict_count = len(_duplicate_keys) - true_dup_count
+    print(f"Issues found: {len(_duplicate_keys)} (True duplicates: {true_dup_count}, Key conflicts: {key_conflict_count})")
 
     with open("test_validation.json") as f:
         validation = json.load(f)
