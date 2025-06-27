@@ -1239,6 +1239,10 @@ class FADiagram():
             face = "front"
         config["face"] = face
 
+        config["fm_label"] = params.get("fm_label", False)
+        config["dp_label"] = params.get("dp_label", False)
+        config["bezel"] = params.get("bezel", False)
+
         if face == "back":
             config['bezel'] = False
             
@@ -1300,9 +1304,7 @@ class FADiagram():
 
         else:
             # face == 'front'
-            config["fm_label"] = params.get("fm_label", False)
-            config["dp_label"] = params.get("dp_label", False)
-            config["bezel"] = params.get("bezel", False)
+            
 
             # we guarantted chassis gen will be in the config
             if "chassis_gen" not in params:
