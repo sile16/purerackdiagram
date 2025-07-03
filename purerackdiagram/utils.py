@@ -219,12 +219,15 @@ class RackImage():
 
 def bool_param_get(config, key, default=False):
     if key in config:
-        value = str(config[key]).lower()
+        value = str(config[key]).lower().strip()
+        if value == "":
+            return default
         if value in ['true', '1', 'yes']:
             return True
         elif value in ['false', '0', 'no']:
             return False
-        return default
+        else:
+            raise InvalidConfigurationException(f"Invalid boolean value for parameter '{key}': '{config[key]}'. Expected: true, false, 1, 0, yes, no")
     return default
 
 def add_ports_at_offset(key, offset, all_ports, additional_keys={}):

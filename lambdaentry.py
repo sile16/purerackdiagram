@@ -619,7 +619,7 @@ def handler(event, context):
                 "ports": all_ports,
                 "execution_duration": time.time() - program_time_s,
                 "error": None,
-                "image_size": None,
+                "image_size": final_img.size,
                 "image_mib": 0,
                 "params": original_params,
                 "image": None
@@ -699,7 +699,7 @@ def handler(event, context):
                     "params": original_params,
                     "image": None }
 
-            if 'json_only' in params:
+            if bool_param_get(params,'json_only', False):
                 return create_response(
                     status_code=200,
                     body=json.dumps(data, indent=4),

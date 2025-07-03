@@ -3,6 +3,42 @@ import jsonurl_py as jsonurl
 import urllib.parse
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "chassis_gen": "1",
+            "datapacks": "1350",
+            "dp_label": "TRUE",
+            "face": "back",
+            "ports": "True",
+            "json_only": "True",
+            "model": "fa-C70R4b",
+            "protocol": "ETH"
+        }
+    },
+   {
+        "queryStringParameters": {
+            "chassis_gen": "1",
+            "datapacks": "1350",
+            "dp_label": "TRUE",
+            "face": "back",
+            "ports": "True",
+            "json": "True",
+            "model": "fa-C70R4b",
+            "protocol": "ETH"
+        }
+    },
+
+    {
+        "queryStringParameters": {
+            "chassis_gen": "1",
+            "datapacks": "1350",
+            "dp_label": "True",
+            "face": "front",
+            "model": "fa-C70R4b",
+            "ports": "True",
+            "protocol": "ETH"
+        }
+    },
     #model=fa-x20r4b&protocol=fc&face=back&datapacksv2=((datapacks%3A((fm_size%3A9.1TB%2Cfm_count%3A10)))%2C(datapacks%3A((fm_size%3A2TB%2Cfm_count%3A3))))&fm_label=TRUE&dp_label=TRUE&addoncards=2eth100&chassis_gen=2
     {
         "queryStringParameters": {
