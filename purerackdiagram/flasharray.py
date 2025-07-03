@@ -939,8 +939,8 @@ class FADiagram():
 
         def get_default_fm_type(fm_size):
             # default fm type is based on the size
-            if fm_size == "Blank":
-                return ""
+            if fm_size.upper() == "BLANK" or fm_size == "0":
+                return "Blank"
             
             if config['generation'] in ['c', 'e', 'rc']:
                 return "nvme-qlc"
