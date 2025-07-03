@@ -217,6 +217,15 @@ class RackImage():
             logger.debug("Loaded: {}".format(self.key))
 
 
+def bool_param_get(config, key, default=False):
+    if key in config:
+        value = str(config[key]).lower()
+        if value in ['true', '1', 'yes']:
+            return True
+        elif value in ['false', '0', 'no']:
+            return False
+        return default
+    return default
 
 def add_ports_at_offset(key, offset, all_ports, additional_keys={}):
     global global_config

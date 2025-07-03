@@ -8,7 +8,7 @@ from PIL import ImageFont
 import sys
 import re
 from .utils import InvalidConfigurationException, InvalidDatapackException, RackDiagramException
-from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text
+from .utils import RackImage, add_ports_at_offset, combine_images_vertically, global_config, apply_text, bool_param_get
 
 from .flasharray import apply_fm_label
 import logging
@@ -22,7 +22,7 @@ logging = logging.getLogger(__name__)
 class FBSDiagram():
     def __init__(self, params):
         self.ports = []
-        self.json_only = params.get('json_only', False)
+        self.json_only = bool_param_get(params, 'json_only', False)
 
         config = {}
         raw_model = params.get("model").lower()

@@ -10,7 +10,7 @@ from PIL import ImageFont
 # from io import BytesIO
 
 from . import utils
-from .utils import RackImage, add_ports_at_offset, InvalidConfigurationException, InvalidDatapackException
+from .utils import RackImage, add_ports_at_offset, InvalidConfigurationException, InvalidDatapackException, bool_param_get
 
 import jsonurl_py as jsonurl
 
@@ -24,7 +24,7 @@ logger.setLevel(logging.WARNING)
 class FAShelf():
     def __init__(self, params):
         self.config = params
-        self.json_only = params.get('json_only', False)
+        self.json_only = bool_param_get(params,'json_only', False)
         self.start_img_event = asyncio.Event()
         self.ports = []
 
@@ -1351,6 +1351,8 @@ class FADiagram():
 
             elif 'datapacks' in params and params['datapacks'] != '':
                 #they specified the datapacks use those.
+                pass
+            elif 'datapacksv2' in params and params['datapacksv2'] != '':
                 pass
             else:
                 raise InvalidDatapackException("Please provide either csize or datapacks")

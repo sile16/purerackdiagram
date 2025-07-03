@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from purerackdiagram.utils import combine_images_vertically
 import purerackdiagram
-from purerackdiagram.utils import RackDiagramException, InvalidConfigurationException, InvalidDatapackException, MockImage
+from purerackdiagram.utils import RackDiagramException, InvalidConfigurationException, InvalidDatapackException, MockImage, bool_param_get
 
 # Configure logging for Lambda
 logger = logging.getLogger()
@@ -585,7 +585,7 @@ def handler(event, context):
         logger.info(f"Processing request with parameters: {json.dumps(params)}")
         
         # Check for json_only parameter to enable fast mode
-        json_only_mode = 'json_only' in params
+        json_only_mode = bool_param_get(params, 'json_only', False)
         if json_only_mode:
             params['json_only'] = True
         
@@ -716,7 +716,8 @@ def handler(event, context):
                 data["image"] = base64.b64encode(buffered.getvalue()).decode('utf-8')
                 data['image_type'] = "png"
 
-            if 'json' in params and params['json']:
+            json_param = bool_param_get(params, 'json', False)
+            if json_param:
                 return create_response(
                     status_code=200,
                     body=json.dumps(data, indent=4),
@@ -777,7 +778,8 @@ def handler(event, context):
             
         
         # Return appropriate response based on request format
-        if 'json' in params and params['json']:
+        json_param = bool_param_get(params, 'json', False)
+        if json_param:
             data = {}
             if diagram:
                 try:
