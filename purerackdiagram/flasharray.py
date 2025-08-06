@@ -950,9 +950,9 @@ class FADiagram():
             
             return "nvme"
         
-        def get_default_dp_label(fm_size, fm_count):
-            if fm_size == "Blank":
-                return "0TB"
+        def get_default_dp_label(fm_size, fm_count, fm_type):
+            if fm_type.lower() == "blank" or fm_size.lower() in ["blank", "0", "0tb"]:
+                return "Blank"
             
             import re
             
@@ -1027,8 +1027,9 @@ class FADiagram():
                 
                 num_modules = dp['fm_count']
                 fm_size = dp['fm_size']
-                dp_label = dp.get('dp_label', get_default_dp_label(fm_size, num_modules))
                 fm_type = dp.get('fm_type', get_default_fm_type(fm_size) )
+                dp_label = dp.get('dp_label', get_default_dp_label(fm_size, num_modules, fm_type))
+                
                 first_slot = dp.get('first_slot', next_chassis_index)
                 next_chassis_index = first_slot + num_modules
 

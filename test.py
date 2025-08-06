@@ -8,6 +8,7 @@ import traceback
 import os
 import requests
 import jsondiff
+import copy
 
 import lambdaentry
 from purerackdiagram.utils import global_config
@@ -165,7 +166,8 @@ _duplicate_keys = []
 
 def create_test_image(item, count, total):
     folder = "test_results"
-    file_name = f"{item['model']}"
+    # Build the complete file_name first to compute its hash
+    file_name_parts = [item['model']]
     for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
     'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 
     'chassis_gen', 'json_only', 'datapacksv2', 'bladesv2', 'protocol', 'chassis', 'dc_power', 'individual',
@@ -173,31 +175,29 @@ def create_test_image(item, count, total):
     'blades', 'dfm_label' ]:
         if n in item:
             if n == 'datapacks':
-                file_name += f"_{str(item[n]).replace('/', '-')}"
+                file_name_parts.append(f"_{str(item[n]).replace('/', '-')}")
             elif n == 'datapacksv2' or n == 'bladesv2':
                 #sha256 hash the datapacksv2 value
                 h = hashlib.sha256()
                 h.update(item[n].encode('utf-8'))
-                file_name += f"_{n}-{h.hexdigest()[:8]}"
+                file_name_parts.append(f"_{n}-{h.hexdigest()[:8]}")
             else:
-                # Normalize boolean and numeric values for consistent keys
+                # Include type information to differentiate between bool True vs string "True"
                 value = item[n]
                 if isinstance(value, bool):
-                    # Convert boolean to string with type prefix
-                    value = f"bool_{str(value)}"
-                elif isinstance(value, str) and value.lower() in ['true', 'false']:
-                    # String representations of boolean values
-                    value = f"str_{value.lower().capitalize()}"
-                elif isinstance(value, str) and value in ['TRUE', 'FALSE']:
-                    # All caps string representations  
-                    value = f"str_{value.lower().capitalize()}"
-                elif value == 'True' or value == 'False':
-                    # Exact string literals
-                    value = f"str_{value}"
+                    file_name_parts.append(f"_{n}-bool_{value}")
+                elif isinstance(value, str):
+                    file_name_parts.append(f"_{n}-str_{value}")
                 else:
-                    # All other values - include type info for better differentiation
-                    value = f"{type(value).__name__}_{str(value)}"
-                file_name += f"_{n}-{value}"
+                    file_name_parts.append(f"_{n}-{type(value).__name__}_{value}")
+    
+    # Join all parts to create the base filename
+    file_name_base = ''.join(file_name_parts)
+    
+    # Add a hash of the case-sensitive filename to handle case-insensitive filesystems
+    # This ensures fa-c70r4b and fa-C70R4b create different files
+    case_hash = hashlib.md5(file_name_base.encode()).hexdigest()[:6]
+    file_name = f"{file_name_base}_{case_hash}"
     
     # Check filename length against OS limits
     # Most filesystems support 255 bytes for filename, but we need to account for:
@@ -236,7 +236,8 @@ def create_test_image(item, count, total):
             print(f"  Differences:   {diff}")
             _duplicate_keys.append((file_name, original_item, item, "different"))
     else:
-        _generated_keys[file_name] = item
+        # Store a deep copy to prevent modification by lambda function
+        _generated_keys[file_name] = copy.deepcopy(item)
 
     try:
         results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name))
@@ -655,7 +656,7 @@ def test_all(args):
                 continue # it's a hash value for an image not json
             json_only_to_original += 1
 
-            ignore_keys = ['image_size', 'execution_duration', 'image', "image_mib", "params", "json_only", "json", "image_type"]
+            ignore_keys = ['execution_duration', 'image', "image_mib", "params", "json_only", "json", "image_type"]
             
             for k in ignore_keys:
                 if k in res_json:
