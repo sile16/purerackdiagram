@@ -12,18 +12,8 @@ import copy
 
 import lambdaentry
 from purerackdiagram.utils import global_config
-
-try:
-    import jsonurl_py as jsonurl
-except ImportError:
-    # For older commits that don't have jsonurl_py
-    jsonurl = None
-    
-try:
-    from test_one_offs import more_tests
-except ImportError:
-    # For older commits that don't have test_one_offs
-    more_tests = []
+import jsonurl_py as jsonurl
+from test_one_offs import more_tests
 import subprocess
 import datetime
 import shutil
@@ -35,9 +25,6 @@ ch.setLevel(logging.WARN)
 logger.addHandler(ch)
 logger.setLevel(logging.WARN)
 
-save_dir = 'test_results/'
-
-
 def get_file_hash(file_path):
     """Get SHA256 hash of a file"""
     h = hashlib.sha256()
@@ -45,145 +32,6 @@ def get_file_hash(file_path):
         for chunk in iter(lambda: f.read(4096), b""):
             h.update(chunk)
     return h.hexdigest()
-
-
-def manage_file_history(test_key, source_file_path, git_state):
-    """
-    Manage file history with deduplication and 3-generation history.
-    
-    Args:
-        test_key: The test key/name
-        source_file_path: Path to the newly generated file
-        git_state: Current git state
-        
-    Returns:
-        dict: Information about file placement and deduplication
-    """
-    if not os.path.exists(source_file_path):
-        return {'status': 'error', 'message': 'Source file not found'}
-    
-    # Get file extension
-    file_ext = os.path.splitext(source_file_path)[1]
-    
-    # Calculate hash of the new file
-    new_hash = get_file_hash(source_file_path)
-    
-    # Create git-state directory structure
-    git_dir = os.path.join(save_dir, git_state)
-    if not os.path.exists(git_dir):
-        os.makedirs(git_dir)
-    
-    # Look for existing files with the same hash across all git states
-    existing_file = None
-    duplicate_info = {'is_duplicate': False, 'original_path': None, 'original_git_state': None}
-    
-    # Search all git state directories for duplicates
-    for state_dir in os.listdir(save_dir):
-        state_path = os.path.join(save_dir, state_dir)
-        if not os.path.isdir(state_path):
-            continue
-            
-        # Look for files with the same test_key
-        potential_matches = []
-        for filename in os.listdir(state_path):
-            if filename.startswith(test_key) and filename.endswith(file_ext):
-                potential_matches.append(os.path.join(state_path, filename))
-        
-        # Check hashes of potential matches
-        for match_path in potential_matches:
-            try:
-                if get_file_hash(match_path) == new_hash:
-                    existing_file = match_path
-                    duplicate_info = {
-                        'is_duplicate': True,
-                        'original_path': match_path,
-                        'original_git_state': state_dir
-                    }
-                    break
-            except (IOError, OSError):
-                continue
-                
-        if existing_file:
-            break
-    
-    final_path = os.path.join(git_dir, f"{test_key}{file_ext}")
-    
-    if existing_file and duplicate_info['is_duplicate']:
-        # File is a duplicate - create a symlink instead of copying
-        if not os.path.exists(final_path):
-            try:
-                # Create relative symlink
-                rel_path = os.path.relpath(existing_file, git_dir)
-                os.symlink(rel_path, final_path)
-                logger.info(f"Created symlink for duplicate: {test_key} -> {duplicate_info['original_git_state']}")
-            except OSError:
-                # Fallback to copy if symlinks not supported
-                shutil.copy2(existing_file, final_path)
-                logger.info(f"Copied duplicate (symlink failed): {test_key} -> {duplicate_info['original_git_state']}")
-        
-        return {
-            'status': 'duplicate',
-            'final_path': final_path,
-            'hash': new_hash,
-            'duplicate_info': duplicate_info
-        }
-    else:
-        # File is unique - copy it and manage history
-        shutil.copy2(source_file_path, final_path)
-        
-        # Manage 3-generation history for this test across all git states
-        manage_test_history(test_key, file_ext)
-        
-        return {
-            'status': 'unique',
-            'final_path': final_path,
-            'hash': new_hash,
-            'duplicate_info': duplicate_info
-        }
-
-
-def manage_test_history(test_key, file_ext):
-    """
-    Keep only the last 3 generations of a specific test across all git states.
-    This helps prevent disk space from growing infinitely.
-    """
-    # Find all instances of this test across git states
-    test_instances = []
-    
-    for state_dir in os.listdir(save_dir):
-        state_path = os.path.join(save_dir, state_dir)
-        if not os.path.isdir(state_path):
-            continue
-            
-        for filename in os.listdir(state_path):
-            if filename.startswith(test_key) and filename.endswith(file_ext):
-                file_path = os.path.join(state_path, filename)
-                try:
-                    stat = os.stat(file_path)
-                    test_instances.append({
-                        'path': file_path,
-                        'git_state': state_dir,
-                        'mtime': stat.st_mtime,
-                        'is_symlink': os.path.islink(file_path)
-                    })
-                except (IOError, OSError):
-                    continue
-    
-    # Sort by modification time (newest first)
-    test_instances.sort(key=lambda x: x['mtime'], reverse=True)
-    
-    # Keep only the 3 most recent, delete the rest
-    instances_to_delete = test_instances[3:]  # Everything after the first 3
-    
-    for instance in instances_to_delete:
-        try:
-            if instance['is_symlink']:
-                os.unlink(instance['path'])  # Remove symlink
-            else:
-                os.remove(instance['path'])  # Remove actual file
-            logger.info(f"Removed old test instance: {instance['path']}")
-        except (IOError, OSError) as e:
-            logger.warning(f"Failed to remove old test instance {instance['path']}: {e}")
 
 
 def filter_result_data(data):
@@ -207,28 +55,6 @@ def filter_result_data(data):
     return filtered
 
 
-def get_git_state():
-    """Get current git commit hash or 'head' if there are uncommitted changes."""
-    try:
-        # Check if there are any uncommitted changes
-        result = subprocess.run(['git', 'status', '--porcelain'], 
-                              capture_output=True, text=True, check=True)
-        has_changes = bool(result.stdout.strip())
-        
-        # Get current commit hash
-        result = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], 
-                              capture_output=True, text=True, check=True)
-        commit_hash = result.stdout.strip()
-        
-        if has_changes:
-            return 'head'
-        else:
-            return commit_hash
-    except subprocess.CalledProcessError:
-        # Not a git repo or git not available
-        return f'nogit_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}'
-
-
 def download_and_hash_image(url):
     """Download image content from URL and return SHA256 hash of raw bytes."""
     try:
@@ -247,7 +73,7 @@ def download_and_hash_image(url):
         return h.hexdigest()
 
 
-def test_lambda(params, outputfile, git_state=None):
+def test_lambda(params, outputfile ):
     """
     Run lambda test and save output files.
     
@@ -256,8 +82,7 @@ def test_lambda(params, outputfile, git_state=None):
         outputfile: Base path for output file (without extension)
         git_state: Git commit hash or 'head' (if None, will be determined)
     """
-    if git_state is None:
-        git_state = get_git_state()
+
     
     results = lambdaentry.handler(params, None)
     
@@ -292,19 +117,6 @@ def test_lambda(params, outputfile, git_state=None):
         results['body'] = base64.b64encode(response.content).decode('utf-8')
         results['headers']['Content-Type'] = content_type
         results['statusCode'] = 200  # Update status code to OK
-        
-        # Save the response content to the appropriate file
-        #if content_type == 'image/png':
-        #    ext = '.png'
-        #elif content_type == 'application/vnd.ms-visio.stencil':
-        #    ext = '.vssx'
-        #elif content_type == 'application/json':
-        #    ext = '.json'
-        #else:
-        #    ext = ''
-        
-        #with open(outputfile + ext, 'wb') as outfile:
-        #    outfile.write(response.content)
 
     
     if results['headers'].get("Content-Type") == 'image/png':
@@ -329,56 +141,46 @@ def test_lambda(params, outputfile, git_state=None):
         if 'body' in results:
             
             obj = json.loads(results['body'])
-            if 'image' in obj and obj['image'] is not None:
-                # Replace image data with SHA256 hash
-                if obj.get('image_type') == 'link' or obj['image'].startswith(('http://', 'https://')):
+            
+            # Save the original object to file WITHOUT modifying the image
+            with open(outputfile + '.json', 'w',  encoding='utf-8') as outfile:
+                json.dump(obj, outfile, indent=4, ensure_ascii=False)
+            
+            # Now create a modified version for the results data structure
+            # This modified version will have the hash instead of the full image
+            result_obj = obj.copy()
+            if 'image' in result_obj and result_obj['image'] is not None:
+                # Replace image data with SHA256 hash in the result object only
+                if result_obj.get('image_type') == 'link' or result_obj['image'].startswith(('http://', 'https://')):
                     # Image is a URL - download and hash the content
-                    logger.info(f"Downloading image from URL: {obj['image']}")
-                    obj['image'] = download_and_hash_image(obj['image'])
+                    logger.info(f"Downloading image from URL: {result_obj['image']}")
+                    result_obj['image'] = download_and_hash_image(result_obj['image'])
                 else:
                     # Image is base64 data - decode and hash
                     h = hashlib.sha256()
                     try:
-                        decoded_image = base64.b64decode(obj['image'])
+                        decoded_image = base64.b64decode(result_obj['image'])
                     except (TypeError, ValueError) as e:
                         logger.error(f"Failed to decode image data: {e}")
                         decoded_image = b''
                     h.update(decoded_image)
-                    obj['image'] = h.hexdigest()
+                    result_obj['image'] = h.hexdigest()
             else:
                 if 'json_only' not in params['queryStringParameters'] and results['statusCode'] == 200:
                     # If no image data, just use the original body
                     print("No image data found in JSON response")
 
-            results['body'] = obj
-
-            with open(outputfile + '.json', 'w',  encoding='utf-8') as outfile:
-                json.dump(obj, outfile, indent=4, ensure_ascii=False)
-            #del results['body']
+            results['body'] = result_obj  # Use the modified version with hash for results
 
     return results
 
-
-def create_test_image_original(item, count, total):
-    """Original function, kept for reference"""
-    
-    folder = "test_results"
-    file_name = f"{item['model']}"
-    for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
-    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 'chassis_gen' ]:
-        if n in item:
-            if n == 'datapacks':
-                file_name += f"_{str(item[n]).replace('/', '-')}"
-            else:
-                file_name += f"_{n}-{item[n]}"
-    
 
 # Now define the new create_test_image function
 # Global set to track all generated keys for duplicate detection
 _generated_keys = {}  # Change to dict to store both key and item
 _duplicate_keys = []
 
-def create_test_image(item, count, total, git_state=None):
+def create_test_image(item, count, total, save_dir):
     """
     Create test image with git-state based directory structure.
     
@@ -386,23 +188,41 @@ def create_test_image(item, count, total, git_state=None):
         item: Test parameters
         count: Current test number
         total: Total number of tests
-        git_state: Git commit hash or 'head' (if None, will be determined)
+        save_dir: Directory name for saving results
     """
-    if git_state is None:
-        git_state = get_git_state()
+
     
     # Create git-state based subdirectory
-    folder = os.path.join("test_results", git_state)
+    folder = os.path.join("test_results", save_dir)
     if not os.path.exists(folder):
         os.makedirs(folder)
     
-    # Build the complete file_name first to compute its hash
+    # Extract json/json_only parameters to determine output type
+    json_param = item.get('json')
+    json_only_param = item.get('json_only')
+    
+    # Determine output type based on parameter priority
+    if json_only_param:  # json_only takes precedence
+        output_type = 'json_only'
+        file_extension = '.json_only'
+    elif json_param:
+        output_type = 'json'
+        file_extension = '.json'
+    else:
+        output_type = 'png'
+        file_extension = '.png'
+    
+    # Build filename WITHOUT json/json_only parameters (so hash is same for all variants)
     file_name_parts = [item['model']]
     for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
-    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx', 'json', 
-    'chassis_gen', 'json_only', 'datapacksv2', 'bladesv2', 'protocol', 'chassis', 'dc_power', 'individual',
+    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx',
+    'chassis_gen', 'datapacksv2', 'bladesv2', 'protocol', 'chassis', 'dc_power', 'individual',
     'jsononly', 'pci0', 'pci1', 'pci2', 'pci3', 'pci4', 'pci5', 'local_delay', 'chassi_gen', 
     'blades', 'dfm_label' ]:
+        # Skip json and json_only parameters in filename generation
+        if n in ['json', 'json_only']:
+            continue
+            
         if n in item:
             if n == 'datapacks':
                 file_name_parts.append(f"_{str(item[n]).replace('/', '-')}")
@@ -414,12 +234,7 @@ def create_test_image(item, count, total, git_state=None):
             else:
                 # Include type information to differentiate between bool True vs string "True"
                 value = item[n]
-                if isinstance(value, bool):
-                    file_name_parts.append(f"_{n}-bool_{value}")
-                elif isinstance(value, str):
-                    file_name_parts.append(f"_{n}-str_{value}")
-                else:
-                    file_name_parts.append(f"_{n}-{type(value).__name__}_{value}")
+                file_name_parts.append(f"_{n}-{type(value).__name__}_{value}")
     
     # Join all parts to create the base filename
     file_name_base = ''.join(file_name_parts)
@@ -427,50 +242,48 @@ def create_test_image(item, count, total, git_state=None):
     # Add a hash of the case-sensitive filename to handle case-insensitive filesystems
     # This ensures fa-c70r4b and fa-C70R4b create different files
     case_hash = hashlib.md5(file_name_base.encode()).hexdigest()[:6]
-    file_name = f"{file_name_base}_{case_hash}"
+    base_file_name = f"{file_name_base}_{case_hash}"
+    
+    # Create the full filename with extension - this will be our result key
+    full_file_name = base_file_name + file_extension
     
     # Check filename length against OS limits
-    # Most filesystems support 255 bytes for filename, but we need to account for:
-    # - The folder path length
-    # - The file extension (.png, .json, etc.)
-    # - Safety margin
     max_filename_length = 255  # Common filesystem limit
-    folder = os.path.join("test_results", git_state)
-    extension = ".json"  # Longest extension we use
-    full_path_est = os.path.join(folder, file_name + extension)
     
-    if len(file_name) > max_filename_length - len(extension) - 10:  # 10 byte safety margin
-        logger.warning(f"Filename approaching OS limit ({len(file_name)} chars): {file_name[:50]}...")
-        # Truncate and add hash to ensure uniqueness
-        truncate_at = max_filename_length - len(extension) - 20  # Leave room for hash
-        file_name_hash = hashlib.sha256(file_name.encode('utf-8')).hexdigest()[:8]
-        file_name = file_name[:truncate_at] + "_" + file_name_hash
-        logger.info(f"Truncated to: {file_name}")
+    if len(full_file_name) > max_filename_length - 10:  # 10 byte safety margin
+        logger.warning(f"Filename approaching OS limit ({len(full_file_name)} chars): {full_file_name[:50]}...")
+        # Truncate base name and add hash to ensure uniqueness
+        truncate_at = max_filename_length - len(file_extension) - 20  # Leave room for hash and extension
+        file_name_hash = hashlib.sha256(base_file_name.encode('utf-8')).hexdigest()[:8]
+        base_file_name = base_file_name[:truncate_at] + "_" + file_name_hash
+        full_file_name = base_file_name + file_extension
+        logger.info(f"Truncated to: {full_file_name}")
     
     # Check for duplicate keys and compare with json_diff
-    if file_name in _generated_keys:
+    if full_file_name in _generated_keys:
         # Use json_diff to check if items are truly identical
-        original_item = _generated_keys[file_name]
+        original_item = _generated_keys[full_file_name]
         diff = jsondiff.diff(original_item, item)
         
         if not diff:
             # Truly identical - this is a real duplicate
-            print(f"TRUE DUPLICATE DETECTED: {file_name}")
+            print(f"TRUE DUPLICATE DETECTED: {full_file_name}")
             print(f"  Items are identical: {item}")
-            _duplicate_keys.append((file_name, original_item, item, "identical"))
+            _duplicate_keys.append((full_file_name, original_item, item, "identical"))
         else:
             # Different items with same key - key generation needs improvement
-            print(f"KEY CONFLICT DETECTED: {file_name}")
+            print(f"KEY CONFLICT DETECTED: {full_file_name}")
             print(f"  Original item: {original_item}")
             print(f"  Current item:  {item}")
             print(f"  Differences:   {diff}")
-            _duplicate_keys.append((file_name, original_item, item, "different"))
+            _duplicate_keys.append((full_file_name, original_item, item, "different"))
     else:
         # Store a deep copy to prevent modification by lambda function
-        _generated_keys[file_name] = copy.deepcopy(item)
+        _generated_keys[full_file_name] = copy.deepcopy(item)
 
     try:
-        results = test_lambda({"queryStringParameters":item}, os.path.join(folder, file_name), git_state)
+        # Use base filename (without extension) for the actual file output
+        results = test_lambda({"queryStringParameters":item}, os.path.join(folder, base_file_name))
 
         h = hashlib.sha256()
         content_type = results['headers'].get("Content-Type")
@@ -478,7 +291,7 @@ def create_test_image(item, count, total, git_state=None):
 
         # Check for error responses (4xx, 5xx)
         if 400 <= status_code < 600:
-            print(f"{count} of {total}   {file_name} - ERROR {status_code}")
+            print(f"{count} of {total}   {full_file_name} - ERROR {status_code}")
             
             # For JSON errors, we can examine the detailed message
             if content_type == 'application/json' and 'body' in results:
@@ -492,29 +305,29 @@ def create_test_image(item, count, total, git_state=None):
                     error_type = error_data.get('error_type', 'Unknown')
                     
                     # Return error details for validation and testing
-                    return({file_name: {
+                    return({full_file_name: {
                         "status": status_code,
                         "error_type": error_type,
                         "error_msg": error_msg,
-                        "path": f"{git_state}/{file_name}",
-                        "git_state": git_state
+                        "path": f"{save_dir}/{base_file_name}",
+            
                     }})
                 except json.JSONDecodeError:
                     print(f"  Failed to parse error JSON")
-                    return({file_name: {
+                    return({full_file_name: {
                         "status": status_code,
                         "error": "Failed to parse error JSON",
-                        "path": f"{git_state}/{file_name}",
-                        "git_state": git_state
+                        "path": f"{save_dir}/{base_file_name}",
+ 
                     }})
         
         # For successful responses or errors that aren't in JSON format
-        print(f"{count} of {total}   {file_name} - Status: {status_code}")
+        print(f"{count} of {total}   {full_file_name} - Status: {status_code}")
         
         # Prepare result with path information
         result_data = {
-            'path': f"{git_state}/{file_name}",
-            'git_state': git_state
+            'path': f"{save_dir}/{base_file_name}",
+
         }
         
         if content_type == 'application/json':
@@ -533,23 +346,17 @@ def create_test_image(item, count, total, git_state=None):
             elif content_type == 'application/zip':
                 result_data['path'] += '.zip'
         
-        return({file_name: result_data})
+        return({full_file_name: result_data})
 
     except Exception as ex_unknown:
-        print(f"Caught exception in image: {file_name}")
+        print(f"Caught exception in image: {full_file_name}")
         traceback.print_exc()
-        return({file_name: {
+        return({full_file_name: {
             "status": 500,
             "error": str(ex_unknown),
             "traceback": traceback.format_exc(),
-            "path": f"{git_state}/{file_name}",
-            "git_state": git_state
+            "path": f"{save_dir}/{base_file_name}",
         }})
-
-#    if "fa-er1-f" in item['model'] :
-#        pass
-
-    # Original implementation replaced by the new create_test_image function above
 
     
 
@@ -587,13 +394,6 @@ def get_all_tests():
             json_test = json_test.copy()
             json_test['json_only'] = True
             yield json_test
-    
-    #return count
-        
-        
-
-
-
 
         
     for json_test in [None,"json","json_only"]:
@@ -765,16 +565,43 @@ def get_all_tests():
 
 def test_all(args):
 
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    
-    # Get git state - use override if provided, otherwise default to "head"
+
+    git_state = "head"
     if hasattr(args, 'git_state') and args.git_state:
         git_state = args.git_state
-        print(f"Using specified git state: {git_state}")
+    print(f"Using specified git state: {git_state}")
+
+    save_dir = os.path.join("test_results", git_state)
+    
+    # Handle directory cleanup based on git-state
+    results_json_file = os.path.join("test_results", f"test_results_{git_state}.json")
+    
+    if git_state == "head":
+        # Automatically delete head directory contents and JSON file
+        if os.path.exists(save_dir):
+            print(f"Automatically clearing head directory: {save_dir}")
+            shutil.rmtree(save_dir)
+        if os.path.exists(results_json_file):
+            print(f"Automatically removing head results file: {results_json_file}")
+            os.remove(results_json_file)
     else:
-        git_state = "head"
-        print(f"Using default git state: {git_state}")
+        # Ask user for confirmation before deleting other git-state directories
+        if os.path.exists(save_dir) or os.path.exists(results_json_file):
+            print(f"Directory {save_dir} or results file {results_json_file} already exists.")
+            response = input(f"Do you want to overwrite the existing data for git-state '{git_state}'? (y/N): ")
+            if response.lower() in ['y', 'yes']:
+                if os.path.exists(save_dir):
+                    print(f"Removing directory: {save_dir}")
+                    shutil.rmtree(save_dir)
+                if os.path.exists(results_json_file):
+                    print(f"Removing results file: {results_json_file}")
+                    os.remove(results_json_file)
+            else:
+                print("Aborting test run to avoid overwriting existing data.")
+                return
+
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir, exist_ok=True)
 
     # Create amultiprocessing pool
     pool = Pool(processes=args.t)
@@ -786,7 +613,7 @@ def test_all(args):
         all_items = all_items[:args.limit]
     count = 0
     for item in all_items:
-        futures.append(pool.apply_async(create_test_image, args=(item, count, len(all_items), git_state)))
+        futures.append(pool.apply_async(create_test_image, args=(item, count, len(all_items), save_dir)))
         count += 1
 
     pool.close()
@@ -799,9 +626,8 @@ def test_all(args):
         results.update(result)
 
     # Create git-state subdirectory and save results there
-    git_dir = f"test_results/{git_state}/"
-    os.makedirs(git_dir, exist_ok=True)
-    output_filename = f"{git_dir}test_results_{git_state}.json"
+    
+    output_filename = os.path.join("test_results", f"test_results_{git_state}.json")
     with open(output_filename, "w") as f:
         json.dump(results, f, indent=4, ensure_ascii=False)
     print(f"Results saved to: {output_filename}")
@@ -841,25 +667,8 @@ def test_all(args):
                 print(f"   Current:  {duplicate}")
                 print(f"   Diff:     {jsondiff.diff(original, duplicate)}")
         
-        # Save detailed report
-        with open("duplicate_keys_report.json", "w") as f:
-            json.dump({
-                "total_issues": len(_duplicate_keys),
-                "true_duplicates": len(true_duplicates),
-                "key_conflicts": len(key_conflicts),
-                "true_duplicate_details": [
-                    {"key": key, "params": original} for key, original, duplicate in true_duplicates
-                ],
-                "key_conflict_details": [
-                    {
-                        "key": key, 
-                        "original": original, 
-                        "duplicate": duplicate,
-                        "differences": jsondiff.diff(original, duplicate)
-                    } for key, original, duplicate in key_conflicts
-                ]
-            }, f, indent=4, ensure_ascii=False)
-        print(f"\nDetailed report saved to duplicate_keys_report.json")
+     
+        
     
     print(f"Total unique keys generated: {len(_generated_keys)}")
     print(f"Total tests processed: {len(results)}")
@@ -869,165 +678,81 @@ def test_all(args):
     key_conflict_count = len(_duplicate_keys) - true_dup_count
     print(f"Issues found: {len(_duplicate_keys)} (True duplicates: {true_dup_count}, Key conflicts: {key_conflict_count})")
 
-    with open("test_validation.json") as f:
-        validation = json.load(f)
-
-    errors = 0
-    warnings = 0
-    json_only_to_original = 0
-    json_to_image_compare_count = 0
-    for key, result_value in results.items():
-        # Extract actual data/hash from new structure
-        if isinstance(result_value, dict) and 'data' in result_value:
-            result_compare = result_value['data']
-        elif isinstance(result_value, dict) and 'hash' in result_value:
-            result_compare = result_value['hash']
-        elif isinstance(result_value, dict) and 'status' in result_value:
-            # Error case
-            result_compare = result_value
-        else:
-            result_compare = result_value
-            
-        if key not in validation:
-            warnings += 1
-            print("WARNING missing key:{}".format(key))
-        elif 'vssx' in key:
-            pass # always different because unique key
-        elif 'json_only' in key:
-
-            # Now lets compare to 
-            
-            ignore_keys = ['execution_duration']
-                
-            diff = True
-            try:
-                res_json = result_compare.copy() if isinstance(result_compare, dict) else result_compare
-                val_json = validation[key].copy() if isinstance(validation[key], dict) else validation[key]
-                for k in ignore_keys:
-                    if k in res_json:
-                        del res_json[k]
-                    if k in val_json:
-                        del val_json[k]
-                diff = jsondiff.diff(val_json, res_json)
-            except Exception as ex:
-                pass
-            
-            if diff:
-                errors += 1
-                print("Error JSON Only Changed!!:{}".format(key))
-                print(str(diff)[:100])
-
-            
-            original_json_key = key.replace("_json_only-True", "_json-True")
-
-            if original_json_key not in validation:
-                original_json_key = key.replace("_json_only-True", "")
-                if original_json_key not in validation:
-                    continue
-            
-            
-
-            
-            val_json = validation[original_json_key]
-            if type(val_json) is str:
-                continue # it's a hash value for an image not json
-            json_only_to_original += 1
-
-            ignore_keys = ['execution_duration', 'image', "image_mib", "params", "json_only", "json", "image_type"]
-            
-            for k in ignore_keys:
-                if k in res_json:
-                    del res_json[k]
-                if k in val_json:
-                    del val_json[k]
-
-            
-
-            diff = True
-            diff = jsondiff.diff(val_json, res_json)
-            if diff:
-                errors += 1
-                print("Error JSON_Only, vs JSON difference!!:{}".format(original_json_key))
-                print(str(diff)[:100])
-
-
-        elif 'json' in key:
-            # use jsondiff to compare the two
-            # load the two strings into json objects, results
-            # compare json
-
-            ignore_keys = [ 'execution_duration']
-            
-            diff = True
-            try:
-                res_json = result_compare.copy() if isinstance(result_compare, dict) else result_compare
-                val_json = validation[key].copy() if isinstance(validation[key], dict) else validation[key]
-                if isinstance(res_json, dict) and isinstance(val_json, dict):
-                    for k in ignore_keys:
-                        if k in res_json:
-                            del res_json[k]
-                        if k in val_json:
-                            del val_json[k]
-                diff = jsondiff.diff(val_json, res_json)
-            except Exception as ex:
-                pass
-
-            if diff:
-                # Check if this is a known non-deterministic case
-                if 'individual-str_True' in key:
-                    # JSON responses for individual mode may have non-deterministic metadata
-                    print(f"Warning: Skipping non-deterministic individual mode JSON: {key}")
-                    warnings += 1
-                else:
-                    errors += 1
-                    print("Error JSON Changed!!:{}".format(key))
-                    print(str(diff)[:100])
-            
-            # Compare JSON image hash with PNG image hash
-            if isinstance(result_compare, dict) and 'image' in result_compare:
-                # Get the non-JSON key by removing _json-True
-                png_key = key.replace("_json-bool_True", "").replace("_json-str_True", "")
-                if png_key == key:
-                    print("Warning: PNG key not found for JSON key: {}".format(key))
-                    continue
-                
-                if png_key in results:
-                    # Extract PNG hash from result structure
-                    png_result = results[png_key]
-                    if isinstance(png_result, dict) and 'hash' in png_result:
-                        png_hash = png_result['hash']
-                    else:
-                        png_hash = png_result
+    # ============================================
+    # SELF-COMPARISON VALIDATION
+    # ============================================
+    print("\n=== SELF-COMPARISON VALIDATION ===")
+    self_comparison_errors = 0
+    json_to_binary_comparisons = 0
+    json_to_json_only_comparisons = 0
+    
+    # 1. Compare JSON image hash with binary image hash
+    print("\nComparing JSON vs Binary image hashes...")
+    for key in results:
+        if key.endswith('.json') and 'vssx' not in key:
+            json_result = results[key]
+            if isinstance(json_result, dict) and 'data' in json_result:
+                json_data = json_result['data']
+                if isinstance(json_data, dict) and 'image' in json_data:
+                    # Get base key by removing extension
+                    base_key = key.rsplit('.', 1)[0]
+                    png_key = base_key + '.png'
                     
-                    json_image_hash = result_compare['image']
-
-                    json_to_image_compare_count +=1
+                    if png_key in results:
+                        png_result = results[png_key]
+                        if isinstance(png_result, dict) and 'hash' in png_result:
+                            json_to_binary_comparisons += 1
+                            json_image_hash = json_data['image']
+                            png_hash = png_result['hash']
+                            if json_image_hash != png_hash:
+                                self_comparison_errors += 1
+                                print(f"  ERROR: Image hash mismatch for {key[:50]}...")
+                                print(f"    JSON hash: {json_image_hash}")
+                                print(f"    PNG hash:  {png_hash}")
+    
+    print(f"  Compared {json_to_binary_comparisons} JSON/Binary pairs, {self_comparison_errors} errors")
+    
+    # 2. Compare json vs json_only (excluding image fields)
+    print("\nComparing JSON vs JSON_only outputs...")
+    json_only_errors = 0
+    for key in results:
+        if key.endswith('.json_only') and 'vssx' not in key:
+            json_only_result = results[key]
+            # Find corresponding json key - same base with .json extension
+            base_key = key.rsplit('.', 1)[0]
+            json_key = base_key + '.json'
+            
+            if json_key in results:
+                json_to_json_only_comparisons += 1
+                
+                # Extract data from both results
+                json_only_data = json_only_result.get('data', json_only_result) if isinstance(json_only_result, dict) else json_only_result
+                json_data = results[json_key].get('data', results[json_key]) if isinstance(results[json_key], dict) else results[json_key]
+                
+                if isinstance(json_only_data, dict) and isinstance(json_data, dict):
+                    # Compare excluding specific keys (including path which can vary between output types)
+                    ignore_keys = ['execution_duration', 'image', 'image_mib', 'params', 'json_only', 'json', 'image_type', 'path']
                     
-                    if png_hash != json_image_hash:
-                        errors += 1
-                        print(f"Error: Image hash mismatch between JSON and PNG for {key}")
-                        print(f"  JSON image hash: {json_image_hash}")
-                        print(f"  PNG image hash:  {png_hash}")
-            
-            
-        
-        elif result_compare != validation[key]:
-            # Check if this is a known non-deterministic case
-            if 'individual-str_True' in key:
-                # ZIP files with individual mode are non-deterministic due to timestamps
-                print(f"Warning: Skipping non-deterministic ZIP file: {key}")
-                warnings += 1
-            else:
-                errors += 1
-                # Get the actual path from result_value if available
-                if isinstance(result_value, dict) and 'path' in result_value:
-                    file_path = os.path.join(save_dir, result_value['path'])
-                else:
-                    file_path = os.path.join(save_dir, git_state, key) + '.png'
-                print(f"Error Image Changed!!: {key} (file://{os.path.abspath(file_path)})")
-    print("Test Complete {} Errors Found {} Warning".format(errors, warnings))
-    print("JSON Only to Original: {}".format(json_only_to_original))
-    print("JSON to Image Compare Count: {}".format(json_to_image_compare_count))
+                    json_only_filtered = {k: v for k, v in json_only_data.items() if k not in ignore_keys}
+                    json_filtered = {k: v for k, v in json_data.items() if k not in ignore_keys}
+                    
+                    diff = jsondiff.diff(json_only_filtered, json_filtered)
+                    if diff:
+                        json_only_errors += 1
+                        print(f"  ERROR: JSON vs JSON_only mismatch for {key[:50]}...")
+                        print(f"    Differences: {str(diff)[:100]}")
+    
+    print(f"  Compared {json_to_json_only_comparisons} JSON/JSON_only pairs, {json_only_errors} errors")
+    self_comparison_errors += json_only_errors
+    
+    print(f"\n=== SELF-COMPARISON SUMMARY ===")
+    print(f"Total self-comparison errors: {self_comparison_errors}")
+    print(f"JSON to Binary comparisons: {json_to_binary_comparisons}")
+    print(f"JSON to JSON_only comparisons: {json_to_json_only_comparisons}")
+    
+    print(f"\n=== TEST COMPLETE ===")
+    print(f"For external validation against previous runs, use:")
+    print(f"  python test_compare.py {output_filename} --validation test_validation.json")
 
 
 def main(args):
@@ -1044,7 +769,7 @@ if __name__ == "__main__":
                         nargs='?',
                         help="Test all options, or test through lamdba entry")
     parser.add_argument('-t', type=int, help="number of threads", default=8)
-    parser.add_argument('--limit', type=int, help="limit the total number of tests to run", default=None)
+    parser.add_argument('--limit', type=int, help="limit the total number of tests to run")
     parser.add_argument('--git-state', dest='git_state', type=str, 
                         help="Override git state (e.g., commit hash like '9fc053a')")
     main(parser.parse_args())
