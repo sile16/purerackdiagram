@@ -226,7 +226,7 @@ def test_lambda(params, outputfile ):
 _generated_keys = {}  # Change to dict to store both key and item
 _duplicate_keys = []
 
-def create_test_image(item, count, total, save_dir):
+def create_test_image(item, count, total, save_dir, filter_text=None):
     """
     Create test image with git-state based directory structure.
     
@@ -235,6 +235,7 @@ def create_test_image(item, count, total, save_dir):
         count: Current test number
         total: Total number of tests
         save_dir: Directory name for saving results
+        filter_text: Optional filter text to check against generated key
     """
 
     
@@ -293,6 +294,10 @@ def create_test_image(item, count, total, save_dir):
     
     # Create the full filename with extension - this will be our result key
     full_file_name = base_file_name + file_extension
+    
+    # Apply filter if specified
+    if filter_text and filter_text.lower() not in full_file_name.lower():
+        return {}
     
     # Check filename length against OS limits
     max_filename_length = 255  # Common filesystem limit
@@ -668,11 +673,13 @@ def test_all(args):
     total_count = 0
 
     all_items = list(get_all_tests())
+    
     if args.limit is not None:
         all_items = all_items[:args.limit]
     count = 0
+    filter_text = getattr(args, 'filter', None)
     for item in all_items:
-        futures.append(pool.apply_async(create_test_image, args=(item, count, len(all_items), save_dir)))
+        futures.append(pool.apply_async(create_test_image, args=(item, count, len(all_items), save_dir, filter_text)))
         count += 1
 
     pool.close()
@@ -855,7 +862,7 @@ def main(args):
     else:
         all_items = list(get_all_tests())
         print(f"Running single test at index {args.index} of {len(all_items)}")    
-        create_test_image(all_items[args.index], 0, 1, '')
+        create_test_image(all_items[args.index], 0, 1, '', getattr(args, 'filter', None))
         
         
 
@@ -874,6 +881,8 @@ if __name__ == "__main__":
     parser.add_argument('--debug-level', dest='debug_level', type=str, default='warning',
                         choices=['debug', 'info', 'warning', 'warn', 'error', 'critical'],
                         help="Set logging level (default: warning)")
+    parser.add_argument('--filter', dest='filter', type=str, 
+                        help="Filter tests by key name - only run tests whose key contains this text")
     
     args = parser.parse_args()
     
