@@ -12,8 +12,10 @@ from collections import defaultdict
 def extract_result_data(result_value):
     """Extract actual data/hash from result structure"""
     if isinstance(result_value, dict) and 'data' in result_value:
+        # For JSON results, the data already contains hashed images
         return result_value['data']
     elif isinstance(result_value, dict) and 'hash' in result_value:
+        # For binary results (PNG, VSSX), return the hash directly
         return result_value['hash']
     elif isinstance(result_value, dict) and 'status' in result_value:
         # Error case
@@ -130,29 +132,6 @@ def group_errors_by_diff(errors):
     
     return grouped
 
-def sort_ports_list(data):
-    """Sort ports list in data if it exists, recursively handling nested structures"""
-    if isinstance(data, dict):
-        # Check if this dict has a ports list
-        if 'ports' in data and isinstance(data['ports'], list):
-            def port_key(port):
-                return (port['loc'][0], port['loc'][1])
-            
-            # Sort the ports list
-            data['ports'] = sorted(data['ports'], key=port_key)
-        
-        # Recursively check all nested dictionaries
-        for key, value in data.items():
-            if isinstance(value, (dict, list)):
-                data[key] = sort_ports_list(value)
-    
-    elif isinstance(data, list):
-        # Handle lists that might contain dicts with ports
-        for i, item in enumerate(data):
-            if isinstance(item, (dict, list)):
-                data[i] = sort_ports_list(item)
-    
-    return data
 
 def compare_results(input_file, validation_file, output_html=None):
     """Compare two test result JSON files and generate HTML report"""
@@ -232,9 +211,6 @@ def compare_results(input_file, validation_file, output_html=None):
                         res_json.pop(k, None)
                         val_json.pop(k, None)
                     
-                    # Sort ports list before comparison to ensure consistent ordering
-                    res_json = sort_ports_list(res_json)
-                    val_json = sort_ports_list(val_json)
                 
                 diff = jsondiff.diff(val_json, res_json)
                 

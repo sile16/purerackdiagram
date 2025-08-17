@@ -142,15 +142,10 @@ def test_lambda(params, outputfile ):
             
             obj = json.loads(results['body'])
             
-            # Save the original object to file WITHOUT modifying the image
-            with open(outputfile + '.json', 'w',  encoding='utf-8') as outfile:
-                json.dump(obj, outfile, indent=4, ensure_ascii=False)
-            
-            # Now create a modified version for the results data structure
-            # This modified version will have the hash instead of the full image
+            # Create a modified version with hashed image for both disk storage and results
             result_obj = obj.copy()
             if 'image' in result_obj and result_obj['image'] is not None:
-                # Replace image data with SHA256 hash in the result object only
+                # Replace image data with SHA256 hash
                 if result_obj.get('image_type') == 'link' or result_obj['image'].startswith(('http://', 'https://')):
                     # Image is a URL - download and hash the content
                     logger.info(f"Downloading image from URL: {result_obj['image']}")
@@ -169,6 +164,19 @@ def test_lambda(params, outputfile ):
                 if 'json_only' not in params['queryStringParameters'] and results['statusCode'] == 200:
                     # If no image data, just use the original body
                     print("No image data found in JSON response")
+
+            # Add params to the result object for disk storage
+            result_obj['params'] = params['queryStringParameters']
+            
+            # Save the hashed version to disk with correct extension
+            json_only_param = params['queryStringParameters'].get('json_only')
+            if json_only_param and str(json_only_param).lower() in ['true', '1', 'yes']:
+                file_extension = '.json_only'
+            else:
+                file_extension = '.json'
+            
+            with open(outputfile + file_extension, 'w',  encoding='utf-8') as outfile:
+                json.dump(result_obj, outfile, indent=4, ensure_ascii=False)
 
             results['body'] = result_obj  # Use the modified version with hash for results
 
@@ -310,7 +318,7 @@ def create_test_image(item, count, total, save_dir):
                         "error_type": error_type,
                         "error_msg": error_msg,
                         "path": f"{save_dir}/{base_file_name}",
-            
+                        "params": item,
                     }})
                 except json.JSONDecodeError:
                     print(f"  Failed to parse error JSON")
@@ -318,25 +326,39 @@ def create_test_image(item, count, total, save_dir):
                         "status": status_code,
                         "error": "Failed to parse error JSON",
                         "path": f"{save_dir}/{base_file_name}",
- 
+                        "params": item,
                     }})
         
         # For successful responses or errors that aren't in JSON format
         print(f"{count} of {total}   {full_file_name} - Status: {status_code}")
         
-        # Prepare result with path information
+        # Prepare result with path information and params
         result_data = {
             'path': f"{save_dir}/{base_file_name}",
-
+            'params': item,  # Include test parameters
         }
         
         if content_type == 'application/json':
-            result_data['data'] = filter_result_data(results['body'])
+            # For JSON files, just store a reference instead of duplicating data
+            # Use the correct extension based on the test type
+            json_only_param = item.get('json_only', False)
+            if json_only_param and str(json_only_param).lower() in ['true', '1', 'yes']:
+                result_data['path'] += '.json_only'
+            else:
+                result_data['path'] += '.json'
+            result_data['content_type'] = 'application/json'
+            # Add basic metadata without duplicating full data
+            if 'image' in results['body']:
+                result_data['has_image'] = True
+                result_data['image_hash'] = results['body']['image']  # This is now a hash
+            else:
+                result_data['has_image'] = False
         else:
             # For other content types (PNG, VSSX, ZIP), decode base64 and hash raw bytes
             decoded_body = base64.b64decode(results['body'].encode('utf-8'))
             h.update(decoded_body)
             result_data['hash'] = h.hexdigest()
+            result_data['content_type'] = content_type
             
             # Determine file extension based on content type
             if content_type == 'image/png':
@@ -356,6 +378,7 @@ def create_test_image(item, count, total, save_dir):
             "error": str(ex_unknown),
             "traceback": traceback.format_exc(),
             "path": f"{save_dir}/{base_file_name}",
+            "params": item,
         }})
 
     
@@ -600,9 +623,6 @@ def test_all(args):
                 print("Aborting test run to avoid overwriting existing data.")
                 return
 
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir, exist_ok=True)
-
     # Create amultiprocessing pool
     pool = Pool(processes=args.t)
     futures = []
@@ -691,57 +711,92 @@ def test_all(args):
     for key in results:
         if key.endswith('.json') and 'vssx' not in key:
             json_result = results[key]
-            if isinstance(json_result, dict) and 'data' in json_result:
-                json_data = json_result['data']
-                if isinstance(json_data, dict) and 'image' in json_data:
-                    # Get base key by removing extension
-                    base_key = key.rsplit('.', 1)[0]
-                    png_key = base_key + '.png'
-                    
-                    if png_key in results:
-                        png_result = results[png_key]
-                        if isinstance(png_result, dict) and 'hash' in png_result:
-                            json_to_binary_comparisons += 1
-                            json_image_hash = json_data['image']
-                            png_hash = png_result['hash']
-                            if json_image_hash != png_hash:
-                                self_comparison_errors += 1
-                                print(f"  ERROR: Image hash mismatch for {key[:50]}...")
-                                print(f"    JSON hash: {json_image_hash}")
-                                print(f"    PNG hash:  {png_hash}")
+            if isinstance(json_result, dict) and json_result.get('has_image'):
+                # Get base key by removing extension
+                base_key = key.rsplit('.', 1)[0]
+                png_key = base_key + '.png'
+                
+                if png_key in results:
+                    png_result = results[png_key]
+                    if isinstance(png_result, dict) and 'hash' in png_result:
+                        json_to_binary_comparisons += 1
+                        json_image_hash = json_result.get('image_hash')
+                        png_hash = png_result['hash']
+                        if json_image_hash != png_hash:
+                            self_comparison_errors += 1
+                            print(f"  ERROR: Image hash mismatch for {key[:50]}...")
+                            print(f"    JSON hash: {json_image_hash}")
+                            print(f"    PNG hash:  {png_hash}")
     
     print(f"  Compared {json_to_binary_comparisons} JSON/Binary pairs, {self_comparison_errors} errors")
     
     # 2. Compare json vs json_only (excluding image fields)
     print("\nComparing JSON vs JSON_only outputs...")
     json_only_errors = 0
+    json_only_keys_found = 0
+    json_keys_matched = 0
+    
     for key in results:
         if key.endswith('.json_only') and 'vssx' not in key:
+            json_only_keys_found += 1
             json_only_result = results[key]
             # Find corresponding json key - same base with .json extension
             base_key = key.rsplit('.', 1)[0]
             json_key = base_key + '.json'
             
             if json_key in results:
+                json_keys_matched += 1
                 json_to_json_only_comparisons += 1
                 
-                # Extract data from both results
-                json_only_data = json_only_result.get('data', json_only_result) if isinstance(json_only_result, dict) else json_only_result
-                json_data = results[json_key].get('data', results[json_key]) if isinstance(results[json_key], dict) else results[json_key]
-                
-                if isinstance(json_only_data, dict) and isinstance(json_data, dict):
-                    # Compare excluding specific keys (including path which can vary between output types)
-                    ignore_keys = ['execution_duration', 'image', 'image_mib', 'params', 'json_only', 'json', 'image_type', 'path']
+                # Read the actual files to compare content
+                try:
+                    # Handle path construction - path might already include "test_results/" prefix
+                    json_only_path = json_only_result['path']
+                    json_path = results[json_key]['path']
                     
-                    json_only_filtered = {k: v for k, v in json_only_data.items() if k not in ignore_keys}
-                    json_filtered = {k: v for k, v in json_data.items() if k not in ignore_keys}
+                    # If path doesn't start with test_results/, add it
+                    if not json_only_path.startswith('test_results/'):
+                        json_only_path = os.path.join("test_results", json_only_path)
+                    if not json_path.startswith('test_results/'):
+                        json_path = os.path.join("test_results", json_path)
                     
-                    diff = jsondiff.diff(json_only_filtered, json_filtered)
-                    if diff:
-                        json_only_errors += 1
-                        print(f"  ERROR: JSON vs JSON_only mismatch for {key[:50]}...")
-                        print(f"    Differences: {str(diff)[:100]}")
+                    # Ensure we're only reading JSON files
+                    if not (json_only_path.endswith('.json_only') and json_path.endswith('.json')):
+                        print(f"  WARNING: Skipping non-JSON comparison: {json_only_path} vs {json_path}")
+                        json_to_json_only_comparisons -= 1
+                        continue
+                    
+                    if os.path.exists(json_only_path) and os.path.exists(json_path):
+                        with open(json_only_path, 'r', encoding='utf-8') as f:
+                            json_only_data = json.load(f)
+                        with open(json_path, 'r', encoding='utf-8') as f:
+                            json_data = json.load(f)
+                        
+                        if isinstance(json_only_data, dict) and isinstance(json_data, dict):
+                            # Compare excluding specific keys (including path which can vary between output types)
+                            ignore_keys = ['execution_duration', 'image', 'image_mib', 'params', 'json_only', 'json', 'image_type', 'path']
+                            
+                            json_only_filtered = {k: v for k, v in json_only_data.items() if k not in ignore_keys}
+                            json_filtered = {k: v for k, v in json_data.items() if k not in ignore_keys}
+                            
+                            diff = jsondiff.diff(json_only_filtered, json_filtered)
+                            if diff:
+                                json_only_errors += 1
+                                print(f"  ERROR: JSON vs JSON_only mismatch for {key[:50]}...")
+                                print(f"    Differences: {str(diff)[:100]}")
+                    else:
+                        print(f"  WARNING: Files not found: {json_only_path} or {json_path}")
+                        json_to_json_only_comparisons -= 1
+                        
+                except (FileNotFoundError, json.JSONDecodeError, UnicodeDecodeError) as e:
+                    print(f"  WARNING: Could not compare {key}: {e}")
+                    print(f"    Paths: {json_only_path} vs {json_path}")
+                    json_to_json_only_comparisons -= 1  # Don't count failed comparisons
+            else:
+                if json_only_keys_found <= 5:  # Only show first few for debugging
+                    print(f"  DEBUG: No matching JSON key for {key} (looking for {json_key})")
     
+    print(f"  DEBUG: Found {json_only_keys_found} json_only keys, {json_keys_matched} matched with json keys")
     print(f"  Compared {json_to_json_only_comparisons} JSON/JSON_only pairs, {json_only_errors} errors")
     self_comparison_errors += json_only_errors
     
