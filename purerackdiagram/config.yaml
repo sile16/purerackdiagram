@@ -875,10 +875,6 @@ pci_valid_cards:
 - sas
 - dca
 - blank
-png/old_pure_fbs_back.png:
-  size:
-  - 2606
-  - 1288
 png/pure_fa_2eth100_fh.png:
   ports:
   - loc: &id004 !!python/tuple
@@ -3637,6 +3633,10 @@ png/pure_fa_c_r5_back.png:
   size:
   - 2625
   - 781
+png/pure_fa_c_r5_bezel.png:
+  size:
+  - 2844
+  - 766
 png/pure_fa_c_r5_front.png:
   fm_loc:
   - *id055
@@ -8084,14 +8084,6 @@ png/pure_fb_xfm_8400_front.png:
   size:
   - 2850
   - 264
-png/pure_fb_xfm_back.png:
-  size:
-  - 2844
-  - 264
-png/pure_fb_xfm_front.png:
-  size:
-  - 2844
-  - 284
 png/pure_fbe_back.png:
   ports:
   - &id418

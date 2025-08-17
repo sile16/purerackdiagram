@@ -1644,8 +1644,7 @@ def update_image_sizes(config):
     """Add image size information to config for all PNG files"""
     # Scan both purerackdiagram/png and lambda/purerackdiagram/png directories
     png_dirs = [
-        'purerackdiagram/png',
-        'lambda/purerackdiagram/png'
+        'purerackdiagram/png'
     ]
     
     for png_dir in png_dirs:

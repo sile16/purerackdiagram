@@ -763,7 +763,7 @@ def test_all(args):
                         png_hash = png_result['hash']
                         if json_image_hash != png_hash:
                             self_comparison_errors += 1
-                            print(f"  ERROR: Image hash mismatch for {key[:50]}...")
+                            print(f"  ERROR: Image hash mismatch for {key}")
                             print(f"    JSON hash: {json_image_hash}")
                             print(f"    PNG hash:  {png_hash}")
     
