@@ -571,7 +571,7 @@ def test_all(args):
         git_state = args.git_state
     print(f"Using specified git state: {git_state}")
 
-    save_dir = os.path.join("test_results", git_state)
+    save_dir = git_state
     
     # Handle directory cleanup based on git-state
     results_json_file = os.path.join("test_results", f"test_results_{git_state}.json")

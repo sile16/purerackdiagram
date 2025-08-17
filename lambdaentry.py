@@ -170,20 +170,13 @@ def draw_triangle_down(draw, x, y, size, color):
 def sort_ports(all_ports):
 
     def port_key(port):
-        global unknown_count
-        if 'name' not in port:
-            return ('uknown', 'unknown', 99, sum(port['loc']))
-        name = port.get('name', 'ct0.eth0')
+        name = port.get('name', 'unknown99.unknown99')
         parts = name.split('.')
         controller = parts[0]
+        protocol_and_number = "unknown99"
         if len(parts) > 1:
-            protocol_and_number = parts[1]
-        else:
-            protocol_and_number = "eth0"
-        protocol = ''.join([char for char in protocol_and_number if not char.isdigit()])
-        number = ''.join([char for char in protocol_and_number if char.isdigit()])
-
-        return (controller, protocol, int(number), sum(port['loc']))
+            protocol_and_number = parts[1]  
+        return (controller, protocol_and_number, port['loc'][0], port['loc'][1])
     return sorted(all_ports, key=port_key)
 
 
