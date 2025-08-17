@@ -19,11 +19,49 @@ import datetime
 import shutil
 
 
+# Initialize logger with default WARN level (will be updated by setup_logging)
 logger = logging.getLogger()
 ch = logging.StreamHandler()
 ch.setLevel(logging.WARN)
 logger.addHandler(ch)
 logger.setLevel(logging.WARN)
+
+def setup_logging(debug_level):
+    """Setup logging based on debug level argument"""
+    # Map string levels to logging constants
+    level_map = {
+        'debug': logging.DEBUG,
+        'info': logging.INFO,
+        'warning': logging.WARNING,
+        'warn': logging.WARNING,
+        'error': logging.ERROR,
+        'critical': logging.CRITICAL
+    }
+    
+    # Convert to lowercase and get logging level
+    level = level_map.get(debug_level.lower(), logging.WARNING)
+    
+    # Update existing logger and handler
+    logger.setLevel(level)
+    ch.setLevel(level)
+    
+    # Set format based on level
+    if level <= logging.DEBUG:
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    else:
+        formatter = logging.Formatter('%(levelname)s: %(message)s')
+    
+    ch.setFormatter(formatter)
+    
+    logger.info(f"Logging level set to: {debug_level.upper()}")
+
+
+def clear_image_cache():
+    """Clear the global image cache to prevent state leakage between tests"""
+    from purerackdiagram.utils import cache
+    cache_size_before = len(cache)
+    cache.clear()
+    logger.debug(f"Cleared image cache: {cache_size_before} items -> {len(cache)} items")
 
 def get_file_hash(file_path):
     """Get SHA256 hash of a file"""
@@ -201,6 +239,7 @@ def create_test_image(item, count, total, save_dir):
 
     
     # Create git-state based subdirectory
+    clear_image_cache() 
     folder = os.path.join("test_results", save_dir)
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -814,7 +853,19 @@ def main(args):
     if args.testtype == 'all':
         test_all(args)
     else:
-        test_lambda(more_tests[0], 'tmp')
+        all_items = list(get_all_tests())
+        print(f"Running single test at index {args.index} of {len(all_items)}")
+        for x in range(0, 10):
+            print(f"Running test {x+1} of 10")
+            
+            # Log test parameters for debugging
+            test_params = all_items[x]
+            json_only = test_params.get('json_only', False)
+            logger.debug(f"Test {x}: json_only={json_only}, params={test_params}")
+            
+            create_test_image(all_items[x], x, 10, '')
+        
+        
 
 
 if __name__ == "__main__":
@@ -824,7 +875,17 @@ if __name__ == "__main__":
                         nargs='?',
                         help="Test all options, or test through lamdba entry")
     parser.add_argument('-t', type=int, help="number of threads", default=8)
+    parser.add_argument('-i', '--index', type=int, help="Index of the test to run (0-based)", default=0)
     parser.add_argument('--limit', type=int, help="limit the total number of tests to run")
     parser.add_argument('--git-state', dest='git_state', type=str, 
                         help="Override git state (e.g., commit hash like '9fc053a')")
-    main(parser.parse_args())
+    parser.add_argument('--debug-level', dest='debug_level', type=str, default='warning',
+                        choices=['debug', 'info', 'warning', 'warn', 'error', 'critical'],
+                        help="Set logging level (default: warning)")
+    
+    args = parser.parse_args()
+    
+    # Setup logging based on debug level argument
+    setup_logging(args.debug_level)
+    
+    main(args)

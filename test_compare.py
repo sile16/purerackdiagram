@@ -203,8 +203,16 @@ def compare_results(input_file, validation_file, output_html=None):
             ignore_keys = ['execution_duration', 'image', 'image_mib', 'params', 'json_only', 'json', 'image_type', 'path']
             
             try:
-                res_json = result_compare.copy() if isinstance(result_compare, dict) else result_compare
-                val_json = validation_compare.copy() if isinstance(validation_compare, dict) else validation_compare
+                # Load actual JSON content from files instead of comparing metadata
+                if result_path and validation_path and os.path.exists(result_path) and os.path.exists(validation_path):
+                    with open(result_path, 'r') as f:
+                        res_json = json.load(f)
+                    with open(validation_path, 'r') as f:
+                        val_json = json.load(f)
+                else:
+                    # Fallback to metadata comparison if files don't exist
+                    res_json = result_compare.copy() if isinstance(result_compare, dict) else result_compare
+                    val_json = validation_compare.copy() if isinstance(validation_compare, dict) else validation_compare
                 
                 if isinstance(res_json, dict) and isinstance(val_json, dict):
                     for k in ignore_keys:
@@ -1349,11 +1357,44 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                 return;
             }
             
+            // Check if images are loaded, if not wait for them
+            Promise.all([
+                ensureImageLoaded(img1),
+                ensureImageLoaded(img2)
+            ]).then(() => {
+                performPixelDiff(img1, img2, canvas, imageId);
+            }).catch((error) => {
+                console.error('Error loading images for comparison:', error);
+                alert('Error loading images for comparison: ' + error.message);
+            });
+        }
+        
+        function ensureImageLoaded(img) {
+            return new Promise((resolve, reject) => {
+                if (img.complete && img.naturalWidth > 0) {
+                    resolve();
+                } else {
+                    img.onload = () => resolve();
+                    img.onerror = () => reject(new Error('Failed to load image: ' + img.src));
+                    // If image src is not set or empty, try to reload
+                    if (!img.src) {
+                        reject(new Error('Image src is empty'));
+                    }
+                }
+            });
+        }
+        
+        function performPixelDiff(img1, img2, canvas, imageId) {
             const ctx = canvas.getContext('2d');
             
             // Set canvas size to match images
             const maxWidth = Math.max(img1.naturalWidth || img1.width, img2.naturalWidth || img2.width);
             const maxHeight = Math.max(img1.naturalHeight || img1.height, img2.naturalHeight || img2.height);
+            
+            if (maxWidth === 0 || maxHeight === 0) {
+                alert('Images have no dimensions - cannot compare');
+                return;
+            }
             
             canvas.width = maxWidth;
             canvas.height = maxHeight;
@@ -1367,9 +1408,21 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
             canvas1.width = canvas2.width = maxWidth;
             canvas1.height = canvas2.height = maxHeight;
             
+            // Clear canvases with white background
+            ctx1.fillStyle = 'white';
+            ctx1.fillRect(0, 0, maxWidth, maxHeight);
+            ctx2.fillStyle = 'white';
+            ctx2.fillRect(0, 0, maxWidth, maxHeight);
+            
             // Draw images to temporary canvases
-            ctx1.drawImage(img1, 0, 0, maxWidth, maxHeight);
-            ctx2.drawImage(img2, 0, 0, maxWidth, maxHeight);
+            try {
+                ctx1.drawImage(img1, 0, 0, maxWidth, maxHeight);
+                ctx2.drawImage(img2, 0, 0, maxWidth, maxHeight);
+            } catch (error) {
+                console.error('Error drawing images to canvas:', error);
+                alert('Error drawing images to canvas: ' + error.message);
+                return;
+            }
             
             // Get image data
             const imageData1 = ctx1.getImageData(0, 0, maxWidth, maxHeight);

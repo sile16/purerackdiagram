@@ -38,9 +38,7 @@ class MockImage:
             width, height = global_config[config_key]['size']
             return cls((width, height))
         else:
-            # Fallback: load image to get size, but don't keep it in memory
-            with Image.open(image_path) as img:
-                return cls(img.size)
+            logger.error(f"Config for {config_key} not found or size not specified")
     
     def paste(self, im, box=None):
         """Mock paste operation - does nothing"""
@@ -158,7 +156,7 @@ class RackImage():
         # potential race, if two object check but... worst case is we miss
         # a caching opportunity and just load twice.
         cache_key = f"{key}_{json_only}"
-        if cache_key in cache:
+        if cache_key in cache and not json_only:
             self.primary = False
             self.primary_obj = cache[cache_key]
         else:
@@ -166,7 +164,7 @@ class RackImage():
             self.primary = True
 
     async def get_image(self):
-        if not self.primary:
+        if not self.primary and not self.json_only:
             return await self.primary_obj.get_image()
 
         # could be called by primary and secondary
@@ -176,11 +174,9 @@ class RackImage():
             # same image may be requested multiple times
             # when secondary comes through need to
             # return image that's already loaded
-            if self.img:
-                if isinstance(self.img, MockImage):
-                    return self.img  # MockImages don't need copying
-                else:
-                    return self.img.copy()
+            
+            if self.img and not self.json_only:
+                return self.img.copy()
 
             loop = asyncio.get_event_loop()
 
@@ -190,10 +186,8 @@ class RackImage():
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 await loop.run_in_executor(pool, self.load_img)
 
-            if isinstance(self.img, MockImage):
-                return self.img  # MockImages don't need copying
-            else:
-                return self.img.copy()
+            
+            return self.img.copy()
 
     def load_img(self):
         # load image from disk or create MockImage
@@ -273,7 +267,7 @@ def combine_images_vertically(image_ports):
         new_im = MockImage((total_width, total_height))
     elif any_mock:
         # Mixed images - this shouldn't happen, but handle gracefully
-        logger.warning("Mixed MockImage and PIL Images detected, forcing MockImage mode")
+        logger.error("Mixed MockImage and PIL Images detected, forcing MockImage mode")
         new_im = MockImage((total_width, total_height))
     else:
         # Regular PIL image combination
@@ -288,9 +282,7 @@ def combine_images_vertically(image_ports):
         # center the x difference if an image is slightly smaller width
         x_offset = int((total_width - im.size[0]) / 2)
         
-        # Only paste if not using MockImages
-        if not isinstance(new_im, MockImage) and not isinstance(im, MockImage):
-            new_im.paste(im, (x_offset, y_offset))
+        new_im.paste(im, (x_offset, y_offset))
 
         
         #calculate new port location
