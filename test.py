@@ -426,8 +426,8 @@ def get_all_tests():
                                 "datapacks": "0",
                                 "face": "front",
                                 'chassi_gen': cg,
-                                "fm_label": True,
-                                "dp_label": True}
+                                "fm_label": "True",
+                                "dp_label": "True"}
                     if json_test is not None:
                         params[json_test] = "True"
                     
@@ -442,8 +442,8 @@ def get_all_tests():
             if 'c' in model or 'e' in model:
                 count += 1
                 params = {"model": model,
-                            "fm_label": True,
-                            "dp_label": True,
+                            "fm_label": "True",
+                            "dp_label": "True",
                             "csize": '984'}
                 if json_test is not None:
                     params[json_test] = "True"
@@ -453,8 +453,8 @@ def get_all_tests():
                 for dp in dps:
                     count += 1
                     params = {"model": model,
-                                "fm_label": True,
-                                "dp_label": True,
+                                "fm_label": "True",
+                                "dp_label": "True",
                                 "datapacks": dp}
                     if json_test is not None:
                         params[json_test] = "True"
@@ -463,9 +463,9 @@ def get_all_tests():
 
             # The bezel.
             params = {"model": model,
-                        "fm_label": True,
-                        "dp_label": True,
-                        "bezel": True,
+                        "fm_label": "True",
+                        "dp_label": "True",
+                        "bezel": "True",
                         "datapacks": '366'}
             if json_test is not None:
                 params[json_test] = "True"
@@ -475,8 +475,8 @@ def get_all_tests():
         for csize in csizes:
             count += 1
             params = {"model": 'fa-c60',
-                        "fm_label": True,
-                        "dp_label": True,
+                        "fm_label": "True",
+                        "dp_label": "True",
                         "csize": csize}
             if json_test is not None:
                 params[json_test] = "True"
@@ -487,8 +487,8 @@ def get_all_tests():
         for dp in valid_chassis_dps:
             count += 1
             params = {"model": "fa-x70r1",
-                        "fm_label": True,
-                        "dp_label": True,
+                        "fm_label": "True",
+                        "dp_label": "True",
                         "datapacks": dp}
             if json_test is not None:
                 params[json_test] = "True"
@@ -498,8 +498,8 @@ def get_all_tests():
         for dp in valid_shelf_dps:
             count += 1
             params = {"model": "fa-x70r4",
-                        "fm_label": True,
-                        "dp_label": True,
+                        "fm_label": "True",
+                        "dp_label": "True",
                         "datapacks": f"63-{dp}"}
             if json_test is not None:
                 params[json_test] = "True"
@@ -520,7 +520,7 @@ def get_all_tests():
                             "addoncards": '4fc',
                             "face": "back",
                             "csize": '984',
-                            "ports": True}
+                            "ports": "True"}
                 if json_test is not None:
                     params[json_test] = "True"
                 
@@ -532,7 +532,7 @@ def get_all_tests():
                             "datapacks": "63-24.0-45",
                             "addoncards": '4fc',
                             "face": "back",
-                            "ports": True}
+                            "ports": "True"}
                 if json_test is not None:
                     params[json_test] = "True"
                 
@@ -545,7 +545,7 @@ def get_all_tests():
                             "datapacks": "366",
                             "addoncards": f"{card},{card},{card}",
                             "face": "back",
-                            "ports": True}
+                            "ports": "True"}
                 if json_test is not None:
                     params[json_test] = "True"
                 count += 1
@@ -564,7 +564,7 @@ def get_all_tests():
                                 "face": face,
                                 "no_of_drives_per_blade": dfms,
                                 "drive_size": size,
-                                "ports": True}
+                                "ports": "True"}
                         if json_test is not None:
                             params[json_test] = "True"
                         

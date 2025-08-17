@@ -56,7 +56,7 @@ more_tests = [
         "queryStringParameters": {
             "model": "fb-s200r2",
             "face": "front",
-            "dfm_label": True,
+            "dfm_label": "True",
             "bladesv2": jsonurl.dumps([
                 {
                     "gen": "1",
@@ -107,8 +107,8 @@ more_tests = [
                     ]
                 }
             ]),
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -116,7 +116,7 @@ more_tests = [
         "queryStringParameters": {
             "model": "fb-s200",
             "face": "front",
-            "dfm_label": True,
+            "dfm_label": "True",
             "bladesv2": jsonurl.dumps([
                 {  # Chassis 0
                     "gen": "1",
@@ -155,7 +155,7 @@ more_tests = [
         "queryStringParameters": {
             "model": "fb-s200",
             "face": "front",
-            "dfm_label": True,
+            "dfm_label": "True",
             "bladesv2": jsonurl.dumps([
                 {  # Chassis 0
                     "gen": "1",
@@ -194,7 +194,7 @@ more_tests = [
         "queryStringParameters": {
             "model": "fb-s200",
             "face": "front",
-            "dfm_label": True,
+            "dfm_label": "True",
             "bladesv2": jsonurl.dumps([
                 {  # Chassis 0
                     "gen": "1",
@@ -266,8 +266,8 @@ more_tests = [
                     ]
                 }
             ]),
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -277,8 +277,8 @@ more_tests = [
             "protocol": "eth",
             "face": "front",
             "datapacks": "366", 
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -318,8 +318,8 @@ more_tests = [
                     ]
                 }
             ]),
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -345,8 +345,8 @@ more_tests = [
                     ]
                 }
             ]),
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -356,8 +356,8 @@ more_tests = [
             "protocol": "eth",
             "face": "front",
             "datapacks": "366", 
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -366,10 +366,10 @@ more_tests = [
             "model": "fa-xl130r5",
             "protocol": "eth",
             "face": "front",
-            "bezel": True,
+            "bezel": "True",
             "datapacks": "366",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -378,10 +378,10 @@ more_tests = [
             "model": "fa-xl130r5",
             "protocol": "eth",
             "face": "back",
-            "bezel": True,
+            "bezel": "True",
             "datapacks": "366", 
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth200roce,2fc"
         }
     },
@@ -390,10 +390,10 @@ more_tests = [
             "model": "fa-rc20",
             "protocol": "eth",
             "face": "front",
-            "bezel": True,
+            "bezel": "True",
             "datapacks": "148", # invalid datapack that should trigger friendly error
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth100,2fc"
         }
     },
@@ -403,8 +403,8 @@ more_tests = [
             "protocol": "eth",
             "face": "back",
             "datapacks": "148", # invalid datapack that should trigger friendly error
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             "addoncards": "2eth100,2eth100,2fc"
         }
     },
@@ -414,8 +414,8 @@ more_tests = [
             "protocol": "eth",
             "face": "front",
             "datapacks": "148", # invalid datapack that should trigger friendly error
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
         }
     },
     {
@@ -424,8 +424,8 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "148", # invalid datapack that should trigger friendly error
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
         }
     },
     # Error test case 1: Invalid datapack
@@ -435,9 +435,9 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "999", # invalid datapack that should trigger friendly error
-            "dp_label": True,
-            "fm_label": True,
-            "json": True  # Return JSON to see error message
+            "dp_label": "True",
+            "fm_label": "True",
+            "json": "True"  # Return JSON to see error message
         }
     },
     # Error test case 2: Invalid model
@@ -447,9 +447,9 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "45",
-            "dp_label": True,
-            "fm_label": True,
-            "json": True  # Return JSON to see error message
+            "dp_label": "True",
+            "fm_label": "True",
+            "json": "True"  # Return JSON to see error message
         }
     },
     # Error test case 3: Invalid PCI card
@@ -460,9 +460,9 @@ more_tests = [
             "face": "back",
             "datapacks": "45",
             "addoncards": "invalid-card",  # Invalid PCI card
-            "dp_label": True,
-            "fm_label": True,
-            "json": True  # Return JSON to see error message
+            "dp_label": "True",
+            "fm_label": "True",
+            "json": "True"  # Return JSON to see error message
         }
     },
     {
@@ -471,8 +471,8 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "11/13/0.06",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
         }
     },
     {
@@ -482,8 +482,8 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "15/11/0.04",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
         }
     },
     {
@@ -493,8 +493,8 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "18/11/0.02",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
         }
     },
     {
@@ -503,8 +503,8 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "18/13-63/63/63",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             
             
         }
@@ -515,8 +515,8 @@ more_tests = [
             "protocol": "eth",
             "face": "front",
             "datapacks": "1050/1050",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             
             
         }
@@ -527,8 +527,8 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "18/13/18",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             
             
         }
@@ -539,8 +539,8 @@ more_tests = [
             "protocol": "fc",
             "face": "front",
             "datapacks": "1050/1050",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             
             
         }
@@ -552,8 +552,8 @@ more_tests = [
             "face": "front",
             "datapacks": "1050/1050",
             "chassis_gen": "2",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
             
             
         }
@@ -603,9 +603,9 @@ more_tests = [
             "datapacks": "183/40",
             "face": "front",
             "dc_power": "",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
             
         }
     },
@@ -615,9 +615,9 @@ more_tests = [
             "datapacks": "186",
             "face": "front",
             "dc_power": "",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
             "chassis_gen": "2"
         }
     },
@@ -627,9 +627,9 @@ more_tests = [
             "datapacks": "186",
             "face": "front",
             "dc_power": "",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -638,9 +638,9 @@ more_tests = [
             "datapacks": "183-183",
             "face": "back",
             "dc_power": "",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
             "individual": "True",
             "vssx": "True"
         }
@@ -651,9 +651,9 @@ more_tests = [
             "datapacks": "183-183",
             "face": "back",
             "dc_power": "",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
             "individual": "True"
         }
     },
@@ -663,9 +663,9 @@ more_tests = [
             "datapacks": "183-183",
             "face": "back",
             "dc_power": "",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -674,9 +674,9 @@ more_tests = [
             "datapacks": "1050-1050",
             "face": "back",
             "dc_power": "True",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
 
@@ -686,9 +686,9 @@ more_tests = [
             "datapacks": "183-183",
             "face": "back",
             "dc_power": "2000",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -697,9 +697,9 @@ more_tests = [
             "datapacks": "183-183",
             "face": "back",
             "dc_power": "1300",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -708,9 +708,9 @@ more_tests = [
             "datapacks": "183-183",
             "face": "back",
             "dc_power": "2000",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -718,10 +718,10 @@ more_tests = [
             "model": "fa-x20r4",
             "datapacks": "183-183",
             "face": "back",
-            "dc_power": True,
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dc_power": "True",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -729,10 +729,10 @@ more_tests = [
             "model": "fa-x50r4",
             "datapacks": "183-183",
             "face": "back",
-            "dc_power": True,
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dc_power": "True",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -740,10 +740,10 @@ more_tests = [
             "model": "fa-c20",
             "datapacks": "186/260-1050",
             "face": "back",
-            "dc_power": True,
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dc_power": "True",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -751,9 +751,9 @@ more_tests = [
             "model": "fa-c20",
             "datapacks": "186/260",
             "face": "front",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -764,7 +764,7 @@ more_tests = [
             "no_of_drives_per_blade": 4,
             "drive_size": 75,
             "ports": "TRUE",
-            'bezel': True
+            'bezel': "True"
         }
     },
     {
@@ -772,10 +772,10 @@ more_tests = [
             "model": "fa-er1b",
             "datapacks": "186",
             "face": "front",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
-            "bezel": True
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+            "bezel": "True"
         }
     },
     {
@@ -783,9 +783,9 @@ more_tests = [
             "model": "fa-er1b",
             "datapacks": "186",
             "face": "front",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     {
@@ -793,9 +793,9 @@ more_tests = [
             "model": "fa-x90r4b",
             "datapacks": "3/0.02/45",
             "face": "back",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
         }
     },
     
@@ -807,7 +807,7 @@ more_tests = [
             "no_of_drives_per_blade": 4,
             "drive_size": 75,
             "ports": "TRUE",
-            "vssx": True
+            "vssx": "True"
         }
     },
     {
@@ -816,11 +816,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "2eth100",
             "face": "back",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
       {
@@ -828,11 +828,11 @@ more_tests = [
             "model": "fa-x90r4",
             "datapacks": "3/0.02/45",
             "face": "back",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
-            "jsononly": True,
-            'json': True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+            "jsononly": "True",
+            'json': "True",
             'addoncards': '2eth100',
             'pci3': '2eth40',
             'pci0': '2eth100'
@@ -843,11 +843,11 @@ more_tests = [
             "model": "fa-x90r4",
             "datapacks": "3/0.02/45",
             "face": "back",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
-            "jsononly": True,
-            'json': True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+            "jsononly": "True",
+            'json': "True",
             'addoncards': '2eth100',
             'pci3': '2eth40'
         }
@@ -858,9 +858,9 @@ more_tests = [
             "model": "fa-x90r4",
             "datapacks": "3/0.02/45",
             "face": "back",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True"
         }
     },
         {
@@ -869,9 +869,9 @@ more_tests = [
             "datapacks": "366",
             "addoncards": "2eth25roce,2eth,2eth",
             "face": "back",
-            "dp_label": True,
-            "fm_label": True,
-            "ports": True,
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
             "mezz": "smezz"
         }
     },
@@ -881,8 +881,8 @@ more_tests = [
             "model": "fa-xl170",
             "datapacks": "183/72/91",
             "face": "front",
-            "dp_label": True,
-            "fm_label": True,
+            "dp_label": "True",
+            "fm_label": "True",
         }
     },
     {
@@ -892,11 +892,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "2eth100",
             "face": "back",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True,
+            "ports": "True",
             'json': 'True'
         }
     },
@@ -935,11 +935,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "2eth100",
             "face": "back",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
     {
@@ -949,11 +949,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "2eth100",
             "face": "front",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
     {
@@ -962,13 +962,13 @@ more_tests = [
             "datapacks": "750",
             "chassis": 2,
             "addoncards": "2eth100",
-            "bezel": True,
+            "bezel": "True",
             "face": "front",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
     
@@ -979,11 +979,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "2eth100",
             "face": "back",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
     {  ## keep this as an error message on purpose.
@@ -1028,11 +1028,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "2eth100",
             "face": "back",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True,
+            "ports": "True",
             "json": "True"
         }
     },
@@ -1132,11 +1132,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "",
             "face": "front",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
 
@@ -1147,11 +1147,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "",
             "face": "back",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
 
@@ -1162,11 +1162,11 @@ more_tests = [
             "chassis": 2,
             "addoncards": "sas,2fc,4fc,2eth,2ethbaset,2eth40,2fc,2fc,2fc,2fc",
             "face": "back",
-            "fm_label": True,
-            "dp_label": True,
+            "fm_label": "True",
+            "dp_label": "True",
             "mezz": "smezz",
             "local_delay": 0,
-            "ports": True
+            "ports": "True"
         }
     },
 
@@ -1179,7 +1179,7 @@ more_tests = [
             'efm': "efm310",
             'local_delay': 0,
             'blades': '17:0-6,52:23-29',
-            'ports': True
+            'ports': "True"
         }
     },
 
