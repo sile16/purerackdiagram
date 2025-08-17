@@ -23,7 +23,7 @@ def main():
         for gen in ['m', 'x', 'c', 'e']:
             rev_list = ['']
             chassis_gen = ['']
-            if (gen != 'm' and gen != 'xl') and (rel == 4 or rel == 1):
+            if (gen != 'm' and gen != 'xl') and (rel >= 4 or rel == 1):
                 rev_list = ['', 'b', 'c']
                 chassis_gen = ['', '_cg2']
             for rev in rev_list:
@@ -120,6 +120,17 @@ def static_global_config():
             # New E R1
              "fa-er1-eth": ["mgmt2ethbaset", None, None, "2eth25", None],
 
+             # New x R5 8/17 updated 4 port cards to be roce neabled.
+            "fa-x20r5-fc": [None, None, None, "2fc", None],
+            "fa-x50r5-fc": [None, "4fc", None, None, None],
+            "fa-x70r5-fc": [None, "4fc", None, "2fc", "dca"],
+            "fa-x90r5-fc": [None, "4fc", None, "2fc", "dca"],
+            
+            "fa-x20r5-eth": [None, None, None, "2eth25", None],
+            "fa-x50r5-eth": [None, None, None, "4eth25roce", None],
+            "fa-x70r5-eth": [None, None, None, "4eth25roce", "dca"],
+            "fa-x90r5-eth": [None, None, None, "4eth25roce", "dca"],
+
              # New x R4b 6/10 updated 4 port cards to be roce neabled.
             "fa-x20r4b-fc": [None, None, None, "2fc", None],
             "fa-x50r4b-fc": [None, "4fc", None, None, None],
@@ -134,6 +145,15 @@ def static_global_config():
             # New C R4b 20 11/12 
             "fa-c20r4c-fc": [None, None, None, "2eth25", None],  # no FC model base model, but making this show up for better experience
             "fa-c20r4c-eth": [None, None, None, "2eth25", None],
+
+            # New C R5 # 8/17 Updated 4port cards to be the roce enabled x7
+            "fa-c50r5-fc": [None, "4fc", None, None, None],
+            "fa-c70r5-fc": [None, "4fc", None, "2fc", "dca"],
+            "fa-c90r5-fc": [None, "4fc", None, "2fc", "dca"],
+            
+            "fa-c50r5-eth": [None, None, None, "4eth25roce", None],
+            "fa-c70r5-eth": [None, None, None, "4eth25roce", "dca"],
+            "fa-c90r5-eth": [None, None, None, "4eth25roce", "dca"],
 
             # New C R4b # 6/10 Updated 4port cards to be the roce enabled x7
             "fa-c50r4b-fc": [None, "4fc", None, None, None],
@@ -654,7 +674,7 @@ def update_static_fm_loc(config):
             ch0_fm_loc[x] = tuple(loc)
 
     # add chassis
-    for rel in range(1, 5):
+    for rel in range(1, 6):
         for rev in ['', 'b', 'c']:
             for cg in ['', '_cg2']:
                 key = f'png/pure_fa_x_r{rel}{rev}_front{cg}.png'
@@ -761,7 +781,7 @@ def update_static_pci_loc(config, generation, release, rev):
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
         ct1_y_offset = 380
 
-    # R4
+    # R4 & R5
     elif (generation == 'x' or generation == 'c') and release >= 4:
         pci_loc = [(679, 83), (1225, 83), (1225, 203), (2075, 83), (2075, 203)]
         ct1_y_offset = 378
@@ -1059,9 +1079,9 @@ def update_static_model_port_loc(config):
     ## FA Chassis Flash Modules for M / X / C
     ######################
 
-    for release in [1, 2, 3, 4]:
+    for release in [1, 2, 3, 4, 5]:
         ct0ports = None
-        if release == 4: 
+        if release in [4, 5] : 
             ct0ports = [ {'loc': (671, 308),
                 'name': 'ct0.eth0',
                 'port_type': 'eth_roce',
@@ -1213,7 +1233,7 @@ def update_static_model_port_loc(config):
 
         for rev in rev_list:
             # this will add in eth5 for rev b and also rev c
-            if release == 4 and rev == 'b':
+            if release == 4 and rev == 'b' or release == 5 and rev == '':
                 ct0ports.append({'loc': (1945, 293),
                 'name': 'ct0.eth5',
                 'port_type': 'eth',

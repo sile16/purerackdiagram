@@ -3,6 +3,77 @@ import jsonurl_py as jsonurl
 import urllib.parse
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "face": "front",
+            "bezel": "true",
+            "model": "fa-x0R5",
+            "ports": "True",
+            'datapacks': "91",
+            'fm_label': "True",
+            'dp_label': "True",
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "face": "front",
+            "bezel": "true",
+            "model": "fa-c50R5",
+            "ports": "True",
+            'datapacks': "240",
+            'fm_label': "True",
+            'dp_label': "True",
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "face": "back",
+            "model": "fa-c50R5",
+            "ports": "True",
+            'datapacks': "240",
+            'fm_label': "True",
+            'dp_label': "True",
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "face": "front",
+            "model": "fa-c50R5",
+            "ports": "True",
+            'datapacks': "240",
+            'fm_label': "True",
+            'dp_label': "True",
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "face": "front",
+            "model": "fa-X50R5",
+            "ports": "True",
+            
+        }
+    },
+    {
+        "queryStringParameters": {
+            "face": "front",
+            "model": "fa-X50R5",
+            "ports": "True",
+            'chassis_gen': "1"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "face": "back",
+            "model": "fa-X50R5",
+            "ports": "True",
+            'chassis_gen': "1"
+        }
+    },
+
     #face=back&model=fa-C70R4b&datapacksv2=((datapacks%3A((fm_size%3A75.0TB%2Cfm_count%3A18))))&dp_label=True&ports=True&fm_label=True&protocol=ETH&chassis_gen=1&json_only=True&json=True
     {
         "queryStringParameters": {

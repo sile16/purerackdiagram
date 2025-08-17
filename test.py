@@ -854,16 +854,8 @@ def main(args):
         test_all(args)
     else:
         all_items = list(get_all_tests())
-        print(f"Running single test at index {args.index} of {len(all_items)}")
-        for x in range(0, 10):
-            print(f"Running test {x+1} of 10")
-            
-            # Log test parameters for debugging
-            test_params = all_items[x]
-            json_only = test_params.get('json_only', False)
-            logger.debug(f"Test {x}: json_only={json_only}, params={test_params}")
-            
-            create_test_image(all_items[x], x, 10, '')
+        print(f"Running single test at index {args.index} of {len(all_items)}")    
+        create_test_image(all_items[args.index], 0, 1, '')
         
         
 

@@ -6,13 +6,15 @@ API_ENDPOINT_STAGING = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/s
 // the options values for FlashArray configurations
 //
 var FA_OPTIONS = {
-    model: ['X Arrays:', 'fa-x20r4b', 'fa-x50r4b', 'fa-x70r4b', 'fa-x90r4b',
+    model: ['X Arrays:', 'fa-x20r5', 'fa-x50r5', 'fa-x70r5', 'fa-x90r5',
+                         'fa-x20r4b', 'fa-x50r4b', 'fa-x70r4b', 'fa-x90r4b',
                          'fa-x20r4', 'fa-x50r4', 'fa-x70r4', 'fa-x90r4',
                          'fa-x10r3', 'fa-x20r3', 'fa-x50r3', 'fa-x70r3', 'fa-x90r3',
                          'fa-x10r2', 'fa-x20r2', 'fa-x50r2', 'fa-x70r2', 'fa-x90r2',
                          'fa-x70r1',
             'XL Arrays:', 'fa-xl130r5','fa-xl170r5', 'fa-xl130r1', 'fa-xl170r1',
-            'C Arrays:', 'fa-rc20', 'fa-c20', 'fa-c50r4b', 'fa-c70r4b', 'fa-c90r4b',
+            'C Arrays:', 'fa-c70r4', 'fa-c90r4',
+                         'fa-rc20', 'fa-c20', 'fa-c50r4b', 'fa-c70r4b', 'fa-c90r4b',
                          'fa-c50r4', 'fa-c70r4', 'fa-c90r4',
                          'fa-c40r3', 'fa-c60r3',
                          'fa-c40r1', 'fa-c60r1',

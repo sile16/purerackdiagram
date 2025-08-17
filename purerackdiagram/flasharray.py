@@ -257,7 +257,7 @@ class FAChassis():
                 return {'img': img, 'ports': []}
             
             if c['release'] in [1] and c['generation'] in ['c', 'e'] or (
-                c['release'] in [4] and c['generation'] in ['x', 'c']
+                c['release'] > 4 and c['generation'] in ['x', 'c']
             ):
                 # check for the next generation chassis
                 if c['chassis_gen'] == '2':
@@ -509,7 +509,7 @@ class FAChassis():
         if self.config["generation"] == "xl":
             return
         
-        if self.config["release"] == 4:
+        if self.config["release"] >= 4:
             return
     
         if self.config["generation"] == 'e':
@@ -1321,6 +1321,10 @@ class FADiagram():
 
                 # all e is now default gen 2
                 if config['generation'] == 'e':
+                    config['chassis_gen'] = '2'
+
+                # x c R5 gen 2 chassis by default
+                if config['generation'] in ['x', 'c'] and config['release'] == 5:
                     config['chassis_gen'] = '2'
                 
             else:
