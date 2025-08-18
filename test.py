@@ -204,6 +204,10 @@ def test_lambda(params, outputfile ):
         if image_type == "png":
             img_bytes = base64.b64decode(result_obj['image'].encode('utf-8'))
             results['hash'] = hash_image(img_bytes)  # Add hash of image
+            png_file_path = full_file_path + "_json_img.png"
+            results['json_img_path'] = png_file_path  # Add path to results
+            with open(png_file_path, 'wb') as outfile:
+                outfile.write(img_bytes)
 
         # Save the hashed version to disk with correct extension
         jo = ""
@@ -691,6 +695,17 @@ def test_all(args):
     json_to_binary_comparisons = 0
     json_to_binary_errors = 0
     
+    def print_clickable(name: str, path: str):
+        """
+        Print a clickable terminal link with custom text.
+        
+        :param name: The text that will be clickable.
+        :param path: The file path or URL to link to.
+        """
+        abs_path = os.path.abspath(path)
+        url = "file://" + abs_path
+        # OSC 8 hyperlink sequence
+        return f"\033]8;;{url}\033\\{name}\033]8;;\033\\"
 
     def compare_json_to_png(json_obj, png_obj):
         nonlocal json_to_binary_errors, json_to_binary_comparisons
@@ -703,7 +718,9 @@ def test_all(args):
         elif json_obj['hash'] != png_obj['hash']:
             print(f"ERROR: Hash mismatch for key {json_obj['key']}")
             json_to_binary_errors += 1
-            return
+
+            print(f"  JSON: {print_clickable('JSON', json_obj['json_img_path'])}")
+            print(f"   PNG: {print_clickable(' PNG', png_obj['path'])}") 
         json_to_binary_comparisons += 1
 
     

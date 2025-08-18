@@ -454,7 +454,7 @@ class FAChassis():
                 height = "fh"
             else:
                 height = "hh"
-        elif (self.config['generation'] == 'c' or self.config['generation'] == 'x') and self.config['release'] == 4:
+        elif (self.config['generation'] == 'c' or self.config['generation'] == 'x') and self.config['release'] >= 4:
 
             if slot in [1, 2]:
                 height = "fh"
