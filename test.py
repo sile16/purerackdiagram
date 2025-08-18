@@ -92,23 +92,33 @@ def filter_result_data(data):
     
     return filtered
 
-
-def download_and_hash_image(url):
-    """Download image content from URL and return SHA256 hash of raw bytes."""
+def download_image(url):
+    """Download image content from URL and return raw bytes."""
     try:
         response = requests.get(url, timeout=30)
         response.raise_for_status()  # Raises an HTTPError for bad responses
-        
-        # Hash the raw bytes
-        h = hashlib.sha256()
-        h.update(response.content)
-        return h.hexdigest()
+        return response.content
     except requests.RequestException as e:
         logger.error(f"Failed to download image from {url}: {e}")
+        return None
+    
+def hash_image(image_data):
+    """Hash the raw image bytes and return SHA256 hash."""
+    if image_data is None:
         # Return hash of empty bytes as fallback
         h = hashlib.sha256()
         h.update(b'')
         return h.hexdigest()
+    
+    h = hashlib.sha256()
+    h.update(image_data)
+    return h.hexdigest()
+    
+def download_and_hash_image(url):
+    """Download image content from URL and return SHA256 hash of raw bytes."""
+    image_content = download_image(url)
+    return hash_image(image_content)
+        
 
 
 def test_lambda(params, outputfile ):
@@ -123,26 +133,8 @@ def test_lambda(params, outputfile ):
 
     
     results = lambdaentry.handler(params, None)
-    
-    # Check for error status codes (4xx)
-    if 400 <= results['statusCode'] < 500:
-        if results['headers'].get("Content-Type") == 'application/json':
-            # Parse the JSON response to inspect error message
-            try:
-                if type(results['body']) is str:
-                    error_data = json.loads(results['body'])
-                else:
-                    error_data = results['body']
-
-                error_msg = error_data.get('error', 'Unknown error')
-                error_type = error_data.get('error_type', 'Unknown')
-                logger.info(f"Error response ({results['statusCode']}): {error_type} - {error_msg}")
-                
-            except json.JSONDecodeError:
-                logger.error("Failed to parse error JSON response")
-        elif results['headers'].get("Content-Type") == 'image/png':
-            # If it's an image error message, we can't inspect it directly
-            logger.info(f"Error response ({results['statusCode']}) as image")
+    results['json'] = False  # Not a JSON response
+    results['params'] = params['queryStringParameters'].copy()  # Copy original parameters
 
     # If statusCode is 302, follow the redirect
     if results['statusCode'] == 302:
@@ -154,70 +146,104 @@ def test_lambda(params, outputfile ):
         # Update the body and headers of the results to hide the redirect
         results['body'] = base64.b64encode(response.content).decode('utf-8')
         results['headers']['Content-Type'] = content_type
-        results['statusCode'] = 200  # Update status code to OK
+        results['statusCode'] = response.status_code  # Update status code to OK
 
-    
+
+    image_type = "file"
+    file_extension = ".png"  # Default to PNG for image files
+    full_file_path = outputfile
     if results['headers'].get("Content-Type") == 'image/png':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
-            with open(outputfile + '.png', 'wb') as outfile:
+            image_type = "png"
+            full_file_path += file_extension
+            with open(full_file_path, 'wb') as outfile:
                 outfile.write(img_str)
+            
+            #hash image
+            
+            results['hash'] = hash_image(img_str)  # Add hash to results
+            results['image_type'] = image_type  # Add image type to results
+            
 
     elif results['headers'].get("Content-Type") == 'application/vnd.ms-visio.stencil':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
-            with open(outputfile + '.vssx', 'wb') as outfile:
+            file_extension = '.vssx'  # Set extension for VSSX files
+            full_file_path += file_extension
+            with open(full_file_path, 'wb') as outfile:
                 outfile.write(img_str)
 
     elif results['headers'].get("Content-Type") == 'application/zip':
         if 'body' in results:
             img_str = base64.b64decode(results['body'].encode('utf-8'))
-            with open(outputfile + '.zip', 'wb') as outfile:
+            file_extension = '.zip'  # Set extension for ZIP files
+            full_file_path += file_extension
+            with open(full_file_path, 'wb') as outfile:
                 outfile.write(img_str)
 
     elif results['headers'].get("Content-Type") == 'application/json':
-        if 'body' in results:
+        obj = json.loads(results['body'])
+        
+        # Create a modified version with hashed image for both disk storage and results
+        result_obj = obj.copy()
+        image_type = result_obj['image_type']
+        results['json'] = True
+        
+        if result_obj.get('image_type') == 'link' or str(result_obj.get('image','')).startswith(('http://', 'https://')):
+            # Image is a URL - download and hash the content
+            logger.info(f"Downloading image from URL: {result_obj['image']}")
+            img_bytes = download_image(result_obj['image'])
+            result_obj['image'] = base64.b64encode(img_bytes).decode('utf-8')  # Store base64 encoded image
             
-            obj = json.loads(results['body'])
             
-            # Create a modified version with hashed image for both disk storage and results
-            result_obj = obj.copy()
-            if 'image' in result_obj and result_obj['image'] is not None:
-                # Replace image data with SHA256 hash
-                if result_obj.get('image_type') == 'link' or result_obj['image'].startswith(('http://', 'https://')):
-                    # Image is a URL - download and hash the content
-                    logger.info(f"Downloading image from URL: {result_obj['image']}")
-                    result_obj['image'] = download_and_hash_image(result_obj['image'])
-                else:
-                    # Image is base64 data - decode and hash
-                    h = hashlib.sha256()
-                    try:
-                        decoded_image = base64.b64decode(result_obj['image'])
-                    except (TypeError, ValueError) as e:
-                        logger.error(f"Failed to decode image data: {e}")
-                        decoded_image = b''
-                    h.update(decoded_image)
-                    result_obj['image'] = h.hexdigest()
-            else:
-                if 'json_only' not in params['queryStringParameters'] and results['statusCode'] == 200:
-                    # If no image data, just use the original body
-                    print("No image data found in JSON response")
+            result_obj['image_type'] = "png"  # Remove raw image data
+            image_type = "png"  # Set image type to json
 
-            # Add params to the result object for disk storage
-            result_obj['params'] = params['queryStringParameters']
-            
-            # Save the hashed version to disk with correct extension
-            json_only_param = params['queryStringParameters'].get('json_only')
-            if json_only_param and str(json_only_param).lower() in ['true', '1', 'yes']:
-                file_extension = '.json_only'
-            else:
-                file_extension = '.json'
-            
-            with open(outputfile + file_extension, 'w',  encoding='utf-8') as outfile:
-                json.dump(result_obj, outfile, indent=4, ensure_ascii=False)
 
-            results['body'] = result_obj  # Use the modified version with hash for results
+        if image_type == "png":
+            img_bytes = base64.b64decode(result_obj['image'].encode('utf-8'))
+            results['hash'] = hash_image(img_bytes)  # Add hash of image
 
+        # Save the hashed version to disk with correct extension
+        jo = ""
+        file_extension = '.json'
+        if image_type == "json_only":
+            file_extension = '.json'
+            jo = "_jo"
+
+        # check if file exists and create unique name if needed:
+        full_file_path +=  jo + file_extension
+        original_path = full_file_path
+        counter = 1
+        while os.path.exists(full_file_path):
+            logger.warning(f"File already exists: {original_path}")
+            # Create new filename with counter
+            base_path = original_path.rsplit('.', 1)[0]  # Remove extension
+            extension = original_path.rsplit('.', 1)[1] if '.' in original_path else ''
+            full_file_path = f"{base_path}_dup{counter}.{extension}" if extension else f"{base_path}_dup{counter}"
+            counter += 1
+        
+        if full_file_path != original_path:
+            logger.info(f"Writing to unique filename: {full_file_path}")
+            
+        with open(full_file_path, 'w',  encoding='utf-8') as outfile:
+            json.dump(result_obj, outfile, indent=4, ensure_ascii=False)
+
+        results['body'] = result_obj  # Use the modified version with hash for results
+
+    results['image_type'] = image_type  # Add image type to results
+    results['key'] = outputfile
+    results['file_extension'] = file_extension  # Add file extension to results
+    results['path'] = full_file_path  # Add path to results
+    category = results.get('image_type')
+    if image_type == "json_only":
+        category = "json_only"
+    elif results['json']:
+        category = "json"
+    else:
+        category = results['image_type']  # Default to image type
+    results['category'] = category  # Add category to results
     return results
 
 
@@ -226,7 +252,15 @@ def test_lambda(params, outputfile ):
 _generated_keys = {}  # Change to dict to store both key and item
 _duplicate_keys = []
 
-def create_test_image(item, count, total, save_dir, filter_text=None):
+def encode_jsonurl_to_filename(s):
+    return (
+        s.replace('~', '~~')
+         .replace('%', '~p')
+         .replace(':', '~c')
+         .replace('/', '~s')
+    )
+
+def create_test_image(item, count, total, save_dir):
     """
     Create test image with git-state based directory structure.
     
@@ -235,9 +269,9 @@ def create_test_image(item, count, total, save_dir, filter_text=None):
         count: Current test number
         total: Total number of tests
         save_dir: Directory name for saving results
-        filter_text: Optional filter text to check against generated key
     """
 
+    import hashlib  # Import needed for multiprocessing
     
     # Create git-state based subdirectory
     clear_image_cache() 
@@ -245,185 +279,55 @@ def create_test_image(item, count, total, save_dir, filter_text=None):
     if not os.path.exists(folder):
         os.makedirs(folder)
     
-    # Extract json/json_only parameters to determine output type
-    json_param = item.get('json')
-    json_only_param = item.get('json_only')
-    
-    # Determine output type based on parameter priority
-    if json_only_param:  # json_only takes precedence
-        output_type = 'json_only'
-        file_extension = '.json_only'
-    elif json_param:
-        output_type = 'json'
-        file_extension = '.json'
-    else:
-        output_type = 'png'
-        file_extension = '.png'
-    
-    # Build filename WITHOUT json/json_only parameters (so hash is same for all variants)
-    file_name_parts = [item['model']]
-    for n in ['face', 'bezel', 'mezz', 'fm_label', 'dp_label', 'addoncards', 'ports', 'csize', 'datapacks',  
-    'no_of_chassis', 'no_of_blades', 'efm', 'direction', 'drive_size', 'no_of_drives_per_blade', 'vssx',
-    'chassis_gen', 'datapacksv2', 'bladesv2', 'protocol', 'chassis', 'dc_power', 'individual',
-    'jsononly', 'pci0', 'pci1', 'pci2', 'pci3', 'pci4', 'pci5', 'local_delay', 'chassi_gen', 
-    'blades', 'dfm_label' ]:
+    file_name_parts = ['t']
+    for n in item:
+        n = str(n).lower()
         # Skip json and json_only parameters in filename generation
         if n in ['json', 'json_only']:
             continue
-            
-        if n in item:
-            if n == 'datapacks':
-                file_name_parts.append(f"_{str(item[n]).replace('/', '-')}")
-            elif n == 'datapacksv2' or n == 'bladesv2':
-                #sha256 hash the datapacksv2 value
-                h = hashlib.sha256()
-                h.update(item[n].encode('utf-8'))
-                file_name_parts.append(f"_{n}-{h.hexdigest()[:8]}")
-            else:
-                # Include type information to differentiate between bool True vs string "True"
-                value = item[n]
-                file_name_parts.append(f"_{n}-{type(value).__name__}_{value}")
+        value = item[n]
+
+        if n == 'datapacks':
+            value = f"_{str(item[n]).replace('/', '-')}"
+        elif n == 'datapacksv2' or n == 'bladesv2':
+            value = encode_jsonurl_to_filename(str(item[n]))
+     
+        file_name_parts.append(f"_{n}-{value}")
     
     # Join all parts to create the base filename
     file_name_base = ''.join(file_name_parts)
     
     # Add a hash of the case-sensitive filename to handle case-insensitive filesystems
     # This ensures fa-c70r4b and fa-C70R4b create different files
-    case_hash = hashlib.md5(file_name_base.encode()).hexdigest()[:6]
-    base_file_name = f"{file_name_base}_{case_hash}"
-    
-    # Create the full filename with extension - this will be our result key
-    full_file_name = base_file_name + file_extension
-    
-    # Apply filter if specified
-    if filter_text and filter_text.lower() not in full_file_name.lower():
-        return {}
-    
+    case_hash = hashlib.md5(file_name_base.encode()).hexdigest()[:10]
     # Check filename length against OS limits
-    max_filename_length = 255  # Common filesystem limit
-    
-    if len(full_file_name) > max_filename_length - 10:  # 10 byte safety margin
-        logger.warning(f"Filename approaching OS limit ({len(full_file_name)} chars): {full_file_name[:50]}...")
-        # Truncate base name and add hash to ensure uniqueness
-        truncate_at = max_filename_length - len(file_extension) - 20  # Leave room for hash and extension
-        file_name_hash = hashlib.sha256(base_file_name.encode('utf-8')).hexdigest()[:8]
-        base_file_name = base_file_name[:truncate_at] + "_" + file_name_hash
-        full_file_name = base_file_name + file_extension
-        logger.info(f"Truncated to: {full_file_name}")
-    
-    # Check for duplicate keys and compare with json_diff
-    if full_file_name in _generated_keys:
-        # Use json_diff to check if items are truly identical
-        original_item = _generated_keys[full_file_name]
-        diff = jsondiff.diff(original_item, item)
-        
-        if not diff:
-            # Truly identical - this is a real duplicate
-            print(f"TRUE DUPLICATE DETECTED: {full_file_name}")
-            print(f"  Items are identical: {item}")
-            _duplicate_keys.append((full_file_name, original_item, item, "identical"))
-        else:
-            # Different items with same key - key generation needs improvement
-            print(f"KEY CONFLICT DETECTED: {full_file_name}")
-            print(f"  Original item: {original_item}")
-            print(f"  Current item:  {item}")
-            print(f"  Differences:   {diff}")
-            _duplicate_keys.append((full_file_name, original_item, item, "different"))
-    else:
-        # Store a deep copy to prevent modification by lambda function
-        _generated_keys[full_file_name] = copy.deepcopy(item)
+    max_filename_length = 150  # Common filesystem limit
 
+    # Create the full filename with extension - this will be our result key
+    key = file_name_base[:(max_filename_length - 10)] + f"_{case_hash}"
+    
     try:
         # Use base filename (without extension) for the actual file output
-        results = test_lambda({"queryStringParameters":item}, os.path.join(folder, base_file_name))
+        results = test_lambda({"queryStringParameters":item}, os.path.join(folder, key))
 
-        h = hashlib.sha256()
-        content_type = results['headers'].get("Content-Type")
-        status_code = results['statusCode']
-
-        # Check for error responses (4xx, 5xx)
-        if 400 <= status_code < 600:
-            print(f"{count} of {total}   {full_file_name} - ERROR {status_code}")
-            
-            # For JSON errors, we can examine the detailed message
-            if content_type == 'application/json' and 'body' in results:
-                try:
-                    if type(results['body']) is str:
-                        # If body is a string, decode it
-                        error_data = json.loads(results['body'])
-                    else:
-                        error_data = results['body']
-                    error_msg = error_data.get('error', 'Unknown error')
-                    error_type = error_data.get('error_type', 'Unknown')
-                    
-                    # Return error details for validation and testing
-                    return({full_file_name: {
-                        "status": status_code,
-                        "error_type": error_type,
-                        "error_msg": error_msg,
-                        "path": f"{save_dir}/{base_file_name}",
-                        "params": item,
-                    }})
-                except json.JSONDecodeError:
-                    print(f"  Failed to parse error JSON")
-                    return({full_file_name: {
-                        "status": status_code,
-                        "error": "Failed to parse error JSON",
-                        "path": f"{save_dir}/{base_file_name}",
-                        "params": item,
-                    }})
-        
+        status_code = results.get('statusCode', 999999)  # Default to 200 if not set
         # For successful responses or errors that aren't in JSON format
-        print(f"{count} of {total}   {full_file_name} - Status: {status_code}")
-        
-        # Prepare result with path information and params
-        result_data = {
-            'path': f"{save_dir}/{base_file_name}",
-            'params': item,  # Include test parameters
-        }
-        
-        if content_type == 'application/json':
-            # For JSON files, just store a reference instead of duplicating data
-            # Use the correct extension based on the test type
-            json_only_param = item.get('json_only', False)
-            if json_only_param and str(json_only_param).lower() in ['true', '1', 'yes']:
-                result_data['path'] += '.json_only'
-            else:
-                result_data['path'] += '.json'
-            result_data['content_type'] = 'application/json'
-            # Add basic metadata without duplicating full data
-            if 'image' in results['body']:
-                result_data['has_image'] = True
-                result_data['image_hash'] = results['body']['image']  # This is now a hash
-            else:
-                result_data['has_image'] = False
-        else:
-            # For other content types (PNG, VSSX, ZIP), decode base64 and hash raw bytes
-            decoded_body = base64.b64decode(results['body'].encode('utf-8'))
-            h.update(decoded_body)
-            result_data['hash'] = h.hexdigest()
-            result_data['content_type'] = content_type
-            
-            # Determine file extension based on content type
-            if content_type == 'image/png':
-                result_data['path'] += '.png'
-            elif content_type == 'application/vnd.ms-visio.stencil':
-                result_data['path'] += '.vssx'
-            elif content_type == 'application/zip':
-                result_data['path'] += '.zip'
-        
-        return({full_file_name: result_data})
+        print(f"{count} of {total}   {key} - Status: {status_code}")
+
+        return(results)
 
     except Exception as ex_unknown:
-        print(f"Caught exception in image: {full_file_name}")
+        print(f"Caught exception in image: {key}")
         traceback.print_exc()
-        return({full_file_name: {
+        return({
             "status": 500,
             "error": str(ex_unknown),
             "traceback": traceback.format_exc(),
-            "path": f"{save_dir}/{base_file_name}",
+            "path": f"{save_dir}/{key}",
             "params": item,
-        }})
+            "key": key,
+            "category": "other",
+        })
 
     
 
@@ -433,14 +337,11 @@ def get_all_tests():
     dps = ['45/45-31/63-45-24.0', '3/127-24.0-45']
 
     valid_chassis_dps = list(global_config['chassis_dp_size_lookup'].keys())
-    #valid_chassis_dps += list(global_config['qlc_chassis_dp_size_lookup'].keys())
     valid_shelf_dps = list(global_config['shelf_dp_size_lookup'].keys())
-    #valid_shelf_dps += list(global_config['qlc_shelf_dp_size_lookup'].keys())
 
     # get the keys of diction csize_lookup
     csizes = list(global_config['csize_lookup'].keys())
-    #csizes = ['964', '984']
-    #global_config.csize_lookup
+
 
     count = 0
 
@@ -453,13 +354,13 @@ def get_all_tests():
 
         if 'json' not in json_test:
             json_test = json_test.copy()
-            json_test['json'] = True
+            json_test['json'] = "True"
             yield json_test
 
         if 'json_only' not in json_test:
             #json onlytest
             json_test = json_test.copy()
-            json_test['json_only'] = True
+            json_test['json_only'] = "True"
             yield json_test
 
         
@@ -628,7 +529,7 @@ def get_all_tests():
 
         
 
-
+    
 
 def test_all(args):
 
@@ -645,21 +546,23 @@ def test_all(args):
     
     if git_state == "head":
         # Automatically delete head directory contents and JSON file
-        if os.path.exists(save_dir):
-            print(f"Automatically clearing head directory: {save_dir}")
-            shutil.rmtree(save_dir)
+        head_dir = os.path.join("test_results", save_dir)
+        if os.path.exists(head_dir):
+            print(f"Automatically clearing head directory: {head_dir}")
+            shutil.rmtree(head_dir)
         if os.path.exists(results_json_file):
             print(f"Automatically removing head results file: {results_json_file}")
             os.remove(results_json_file)
     else:
         # Ask user for confirmation before deleting other git-state directories
-        if os.path.exists(save_dir) or os.path.exists(results_json_file):
-            print(f"Directory {save_dir} or results file {results_json_file} already exists.")
+        state_dir = os.path.join("test_results", save_dir)
+        if os.path.exists(state_dir) or os.path.exists(results_json_file):
+            print(f"Directory {state_dir} or results file {results_json_file} already exists.")
             response = input(f"Do you want to overwrite the existing data for git-state '{git_state}'? (y/N): ")
             if response.lower() in ['y', 'yes']:
-                if os.path.exists(save_dir):
-                    print(f"Removing directory: {save_dir}")
-                    shutil.rmtree(save_dir)
+                if os.path.exists(state_dir):
+                    print(f"Removing directory: {state_dir}")
+                    shutil.rmtree(state_dir)
                 if os.path.exists(results_json_file):
                     print(f"Removing results file: {results_json_file}")
                     os.remove(results_json_file)
@@ -673,183 +576,179 @@ def test_all(args):
     total_count = 0
 
     all_items = list(get_all_tests())
+
+    #applly filter
+    if args.filter:
+        filter_text = args.filter.lower()
+        all_items = [item for item in all_items if filter_text in json.dumps(item).lower()]
+        print(f"Filtered {len(all_items)} items matching '{filter_text}'")
+    
     
     if args.limit is not None:
         all_items = all_items[:args.limit]
+
     count = 0
-    filter_text = getattr(args, 'filter', None)
+    
     for item in all_items:
-        futures.append(pool.apply_async(create_test_image, args=(item, count, len(all_items), save_dir, filter_text)))
+        futures.append(pool.apply_async(create_test_image, args=(item, count, len(all_items), save_dir)))
         count += 1
 
     pool.close()
     pool.join()
 
-    results = {}
+    results = {"png":{}, "json": {}, "json_only": {}, "other": {}, "file": {}}
+    duplicate = 0
+    duplicate_errors = 0
+    key_count = 0
+
+    json_only_errors = 0
+    json_keys_matched = 0
+
+    def compare_json_only_to_json(json_only_obj, json_obj):
+        nonlocal json_only_errors, json_keys_matched
+        try:
+            with open(json_only_obj['path'], 'r', encoding='utf-8') as f:
+                json_only_data = json.load(f)
+            with open(json_obj['path'], 'r', encoding='utf-8') as f:
+                json_data = json.load(f)
+
+            if isinstance(json_only_data, dict) and isinstance(json_data, dict):
+                # Compare excluding specific keys (including path which can vary between output types)
+                ignore_keys = ['execution_duration', 'image', 'image_mib', 'params', 'json_only', 'json', 'image_type', 'path', 'hash']
+                
+                json_only_filtered = {k: v for k, v in json_only_data.items() if k not in ignore_keys}
+                json_filtered = {k: v for k, v in json_data.items() if k not in ignore_keys}
+                
+                diff = jsondiff.diff(json_only_filtered, json_filtered)
+                if diff:
+                    json_only_errors += 1
+                    print(f"  ERROR: JSON vs JSON_only mismatch for {key[:50]}...")
+                    print(f"    Differences: {str(diff)[:100]}")
+                    return diff
+                else:
+                    json_keys_matched += 1
+                    return diff
+
+        except (FileNotFoundError, json.JSONDecodeError, UnicodeDecodeError) as e:
+            print(f"  WARNING: Could not compare {key}: {e}")
+            print(f"    Paths: {json_only_obj['path']} vs {json_obj['path']}")
+
+
+
 
     for f in futures:
         result = f.get()
-        results.update(result)
+        category = result['category']
+        key = result['key']
+        
+        if key in results[category]:
+            if 'hash' in result and 'hash' in results[category][key]:
+                if results[category][key]['hash'] != result['hash']:
+                    # If the key already exists but hashes differ, it's a duplicate
+                    duplicate_errors += 1
+                    print(f"ERROR Duplicate key found: {key} with different hashes")
+                else:
+                    duplicate += 1
+                    #print(f"Info Duplicate key found: {key} with identical hashes")
+            elif ('hash' in result and 'hash' not in results[category][key]) or \
+                     ('hash' not in result and 'hash' in results[category][key]):
+                     print(f"ERROR: Duplicate key found without hash comparison: {key}")
+                     
+            else:
+                diff = compare_json_only_to_json(result, results[category][key])
+                if diff:
+                    print(f"ERROR: Duplicate key found with differences: {key}")
+                    duplicate_errors += 1
+                else:
+                    duplicate += 1
+                    print(f"Info Duplicate key found with no differences: {key}")
+
+        else:
+            results[category][key] = result
+            key_count += 1
+
+    
 
     # Create git-state subdirectory and save results there
     
-    output_filename = os.path.join("test_results", f"test_results_{git_state}.json")
+    output_filename = os.path.join("test_results", f"test_{git_state}.json")
     with open(output_filename, "w") as f:
         json.dump(results, f, indent=4, ensure_ascii=False)
     print(f"Results saved to: {output_filename}")
     
-    # Report duplicate keys with categorization
-    if _duplicate_keys:
-        # Separate true duplicates from key conflicts
-        true_duplicates = []
-        key_conflicts = []
-        
-        for entry in _duplicate_keys:
-            if len(entry) == 4:  # New format with type
-                key, original, duplicate, dup_type = entry
-                if dup_type == "identical":
-                    true_duplicates.append((key, original, duplicate))
-                else:
-                    key_conflicts.append((key, original, duplicate))
-            else:  # Old format - assume it's a conflict
-                key_conflicts.append(entry)
-        
-        print(f"\n=== DUPLICATE ANALYSIS SUMMARY ===")
-        print(f"Total issues found: {len(_duplicate_keys)}")
-        print(f"True duplicates (identical tests): {len(true_duplicates)}")
-        print(f"Key conflicts (different tests, same key): {len(key_conflicts)}")
-        
-        if true_duplicates:
-            print(f"\n=== TRUE DUPLICATES (Test Generation Issues) ===")
-            for i, (key, original, duplicate) in enumerate(true_duplicates[:10]):  # Show first 10
-                print(f"{i+1}. Key: {key}")
-                print(f"   Test params: {original}")
-        
-        if key_conflicts:
-            print(f"\n=== KEY CONFLICTS (Key Generation Issues) ===")
-            for i, (key, original, duplicate) in enumerate(key_conflicts[:5]):  # Show first 5
-                print(f"{i+1}. Key: {key}")
-                print(f"   Original: {original}")
-                print(f"   Current:  {duplicate}")
-                print(f"   Diff:     {jsondiff.diff(original, duplicate)}")
-        
-     
-        
-    
-    print(f"Total unique keys generated: {len(_generated_keys)}")
-    print(f"Total tests processed: {len(results)}")
+    print(f"Total unique keys generated: {key_count}")
+    print(f"Total duplicate keys processed: {duplicate + duplicate_errors}")
     
     # Count duplicates for final summary
-    true_dup_count = len([x for x in _duplicate_keys if len(x) == 4 and x[3] == "identical"])
-    key_conflict_count = len(_duplicate_keys) - true_dup_count
-    print(f"Issues found: {len(_duplicate_keys)} (True duplicates: {true_dup_count}, Key conflicts: {key_conflict_count})")
+    
+    print(f"Duplicate ERORRs found: {duplicate_errors}")
 
     # ============================================
     # SELF-COMPARISON VALIDATION
     # ============================================
     print("\n=== SELF-COMPARISON VALIDATION ===")
-    self_comparison_errors = 0
+    
     json_to_binary_comparisons = 0
-    json_to_json_only_comparisons = 0
+    json_to_binary_errors = 0
+    
+
+    def compare_json_to_png(json_obj, png_obj):
+        nonlocal json_to_binary_errors, json_to_binary_comparisons
+        if json_obj['statusCode'] != 200:
+            if json_obj['statusCode'] != png_obj['statusCode']:
+                print(f"ERROR: Status code mismatch for key {json_obj['key']}")
+                json_to_binary_errors += 1
+                return
+            
+        elif json_obj['hash'] != png_obj['hash']:
+            print(f"ERROR: Hash mismatch for key {json_obj['key']}")
+            json_to_binary_errors += 1
+            return
+        json_to_binary_comparisons += 1
+
     
     # 1. Compare JSON image hash with binary image hash
     print("\nComparing JSON vs Binary image hashes...")
-    for key in results:
-        if key.endswith('.json') and 'vssx' not in key:
-            json_result = results[key]
-            if isinstance(json_result, dict) and json_result.get('has_image'):
-                # Get base key by removing extension
-                base_key = key.rsplit('.', 1)[0]
-                png_key = base_key + '.png'
-                
-                if png_key in results:
-                    png_result = results[png_key]
-                    if isinstance(png_result, dict) and 'hash' in png_result:
-                        json_to_binary_comparisons += 1
-                        json_image_hash = json_result.get('image_hash')
-                        png_hash = png_result['hash']
-                        if json_image_hash != png_hash:
-                            self_comparison_errors += 1
-                            print(f"  ERROR: Image hash mismatch for {key}")
-                            print(f"    JSON hash: {json_image_hash}")
-                            print(f"    PNG hash:  {png_hash}")
+    processed_keys = set()  # Track processed keys to avoid duplicates
+    for key in results['json']:
+        if key in results['png']:
+            compare_json_to_png(results['json'][key], results['png'][key])
+            processed_keys.add(key)
     
-    print(f"  Compared {json_to_binary_comparisons} JSON/Binary pairs, {self_comparison_errors} errors")
+    for key in results['png']:
+        if key not in processed_keys and key in results['json']:
+            compare_json_to_png(results['json'][key], results['png'][key])
+            processed_keys.add(key)
     
     # 2. Compare json vs json_only (excluding image fields)
     print("\nComparing JSON vs JSON_only outputs...")
-    json_only_errors = 0
-    json_only_keys_found = 0
-    json_keys_matched = 0
     
-    for key in results:
-        if key.endswith('.json_only') and 'vssx' not in key:
-            json_only_keys_found += 1
-            json_only_result = results[key]
-            # Find corresponding json key - same base with .json extension
-            base_key = key.rsplit('.', 1)[0]
-            json_key = base_key + '.json'
-            
-            if json_key in results:
-                json_keys_matched += 1
-                json_to_json_only_comparisons += 1
-                
-                # Read the actual files to compare content
-                try:
-                    # Handle path construction - path might already include "test_results/" prefix
-                    json_only_path = json_only_result['path']
-                    json_path = results[json_key]['path']
-                    
-                    # If path doesn't start with test_results/, add it
-                    if not json_only_path.startswith('test_results/'):
-                        json_only_path = os.path.join("test_results", json_only_path)
-                    if not json_path.startswith('test_results/'):
-                        json_path = os.path.join("test_results", json_path)
-                    
-                    # Ensure we're only reading JSON files
-                    if not (json_only_path.endswith('.json_only') and json_path.endswith('.json')):
-                        print(f"  WARNING: Skipping non-JSON comparison: {json_only_path} vs {json_path}")
-                        json_to_json_only_comparisons -= 1
-                        continue
-                    
-                    if os.path.exists(json_only_path) and os.path.exists(json_path):
-                        with open(json_only_path, 'r', encoding='utf-8') as f:
-                            json_only_data = json.load(f)
-                        with open(json_path, 'r', encoding='utf-8') as f:
-                            json_data = json.load(f)
-                        
-                        if isinstance(json_only_data, dict) and isinstance(json_data, dict):
-                            # Compare excluding specific keys (including path which can vary between output types)
-                            ignore_keys = ['execution_duration', 'image', 'image_mib', 'params', 'json_only', 'json', 'image_type', 'path']
-                            
-                            json_only_filtered = {k: v for k, v in json_only_data.items() if k not in ignore_keys}
-                            json_filtered = {k: v for k, v in json_data.items() if k not in ignore_keys}
-                            
-                            diff = jsondiff.diff(json_only_filtered, json_filtered)
-                            if diff:
-                                json_only_errors += 1
-                                print(f"  ERROR: JSON vs JSON_only mismatch for {key[:50]}...")
-                                print(f"    Differences: {str(diff)[:100]}")
-                    else:
-                        print(f"  WARNING: Files not found: {json_only_path} or {json_path}")
-                        json_to_json_only_comparisons -= 1
-                        
-                except (FileNotFoundError, json.JSONDecodeError, UnicodeDecodeError) as e:
-                    print(f"  WARNING: Could not compare {key}: {e}")
-                    print(f"    Paths: {json_only_path} vs {json_path}")
-                    json_to_json_only_comparisons -= 1  # Don't count failed comparisons
-            else:
-                if json_only_keys_found <= 5:  # Only show first few for debugging
-                    print(f"  DEBUG: No matching JSON key for {key} (looking for {json_key})")
+        
+    processed_keys = set()
+    for key in results['json']:
+        if key in results['json_only']:
+            compare_json_only_to_json(results['json_only'][key], results['json'][key])
+            processed_keys.add(key)
+        #else:
+        #    print(f"  WARNING: JSON key {key} not found in JSON_only results")
     
-    print(f"  DEBUG: Found {json_only_keys_found} json_only keys, {json_keys_matched} matched with json keys")
-    print(f"  Compared {json_to_json_only_comparisons} JSON/JSON_only pairs, {json_only_errors} errors")
-    self_comparison_errors += json_only_errors
+    for key in results['json_only']:
+        if key not in processed_keys:
+            if key in results['json']:
+                compare_json_only_to_json(results['json_only'][key], results['json'][key])
+            #else:
+            #    print(f"  WARNING: JSON_only key {key} not found in JSON results")
+
+    
+    
     
     print(f"\n=== SELF-COMPARISON SUMMARY ===")
-    print(f"Total self-comparison errors: {self_comparison_errors}")
+    
     print(f"JSON to Binary comparisons: {json_to_binary_comparisons}")
-    print(f"JSON to JSON_only comparisons: {json_to_json_only_comparisons}")
+    print(f"JSON to JSON_only comparisons: {json_keys_matched}")
+
+    print(f"JSON to Binary errors: {json_to_binary_errors}")
+    print(f"JSON to JSON_only errors: {json_only_errors}")
     
     print(f"\n=== TEST COMPLETE ===")
     print(f"For external validation against previous runs, use:")
@@ -862,7 +761,7 @@ def main(args):
     else:
         all_items = list(get_all_tests())
         print(f"Running single test at index {args.index} of {len(all_items)}")    
-        create_test_image(all_items[args.index], 0, 1, '', getattr(args, 'filter', None))
+        create_test_image(all_items[args.index], 0, 1, '')
         
         
 

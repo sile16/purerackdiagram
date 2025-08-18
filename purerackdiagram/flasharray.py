@@ -257,7 +257,7 @@ class FAChassis():
                 return {'img': img, 'ports': []}
             
             if c['release'] in [1] and c['generation'] in ['c', 'e'] or (
-                c['release'] > 4 and c['generation'] in ['x', 'c']
+                c['release'] >= 4 and c['generation'] in ['x', 'c']
             ):
                 # check for the next generation chassis
                 if c['chassis_gen'] == '2':
@@ -894,7 +894,7 @@ class FADiagram():
                     else:
                         fh_order = [1, 2, 3, 4, 0]
                         hh_order = [1, 2, 3, 4, 0]
-                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4:
+                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] >= 4:
                     fh_order = [0, 1, 2, 3, 4]
                     hh_order = [0, 1, 2, 3, 4]
                 else:

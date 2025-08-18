@@ -27,7 +27,7 @@
             "request": "launch",
             "program": "test.py",
             "args": [
-                "all","-t","16","--limit","600"
+                "all","-t","16","--limit","60000"
             ],
             "console": "integratedTerminal"
         }
