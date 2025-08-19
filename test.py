@@ -232,6 +232,8 @@ def test_lambda(params, outputfile ):
             logger.info(f"Writing to unique filename: {full_file_path}")
             
         with open(full_file_path, 'w',  encoding='utf-8') as outfile:
+            if 'image' in result_obj:
+                del result_obj['image']  # Remove raw image data
             json.dump(result_obj, outfile, indent=4, ensure_ascii=False)
 
         results['body'] = result_obj  # Use the modified version with hash for results
@@ -668,7 +670,11 @@ def test_all(args):
                     print(f"Info Duplicate key found with no differences: {key}")
 
         else:
-            results[category][key] = result
+            val_item = {}
+            for k in {'statusCode', 'params', 'image_type', 'hash', 'path', 'file_extension', 'json_img_path', 'json'}:
+                if k in result:
+                    val_item[k] = result[k]
+            results[category][key] = val_item
             key_count += 1
 
     

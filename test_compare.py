@@ -17,6 +17,14 @@ def extract_result_data(result_value):
     elif isinstance(result_value, dict) and 'hash' in result_value:
         # For binary results (PNG, VSSX), return the hash directly
         return result_value['hash']
+    elif isinstance(result_value, dict) and 'statusCode' in result_value:
+        # For JSON metadata entries, extract only the meaningful comparison fields
+        # Sort params to ensure consistent comparison regardless of field order
+        comparable_data = {
+            'statusCode': result_value.get('statusCode'),
+            'params': dict(sorted(result_value.get('params', {}).items())) if result_value.get('params') else None
+        }
+        return comparable_data
     elif isinstance(result_value, dict) and 'status' in result_value:
         # Error case
         return result_value
@@ -55,53 +63,40 @@ def get_file_paths_for_comparison(key, results, validation, input_file, validati
     """Get the actual file paths for both result and validation files"""
     result_path = None
     validation_path = None
+    result_img_path = None
+    validation_img_path = None
     
     # For result file
     if key in results and isinstance(results[key], dict) and 'path' in results[key]:
-        # The path field contains the path
         result_path = results[key]['path']
-        # Ensure it has the correct format
-        if not result_path.startswith('test_results/'):
-            # If it starts with just the git state (like "head/..."), add test_results prefix
-            result_path = os.path.join('test_results', result_path)
-        # If path doesn't have an extension, add it based on the key
-        if not any(result_path.endswith(ext) for ext in ['.png', '.json', '.vssx']):
-            if '.png' in key and '.json' not in key:
-                result_path = result_path + '.png'
-            elif '.json_only' in key:
-                result_path = result_path + '.json'  
-            elif '.json' in key:
-                result_path = result_path + '.json'
-            elif '.vssx' in key:
-                result_path = result_path + '.vssx'
-            else:
-                result_path = result_path + '.png'
+        # Get json_img_path if available
+        if 'json_img_path' in results[key]:
+            result_img_path = results[key]['json_img_path']
     
     # For validation file
     if key in validation and isinstance(validation[key], dict) and 'path' in validation[key]:
-        # The path field contains the path
         validation_path = validation[key]['path']
-        # Ensure it has the correct format
-        if not validation_path.startswith('test_results/'):
-            # If it starts with just the git state (like "9fc053a/..."), add test_results prefix
-            validation_path = os.path.join('test_results', validation_path)
-        # If path doesn't have an extension, add it based on the key
-        if not any(validation_path.endswith(ext) for ext in ['.png', '.json', '.vssx']):
-            if '.png' in key and '.json' not in key:
-                validation_path = validation_path + '.png'
-            elif '.json_only' in key:
-                validation_path = validation_path + '.json'
-            elif '.json' in key:
-                validation_path = validation_path + '.json'
-            elif '.vssx' in key:
-                validation_path = validation_path + '.vssx'
-            else:
-                validation_path = validation_path + '.png'
+        # Get json_img_path if available
+        if 'json_img_path' in validation[key]:
+            validation_img_path = validation[key]['json_img_path']
     
-    return result_path, validation_path
+    return result_path, validation_path, result_img_path, validation_img_path
 
-def categorize_key(key):
-    """Categorize a key by its type"""
+def categorize_key(key, results_data, validation_data):
+    """Categorize a key by its type based on the data structure"""
+    # First check if this key exists in either results or validation data structure
+    for data in [results_data, validation_data]:
+        if data:
+            if 'json_only' in data and key in data['json_only']:
+                return 'json_only'
+            elif 'json' in data and key in data['json']:
+                return 'json'
+            elif 'png' in data and key in data['png']:
+                return 'image'
+            elif 'vssx' in data and key in data['vssx']:
+                return 'vssx'
+    
+    # Fallback to old logic for backwards compatibility
     if '.json_only' in key:
         return 'json_only'
     elif '.json' in key:
@@ -158,28 +153,80 @@ def compare_results(input_file, validation_file, output_html=None):
     }
     warnings = []
     matches = []
+    missing_in_results = []
+    missing_in_validation = []
     
-    all_keys = set(results.keys()) | set(validation.keys())
+    # Helper function to normalize keys by removing git-specific paths
+    def normalize_key(key):
+        # Replace git-specific paths like "test_results/head/" or "test_results/6ef886b/" with "test_results/normalized/"
+        import re
+        return re.sub(r'test_results/[^/]+/', 'test_results/normalized/', key)
     
-    for key in all_keys:
-        result_value = results.get(key)
-        validation_value = validation.get(key)
+    # Handle new format - extract all keys from nested structure and normalize them
+    all_normalized_keys = set()
+    results_by_normalized_key = {}
+    validation_by_normalized_key = {}
+    
+    # Get all section keys from both files, excluding 'file' section
+    all_sections = set()
+    if isinstance(results, dict):
+        all_sections.update(k for k in results.keys() if k != 'file')
+    if isinstance(validation, dict):
+        all_sections.update(k for k in validation.keys() if k != 'file')
+    
+    # Extract and normalize keys from results
+    if isinstance(results, dict):
+        for type_key in all_sections:
+            if type_key in results and isinstance(results[type_key], dict):
+                for original_key, value in results[type_key].items():
+                    normalized_key = f"{type_key}::{normalize_key(original_key)}"
+                    all_normalized_keys.add(normalized_key)
+                    results_by_normalized_key[normalized_key] = value
+        # Also handle old format (flat structure)
+        flat_keys = [k for k in results.keys() if not isinstance(results[k], dict) or 'statusCode' in results[k]]
+        if flat_keys:
+            for original_key, value in results.items():
+                if original_key in flat_keys:
+                    normalized_key = normalize_key(original_key)
+                    all_normalized_keys.add(normalized_key)
+                    results_by_normalized_key[normalized_key] = value
+    
+    # Extract and normalize keys from validation
+    if isinstance(validation, dict):
+        for type_key in all_sections:
+            if type_key in validation and isinstance(validation[type_key], dict):
+                for original_key, value in validation[type_key].items():
+                    normalized_key = f"{type_key}::{normalize_key(original_key)}"
+                    all_normalized_keys.add(normalized_key)
+                    validation_by_normalized_key[normalized_key] = value
+        # Also handle old format (flat structure)
+        flat_keys = [k for k in validation.keys() if not isinstance(validation[k], dict) or 'statusCode' in validation[k]]
+        if flat_keys:
+            for original_key, value in validation.items():
+                if original_key in flat_keys:
+                    normalized_key = normalize_key(original_key)
+                    all_normalized_keys.add(normalized_key)
+                    validation_by_normalized_key[normalized_key] = value
+    
+    for key in all_normalized_keys:
+        result_value = results_by_normalized_key.get(key)
+        validation_value = validation_by_normalized_key.get(key)
         
-        if key not in results:
-            warnings.append({
+        if result_value is None:
+            missing_in_results.append({
                 'key': key,
                 'type': 'missing_in_results',
                 'message': f'Key exists in validation but not in results',
-                'category': categorize_key(key)
+                'category': categorize_key(key, results, validation)
             })
             continue
             
-        if key not in validation:
-            warnings.append({
+        if validation_value is None:
+            missing_in_validation.append({
                 'key': key,
                 'type': 'missing_in_validation', 
                 'message': f'Key exists in results but not in validation',
-                'category': categorize_key(key)
+                'category': categorize_key(key, results, validation)
             })
             continue
         
@@ -187,18 +234,31 @@ def compare_results(input_file, validation_file, output_html=None):
         if 'vssx' in key:
             continue
         
-        # Determine category
-        category = categorize_key(key)
+        # Determine category from the key prefix
+        if '::' in key:
+            type_key = key.split('::', 1)[0]
+            if type_key == 'png':
+                category = 'image'
+            elif type_key == 'json_only':
+                category = 'json_only'
+            elif type_key == 'json':
+                category = 'json'
+            elif type_key == 'vssx':
+                category = 'vssx'
+            else:
+                category = 'other'
+        else:
+            category = 'other'
         
         # Extract comparable data
         result_compare = extract_result_data(result_value)
         validation_compare = extract_result_data(validation_value)
         
         # Get file paths for both sides
-        result_path, validation_path = get_file_paths_for_comparison(key, results, validation, input_file, validation_file)
+        result_path, validation_path, result_img_path, validation_img_path = get_file_paths_for_comparison(key, {key: result_value}, {key: validation_value}, input_file, validation_file)
         
-        # Compare based on key type
-        if 'json_only' in key or 'json' in key:
+        # Compare based on category 
+        if category in ['json_only', 'json']:
             # JSON comparison - ignore path field since it's test folder specific
             ignore_keys = ['execution_duration', 'image', 'image_mib', 'params', 'json_only', 'json', 'image_type', 'path']
             
@@ -241,7 +301,9 @@ def compare_results(input_file, validation_file, output_html=None):
                             'result_data': res_json,
                             'validation_data': val_json,
                             'result_path': result_path,
-                            'validation_path': validation_path
+                            'validation_path': validation_path,
+                            'result_img_path': result_img_path,
+                            'validation_img_path': validation_img_path
                         }
                         
                         if category == 'json_only':
@@ -261,7 +323,9 @@ def compare_results(input_file, validation_file, output_html=None):
                     'result_data': result_compare,
                     'validation_data': validation_compare,
                     'result_path': result_path,
-                    'validation_path': validation_path
+                    'validation_path': validation_path,
+                    'result_img_path': result_img_path,
+                    'validation_img_path': validation_img_path
                 }
                 errors_by_type['other'].append(error_entry)
         else:
@@ -284,21 +348,27 @@ def compare_results(input_file, validation_file, output_html=None):
                         'validation_hash': validation_compare,
                         'has_images': True,
                         'result_path': result_path,
-                        'validation_path': validation_path
+                        'validation_path': validation_path,
+                        'result_img_path': result_img_path,
+                        'validation_img_path': validation_img_path
                     }
                     errors_by_type['image'].append(error_entry)
             else:
                 matches.append({'key': key, 'type': 'hash_match', 'category': category})
     
+    # Add missing keys to warnings for backwards compatibility
+    warnings.extend(missing_in_results)
+    warnings.extend(missing_in_validation)
+    
     # Generate HTML report
-    generate_html_report(results, validation, errors_by_type, warnings, matches, output_html, input_file, validation_file)
+    generate_html_report(results, validation, errors_by_type, warnings, matches, missing_in_results, missing_in_validation, output_html, input_file, validation_file)
     
     # Calculate total errors
     total_errors = sum(len(errors) for errors in errors_by_type.values())
     
     return total_errors, len(warnings), len(matches)
 
-def generate_html_report(results, validation, errors_by_type, warnings, matches, output_file, input_file, validation_file):
+def generate_html_report(results, validation, errors_by_type, warnings, matches, missing_in_results, missing_in_validation, output_file, input_file, validation_file):
     """Generate HTML report with embedded images and comparisons grouped by type"""
     
     # Calculate totals
@@ -813,8 +883,12 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         html_content += f'            <a href="#json_errors" class="nav-link error">JSON Errors ({len(errors_by_type["json"])})</a>\n'
     if errors_by_type['image']:
         html_content += f'            <a href="#image_errors" class="nav-link error">Image Errors ({len(errors_by_type["image"])})</a>\n'
-    if warnings:
-        html_content += f'            <a href="#warnings" class="nav-link warning">Warnings ({len(warnings)})</a>\n'
+    if missing_in_results:
+        html_content += f'            <a href="#missing_in_results" class="nav-link warning">Missing in Results ({len(missing_in_results)})</a>\n'
+    if missing_in_validation:
+        html_content += f'            <a href="#missing_in_validation" class="nav-link warning">New Keys ({len(missing_in_validation)})</a>\n'
+    if warnings and len(warnings) > len(missing_in_results) + len(missing_in_validation):
+        html_content += f'            <a href="#warnings" class="nav-link warning">Other Warnings ({len(warnings) - len(missing_in_results) - len(missing_in_validation)})</a>\n'
     if matches:
         html_content += f'            <a href="#matches" class="nav-link match">Matches ({len(matches)})</a>\n'
 
@@ -831,10 +905,10 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
     html_content += f"""</div>
             <p>Differences found</p>
         </div>
-        <div class="summary-card warnings" onclick="document.getElementById('warnings').scrollIntoView();">
-            <h3>Warnings</h3>
-            <div class="number">{len(warnings)}</div>
-            <p>Issues to review</p>
+        <div class="summary-card warnings" onclick="document.getElementById('missing_in_results').scrollIntoView();">
+            <h3>Missing/New Keys</h3>
+            <div class="number">{len(missing_in_results) + len(missing_in_validation)}</div>
+            <p>Keys to review</p>
         </div>
         <div class="summary-card matches" onclick="document.getElementById('matches').scrollIntoView();">
             <h3>Matches</h3>
@@ -867,6 +941,60 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
     html_content += """        </div>
     </div>
 """
+
+    # Add missing in results section
+    if missing_in_results:
+        html_content += f'''
+    <div class="section" id="missing_in_results">
+        <div class="section-header warnings">Missing in Results ({len(missing_in_results)})</div>
+'''
+        
+        for missing in missing_in_results[:50]:
+            html_content += f'''
+        <div class="comparison-item">
+            <div class="key-name">{missing['key']}</div>
+            <div class="message">{missing['message']}</div>
+            <div class="message">Category: {missing['category']}</div>
+        </div>
+'''
+        
+        if len(missing_in_results) > 50:
+            html_content += f'''
+        <div class="comparison-item">
+            <p style="text-align: center; color: #7f8c8d;">... and {len(missing_in_results) - 50} more missing keys</p>
+        </div>
+'''
+        
+        html_content += '''
+    </div>
+'''
+
+    # Add missing in validation section (new keys)
+    if missing_in_validation:
+        html_content += f'''
+    <div class="section" id="missing_in_validation">
+        <div class="section-header warnings">New Keys in Results ({len(missing_in_validation)})</div>
+'''
+        
+        for missing in missing_in_validation[:50]:
+            html_content += f'''
+        <div class="comparison-item">
+            <div class="key-name">{missing['key']}</div>
+            <div class="message">{missing['message']}</div>
+            <div class="message">Category: {missing['category']}</div>
+        </div>
+'''
+        
+        if len(missing_in_validation) > 50:
+            html_content += f'''
+        <div class="comparison-item">
+            <p style="text-align: center; color: #7f8c8d;">... and {len(missing_in_validation) - 50} more new keys</p>
+        </div>
+'''
+        
+        html_content += '''
+    </div>
+'''
 
     # Add json_only errors section with grouping
     if errors_by_type['json_only']:
@@ -914,6 +1042,10 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                     result_data_escaped = result_data_json.replace("'", "\\'").replace('"', '&quot;')
                     validation_data_escaped = validation_data_json.replace("'", "\\'").replace('"', '&quot;')
                     
+                    # Check for json_img_path
+                    result_img_path = error.get('result_img_path')
+                    validation_img_path = error.get('validation_img_path')
+                    
                     html_content += f'''
                 <div class="comparison-item">
                     <div class="key-name">{error['key']}</div>
@@ -925,6 +1057,24 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                             data-result='{result_data_escaped}' 
                             data-validation='{validation_data_escaped}'>Show Side-by-Side Comparison</button>
                     <div id="compare_{error_id}" class="side-by-side-comparison collapsible"></div>
+'''
+                    
+                    # Add JSON visualization images if available
+                    if result_img_path or validation_img_path:
+                        html_content += f'''
+                    <div class="image-comparison">
+                        <div class="image-panel">
+                            <h4>Current JSON Visualization</h4>
+                            {f'<img src="{result_img_path}" alt="Current JSON visualization" style="max-width: 100%; max-height: 300px;">' if result_img_path and os.path.exists(result_img_path) else '<div class="no-image">JSON visualization not available</div>'}
+                        </div>
+                        <div class="image-panel">
+                            <h4>Expected JSON Visualization</h4>
+                            {f'<img src="{validation_img_path}" alt="Expected JSON visualization" style="max-width: 100%; max-height: 300px;">' if validation_img_path and os.path.exists(validation_img_path) else '<div class="no-image">JSON visualization not available</div>'}
+                        </div>
+                    </div>
+'''
+                    
+                    html_content += '''
                 </div>
 '''
                 
@@ -990,6 +1140,10 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                     result_data_escaped = result_data_json.replace("'", "\\'").replace('"', '&quot;')
                     validation_data_escaped = validation_data_json.replace("'", "\\'").replace('"', '&quot;')
                     
+                    # Check for json_img_path
+                    result_img_path = error.get('result_img_path')
+                    validation_img_path = error.get('validation_img_path')
+                    
                     html_content += f'''
                 <div class="comparison-item">
                     <div class="key-name">{error['key']}</div>
@@ -1001,6 +1155,24 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                             data-result='{result_data_escaped}' 
                             data-validation='{validation_data_escaped}'>Show Side-by-Side Comparison</button>
                     <div id="compare_{error_id}" class="side-by-side-comparison collapsible"></div>
+'''
+                    
+                    # Add JSON visualization images if available
+                    if result_img_path or validation_img_path:
+                        html_content += f'''
+                    <div class="image-comparison">
+                        <div class="image-panel">
+                            <h4>Current JSON Visualization</h4>
+                            {f'<img src="{result_img_path}" alt="Current JSON visualization" style="max-width: 100%; max-height: 300px;">' if result_img_path and os.path.exists(result_img_path) else '<div class="no-image">JSON visualization not available</div>'}
+                        </div>
+                        <div class="image-panel">
+                            <h4>Expected JSON Visualization</h4>
+                            {f'<img src="{validation_img_path}" alt="Expected JSON visualization" style="max-width: 100%; max-height: 300px;">' if validation_img_path and os.path.exists(validation_img_path) else '<div class="no-image">JSON visualization not available</div>'}
+                        </div>
+                    </div>
+'''
+                    
+                    html_content += '''
                 </div>
 '''
                 
@@ -1107,14 +1279,15 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
     </div>
 '''
 
-    # Add warnings section
-    if warnings:
-        html_content += '''
+    # Add other warnings section (excluding missing keys)
+    other_warnings = [w for w in warnings if w.get('type') not in ['missing_in_results', 'missing_in_validation']]
+    if other_warnings:
+        html_content += f'''
     <div class="section" id="warnings">
-        <div class="section-header warnings">Warnings</div>
+        <div class="section-header warnings">Other Warnings ({len(other_warnings)})</div>
 '''
         
-        for warning in warnings[:50]:
+        for warning in other_warnings[:50]:
             html_content += f'''
         <div class="comparison-item">
             <div class="key-name">{warning['key']}</div>
@@ -1122,10 +1295,10 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         </div>
 '''
         
-        if len(warnings) > 50:
+        if len(other_warnings) > 50:
             html_content += f'''
         <div class="comparison-item">
-            <p style="text-align: center; color: #7f8c8d;">... and {len(warnings) - 50} more warnings</p>
+            <p style="text-align: center; color: #7f8c8d;">... and {len(other_warnings) - 50} more warnings</p>
         </div>
 '''
         

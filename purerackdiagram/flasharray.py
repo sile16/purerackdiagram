@@ -318,7 +318,7 @@ class FAChassis():
         elif self.config['generation'] == 'e':
             port_naming_key = 'port_naming_xcr4'
         elif self.config['generation'] in ['x', 'c', 'rc'] :
-            if self.config['release'] == 4:
+            if self.config['release'] >= 4:
                 port_naming_key = 'port_naming_xcr4'
             else:
                 port_naming_key = 'port_naming_xcr2'
