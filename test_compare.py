@@ -222,11 +222,17 @@ def compare_results(input_file, validation_file, output_html=None):
             continue
             
         if validation_value is None:
+            # Get file paths for the new key
+            result_path, _, result_img_path, _ = get_file_paths_for_comparison(key, {key: result_value}, {}, input_file, validation_file)
+            
             missing_in_validation.append({
                 'key': key,
                 'type': 'missing_in_validation', 
                 'message': f'Key exists in results but not in validation',
-                'category': categorize_key(key, results, validation)
+                'category': categorize_key(key, results, validation),
+                'result_path': result_path,
+                'result_img_path': result_img_path,
+                'result_value': result_value
             })
             continue
         
@@ -949,7 +955,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         <div class="section-header warnings">Missing in Results ({len(missing_in_results)})</div>
 '''
         
-        for missing in missing_in_results[:50]:
+        for missing in missing_in_results[:5000]:
             html_content += f'''
         <div class="comparison-item">
             <div class="key-name">{missing['key']}</div>
@@ -958,10 +964,10 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         </div>
 '''
         
-        if len(missing_in_results) > 50:
+        if len(missing_in_results) > 5000:
             html_content += f'''
         <div class="comparison-item">
-            <p style="text-align: center; color: #7f8c8d;">... and {len(missing_in_results) - 50} more missing keys</p>
+            <p style="text-align: center; color: #7f8c8d;">... and {len(missing_in_results) - 5000} more missing keys</p>
         </div>
 '''
         
@@ -976,19 +982,51 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         <div class="section-header warnings">New Keys in Results ({len(missing_in_validation)})</div>
 '''
         
-        for missing in missing_in_validation[:50]:
+        for missing in missing_in_validation[:5000]:
             html_content += f'''
         <div class="comparison-item">
             <div class="key-name">{missing['key']}</div>
             <div class="message">{missing['message']}</div>
             <div class="message">Category: {missing['category']}</div>
+'''
+            
+            # If this is an image category, show the actual image
+            if missing['category'] == 'image':
+                result_path = missing.get('result_path')
+                result_img_path = missing.get('result_img_path')
+                
+                # Check if image files exist and display them
+                if result_path and os.path.exists(result_path):
+                    html_content += f'''
+            <div class="image-comparison">
+                <div class="image-panel">
+                    <h4>New Image</h4>
+                    <img src="{result_path}" alt="New image" style="max-width: 100%; max-height: 300px;">
+                </div>
+            </div>
+'''
+                elif result_img_path and os.path.exists(result_img_path):
+                    html_content += f'''
+            <div class="image-comparison">
+                <div class="image-panel">
+                    <h4>New Image Visualization</h4>
+                    <img src="{result_img_path}" alt="New image visualization" style="max-width: 100%; max-height: 300px;">
+                </div>
+            </div>
+'''
+                else:
+                    html_content += f'''
+            <div class="message" style="color: #e67e22;">Image file not found at expected path</div>
+'''
+            
+            html_content += '''
         </div>
 '''
         
-        if len(missing_in_validation) > 50:
+        if len(missing_in_validation) > 5000:
             html_content += f'''
         <div class="comparison-item">
-            <p style="text-align: center; color: #7f8c8d;">... and {len(missing_in_validation) - 50} more new keys</p>
+            <p style="text-align: center; color: #7f8c8d;">... and {len(missing_in_validation) - 5000} more new keys</p>
         </div>
 '''
         
@@ -1009,7 +1047,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         for group_key, group_errors in grouped_errors.items():
             if group_key.startswith('_no_diff_'):
                 # Individual errors without grouping
-                for error in group_errors[:5]:
+                for error in group_errors:
                     html_content += f'''
         <div class="comparison-item">
             <div class="key-name">{error['key']}</div>
@@ -1033,7 +1071,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
             <div id="group_{group_id}" class="error-group-content">
 '''
                 
-                for error in group_errors[:10]:
+                for error in group_errors:
                     error_id = abs(hash(error["key"]))
                     # Safely encode JSON data for JavaScript
                     result_data_json = json.dumps(error.get('result_data', {}))
@@ -1078,12 +1116,6 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                 </div>
 '''
                 
-                if len(group_errors) > 10:
-                    html_content += f'''
-                <div class="comparison-item">
-                    <p style="text-align: center; color: #7f8c8d;">... and {len(group_errors) - 10} more similar errors</p>
-                </div>
-'''
                 
                 html_content += '''
             </div>
@@ -1107,7 +1139,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         for group_key, group_errors in grouped_errors.items():
             if group_key.startswith('_no_diff_'):
                 # Individual errors without grouping
-                for error in group_errors[:5]:
+                for error in group_errors:
                     html_content += f'''
         <div class="comparison-item">
             <div class="key-name">{error['key']}</div>
@@ -1131,7 +1163,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
             <div id="group_{group_id}" class="error-group-content">
 '''
                 
-                for error in group_errors[:10]:
+                for error in group_errors:
                     error_id = abs(hash(error["key"]))
                     # Safely encode JSON data for JavaScript
                     result_data_json = json.dumps(error.get('result_data', {}))
@@ -1176,12 +1208,6 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                 </div>
 '''
                 
-                if len(group_errors) > 10:
-                    html_content += f'''
-                <div class="comparison-item">
-                    <p style="text-align: center; color: #7f8c8d;">... and {len(group_errors) - 10} more similar errors</p>
-                </div>
-'''
                 
                 html_content += '''
             </div>
@@ -1199,7 +1225,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         <div class="section-header image">Image Errors ({len(errors_by_type['image'])})</div>
 '''
         
-        for error in errors_by_type['image'][:20]:  # Limit to first 20 for images
+        for error in errors_by_type['image']:  # Show all image errors
             html_content += f'''
         <div class="comparison-item">
             <div class="key-name">{error['key']}</div>
@@ -1268,12 +1294,6 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         </div>
 '''
         
-        if len(errors_by_type['image']) > 20:
-            html_content += f'''
-        <div class="comparison-item">
-            <p style="text-align: center; color: #7f8c8d;">... and {len(errors_by_type['image']) - 20} more image errors</p>
-        </div>
-'''
         
         html_content += '''
     </div>
@@ -1287,7 +1307,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         <div class="section-header warnings">Other Warnings ({len(other_warnings)})</div>
 '''
         
-        for warning in other_warnings[:50]:
+        for warning in other_warnings[:5000]:
             html_content += f'''
         <div class="comparison-item">
             <div class="key-name">{warning['key']}</div>
@@ -1295,10 +1315,10 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         </div>
 '''
         
-        if len(other_warnings) > 50:
+        if len(other_warnings) > 5000:
             html_content += f'''
         <div class="comparison-item">
-            <p style="text-align: center; color: #7f8c8d;">... and {len(other_warnings) - 50} more warnings</p>
+            <p style="text-align: center; color: #7f8c8d;">... and {len(other_warnings) - 5000} more warnings</p>
         </div>
 '''
         
@@ -1330,13 +1350,9 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                 html_content += f'''
                 <h4 style="margin-top: 15px; color: #2c3e50;">{category.replace('_', ' ').title()} ({len(category_matches)})</h4>
 '''
-                for match in category_matches[:10]:
+                for match in category_matches:
                     html_content += f'''
                 <div class="key-name" style="margin: 5px;">{match['key']}</div>
-'''
-                if len(category_matches) > 10:
-                    html_content += f'''
-                <p style="color: #7f8c8d;">... and {len(category_matches) - 10} more {category} matches</p>
 '''
         
         html_content += '''

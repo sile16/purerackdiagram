@@ -8,6 +8,26 @@ more_tests = [
             "model": "fa-c50r5",
             "fm_label": "True",
             "dp_label": "True",
+            "datapacks": "366",
+            "addoncards": "2eth100roce",
+            "face":"back"
+        }
+
+    },{    "queryStringParameters": {
+            "model": "fa-c50r5",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "366-260-260",
+            "addoncards": "2eth100roce",
+            "face":"back"
+        }
+
+    },
+    # {"model": "fa-c50r5-eth", "fm_label": "True", "dp_label": "True", "bezel": "True", "datapacks": "366", "json_only": "True"}
+    {    "queryStringParameters": {
+            "model": "fa-c50r5",
+            "fm_label": "True",
+            "dp_label": "True",
             "bezel": "True",
             "datapacks": "366",
             "json_only": "True"

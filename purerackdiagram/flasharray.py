@@ -883,28 +883,36 @@ class FADiagram():
                 # back on the SE to select which slot.
                 if config["generation"] == 'xl':
                     fh_order = [2, 3, 7, 0, 6, 4, 1, 8, 5]
-                    hh_order = [2, 3, 7, 0, 6, 4, 1, 8, 5]
+                    
                 elif config["generation"] == 'e':
-                    fh_order = [0, 1, 2, 3, 4]
-                    hh_order = [0, 1, 2, 3, 4]
-                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] == 4 and (config['rev'] == 'b' or config['rev'] == 'c'):
-                    if card == "2eth100roce":
+                    if card == "2eth100roce" and len(config['shelves']) >= 2 :
                         fh_order = [0, 1, 2, 3, 4]
-                        hh_order = [0, 1, 2, 3, 4]
+                    elif card == "mgmt2ethbaset":
+                        fh_order = [0, 1, 2, 3, 4]
+                    elif card == "dca":
+                        fh_order = [4, 1, 2, 3, 0]
                     else:
-                        fh_order = [1, 2, 3, 4, 0]
-                        hh_order = [1, 2, 3, 4, 0]
-                elif (config['generation'] == 'x' or config['generation'] == 'c') and config['release'] >= 4:
-                    fh_order = [0, 1, 2, 3, 4]
-                    hh_order = [0, 1, 2, 3, 4]
+                        fh_order = [1, 2, 3, 0, 4]
+         
+                elif config['generation'] in ['x', 'c'] and config['release'] >= 4:
+                    if card == "2eth100roce" and len(config['shelves']) >= 2 :
+                        fh_order = [0, 1, 2, 3, 4]
+                    elif card == "mgmt2ethbaset":
+                        fh_order = [0, 1, 2, 3, 4]
+                    elif card == "dca":
+                        fh_order = [4, 1, 2, 3, 0]
+                    else:
+                        fh_order = [1, 2, 3, 0, 4]
+
                 else:
-                    fh_order = [0, 1]
-                    hh_order = [2, 0, 1, 3]
+                    fh_order = [2, 0, 1, 3]
+
                 order = fh_order
 
-                if card == "2fc" or card == "2eth" or card == "2ethbaset":
-                    # card population order for a half or full card slot
-                    order = hh_order
+                # all cards are available as full height or half now removing this to make it easier.
+                #if card == "2fc" or card == "2eth" or card == "2ethbaset":
+                #    # card population order for a half or full card slot
+                #    order = hh_order
                 
 
                 # populate add on cards by the order
@@ -1301,7 +1309,7 @@ class FADiagram():
                 raise InvalidConfigurationException(
                     f"Please use a valid mezzainine: {pformat(valid_mezz)}")
 
-            self._init_pci_cards(config, params)
+            
 
         else:
             # face == 'front'
@@ -1364,6 +1372,10 @@ class FADiagram():
 
         # need for both as shelf type is encoded in DP sizes
         self._init_datapacks(config, params)
+
+        if face == 'back':
+            self._init_pci_cards(config, params)
+
         self.config = config
 
     async def get_image(self):
