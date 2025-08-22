@@ -209,6 +209,11 @@ chassis_dp_size_lookup:
   - nvme
   - 14
   - '512'
+  '54':
+  - 4.5TB
+  - nvme
+  - 12
+  - '54'
   '585':
   - 36.6TB
   - nvme
@@ -9261,6 +9266,11 @@ shelf_dp_size_lookup:
   - nvme
   - 14
   - '512'
+  '54':
+  - 4.5TB
+  - nvme
+  - 12
+  - '54'
   '585':
   - 36.6TB
   - nvme
