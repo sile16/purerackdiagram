@@ -8,6 +8,17 @@ more_tests = [
             "model": "fa-x50r5",
             "fm_label": "True",
             "dp_label": "True",
+            "datapacks": "6/13/0.08",
+            "addoncards": "2eth100roce",
+            "face":"front"
+
+        }
+
+    },
+    {    "queryStringParameters": {
+            "model": "fa-x50r5",
+            "fm_label": "True",
+            "dp_label": "True",
             "datapacks": "0",
             "addoncards": "2eth100roce",
             "face":"back"

@@ -882,8 +882,32 @@ class FADiagram():
                 # practice for population order, may have to just put this 
                 # back on the SE to select which slot.
                 if config["generation"] == 'xl':
-                    fh_order = [2, 3, 7, 0, 6, 4, 1, 8, 5]
+                    if card in ["2fc", "2eth25", "4eth25roce", "4eth25"]:
+                        #cards that support replication and need lower bw
+                        fh_order = [1, 3, 7, 8, 2, 4, 0, 6]
+                    elif card in ["2ethbaset"]:
+                        #lower bw but no replication support.
+                        fh_order = [1, 3, 7, 2, 4, 0, 6]
                     
+                    elif card in ["2eth100roce"]:
+                        # high bw & replication
+                        fh_order = [2, 4, 8, 1, 3, 7, 0, 6, 5]
+                    elif card in ["2eth100"]:
+                        # high bw & replication
+                        fh_order = [2, 4, 1, 3, 7, 0, 6]
+                    elif card in ["2eth200roce"]:
+                        # high bw & shelf
+                        if len(config['shelves']) == 1:
+                            fh_order = [0, 2, 4, 8, 6, 1, 3, 7]
+                        elif len(config['shelves']) > 1:
+                            fh_order = [0, 6, 2, 4, 8, 1, 3, 7]
+                        else:
+                            fh_order = [2, 4, 8, 0, 6, 1, 3, 7]
+                    elif card == "dca":
+                        fh_order = [5]
+                    else:
+                        fh_order = [1, 3, 7, 8, 2, 4, 0, 6, 5]
+
                 elif config["generation"] == 'e':
                     if card == "2eth100roce" and len(config['shelves']) >= 2 :
                         fh_order = [0, 1, 2, 3, 4]
