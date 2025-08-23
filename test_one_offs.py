@@ -4,6 +4,36 @@ import urllib.parse
 
 more_tests = [
     # {"model": "fa-c50r5-eth", "fm_label": "True", "dp_label": "True", "bezel": "True", "datapacks": "366", "json_only": "True"}
+     {    "queryStringParameters": {
+            "model": "fa-x50r5",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "0",
+            "addoncards": "2eth100roce",
+            "face":"back"
+        }
+
+    },
+    {    "queryStringParameters": {
+            "model": "fa-x50r5",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "366/366",
+            "addoncards": "2eth100roce",
+            "face":"front"
+        }
+
+    },
+    {    "queryStringParameters": {
+            "model": "fa-x50r5",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "6/366",
+            "addoncards": "2eth100roce",
+            "face":"front"
+        }
+
+    },
     {    "queryStringParameters": {
             "model": "fa-c50r5",
             "fm_label": "True",
@@ -13,7 +43,8 @@ more_tests = [
             "face":"back"
         }
 
-    },{    "queryStringParameters": {
+    },
+    {    "queryStringParameters": {
             "model": "fa-c50r5",
             "fm_label": "True",
             "dp_label": "True",

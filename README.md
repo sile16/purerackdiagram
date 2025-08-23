@@ -33,9 +33,9 @@ You can input multiple data packs on one line, all delimited by "/", where "-" i
 
 "11-11" represents a chassis with 11TB and 1 Shelf 11TB dp.
 
-### Population Order
+### SCM Datapack Population Order
 
-At some point, we needed to populate from the right side moving left to accommodate SCM module best practices. Therefore, in a chassis or shelf, the last datapack specified (unless it's the first one) populates from right to left. The 1st, 2nd, 3rd, 4th, etc. (unless it's the last dp) populate from left to right.
+At some point, we needed to populate from the right side moving left to accommodate SCM module best practices. Therefore, in a chassis, the last datapack specified (unless it's the first one) populates from right to left, this will only happend if the first module is of type scm. 
 
 ### Blanks
 

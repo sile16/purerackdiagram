@@ -159,10 +159,9 @@ class FAShelf():
                     start_loc = dp[4]
                     end_loc = dp[5]
                     rotate = dp[6]
-                    try:
-                        float(dp_size)
+                    if dp_size.replace('.', '', 1).isdigit():
                         text = str(dp_size) + "TB"
-                    except (ValueError, TypeError):
+                    else:
                         text = dp_size
                 
                     self.tmp_img = apply_dp_labelv2(self.tmp_img, text, start_loc, end_loc, rotate)
@@ -222,7 +221,7 @@ class FAShelf():
                                               y_offset,
                                               right,
                                               full)
-                right = True
+                #right = True
 
 
 # takes the config parsed in FA Diagram and creates the image for the chassis
@@ -574,7 +573,9 @@ class FAChassis():
             if dp_i > 0 and dp_i + 1 == dp_count:
                 # If it's m or X need to populated the 
                 # last datapack from the right side
-                if self.config['generation'] != 'xl' and self.config['generation'] != 'c':
+
+                # new 8/22/2025 only populate from the right if we have scm in slot 0
+                if self.config['generation'] != 'xl' and self.config['generation'] != 'c' and slots[0] == 'scm':
                     right = True
 
             fm_str = dp[0]
@@ -681,10 +682,9 @@ class FAChassis():
                     start_loc = dp[4]
                     end_loc = dp[5]
                     rotate = dp[6]
-                    try:
-                        float(dp_size)
+                    if dp_size.replace('.', '', 1).isdigit():
                         text = str(dp_size) + "TB"
-                    except (ValueError, TypeError):
+                    else:
                         text = dp_size
 
                     self.tmp_img = apply_dp_labelv2(self.tmp_img, text , start_loc, end_loc, rotate)
