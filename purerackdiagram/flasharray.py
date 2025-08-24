@@ -882,7 +882,7 @@ class FADiagram():
                 # practice for population order, may have to just put this 
                 # back on the SE to select which slot.
                 if config["generation"] == 'xl':
-                    if card in ["2fc", "2eth25", "4eth25roce", "4eth25"]:
+                    if card in ["2fc", "2eth25", "4eth25roce", "4eth25", '2eth', "4eth"]:
                         #cards that support replication and need lower bw
                         fh_order = [1, 3, 7, 8, 2, 4, 0, 6]
                     elif card in ["2ethbaset"]:

@@ -5,6 +5,39 @@ import urllib.parse
 more_tests = [
     # {"model": "fa-c50r5-eth", "fm_label": "True", "dp_label": "True", "bezel": "True", "datapacks": "366", "json_only": "True"}
      {    "queryStringParameters": {
+            "model": "fa-xl130",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "13-13-13",
+            "addoncards": "2eth200roce,2eth200roce",
+            "face":"back"
+
+        }
+
+     },
+     {    "queryStringParameters": {
+            "model": "fa-xl130",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "13-13",
+            "addoncards": "2eth200roce,2eth200roce",
+            "face":"back"
+
+        }
+
+    },
+    {    "queryStringParameters": {
+            "model": "fa-xl130",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "13",
+            "addoncards": "2eth200roce,2eth200roce",
+            "face":"back"
+
+        }
+
+     },
+     {    "queryStringParameters": {
             "model": "fa-x50r5",
             "fm_label": "True",
             "dp_label": "True",
