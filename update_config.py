@@ -121,8 +121,9 @@ def static_global_config():
              "fa-er1-eth": ["mgmt2ethbaset", None, None, "2eth25", None],
 
              # New x R5 8/17 updated 4 port cards to be roce neabled.
+             # UPdated 10/29 x50 FC has the 4 port card in slot3 
             "fa-x20r5-fc": [None, None, None, "2fc", None],
-            "fa-x50r5-fc": [None, "4fc", None, None, None],
+            "fa-x50r5-fc": [None, None, None, "4fc", None],
             "fa-x70r5-fc": [None, "4fc", None, "2fc", "dca"],
             "fa-x90r5-fc": [None, "4fc", None, "2fc", "dca"],
             

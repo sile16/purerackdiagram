@@ -657,9 +657,9 @@ pci_config_lookup:
   - null
   fa-x50r5-fc:
   - null
+  - null
+  - null
   - 4fc
-  - null
-  - null
   - null
   fa-x70r1-eth:
   - 2eth25

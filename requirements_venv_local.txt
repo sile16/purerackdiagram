@@ -3,5 +3,5 @@ requests
 jsondiff
 #add Pillow because using Klayers in amazon
 #https://github.com/keithrozario/Klayers?tab=readme-ov-file
-Pillow
+Pillow==11.0.0
 jsonurl-py

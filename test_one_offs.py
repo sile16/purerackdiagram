@@ -4,6 +4,54 @@ import urllib.parse
 
 more_tests = [
     # {"model": "fa-c50r5-eth", "fm_label": "True", "dp_label": "True", "bezel": "True", "datapacks": "366", "json_only": "True"}
+    {
+        "queryStringParameters": {
+            "model": "fb-er1",
+            "face": "front",
+            "dfm_label": "True",
+            "bladesv2": jsonurl.dumps([
+                {
+                    "chassis_gen": "1",
+                    "blades": [
+                        {
+                            "bays": [1, 2, 3, 4],
+                            "fm_size": "24TB",
+                            "blade_count": 4,
+                            "blade_model": "fb-er1",
+                            "model_text": "EC",
+                            "first_slot": 2 # indexed from 1
+                        },
+                        {
+                            "bays": [1, 2, 3, 4],
+                            "fm_size": "48TB",
+                            "blade_count": 5,
+                            "blade_model": "fb-s200r2",
+                            "model_text": "modelT"
+                        }
+                    ]
+                },
+                {    
+                    
+                    "chassis_gen": "2",
+                    "blades": [
+                        {
+                            "bays": [1, 2, 3, 4],
+                            "fm_size": "75TB",
+                            "blade_count": 5,
+                            "blade_model": "fb-s500r2",
+                            "model_text": "EXA"
+                        },
+                        {
+                            "bays": [1, 2, 3, 4],
+                            "fm_size": "75TB",
+                            "blade_count": 5,
+                            "blade_model": "fb-s500r2",
+                        }
+                    ]
+                }
+            ])
+        }
+    },
      {    "queryStringParameters": {
             "model": "fa-xl130",
             "fm_label": "True",
