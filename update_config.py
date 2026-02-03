@@ -231,7 +231,9 @@ def static_global_config():
             "fa-xl130r5-eth": [None, None, None, "4eth25roce", None, "dca", None, None, None],
             "fa-xl170r5-eth": [None, None, None, "4eth25roce", None, "dca", None, None, None],
             "fa-xl130r5-fc":  [None, None, None, "2fc", "4fc", "dca", None, None, None],
-            "fa-xl170r5-fc":  [None, None, None, "2fc", "4fc", "dca", None, None, None]
+            "fa-xl170r5-fc":  [None, None, None, "2fc", "4fc", "dca", None, None, None],
+            "fa-xl190r5-eth": [None, None, "2eth100", None, "2eth100", "dca", None, None, None],
+            "fa-xl190r5-fc":  [None, "4fc", "4fc", None, "4fc", "dca", None, "4fc", None],
 
         },
 

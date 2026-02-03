@@ -863,6 +863,26 @@ pci_config_lookup:
   - null
   - null
   - null
+  fa-xl190r5-eth:
+  - null
+  - null
+  - 2eth100
+  - null
+  - 2eth100
+  - dca
+  - null
+  - null
+  - null
+  fa-xl190r5-fc:
+  - null
+  - 4fc
+  - 4fc
+  - null
+  - 4fc
+  - dca
+  - null
+  - 4fc
+  - null
 pci_valid_cards:
 - 2eth
 - 2eth25
