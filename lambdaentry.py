@@ -301,8 +301,9 @@ def resize_image_and_ports(img, all_ports):
     return img
 
 
-def create_vssx_for_image(img, all_ports, diagram, params):
-    ru = diagram.config['ru']
+def create_vssx_for_image(img, all_ports, diagram, params, component_ru=None):
+    # Use component-level RU if provided, otherwise fall back to total diagram RU
+    ru = component_ru if component_ru is not None else diagram.config['ru']
     h_inches = "{:.2f}".format(ru*1.75)
     if params['model'] == 'fb':
         name = "fb"
@@ -399,9 +400,10 @@ def handle_individual_processing(img_ports, diagram, params):
     with zipfile.ZipFile(memory_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
         index = 1
         for component in img_ports:
-            # component is expected to be {'img':..., 'ports':...}
+            # component is expected to be {'img':..., 'ports':..., 'ru':...}
             img = component['img']
             all_ports = component['ports']
+            component_ru = component.get('ru')
 
             if all_ports:
                 all_ports = sort_ports(all_ports)
@@ -409,7 +411,7 @@ def handle_individual_processing(img_ports, diagram, params):
             img = resize_image_and_ports(img, all_ports)
 
             if vssx_flag:
-                name, vssx_buffer = create_vssx_for_image(img, all_ports, diagram, params)
+                name, vssx_buffer = create_vssx_for_image(img, all_ports, diagram, params, component_ru)
                 filename = f"{name}_{index}.vssx"
                 zipf.writestr(filename, vssx_buffer.getvalue())
             else:

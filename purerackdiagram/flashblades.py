@@ -421,12 +421,12 @@ class FBSDiagram():
         if "front" in img_key:
             await self.add_blades(base_img, number_of_blades, blade_model_text, chassis_idx)
 
-        return {'img': base_img, 'ports': ports}
+        return {'img': base_img, 'ports': ports, 'ru': 5}
 
-    async def get_rack_image_with_ports(self, key):
+    async def get_rack_image_with_ports(self, key, ru=1):
         ports = []
         add_ports_at_offset(key, (0, 0), ports)
-        return {'img': await RackImage(key, self.json_only).get_image(), 'ports': ports}
+        return {'img': await RackImage(key, self.json_only).get_image(), 'ports': ports, 'ru': ru}
 
     async def get_image(self):
         tasks = []
@@ -469,7 +469,7 @@ class FBSDiagram():
             xfm_face = self.config['xfm_face']
             for x in range(2):
                 tasks.append(
-                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_model']}_{xfm_face}.png"))
+                self.get_rack_image_with_ports(f"png/pure_fb_xfm_{self.config['xfm_model']}_{xfm_face}.png", ru=1))
             
 
         all_images = await asyncio.gather(*tasks)

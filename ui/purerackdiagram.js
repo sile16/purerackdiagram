@@ -518,6 +518,9 @@ $(function () {
     $('#img_url').html('<a target="_blank" href="' + url + '">' + url + '</a>');
     $('#visio_url').html('<a target="_blank" href="' + visio_url + '">' + visio_url + '</a>');
 
+    // Check if individual mode is requested before stripping it
+    var individual_mode = url.includes("&individual");
+
     url_wo_individual = url.replace("&individual","") + "&json=True";
     const response = await fetch(url_wo_individual);
     var diagram = await response.json();
@@ -616,6 +619,14 @@ $(function () {
 
           parentElement.append(portElement);
         });
+
+        // If individual mode was selected, trigger download of individual components
+        if (individual_mode) {
+          // Small delay to ensure image is displayed before download starts
+          setTimeout(function() {
+            location.href = url;
+          }, 100);
+        }
       });
 
       $('#rack_diagram').attr('src', image_src_url).show();

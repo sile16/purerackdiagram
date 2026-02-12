@@ -43,7 +43,9 @@ class FAShelf():
 
         # load the base image and FMs simultaniously.
         await asyncio.gather(*tasks)
-        return {'img':self.tmp_img, 'ports': self.ports}
+        # NVMe shelves are 3 RU, SAS shelves are 2 RU
+        shelf_ru = 3 if c["shelf_type"] == "nvme" else 2
+        return {'img':self.tmp_img, 'ports': self.ports, 'ru': shelf_ru}
 
     # load the first base image
     async def get_base_img(self):
@@ -253,7 +255,9 @@ class FAChassis():
             if  c["bezel"]:
                 key += "_bezel.png"
                 img =  await RackImage(key, self.json_only).get_image()
-                return {'img': img, 'ports': []}
+                # XL chassis is 5 RU, others are 3 RU
+                chassis_ru = 5 if c['generation'] == 'xl' else 3
+                return {'img': img, 'ports': [], 'ru': chassis_ru}
             
             if c['release'] in [1] and c['generation'] in ['c', 'e'] or (
                 c['release'] >= 4 and c['generation'] in ['x', 'c']
@@ -296,8 +300,10 @@ class FAChassis():
         async with self.lock:
             await self.add_port_names()
 
-        return {'img': self.tmp_img, 'ports': self.ports}
-    
+        # XL chassis is 5 RU, others are 3 RU
+        chassis_ru = 5 if c['generation'] == 'xl' else 3
+        return {'img': self.tmp_img, 'ports': self.ports, 'ru': chassis_ru}
+
     # Add port names to each port if it's missing i.e. ct0.eth7
     async def add_port_names(self):
         
