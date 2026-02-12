@@ -3,8 +3,19 @@ import jsonurl_py as jsonurl
 import urllib.parse
 
 more_tests = [
-    # {"model": "fa-c50r5-eth", "fm_label": "True", "dp_label": "True", "bezel": "True", "datapacks": "366", "json_only": "True"}
-    {
+    # ?model=fa-xl190r5&protocol=fc&face=back&datapacks=366&fm_label=TRUE&dp_label=TRUE
+    {    "queryStringParameters": {
+            "model": "fa-xl190r5",
+            "fm_label": "True",
+            "dp_label": "True",
+            "datapacks": "366",
+            "addoncards": "2eth200roce,2eth200roce",
+            "face":"back"
+
+        }
+
+     },
+     {
         "queryStringParameters": {
             "model": "fb-er1",
             "face": "front",

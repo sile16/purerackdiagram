@@ -9,6 +9,8 @@ import zipfile
 import io
 import json
 import traceback
+# import tracemalloc
+# import resource
 
 import boto3
 from PIL import Image, ImageDraw, ImageFont
@@ -116,6 +118,42 @@ def emit_exception_metric(exception_type):
 
 VERSION = 5
 program_time_s = time.time()
+
+# def get_memory_stats():
+#     """
+#     Get current memory usage statistics.
+#
+#     Returns:
+#         dict: Memory statistics including:
+#             - tracemalloc_current_mb: Current Python memory usage in MB
+#             - tracemalloc_peak_mb: Peak Python memory usage in MB
+#             - max_rss_mb: Maximum resident set size in MB
+#     """
+#     stats = {}
+#
+#     # Get tracemalloc stats (Python heap memory)
+#     if tracemalloc.is_tracing():
+#         current, peak = tracemalloc.get_traced_memory()
+#         stats['tracemalloc_current_mb'] = round(current / (1024 * 1024), 2)
+#         stats['tracemalloc_peak_mb'] = round(peak / (1024 * 1024), 2)
+#     else:
+#         stats['tracemalloc_current_mb'] = 0
+#         stats['tracemalloc_peak_mb'] = 0
+#
+#     # Get max RSS (overall process memory)
+#     try:
+#         usage = resource.getrusage(resource.RUSAGE_SELF)
+#         # On Linux, ru_maxrss is in KB, on macOS it's in bytes
+#         if os.uname().sysname == 'Linux':
+#             max_rss_mb = usage.ru_maxrss / 1024  # Convert KB to MB
+#         else:
+#             max_rss_mb = usage.ru_maxrss / (1024 * 1024)  # Convert bytes to MB
+#         stats['max_rss_mb'] = round(max_rss_mb, 2)
+#     except Exception as e:
+#         logger.warning(f"Failed to get RSS memory: {e}")
+#         stats['max_rss_mb'] = 0
+#
+#     return stats
 
 def upload_to_s3(buffered, extension, contenttype, disposition):
     s3 = boto3.client('s3')
@@ -552,6 +590,10 @@ def create_response(status_code, body, headers=None, is_base64_encoded=False, pa
 def handler(event, context):
     global program_time_s
     program_time_s = time.time()
+
+    # # Start memory tracking
+    # tracemalloc.start()
+
     params = {}
     all_ports = []
     original_params = {}
@@ -565,6 +607,7 @@ def handler(event, context):
         if ("queryStringParameters" not in event
                 or event["queryStringParameters"] is None):
             logger.info("No query parameters found, returning default response")
+            # tracemalloc.stop()
             return create_response(
                 status_code=200,
                 body='Hello from Lambda!',
@@ -605,7 +648,10 @@ def handler(event, context):
             
             draw_ports_on_image(final_img, all_ports, draw_ports_flag, final_img.size)
             final_img = resize_image_and_ports(final_img, all_ports)
-            
+
+            # # Get memory stats before returning
+            # memory_stats = get_memory_stats()
+
             data = {
                 "image_type": "json_only",
                 "config": diagram.config,
@@ -615,9 +661,13 @@ def handler(event, context):
                 "image_size": final_img.size,
                 "image_mib": 0,
                 "params": original_params,
-                "image": None
+                "image": None,
+                # "memory_stats": memory_stats
             }
-            
+
+            # # Stop memory tracking
+            # tracemalloc.stop()
+
             return create_response(
                 status_code=200,
                 body=json.dumps(data, indent=4),
@@ -682,6 +732,9 @@ def handler(event, context):
                 diagram=diagram
             )
         else:
+            # # Get memory stats
+            # memory_stats = get_memory_stats()
+
             data = {"image_type": "png",
                     "config": diagram.config,
                     "ports": all_ports,
@@ -690,9 +743,12 @@ def handler(event, context):
                     "image_size": final_img.size,
                     "image_mib": size_of_buffered_in_mib,
                     "params": original_params,
-                    "image": None }
+                    "image": None,
+                    # "memory_stats": memory_stats
+                    }
 
             if bool_param_get(params,'json_only', False):
+                # tracemalloc.stop()
                 return create_response(
                     status_code=200,
                     body=json.dumps(data, indent=4),
@@ -711,6 +767,7 @@ def handler(event, context):
 
             json_param = bool_param_get(params, 'json', False)
             if json_param:
+                # tracemalloc.stop()
                 return create_response(
                     status_code=200,
                     body=json.dumps(data, indent=4),
@@ -720,6 +777,7 @@ def handler(event, context):
                 )
 
             if size_of_buffered_in_mib > use_s3_size_limit:
+                # tracemalloc.stop()
                 return {
                     "statusCode": 302,
                     "headers": {"Location": data["image"],
@@ -727,6 +785,7 @@ def handler(event, context):
                                 'Access-Control-Allow-Methods': 'GET'}
                 }
 
+            # tracemalloc.stop()
             return create_response(
                 status_code=200,
                 body=data['image'],
@@ -738,10 +797,13 @@ def handler(event, context):
 
     # Catch all exceptions and then handle by type
     except Exception as e:
+        # # Get memory stats even on error
+        # memory_stats = get_memory_stats()
+
         error_msg = str(e)
         stack_trace = traceback.format_exc()
         error_type = e.__class__.__name__
-        
+
         # Determine the status code based on error type
         status_code = 500  # Default as server error
         if error_type == 'InvalidDatapackException':
@@ -787,7 +849,9 @@ def handler(event, context):
             data["params"] = original_params
             data["image_type"] = None
             data["image"] = None
+            # data["memory_stats"] = memory_stats
 
+            # tracemalloc.stop()
             return {
                     "statusCode": status_code,
                     "body": json.dumps(data, indent=4),
@@ -801,6 +865,7 @@ def handler(event, context):
             img.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
+            # tracemalloc.stop()
             return {
                 "statusCode": status_code,
                 "body": img_str,

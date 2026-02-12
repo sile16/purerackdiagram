@@ -76,20 +76,20 @@ def filter_result_data(data):
     """Filter out keys that should not be used for comparisons"""
     if not isinstance(data, dict):
         return data
-    
+
     # Keys to always ignore in comparisons
-    always_ignore = {'execution_duration'}
-    
+    always_ignore = {'execution_duration', 'memory_stats'}
+
     # Create filtered copy
     filtered = {k: v for k, v in data.items() if k not in always_ignore}
-    
+
     # For JSON-based tests, also ignore these keys when they exist
     if 'image_type' in filtered:
         image_type = filtered.get('image_type')
         if image_type in ['json', 'json_only']:
             json_ignore = {'image_mib'}
             filtered = {k: v for k, v in filtered.items() if k not in json_ignore}
-    
+
     return filtered
 
 def download_image(url):
