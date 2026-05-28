@@ -52,6 +52,8 @@ def main():
     update_static_mezz_port_loc(config)
     update_static_psu_loc(config)
 
+    # nl ("No LOM") back variants: identical to _back but without LOM ports (eth0-3)
+    add_nl_back_variants(config)
 
     update_static_fbs_blade_loc(config)
     update_image_sizes(config)
@@ -120,6 +122,12 @@ def static_global_config():
             # New E R1
              "fa-er1-eth": ["mgmt2ethbaset", None, None, "2eth25", None],
 
+            # new X no Lom 
+            "fa-x20r5-fc-nl": [None, "4eth25roce", None, "2fc", None],
+            "fa-x50r5-fc-nl": [None, "4eth25roce",  None, "4fc", None],
+            "fa-x20r5-eth-nl": [None, "4eth25roce", None, "4eth25roce", None],
+            "fa-x50r5-eth-nl": [None, "4eth25roce" ,None, "4eth25roce", None],
+
              # New x R5 8/17 updated 4 port cards to be roce neabled.
              # UPdated 10/29 x50 FC has the 4 port card in slot3 
             "fa-x20r5-fc": [None, None, None, "2fc", None],
@@ -147,8 +155,12 @@ def static_global_config():
             "fa-c20r4c-fc": [None, None, None, "2eth25", None],  # no FC model base model, but making this show up for better experience
             "fa-c20r4c-eth": [None, None, None, "2eth25", None],
 
+            # new C No lom 5/28/2026
+            "fa-c50r5-fc-nl": [None, "4eth25", None, "4fc", None],
+            "fa-c50r5-eth-nl": [None, "4eth25", None, "4eth25", None],
+
             # New C R5 # 8/17 Updated 4port cards to be the roce enabled x7
-            "fa-c50r5-fc": [None, "4fc", None, None, None],
+            "fa-c50r5-fc": [None, None, None, "4fc", None],
             "fa-c70r5-fc": [None, "4fc", None, "2fc", "dca"],
             "fa-c90r5-fc": [None, "4fc", None, "2fc", "dca"],
             
@@ -1643,6 +1655,34 @@ def update_static_mezz_port_loc(config):
                           'mezz': True,
                           'services': ['shelf']})
     config[key] = {'ports': all_ports}
+
+
+def add_nl_back_variants(config):
+    # Generate _nl_back config entries that mirror _back but with the on-chassis
+    # LOM ports (eth0-3) stripped out. Currently scoped to x/c r5.
+    lom_names = {'ct0.eth0', 'ct0.eth1', 'ct0.eth2', 'ct0.eth3',
+                 'ct1.eth0', 'ct1.eth1', 'ct1.eth2', 'ct1.eth3'}
+
+    nl_models = [('x', 5, ''), ('c', 5, '')]
+
+    for gen, rel, rev in nl_models:
+        back_key = f'png/pure_fa_{gen}_r{rel}{rev}_back.png'
+        nl_key = f'png/pure_fa_{gen}_r{rel}{rev}_nl_back.png'
+
+        if back_key not in config:
+            continue
+
+        if nl_key not in config:
+            config[nl_key] = {}
+
+        for k, v in config[back_key].items():
+            if k == 'ports':
+                config[nl_key][k] = [p for p in v if p.get('name') not in lom_names]
+            elif k == 'size':
+                # let update_image_sizes set this from the actual PNG file
+                continue
+            else:
+                config[nl_key][k] = v
 
 
 def update_image_sizes(config):

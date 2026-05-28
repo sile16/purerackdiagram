@@ -3,6 +3,35 @@ import jsonurl_py as jsonurl
 import urllib.parse
 
 more_tests = [
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r5",
+            "face": "back",
+            "nl": "True",
+            "datapacks": "22"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fb-s200",
+            "no_of_blades": 20,
+            "face": "front",
+            "no_of_drives_per_blade": 4,
+            "drive_size": 75
+        }
+    },
+    {
+        "queryStringParameters": {
+            "datapacksv2": "((datapacks:((fm_size:18.3TB,fm_count:28))))",
+            "dp_label": "FALSE",
+            "face": "front",
+            "fm_label": "TRUE",
+            "json": "True",
+            "model": "fa-x50r5",
+            "protocol": "fc"
+        }
+
+    },
     # ?model=fa-xl190r5&protocol=fc&face=back&datapacks=366&fm_label=TRUE&dp_label=TRUE
     {    "queryStringParameters": {
             "model": "fa-xl190r5",

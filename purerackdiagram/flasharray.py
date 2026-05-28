@@ -251,6 +251,7 @@ class FAChassis():
 
 
         chassis_gen = ""
+        nl_suffix = ""
         if c["face"] == "front":
             if  c["bezel"]:
                 key += "_bezel.png"
@@ -258,16 +259,20 @@ class FAChassis():
                 # XL chassis is 5 RU, others are 3 RU
                 chassis_ru = 5 if c['generation'] == 'xl' else 3
                 return {'img': img, 'ports': [], 'ru': chassis_ru}
-            
+
             if c['release'] in [1] and c['generation'] in ['c', 'e'] or (
                 c['release'] >= 4 and c['generation'] in ['x', 'c']
             ):
                 # check for the next generation chassis
                 if c['chassis_gen'] == '2':
                     chassis_gen = "_cg2"
+        else:
+            # back face - check for No LOM variant (eth0-3 LOM ports removed)
+            if c.get('nl'):
+                nl_suffix = "_nl"
 
         # not doing bezel
-        key += f"_{c['face']}{chassis_gen}.png"
+        key += f"{nl_suffix}_{c['face']}{chassis_gen}.png"
 
         
 
@@ -866,8 +871,9 @@ class FADiagram():
         pci_config = [None, None, None, None]
         c = config
         pci_lookup_str = f'fa-{c["generation"]}{c["model_num"]}r{c["release"]}{c["rev"]}-{config["protocol"]}'
-        
-        
+        if c.get('nl'):
+            pci_lookup_str += '-nl'
+
         pci_config = pci_config_lookup[pci_lookup_str].copy()
         config['default_pci_config'] = pci_config.copy()
 
@@ -1284,7 +1290,7 @@ class FADiagram():
 
         if face == "back":
             config['bezel'] = False
-            
+
             config["dc_power"] = params.get("dc_power", False)
             # check for string versions of no/false
             for item in ["dc_power"]:
@@ -1295,6 +1301,20 @@ class FADiagram():
 
             if config["dc_power"] not in [True, False, "1300", "2000"]:
                 raise InvalidConfigurationException("Please use a valid dc_power: 1300, 2000")
+
+            # nl = "No LOM" - back image without LOM ports (eth0-3).
+            # Default True for x20r5, x50r5, c50r5; user can override (e.g. X20 low-line keeps LOM).
+            nl_default = (
+                (config['generation'] == 'x' and config['release'] == 5 and config['model_num'] in [20, 50])
+                or (config['generation'] == 'c' and config['release'] == 5 and config['model_num'] == 50)
+            )
+            config["nl"] = params.get("nl", nl_default)
+            if config["nl"] in ['False', 'false', 'FALSE', 'no', '0', ""]:
+                config["nl"] = False
+            elif config["nl"] in ['True', 'TRUE', 'true', 'yes', '1']:
+                config["nl"] = True
+            if config["nl"] not in [True, False]:
+                raise InvalidConfigurationException("Please use a valid nl: TRUE, FALSE")
 
 
             valid_protocols = ['fc', 'eth']
@@ -1343,7 +1363,7 @@ class FADiagram():
 
         else:
             # face == 'front'
-            
+            config["nl"] = False
 
             # we guarantted chassis gen will be in the config
             if "chassis_gen" not in params:

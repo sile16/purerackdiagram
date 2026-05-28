@@ -228,7 +228,8 @@ $(function () {
   var fa_option_dc_power = build_select('#fa_option_dc_power', FA_OPTIONS.dc_power);
   var fa_option_individual = build_select('#fa_option_individual', FA_OPTIONS.individual);
   var fa_option_chassis_gen = build_select('#fa_option_chassis_gen', FA_OPTIONS.chassis_gen);
-  
+  var fa_option_nl = build_select('#fa_option_nl', FA_OPTIONS.nl);
+
   var fa_option_pci = [];
 
   //loop through pci_select_0 - 8 to build the select options:
@@ -353,6 +354,10 @@ $(function () {
 
     if (fa_option_chassis_gen.val() != ''){
       url += "&chassis_gen=" + fa_option_chassis_gen.val();
+    }
+
+    if (fa_option_nl.val() != ''){
+      url += "&nl=" + fa_option_nl.val();
     }
 
     console.log('fa_url: final URL:', url);
@@ -1100,6 +1105,7 @@ $(function () {
       $('#mezz').hide();
       $('#ports').hide();
       $('#fa_dc_power').hide();
+      $('#fa_nl').hide();
 
       $('#protocol').hide();
       $('#addoncards').hide();
@@ -1109,8 +1115,9 @@ $(function () {
       $('#fa_fm_label').hide();
       $('#fa_dp_label').hide();
       $('#fa_bezel').hide();
-      
+
       $('#fa_dc_power').show();
+      $('#fa_nl').show();
       $('#protocol').show();
       $('#addoncards').show();
       $('#pci_dropdowns').show();
