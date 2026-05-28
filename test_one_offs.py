@@ -8,7 +8,8 @@ more_tests = [
             "model": "fa-x50r5",
             "face": "back",
             "nl": "True",
-            "datapacks": "22"
+            "datapacks": "22",
+            "ports": "True"
         }
     },
     {
