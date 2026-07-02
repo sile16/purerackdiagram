@@ -6,7 +6,7 @@ API_ENDPOINT_STAGING = "https://61fuj0h54e.execute-api.us-east-1.amazonaws.com/s
 // the options values for FlashArray configurations
 //
 var FA_OPTIONS = {
-    model: ['X Arrays:', 'fa-x20r5', 'fa-x50r5', 'fa-x70r5', 'fa-x90r5',
+    model: ['X Arrays:', 'fa-rx20', 'fa-x20r5', 'fa-x50r5', 'fa-x70r5', 'fa-x90r5',
                          'fa-x20r4b', 'fa-x50r4b', 'fa-x70r4b', 'fa-x90r4b',
                          'fa-x20r4', 'fa-x50r4', 'fa-x70r4', 'fa-x90r4',
                          'fa-x10r3', 'fa-x20r3', 'fa-x50r3', 'fa-x70r3', 'fa-x90r3',
@@ -69,7 +69,7 @@ var FBS_OPTIONS = {
     direction: ['', 'up', 'down'],
     blades: '18',
     ports: ['', 'FALSE', 'TRUE'],
-    dfm_size: ['24', '37.5', '48', '75', '150'],
+    dfm_size: ['24', '37.5', '48', '75', '150', '300'],
     dfm_count: ['1', '2', '3', '4'],
     xfm_face: ['', 'front', 'back', 'bezel'],
     bezel: ['FALSE', 'TRUE'],

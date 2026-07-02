@@ -42,7 +42,7 @@ def main():
                 update_static_model_loc(config, gen, rel, '', '')
 
         if rel == 3:
-            for gen in ['rc']:
+            for gen in ['rc', 'rx']:
                 update_static_pci_loc(config, gen, rel, '')
                 update_static_model_loc(config, gen, rel, '', '')
                 update_static_mezz_loc(config, gen, rel, rev)
@@ -105,6 +105,10 @@ def static_global_config():
         "pci_config_lookup": {
 
             #fixed missing 2 port ETH card
+
+            # New RX 20 7/2/2025
+            "fa-rx20r3-fc": [None, None, None, None, None],
+            "fa-rx20r3-eth": [None, None, None, None, None],
 
             # New RC 20
             "fa-rc20r3-fc": [None, None, None, None, None],
@@ -405,6 +409,13 @@ def static_global_config():
             "2100": ["150TB", "nvme-qlc", 14, "2100"],
             "2400": ["150TB", "nvme-qlc", 16, "2400"],
             "2700": ["150TB", "nvme-qlc", 18, "2700"],
+
+            # adding 300TB modules
+            "3000": ["300TB", "nvme-qlc", 10, "3000"],
+            "3600": ["300TB", "nvme-qlc", 12, "3600"],
+            "4200": ["300TB", "nvme-qlc", 14, "4200"],
+            "4800": ["300TB", "nvme-qlc", 16, "4800"],
+            "5400": ["300TB", "nvme-qlc", 18, "5400"],
             
         },
 
@@ -601,6 +612,13 @@ def static_global_config():
             "2100": ["150TB", "nvme-qlc", 14, "2100"],
             "2400": ["150TB", "nvme-qlc", 16, "2400"],
             "2700": ["150TB", "nvme-qlc", 18, "2700"],
+
+            # adding 300TB modules
+            "3000": ["300TB", "nvme-qlc", 10, "3000"],
+            "3600": ["300TB", "nvme-qlc", 12, "3600"],
+            "4200": ["300TB", "nvme-qlc", 14, "4200"],
+            "4800": ["300TB", "nvme-qlc", 16, "4800"],
+            "5400": ["300TB", "nvme-qlc", 18, "5400"],
         },
 
         "fb_blade_reg_pattern": "^([0-9]+:[0-9]+(-[0-9]+)?,?)+$"
@@ -712,6 +730,14 @@ def update_static_fm_loc(config):
                         config[key] = {}
                     config[key]['fm_loc'] = ch0_fm_loc.copy()
 
+                # RX is the same:
+                if rel == 3:
+                    key = f'png/pure_fa_rx_r{rel}{rev}_front.png'
+                    if key not in config:
+                        config[key] = {}
+                    config[key]['fm_loc'] = ch0_fm_loc.copy()
+
+
                 # E is the same:
                 if rel == 1:
                     key = f'png/pure_fa_e_r{rel}{rev}_front{cg}.png'
@@ -773,13 +799,19 @@ def update_static_psu_loc(config):
     # Chassis FM locations
     psu_loc = [(33, 96), (33, 491)]
 
-    for rel in [1, 4]:  #1 will cover the //E and 4 will cover all modern models
-        for gen in ['x', 'c', 'e']:
+    for rel in [1, 3, 4, 5]:  #1 covers the //E, 4 and 5 cover the modern models
+        for gen in ['x', 'c', 'e', 'rc', 'rx']:
             for rev in ['', 'b', 'c']:
                 key = f'png/pure_fa_{gen}_r{rel}{rev}_back.png'
-                if key not in config:
-                    config[key] = {}
-                config[key]['psu_loc'] = psu_loc.copy()
+                if key in config:
+                    #changed to not pollute config if the key is not present
+                    config[key]['psu_loc'] = psu_loc.copy()
+
+                # add for new No Lom configs    
+                key = f'png/pure_fa_{gen}_r{rel}{rev}_nl_back.png'
+                if key in config:
+                    #changed to not pollute config if the key is not present
+                    config[key]['psu_loc'] = psu_loc.copy()
         
 
 
@@ -794,7 +826,7 @@ def update_static_psu_loc(config):
 
 def update_static_pci_loc(config, generation, release, rev):
     pci_loc = None
-    if (generation == 'x' or generation == 'c'or generation == 'rc') and release < 4:
+    if (generation == 'x' or generation == 'c'or generation == 'rc' or generation == 'rx') and release < 4:
         pci_loc = [(1198, 87), (1198, 203), (2069, 87), (2069, 203)]
         ct1_y_offset = 380
 
@@ -843,7 +875,7 @@ def update_static_nvram_loc(config, generation, release, rev):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c' or generation == 'e' or generation == 'rc':
+            generation == 'c' or generation == 'e' or generation == 'rc' or generation == 'rx':
         nv1 = (1263, 28)
         nv2 = (1813, 28)
     elif generation != "xl":
@@ -861,7 +893,7 @@ def update_static_mezz_loc(config, generation, release, rev):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c' or generation == 'rc':
+            generation == 'c' or generation == 'rc' or generation == 'rx':
         config[key]['ct0_mezz_loc'] = (585, 45)
         config[key]['ct1_mezz_loc'] = (585, 425)
     else:
@@ -876,7 +908,7 @@ def update_static_model_loc(config, generation, release, rev, cg):
         config[key] = {}
 
     if generation == 'x' or \
-            generation == 'c' or generation == 'rc':
+            generation == 'c' or generation == 'rc' or generation == 'rx':
         loc = (2759, 83)
     elif generation == 'e':
         loc = (2792, 160)
@@ -1278,6 +1310,12 @@ def update_static_model_port_loc(config):
             
             if release == 3 and rev == '':
                 key = f'png/pure_fa_rc_r{release}{rev}_back.png'
+                if key not in config:
+                    config[key] = {}
+                config[key]['ports'] = ct0ports + ct1ports
+            
+            if release == 3 and rev == '':
+                key = f'png/pure_fa_rx_r{release}{rev}_back.png'
                 if key not in config:
                     config[key] = {}
                 config[key]['ports'] = ct0ports + ct1ports

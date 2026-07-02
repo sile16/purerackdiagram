@@ -327,7 +327,7 @@ class FAChassis():
             port_naming_key = 'port_naming_xl'
         elif self.config['generation'] == 'e':
             port_naming_key = 'port_naming_xcr4'
-        elif self.config['generation'] in ['x', 'c', 'rc'] :
+        elif self.config['generation'] in ['x', 'c', 'rc', 'rx'] :
             if self.config['release'] >= 4:
                 port_naming_key = 'port_naming_xcr4'
             else:
@@ -527,7 +527,7 @@ class FAChassis():
         
         if self.config["release"] == 3 and \
             self.config["model_num"] == 20 and \
-            self.config["generation"] == 'rc':
+            ( self.config["generation"] in ['rc', 'rx'] ):
             return
 
         if self.config['mezz']:
@@ -731,7 +731,7 @@ class FAChassis():
             if c['release'] == 1:
                 text = "" #change to 
                 
-        elif (c['generation'] == 'c' or c['generation'] == 'rc') and c['model_num'] == 20:
+        elif (c['generation'] == 'c' or c['generation'] in ['rc', 'rx']) and c['model_num'] == 20:
             text = "{}{}".format(c['generation'].upper(),
                                     c['model_num'])
 
@@ -1213,7 +1213,7 @@ class FADiagram():
         
 
         try: 
-            if "rc" in config["model_str"]:
+            if "rc" in config["model_str"] or "rx" in config["model_str"]:
                 results = re.split(r'(?<=[0-9])(?=[A-Za-z])'   # between digit and letter
                                 r'|(?<=[A-Za-z])(?=[0-9])'  # between letter and digit
                                 r'|-',
@@ -1245,7 +1245,7 @@ class FADiagram():
                         config["release"] = int(results[5])
                         if len(results) > 6:
                             config["rev"] = results[6]
-                    elif config['generation'] == 'rc':
+                    elif config['generation'] == 'rc' or config['generation'] == 'rx':
                         if len(results) > 4:
                             config["release"] = int(results[4])
                         if len(results) > 6:

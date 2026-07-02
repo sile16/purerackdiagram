@@ -3,13 +3,32 @@ import jsonurl_py as jsonurl
 import urllib.parse
 
 more_tests = [
+        {
+        "queryStringParameters": {
+            "model": "fa-rx20",
+            "face": "back",
+            "datapacks": "22",
+            "ports": "True",
+            'dc_power': "True",
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x70r5",
+            "face": "back",
+            "datapacks": "22",
+            "ports": "True",
+            'dc_power': "True",
+        }
+    },
     {
         "queryStringParameters": {
             "model": "fa-x50r5",
             "face": "back",
             "nl": "True",
             "datapacks": "22",
-            "ports": "True"
+            "ports": "True",
+            'dc_power': "True",
         }
     },
     {
@@ -743,6 +762,63 @@ more_tests = [
     {
         "queryStringParameters": {
             "model": "fa-rc20r3",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "148", # invalid datapack that should trigger friendly error
+            "dp_label": "True",
+            "fm_label": "True",
+        }
+    },
+    # RX20: X-line variant of the RC20 chassis (same backend images, nvme media)
+    {
+        "queryStringParameters": {
+            "model": "fa-rx20",
+            "protocol": "eth",
+            "face": "front",
+            "bezel": "True",
+            "datapacks": "22",
+            "dp_label": "True",
+            "fm_label": "True",
+            "addoncards": "2eth100,2eth100,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-rx20",
+            "protocol": "eth",
+            "face": "back",
+            "datapacks": "22",
+            "dp_label": "True",
+            "fm_label": "True",
+            "addoncards": "2eth100,2eth100,2fc"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-rx20",
+            "protocol": "fc",
+            "face": "front",
+            "datapacks": "22",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-rx20",
+            "protocol": "fc",
+            "face": "back",
+            "datapacks": "22",
+            "dc_power": "True",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-rx20r3",
             "protocol": "fc",
             "face": "front",
             "datapacks": "148", # invalid datapack that should trigger friendly error
@@ -1593,6 +1669,51 @@ more_tests = [
             "face": "front",
             "fm_label": "True",
             "dp_label": "True"
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r5",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "True",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+        }
+    },
+    {
+        "queryStringParameters": {
+            "model": "fa-x50r5",
+            "datapacks": "183-183",
+            "face": "back",
+            "dc_power": "True",
+            "nl": "True",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+        }
+    },
+    # 300TB QLC module coverage (FlashArray C-line)
+    {
+        "queryStringParameters": {
+            "model": "fa-c70r4b",
+            "face": "front",
+            "datapacks": "3000",
+            "dp_label": "True",
+            "fm_label": "True",
+            "ports": "True",
+        }
+    },
+    # FlashBlade coverage
+    {
+        "queryStringParameters": {
+            "model": "fb-s500r2",
+            "face": "front",
+            "no_of_blades": 10,
+            "no_of_drives_per_blade": 4,
+            "drive_size": 75,
+            "ports": "True",
         }
     }
 ]
