@@ -742,10 +742,14 @@ class FAChassis():
             
 
         # Draw the generation code next to the printed "//". Gen-2 chassis ship a
-        # bare "//" and rely on software for the letter. //E (both chassis gens)
-        # and rc20 reuse a bare-"//" chassis too (their own images have the "//"
+        # bare "//" and rely on software for the letter. //E (both chassis gens),
+        # rc20, and c20 reuse a bare-"//" chassis too (their images have the "//"
         # printed but not the trailing code), so draw the letter for them as well.
-        if c['chassis_gen'] == '2' or c['generation'] in ['e', 'rc']:
+        # c20 is the rev 'c' C variant (pure_fa_c_r4c, bare "//"); other C models
+        # at gen 1 use pure_fa_c_r1 which already has "//C" printed, so scope by
+        # rev to avoid double-drawing the "C".
+        if (c['chassis_gen'] == '2' or c['generation'] in ['e', 'rc']
+                or (c['generation'] == 'c' and c['rev'] == 'c')):
             draw.text((2785,160), f" {c['generation'].upper()} ", (255, 255, 255, 220), font=font)
 
         draw.text(loc, text, (255, 255, 255, 220), font=font)
