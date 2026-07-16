@@ -376,7 +376,7 @@ def get_all_tests():
                     params = {"model": f"fa-{model}",
                                 "datapacks": "0",
                                 "face": "front",
-                                'chassi_gen': cg,
+                                'chassis_gen': cg,
                                 "fm_label": "True",
                                 "dp_label": "True"}
                     if json_test is not None:
