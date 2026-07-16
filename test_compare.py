@@ -32,17 +32,24 @@ def extract_result_data(result_value):
     else:
         return result_value
 
-def get_image_data_url(file_path):
-    """Convert image file to data URL for embedding in HTML"""
-    if not os.path.exists(file_path):
+def get_image_data_url(file_path, embed_always=False):
+    """Convert image file to data URL for embedding in HTML.
+
+    Set embed_always=True for images that feed the pixel-diff canvas: a canvas
+    drawn from an <img> loaded off a file:// path is tainted by the browser's
+    same-origin policy, so getImageData() throws. A base64 data: URL is treated
+    as same-origin and keeps the canvas readable, so we must embed regardless of
+    size for those images.
+    """
+    if not file_path or not os.path.exists(file_path):
         return None
-    
-    # Check file size - if too large, return path instead
+
+    # Check file size - if too large, return path instead (unless we must embed)
     file_size = os.path.getsize(file_path)
-    if file_size > 500000:  # 500KB limit for embedding
+    if file_size > 500000 and not embed_always:  # 500KB limit for embedding
         # Return relative path for direct file reference
         return file_path
-    
+
     # Determine MIME type based on extension
     ext = os.path.splitext(file_path)[1].lower()
     mime_type = {
@@ -1310,10 +1317,11 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
             result_path = error.get('result_path')
             validation_path = error.get('validation_path')
             
-            # Check if files exist and get appropriate src (falling back to a
-            # basename search when the stored git-state path no longer exists)
-            result_img_src = resolve_image_path(result_path)
-            validation_img_src = resolve_image_path(validation_path)
+            # Resolve the files (falling back to a basename search when the
+            # stored git-state path no longer exists), then embed as base64 data
+            # URLs so the pixel-diff canvas isn't tainted by file:// origins.
+            result_img_src = get_image_data_url(resolve_image_path(result_path), embed_always=True)
+            validation_img_src = get_image_data_url(resolve_image_path(validation_path), embed_always=True)
             
             html_content += f'''
             <div class="image-comparison">
