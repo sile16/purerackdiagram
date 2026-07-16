@@ -6,7 +6,7 @@ more_tests = [
         {
         "queryStringParameters": {
             "model": "fa-rx20",
-            "face": "back",
+            "face": "front",
             "datapacks": "22",
             "ports": "True",
             'dc_power': "True",
@@ -769,7 +769,7 @@ more_tests = [
             "fm_label": "True",
         }
     },
-    # RX20: X-line variant of the RC20 chassis (same backend images, nvme media)
+    # RX20: X-line variant of the RC20 (uses its own chassis images: pure_fa_rx_r3_*.png, not the rc ones; defaults to chassis_gen 2)
     {
         "queryStringParameters": {
             "model": "fa-rx20",

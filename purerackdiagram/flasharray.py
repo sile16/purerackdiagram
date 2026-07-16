@@ -1377,6 +1377,10 @@ class FADiagram():
                 if config['generation'] == 'c' and config['model_num'] == 20 and config['release'] == 1:
                     config['chassis_gen'] = '2'
 
+                # rx20 is gen 2 chassis by default
+                if config['generation'] == 'rx' and config['model_num'] == 20:
+                    config['chassis_gen'] = '2'
+
                 # all e is now default gen 2
                 if config['generation'] == 'e':
                     config['chassis_gen'] = '2'
