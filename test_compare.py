@@ -4,6 +4,7 @@ import json
 import jsondiff
 import argparse
 import os
+import re
 import base64
 from datetime import datetime
 import hashlib
@@ -82,6 +83,45 @@ def resolve_image_path(path):
             if os.path.exists(candidate):
                 return candidate
     return None
+
+def get_provenance(data):
+    """Return a human-readable provenance label for a results/validation file.
+
+    Prefers the explicit `_meta` block written by test.py; otherwise infers the
+    git-state from a sample entry's path prefix (test_results/<state>/...). This
+    is what lets the report show which commit the validation was captured from.
+    """
+    if not isinstance(data, dict):
+        return 'unknown'
+    meta = data.get('_meta')
+    if meta:
+        commit = meta.get('commit_short') or meta.get('commit')
+        gs = meta.get('git_state')
+        if commit and gs and commit not in (gs, str(gs)[:7]):
+            return f"{gs} (commit {commit})"
+        return commit or gs or 'unknown'
+    # Fall back: infer the git-state from a stored path prefix
+    for section in ('png', 'json', 'json_only', 'other'):
+        sec = data.get(section)
+        if isinstance(sec, dict):
+            for k in sec:
+                m = re.match(r'test_results/([^/]+)/', k)
+                if m:
+                    return f"{m.group(1)} (inferred from path)"
+    return 'unknown'
+
+
+def strip_image_fields(obj):
+    """Recursively drop base64 image payloads from JSON so they never appear as
+    a text diff. The image itself is rendered via the visualization panels, so a
+    multi-hundred-KB base64 'image' line in the diff is pure noise.
+    """
+    if isinstance(obj, dict):
+        return {k: strip_image_fields(v) for k, v in obj.items() if k != 'image'}
+    if isinstance(obj, list):
+        return [strip_image_fields(v) for v in obj]
+    return obj
+
 
 def get_file_paths_for_comparison(key, results, validation, input_file, validation_file):
     """Get the actual file paths for both result and validation files"""
@@ -191,12 +231,13 @@ def compare_results(input_file, validation_file, output_html=None):
     results_by_normalized_key = {}
     validation_by_normalized_key = {}
     
-    # Get all section keys from both files, excluding 'file' section
+    # Get all section keys from both files, excluding 'file' and provenance meta
+    non_section_keys = {'file', '_meta'}
     all_sections = set()
     if isinstance(results, dict):
-        all_sections.update(k for k in results.keys() if k != 'file')
+        all_sections.update(k for k in results.keys() if k not in non_section_keys)
     if isinstance(validation, dict):
-        all_sections.update(k for k in validation.keys() if k != 'file')
+        all_sections.update(k for k in validation.keys() if k not in non_section_keys)
     
     # Extract and normalize keys from results
     if isinstance(results, dict):
@@ -308,8 +349,12 @@ def compare_results(input_file, validation_file, output_html=None):
                     for k in ignore_keys:
                         res_json.pop(k, None)
                         val_json.pop(k, None)
-                    
-                
+
+                # Drop any base64 image payloads (at any depth) so they are never
+                # rendered as a text diff - the image is shown via the panels.
+                res_json = strip_image_fields(res_json)
+                val_json = strip_image_fields(val_json)
+
                 diff = jsondiff.diff(val_json, res_json)
                 
                 if diff:
@@ -403,7 +448,11 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
     
     # Calculate totals
     total_errors = sum(len(errors) for errors in errors_by_type.values())
-    
+
+    # Provenance: which commit each side was captured from
+    result_provenance = get_provenance(results)
+    validation_provenance = get_provenance(validation)
+
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -899,6 +948,7 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
         <h1>Test Comparison Report</h1>
         <p>Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
         <p>Comparing: {os.path.basename(input_file)} vs {os.path.basename(validation_file)}</p>
+        <p>Current results from: <strong>{result_provenance}</strong> &nbsp;|&nbsp; Validation baseline from: <strong>{validation_provenance}</strong></p>
     </div>
     
     <div class="navigation">

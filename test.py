@@ -679,8 +679,27 @@ def test_all(args):
 
     
 
+    # Record provenance so a promoted validation file knows which commit it
+    # came from (the git-state is also encoded in each entry's path prefix, but
+    # this makes it explicit and survives being copied to test_validation.json).
+    def _resolve_commit():
+        try:
+            import subprocess
+            return subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL
+            ).decode().strip()
+        except Exception:
+            return None
+
+    commit = _resolve_commit()
+    results['_meta'] = {
+        'git_state': git_state,
+        'commit': commit,
+        'commit_short': commit[:7] if commit else None,
+    }
+
     # Create git-state subdirectory and save results there
-    
+
     output_filename = os.path.join("test_results", f"test_{git_state}.json")
     with open(output_filename, "w") as f:
         json.dump(results, f, indent=4, ensure_ascii=False)
