@@ -741,10 +741,13 @@ class FAChassis():
                                     c['release'])
             
 
-        if c['chassis_gen'] == '2':
-            #Draw the Generation Letter on the 2nd gen chassis
+        # Draw the generation code next to the printed "//". Gen-2 chassis ship a
+        # bare "//" and rely on software for the letter. //E (both chassis gens)
+        # and rc20 reuse a bare-"//" chassis too (their own images have the "//"
+        # printed but not the trailing code), so draw the letter for them as well.
+        if c['chassis_gen'] == '2' or c['generation'] in ['e', 'rc']:
             draw.text((2785,160), f" {c['generation'].upper()} ", (255, 255, 255, 220), font=font)
-        
+
         draw.text(loc, text, (255, 255, 255, 220), font=font)
 
 
