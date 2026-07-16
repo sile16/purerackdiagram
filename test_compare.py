@@ -59,6 +59,30 @@ def get_image_data_url(file_path):
     except Exception:
         return None
 
+def resolve_image_path(path):
+    """Resolve an image path for rendering in the report.
+
+    Paths stored in a validation JSON are tied to the git-state directory the
+    run was captured in (e.g. test_results/head/... or test_results/<hash>/...).
+    The 'head' directory is overwritten on every run, so the expected image the
+    validation points at is frequently gone - which showed up as "Image not
+    found" on the Expected (Validation) panel. Filenames include a unique
+    case-hash suffix, so if the literal path is missing we can safely locate the
+    same file by basename in any other test_results/<state>/ directory.
+    """
+    if not path:
+        return None
+    if os.path.exists(path):
+        return path
+    basename = os.path.basename(path)
+    results_root = "test_results"
+    if os.path.isdir(results_root):
+        for entry in os.listdir(results_root):
+            candidate = os.path.join(results_root, entry, basename)
+            if os.path.exists(candidate):
+                return candidate
+    return None
+
 def get_file_paths_for_comparison(key, results, validation, input_file, validation_file):
     """Get the actual file paths for both result and validation files"""
     result_path = None
@@ -992,9 +1016,9 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
             
             # If this is an image category, show the actual image
             if missing['category'] == 'image':
-                result_path = missing.get('result_path')
-                result_img_path = missing.get('result_img_path')
-                
+                result_path = resolve_image_path(missing.get('result_path'))
+                result_img_path = resolve_image_path(missing.get('result_img_path'))
+
                 # Check if image files exist and display them
                 if result_path and os.path.exists(result_path):
                     html_content += f'''
@@ -1080,9 +1104,9 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                     result_data_escaped = result_data_json.replace("'", "\\'").replace('"', '&quot;')
                     validation_data_escaped = validation_data_json.replace("'", "\\'").replace('"', '&quot;')
                     
-                    # Check for json_img_path
-                    result_img_path = error.get('result_img_path')
-                    validation_img_path = error.get('validation_img_path')
+                    # Check for json_img_path (resolve against available test dirs)
+                    result_img_path = resolve_image_path(error.get('result_img_path'))
+                    validation_img_path = resolve_image_path(error.get('validation_img_path'))
                     
                     html_content += f'''
                 <div class="comparison-item">
@@ -1172,9 +1196,9 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
                     result_data_escaped = result_data_json.replace("'", "\\'").replace('"', '&quot;')
                     validation_data_escaped = validation_data_json.replace("'", "\\'").replace('"', '&quot;')
                     
-                    # Check for json_img_path
-                    result_img_path = error.get('result_img_path')
-                    validation_img_path = error.get('validation_img_path')
+                    # Check for json_img_path (resolve against available test dirs)
+                    result_img_path = resolve_image_path(error.get('result_img_path'))
+                    validation_img_path = resolve_image_path(error.get('validation_img_path'))
                     
                     html_content += f'''
                 <div class="comparison-item">
@@ -1236,17 +1260,10 @@ def generate_html_report(results, validation, errors_by_type, warnings, matches,
             result_path = error.get('result_path')
             validation_path = error.get('validation_path')
             
-            # Check if files exist and get appropriate src
-            result_img_src = None
-            validation_img_src = None
-            
-            if result_path and os.path.exists(result_path):
-                # Use relative path for images
-                result_img_src = result_path
-            
-            if validation_path and os.path.exists(validation_path):
-                # Use relative path for images
-                validation_img_src = validation_path
+            # Check if files exist and get appropriate src (falling back to a
+            # basename search when the stored git-state path no longer exists)
+            result_img_src = resolve_image_path(result_path)
+            validation_img_src = resolve_image_path(validation_path)
             
             html_content += f'''
             <div class="image-comparison">
