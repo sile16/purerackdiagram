@@ -627,7 +627,7 @@ pci_config_lookup:
   - null
   - 4eth25roce
   - null
-  - 4eth25roce
+  - null
   - null
   fa-x20r5-fc:
   - null
