@@ -129,7 +129,7 @@ def static_global_config():
             # new X no Lom 
             "fa-x20r5-fc-nl": [None, "4eth25roce", None, "2fc", None],
             "fa-x50r5-fc-nl": [None, "4eth25roce",  None, "4fc", None],
-            "fa-x20r5-eth-nl": [None, "4eth25roce", None, "4eth25roce", None],
+            "fa-x20r5-eth-nl": [None, "4eth25roce", None, None, None],
             "fa-x50r5-eth-nl": [None, "4eth25roce" ,None, "4eth25roce", None],
 
              # New x R5 8/17 updated 4 port cards to be roce neabled.
